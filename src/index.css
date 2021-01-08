@@ -1,13 +1,138 @@
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
+}
+
+.trigger {
+  font-size: 18px;
+  line-height: 64px;
+  padding: 0 24px;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.trigger:hover {
+  color: #1890ff;
+}
+
+.site-layout {
+  max-width: auto;
+  max-height: auto;
+}
+.ant-layout-header {
+  height: 64px;
+  padding: 0 50px;
+  background: white !important;
+  line-height: 64px;
+}
+
+.logo {
+  height: 32px;
+  background: rgba(255, 255, 255, 0.2);
+  margin: 16px;
+}
+.site-layout .site-layout-background {
+  background: #fff;
+}
+
+section.ant-layout.ant-layout-has-sider {
+  min-height: 100vh;
+  height: 100%;
+  min-width: 100vh;
+  width: 100%;
+}
+
+.seperator {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.65);
+  width: 95%;
+  margin-left: 2.5%;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  text-decoration: none;
+  box-sizing: border-box;
+}
+
+body {
+  height: auto;
+  background-image: linear-gradient(120deg, #001529, #001529);
+}
+
+.main-layout {
+  padding: 15px;
+  margin: 15px;
+  height: auto;
+}
+
+.annoucement-layout {
+  margin: 15px 15px 15px 0px;
+  padding: 15px;
+  height: auto;
+}
+.event-layout {
+  margin: 15px 15px 15px 0px;
+  padding: 15px;
+  height: auto;
+}
+
+.lesson-content {
+  display: flex;
+  justify-content: center;
+}
+.ant-card-body {
+  padding: 10px;
+}
+.ant-card-head {
+  padding: 0 10px;
+}
+
+.ant-list-item-meta-title a {
+  color: #1890ff !important;
+}
+
+/*Header chứa thông tin account*/
+.header-account {
+  display: flex;
+  justify-content: space-between;
+}
+.header-account h1 {
+  margin-right: 1%;
+}
+.header-account .icon-header {
+  margin-top: 22px;
+}
+.header-account > .anticon {
+  margin-top: 22px;
+}
+
+/*Menu sidebar*/
+.ant-menu-dark.ant-menu-inline .ant-menu-item,
+.ant-menu-dark.ant-menu-inline .ant-menu-submenu-title {
+  display: flex;
+  align-items: center;
+}
+
+.ant-menu-item-only-child a {
+  margin-top: -7px;
+}
+
+/* Form */
+form#nest-messages {
+  margin-right: 15%;
+}
+
+/* Account Student Button */
+.student-buttons {
+  margin-left: 5px;
 }
