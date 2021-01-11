@@ -1,5 +1,5 @@
 import { BrowserRouter, Switch, Route } from "react-router-dom";
-import Home from "../Pages/Home";
+import Index from "../Pages/Index";
 import "antd/dist/antd.css";
 import "../index.css";
 
@@ -8,7 +8,7 @@ function App() {
     <div className="App">
       <BrowserRouter>
         <Switch>
-          <Route path="/" component={Home} />
+          <Route path="/" component={Index} />
         </Switch>
       </BrowserRouter>
     </div>

@@ -1,5 +1,5 @@
 import React from "react";
-import LessonComponent from "../Components/LessonComponent";
+import LessonComponent from "../Components/Syllabus/LessonComponent";
 import AnnounceComponent from "../Components/AnnounceComponent";
 import UpComingEventComponent from "../Components/UpComingEventComponent";
 import { Layout, Col } from "antd";
