@@ -98,7 +98,6 @@ const getRandomuserParams = (params) => ({
 
 export class AccountTableComponent extends Component {
   state = {
-    data: [],
     pagination: {
       current: 1,
       pageSize: 10,
@@ -147,9 +146,9 @@ export class AccountTableComponent extends Component {
         <TabPane tab="Student's Account" key="1">
           <StudentAccountComponent data={student} />
         </TabPane>
-        <TabPane tab="Teacher's Account" key="2">
+        {/* <TabPane tab="Teacher's Account" key="2">
           <TeacherAccountComponent data={teacher} />
-        </TabPane>
+        </TabPane> */}
       </Tabs>
     );
   }

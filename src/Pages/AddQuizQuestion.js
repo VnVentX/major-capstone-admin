@@ -1,16 +1,15 @@
-import React from "react";
 import { Col, Layout } from "antd";
 import AnnounceComponent from "../Components/AnnounceComponent";
 import UpComingEventComponent from "../Components/UpComingEventComponent";
-import UnitDetailComponent from "../Components/Lesson/UnitDetailComponent";
+import QuizQuestionComponent from "../Components/Lesson/QuizQuestionComponent";
 const { Content } = Layout;
 
-const UnitDetail = () => {
+const AddQuizQuestion = () => {
   return (
     <>
       <Col span={20}>
         <Content className="main-layout site-layout-background">
-          <UnitDetailComponent />
+          <QuizQuestionComponent />
         </Content>
       </Col>
       <Col span={4}>
@@ -25,4 +24,4 @@ const UnitDetail = () => {
   );
 };
 
-export default UnitDetail;
+export default AddQuizQuestion;

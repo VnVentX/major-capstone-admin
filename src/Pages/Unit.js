@@ -2,15 +2,15 @@ import React from "react";
 import { Col, Layout } from "antd";
 import AnnounceComponent from "../Components/AnnounceComponent";
 import UpComingEventComponent from "../Components/UpComingEventComponent";
-import UnitDetailComponent from "../Components/Lesson/UnitDetailComponent";
+import UnitComponent from "../Components/Lesson/UnitComponent";
 const { Content } = Layout;
 
-const UnitDetail = () => {
+const Unit = () => {
   return (
     <>
       <Col span={20}>
         <Content className="main-layout site-layout-background">
-          <UnitDetailComponent />
+          <UnitComponent />
         </Content>
       </Col>
       <Col span={4}>
@@ -25,4 +25,4 @@ const UnitDetail = () => {
   );
 };
 
-export default UnitDetail;
+export default Unit;

@@ -14,12 +14,15 @@ import {
   message,
 } from "antd";
 import { Link } from "react-router-dom";
-import { InboxOutlined } from "@ant-design/icons";
-import { DownloadOutlined } from "@ant-design/icons";
-import { UploadOutlined } from "@ant-design/icons";
-import { PlusOutlined } from "@ant-design/icons";
-import { SearchOutlined } from "@ant-design/icons";
+import {
+  InboxOutlined,
+  DownloadOutlined,
+  UploadOutlined,
+  PlusOutlined,
+  SearchOutlined,
+} from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
+
 const { Dragger } = Upload;
 
 const props = {
@@ -604,7 +607,7 @@ export default class StudentAccountComponent extends Component {
             rowKey={this.props.data.key}
             pagination={pagination}
             loading={loading}
-            onChange={this.handleTableChange}
+            scroll={{ x: true }}
           />
         </Card>
       </>

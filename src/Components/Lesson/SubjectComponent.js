@@ -1,21 +1,15 @@
 import React from "react";
 import { Card, List, Button, Modal, Form, Input } from "antd";
 import { Link } from "react-router-dom";
+
+const { Search } = Input;
+
 const data = [
   {
-    title: "Unit 1",
+    title: "Math",
   },
   {
-    title: "Unit 2",
-  },
-  {
-    title: "Unit 3",
-  },
-  {
-    title: "Unit 4",
-  },
-  {
-    title: "Unit 5",
+    title: "Science",
   },
 ];
 
@@ -24,7 +18,7 @@ const layout = {
   wrapperCol: { span: 16 },
 };
 
-const LessonComponent = () => {
+const SubjectComponent = () => {
   const [visible, setVisible] = React.useState(false);
   const [confirmLoading, setConfirmLoading] = React.useState(false);
 
@@ -45,20 +39,29 @@ const LessonComponent = () => {
     setVisible(false);
   };
 
+  const onSearch = (value) => console.log(value);
+
   return (
-    <Card type="inner" title="Syllabus">
+    <Card type="inner" title="Subjects">
       <div
         style={{
           marginBottom: 20,
           display: "flex",
-          justifyContent: "flex-end",
+          justifyContent: "space-between",
         }}
       >
+        <Search
+          placeholder="Search subject"
+          allowClear
+          onSearch={onSearch}
+          style={{ width: 400 }}
+          enterButton
+        />
         <Button type="primary" size="middle" onClick={showModal}>
-          Create Unit
+          Create Subject
         </Button>
         <Modal
-          title="Create Unit"
+          title="Create Subject"
           visible={visible}
           onOk={handleOk}
           confirmLoading={confirmLoading}
@@ -66,7 +69,7 @@ const LessonComponent = () => {
         >
           <Form {...layout} name="nest-messages">
             <Form.Item name="title" label="Title" rules={[{ required: true }]}>
-              <Input placeholder="Unit Title" />
+              <Input placeholder="Subject Title" />
             </Form.Item>
             <Form.Item
               name="description"
@@ -76,36 +79,8 @@ const LessonComponent = () => {
               <Input.TextArea
                 showCount
                 maxLength={500}
-                placeholder="Unit Description"
+                placeholder="Subject Description"
               />
-            </Form.Item>
-            <Form.Item
-              name="lesson1"
-              label="Lesson 1"
-              rules={[{ required: true }]}
-            >
-              <Input placeholder="Lesson Title" />
-            </Form.Item>
-            <Form.Item
-              name="lesson-1-url"
-              label="Url Lesson 1"
-              rules={[{ required: true }]}
-            >
-              <Input placeholder="Url Lesson" />
-            </Form.Item>
-            <Form.Item
-              name="lesson-2"
-              label="Lesson 2"
-              rules={[{ required: true }]}
-            >
-              <Input placeholder="Lesson Title" />
-            </Form.Item>
-            <Form.Item
-              name="lesson-2-url"
-              label="Url Lesson 2"
-              rules={[{ required: true }]}
-            >
-              <Input placeholder="Url Lesson" />
             </Form.Item>
           </Form>
         </Modal>
@@ -115,8 +90,8 @@ const LessonComponent = () => {
         dataSource={data}
         renderItem={(item) => (
           <List.Item>
-            <Card title={<Link to="/lesson/grade/1/Unit/1">{item.title}</Link>}>
-              Lesson Descriptions
+            <Card title={<Link to="/lesson/grade/1/math">{item.title}</Link>}>
+              Subject descriptions
             </Card>
           </List.Item>
         )}
@@ -125,4 +100,4 @@ const LessonComponent = () => {
   );
 };
 
-export default LessonComponent;
+export default SubjectComponent;

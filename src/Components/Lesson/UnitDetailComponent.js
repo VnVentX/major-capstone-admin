@@ -1,12 +1,38 @@
 import React from "react";
-import { Button, Modal, Form, Input, Typography, Divider } from "antd";
+import {
+  Button,
+  Modal,
+  Form,
+  Input,
+  Typography,
+  Divider,
+  List,
+  Card,
+} from "antd";
+import { Link } from "react-router-dom";
+import AddQuiz from "./AddQuiz";
 
-const { Title, Paragraph, Text, Link } = Typography;
+const { Title, Paragraph } = Typography;
 
 const layout = {
   labelCol: { span: 8 },
   wrapperCol: { span: 16 },
 };
+
+const data = [
+  {
+    title: "Quiz 1",
+  },
+  {
+    title: "Quiz 2",
+  },
+  {
+    title: "Quiz 3",
+  },
+  {
+    title: "Quiz 4",
+  },
+];
 
 const UnitComponent = () => {
   const [visible, setVisible] = React.useState(false);
@@ -32,12 +58,12 @@ const UnitComponent = () => {
     <>
       <Typography>
         <div style={{ display: "flex", justifyContent: "space-between" }}>
-          <Title>Introduction</Title>
+          <Title level={1}>Introduction</Title>
           <Button type="primary" size="middle" onClick={showModal}>
             Edit Content
           </Button>
           <Modal
-            title="Create Unit"
+            title="Edit Unit"
             visible={visible}
             onOk={handleOk}
             confirmLoading={confirmLoading}
@@ -63,7 +89,7 @@ const UnitComponent = () => {
                 />
               </Form.Item>
               <Form.Item
-                name="lesson1"
+                name="lesson-1"
                 label="Lesson 1"
                 rules={[{ required: true }]}
               >
@@ -77,6 +103,18 @@ const UnitComponent = () => {
                 <Input placeholder="Url Lesson" />
               </Form.Item>
               <Form.Item
+                name="lesson-1-des"
+                label="Descripton"
+                rules={[{ required: true }]}
+              >
+                <Input.TextArea
+                  showCount
+                  maxLength={500}
+                  placeholder="Lesson Description"
+                />
+              </Form.Item>
+
+              <Form.Item
                 name="lesson-2"
                 label="Lesson 2"
                 rules={[{ required: true }]}
@@ -89,6 +127,17 @@ const UnitComponent = () => {
                 rules={[{ required: true }]}
               >
                 <Input placeholder="Url Lesson" />
+              </Form.Item>
+              <Form.Item
+                name="lesson-2-des"
+                label="Descripton"
+                rules={[{ required: true }]}
+              >
+                <Input.TextArea
+                  showCount
+                  maxLength={500}
+                  placeholder="Lesson Description"
+                />
               </Form.Item>
             </Form>
           </Modal>
@@ -107,49 +156,68 @@ const UnitComponent = () => {
 
         <Divider />
 
-        <Title level={2}>Lesson 1</Title>
+        <Title level={1}>Lesson 1</Title>
+        <Paragraph>
+          In the process of internal desktop applications development, many
+          different design specs and implementations would be involved, which
+          might cause designers and developers difficulties and duplication and
+          reduce the efficiency of development. In the process of internal
+          desktop applications development, many different design specs and
+          implementations would be involved, which might cause designers and
+          developers difficulties and duplication and reduce the efficiency of
+          development.
+        </Paragraph>
         <div id="layout" className="non-fs">
           <iframe
             title="lesson 1"
             id="myframe"
             src="https://onedrive.live.com/embed?resid=1EB9A25728760E08%215189&amp;authkey=%21AFuemMImkjPq4Yk&amp;em=2&amp;wdAr=1.7786561264822134"
-            frameborder="0"
+            frameBorder="0"
           ></iframe>
         </div>
         <Divider />
 
-        <Title level={2}>Lesson 2</Title>
+        <Title level={1}>Lesson 2</Title>
+        <Paragraph>
+          In the process of internal desktop applications development, many
+          different design specs and implementations would be involved, which
+          might cause designers and developers difficulties and duplication and
+          reduce the efficiency of development. In the process of internal
+          desktop applications development, many different design specs and
+          implementations would be involved, which might cause designers and
+          developers difficulties and duplication and reduce the efficiency of
+          development.
+        </Paragraph>
         <div id="layout" className="non-fs">
           <iframe
             title="lesson 1"
             id="myframe"
             src="https://onedrive.live.com/embed?resid=1EB9A25728760E08%215189&amp;authkey=%21AFuemMImkjPq4Yk&amp;em=2&amp;wdAr=1.7786561264822134"
-            frameborder="0"
+            frameBorder="0"
           ></iframe>
         </div>
         <Divider />
 
-        <Title level={2}>Guidelines and Resources</Title>
-        <Paragraph>
-          We supply a series of design principles, practical patterns and high
-          quality design resources (<Text code>Sketch</Text> and{" "}
-          <Text code>Axure</Text>), to help people create their product
-          prototypes beautifully and efficiently.
-        </Paragraph>
-
-        <Paragraph>
-          <ul>
-            <li>
-              <Link href="/docs/spec/proximity">Principles</Link>
-            </li>
-            <li>
-              <Link href="/docs/pattern/navigation">Patterns</Link>
-            </li>
-            <li>
-              <Link href="/docs/resource/download">Resource Download</Link>
-            </li>
-          </ul>
-        </Paragraph>
+        <div style={{ display: "flex", justifyContent: "space-between" }}>
+          <Title level={1}>Quiz</Title>
+          <AddQuiz />
+        </div>
+        <List
+          itemLayout="horizontal"
+          grid={{ gutter: 16, column: 1 }}
+          dataSource={data}
+          renderItem={(item) => (
+            <List.Item>
+              <Card
+                title={
+                  <Link to="/lesson/grade/1/math/1/quiz">{item.title}</Link>
+                }
+              >
+                Quiz descriptions
+              </Card>
+            </List.Item>
+          )}
+        />
       </Typography>
     </>
   );

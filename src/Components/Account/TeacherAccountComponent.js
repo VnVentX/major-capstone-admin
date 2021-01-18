@@ -335,7 +335,6 @@ export default class TeacherAccountComponent extends Component {
             rowKey={this.props.data.key}
             pagination={pagination}
             loading={loading}
-            onChange={this.handleTableChange}
           />
         </Card>
       </>
