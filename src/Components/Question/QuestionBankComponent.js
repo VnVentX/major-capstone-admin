@@ -148,8 +148,16 @@ const QuestionBankComponent = () => {
                   placeholder="Select category"
                   style={{ width: 200, marginRight: 10 }}
                 >
-                  <Option value="quiz 1">Quiz 1</Option>
-                  <Option value="quiz 2">Quiz 2</Option>
+                  <Option value="unit 1">Unit 1</Option>
+                  <Option value="unit 2">Unit 2</Option>
+                  <Option value="unit 3">Unit 3</Option>
+                  <Option value="unit 4">Unit 4</Option>
+                  <Option value="unit 5">Unit 5</Option>
+                  <Option value="unit 6">Unit 6</Option>
+                  <Option value="unit 7">Unit 7</Option>
+                  <Option value="unit 8">Unit 8</Option>
+                  <Option value="unit 9">Unit 9</Option>
+                  <Option value="unit 10">Unit 10</Option>
                 </Select>
               </Form.Item>
             ) : null;
@@ -166,7 +174,7 @@ const QuestionBankComponent = () => {
         rowKey={data.key}
         scroll={{ x: true }}
       />
-      <div>
+      {/* <div>
         <h1>With selected:</h1>
         {selectedRowKeys.length === 0 ? (
           <>
@@ -202,7 +210,7 @@ const QuestionBankComponent = () => {
             </Select>
           </>
         )}
-      </div>
+      </div> */}
     </>
   );
 };

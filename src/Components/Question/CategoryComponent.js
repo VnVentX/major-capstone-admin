@@ -49,25 +49,25 @@ const CategoryComponent = () => {
   const data = [
     {
       key: "1",
-      category: "Quiz 1",
+      category: "Unit 1",
       createdby: "Đoàn Tuấn Đức",
       modifiedby: "Trần Thiên Anh",
     },
     {
       key: "2",
-      category: "Quiz 2",
+      category: "Unit 2",
       createdby: "Đoàn Tuấn Đức",
       modifiedby: "Từ Thiệu Hào",
     },
     {
       key: "3",
-      category: "Quiz 3",
+      category: "Unit 3",
       createdby: "Đoàn Tuấn Đức",
       modifiedby: "Trương Thành Đạt",
     },
     {
       key: "4",
-      category: "Quiz 4",
+      category: "Unit 4",
       createdby: "Đoàn Tuấn Đức",
       modifiedby: "Đoàn Tuấn Đức",
     },
