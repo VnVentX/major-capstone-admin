@@ -3,7 +3,7 @@ import { Breadcrumb } from "antd";
 
 const breadcrumbNameMap = {
   "/": "Home",
-  "/dashboard": "Dashboard",
+  "/notice": "Notice",
   "/account": "Account",
   "/account/detail": "User Detail",
   "/lesson": "Lesson",

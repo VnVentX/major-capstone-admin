@@ -23,6 +23,7 @@ import UnitDetail from "./UnitDetail";
 import Subject from "./Subject";
 import Unit from "./Unit";
 import AddQuizQuestion from "./AddQuizQuestion";
+import Notice from "./Notice";
 
 const { Header, Sider } = Layout;
 
@@ -62,12 +63,12 @@ export default class Index extends React.Component {
                   <span>Home</span>
                 </Link>
               </Menu.Item>
-              {/* <Menu.Item key="2">
-                <Link to="/dashboard">
+              <Menu.Item key="2">
+                <Link to="/notice">
                   <DashboardOutlined />
-                  <span>Dashboard</span>
+                  <span>Notice</span>
                 </Link>
-              </Menu.Item> */}
+              </Menu.Item>
               <Menu.Item key="3">
                 <Link to="/account">
                   <UserOutlined />
@@ -125,6 +126,7 @@ export default class Index extends React.Component {
               <Switch>
                 <Route path="/" exact component={Home} />
                 {/* <Route path="/dashboard" exact component={DashBoard} /> */}
+                <Route path="/notice" exact component={Notice} />
                 <Route path="/account" exact component={Account} />
                 <Route path="/account/detail" exact component={AccountDetail} />
                 <Route path="/lesson" exact component={Home} />
