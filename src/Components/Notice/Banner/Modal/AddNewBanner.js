@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Modal, Form, Input, Upload } from "antd";
+import { Button, Modal, Form, Input, Upload, message } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 
 const layout = {
@@ -7,8 +7,7 @@ const layout = {
   wrapperCol: { span: 16 },
 };
 
-const normFile = (e: any) => {
-  console.log("Upload event:", e);
+const normFile = (e) => {
   if (Array.isArray(e)) {
     return e;
   }
@@ -19,11 +18,6 @@ const AddNewBanner = () => {
   const [form] = Form.useForm();
   const [visible, setVisible] = useState(false);
   const [fileList, setFileList] = useState([]);
-
-  const onFinish = (event) => {
-    console.log(event);
-    setFileList([]);
-  };
 
   const showModal = () => {
     setVisible(true);
@@ -36,6 +30,11 @@ const AddNewBanner = () => {
 
   const handleChange = ({ fileList }) => {
     setFileList(fileList);
+  };
+
+  const onFinish = (event) => {
+    console.log(event);
+    setFileList([]);
   };
 
   return (
@@ -62,16 +61,25 @@ const AddNewBanner = () => {
       >
         <Form {...layout} form={form} name="nest-messages">
           <Form.Item
-            name="upload"
-            label="Upload"
-            valuePropName="fileList"
+            name="bannerImg"
+            label="Banner Image"
             getValueFromEvent={normFile}
-            rules={[{ required: true, message: "Please input name" }]}
+            rules={[
+              { required: true, message: "Please select an image to upload" },
+            ]}
           >
             <Upload
               listType="text"
               fileList={fileList}
-              onChange={handleChange}
+              beforeUpload={() => false}
+              onChange={(info) => {
+                if (info.file.type.split("/")[0] !== "image") {
+                  message.error(`${info.file.name} is not an image file`);
+                  setFileList([]);
+                } else {
+                  handleChange(info);
+                }
+              }}
             >
               {fileList.length === 1 ? null : (
                 <Button icon={<UploadOutlined />}>Upload</Button>
