@@ -1,7 +1,6 @@
 import React from "react";
 import {
   Table,
-  Image,
   Button,
   Input,
   Space,
@@ -11,41 +10,44 @@ import {
 } from "antd";
 import Highlighter from "react-highlight-words";
 import { SearchOutlined } from "@ant-design/icons";
-import AddNewBanner from "./Modal/AddNewBanner";
-import EditBanner from "./Modal/EditBanner";
+import AddNewAnnouncement from "./Modal/AddNewAnnouncement";
 
 const data = [
   {
     id: 1,
-    imageUrl: "https://i.ibb.co/MMR1fHg/banner-science.jpg",
-    description: "Banner 1",
+    title: "Announce 1",
     status: "active",
-    uploadedBy: "haotpv",
+    uploadedBy: "anhtt",
+    uploadedDate: "14:24PM, 24/02/2021",
+    modifiedDate: "14:50PM, 24/02/2021",
   },
   {
     id: 2,
-    imageUrl: "https://i.ibb.co/MMR1fHg/banner-science.jpg",
-    description: "Banner 2",
+    title: "Announce 2",
     status: "active",
     uploadedBy: "anhtt",
+    uploadedDate: "14:24PM, 24/02/2021",
+    modifiedDate: "14:50PM, 24/02/2021",
   },
   {
     id: 3,
-    imageUrl: "https://i.ibb.co/MMR1fHg/banner-science.jpg",
-    description: "Banner 3",
+    title: "Announce 3",
     status: "active",
     uploadedBy: "anhtt",
+    uploadedDate: "14:24PM, 24/02/2021",
+    modifiedDate: "14:50PM, 24/02/2021",
   },
   {
     id: 4,
-    imageUrl: "https://i.ibb.co/MMR1fHg/banner-science.jpg",
-    description: "Banner 4",
+    title: "Announce 4",
     status: "active",
     uploadedBy: "anhtt",
+    uploadedDate: "14:24PM, 24/02/2021",
+    modifiedDate: "14:50PM, 24/02/2021",
   },
 ];
 
-export default class BannerComponent extends React.Component {
+export default class AnnoucementComponent extends React.Component {
   state = {
     searchText: "",
     searchedColumn: "",
@@ -148,29 +150,28 @@ export default class BannerComponent extends React.Component {
   render() {
     const columns = [
       {
-        title: "Banner",
-        dataIndex: "imageUrl",
-        width: "20%",
+        title: "Title",
+        dataIndex: "title",
         align: "center",
-        render: (record) => (
-          <Image
-            width={200}
-            src={record}
-            placeholder={<Image preview={false} src={record} width={200} />}
-          />
-        ),
-      },
-      {
-        title: "Description",
-        dataIndex: "description",
-        align: "center",
-        ...this.getColumnSearchProps("description"),
+        ...this.getColumnSearchProps("title"),
       },
       {
         title: "Uploaded By",
         dataIndex: "uploadedBy",
         align: "center",
         ...this.getColumnSearchProps("uploadedBy"),
+      },
+      {
+        title: "Uploaded Date",
+        dataIndex: "uploadedDate",
+        align: "center",
+        ...this.getColumnSearchProps("uploadedDate"),
+      },
+      {
+        title: "Modified Date",
+        dataIndex: "modifiedDate",
+        align: "center",
+        ...this.getColumnSearchProps("modifiedDate"),
       },
       {
         title: "Status",
@@ -199,7 +200,6 @@ export default class BannerComponent extends React.Component {
         render: (record) => (
           <Space size="small">
             <Button type="primary">Change Status</Button>
-            <EditBanner data={record} />
           </Space>
         ),
       },
@@ -221,10 +221,11 @@ export default class BannerComponent extends React.Component {
             marginBottom: 20,
           }}
         >
-          <AddNewBanner />
+          <AddNewAnnouncement />
           {selectedRowKeys.length === 0 ? null : (
             <Popconfirm
-              title="Are you sure to disable selected banners?"
+              placement="topRight"
+              title="Are you sure to disable selected Titles?"
               onConfirm={this.confirm} //Handle disable logic here
               okText="Yes"
               cancelText="No"
