@@ -32,10 +32,10 @@ const AddNewAnnouncement = () => {
   return (
     <div>
       <Button type="primary" size="large" onClick={showModal}>
-        Create New Annoucement
+        Create New Announcement
       </Button>
       <Modal
-        title="Create New Banner"
+        title="Create New Announcement"
         width={1000}
         visible={visible}
         onCancel={handleCancel}

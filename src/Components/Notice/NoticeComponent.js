@@ -1,7 +1,7 @@
 import React from "react";
 import { Tabs } from "antd";
 import BannerComponent from "./Banner/BannerComponent";
-import AnnoucementComponent from "./Annoucement/AnnoucementComponent";
+import AnnouncementComponent from "./Announcement/AnnouncementComponent";
 
 const { TabPane } = Tabs;
 
@@ -12,7 +12,7 @@ const NoticeComponent = () => {
         <BannerComponent />
       </TabPane>
       <TabPane tab="Annoucement" key="2">
-        <AnnoucementComponent />
+        <AnnouncementComponent />
       </TabPane>
     </Tabs>
   );

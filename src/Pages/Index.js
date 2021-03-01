@@ -100,7 +100,14 @@ export default class Index extends React.Component {
               </Menu.Item>
               <div className="seperator"></div>
               <Menu.Item key="11">
-                <Link to="">
+                <Link
+                  to=""
+                  onClick={() => {
+                    localStorage.removeItem("token");
+                    localStorage.removeItem("user");
+                    this.props.history.push("/login");
+                  }}
+                >
                   <LogoutOutlined />
                   <span>Logout</span>
                 </Link>

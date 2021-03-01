@@ -1,21 +1,16 @@
 import React from "react";
-import {
-  Table,
-  Button,
-  Input,
-  Space,
-  Tag,
-  Popconfirm,
-  message,
-} from "antd";
+import { Table, Button, Input, Space, Tag, Popconfirm, message } from "antd";
 import Highlighter from "react-highlight-words";
 import { SearchOutlined } from "@ant-design/icons";
 import AddNewAnnouncement from "./Modal/AddNewAnnouncement";
+import EditAnnouncement from "./Modal/EditAnnouncement";
 
 const data = [
   {
     id: 1,
     title: "Announce 1",
+    content:
+      "<h2>Lịch nghỉ Tết Nguyên Đán</h2><p>Học sinh của trường Major Edu sẽ được nghỉ tết đến hết tháng 2 năm 2021.</p>",
     status: "active",
     uploadedBy: "anhtt",
     uploadedDate: "14:24PM, 24/02/2021",
@@ -24,6 +19,8 @@ const data = [
   {
     id: 2,
     title: "Announce 2",
+    content:
+      "<h2>Lịch nghỉ Tết Nguyên Đán</h2><p>Học sinh của trường Major Edu sẽ được nghỉ tết đến hết tháng 2 năm 2021.</p>",
     status: "active",
     uploadedBy: "anhtt",
     uploadedDate: "14:24PM, 24/02/2021",
@@ -32,6 +29,8 @@ const data = [
   {
     id: 3,
     title: "Announce 3",
+    content:
+      "<h2>Lịch nghỉ Tết Nguyên Đán</h2><p>Học sinh của trường Major Edu sẽ được nghỉ tết đến hết tháng 2 năm 2021.</p>",
     status: "active",
     uploadedBy: "anhtt",
     uploadedDate: "14:24PM, 24/02/2021",
@@ -40,6 +39,8 @@ const data = [
   {
     id: 4,
     title: "Announce 4",
+    content:
+      "<h2>Lịch nghỉ Tết Nguyên Đán</h2><p>Học sinh của trường Major Edu sẽ được nghỉ tết đến hết tháng 2 năm 2021.</p>",
     status: "active",
     uploadedBy: "anhtt",
     uploadedDate: "14:24PM, 24/02/2021",
@@ -47,7 +48,7 @@ const data = [
   },
 ];
 
-export default class AnnoucementComponent extends React.Component {
+export default class AnnouncementComponent extends React.Component {
   state = {
     searchText: "",
     searchedColumn: "",
@@ -200,6 +201,7 @@ export default class AnnoucementComponent extends React.Component {
         render: (record) => (
           <Space size="small">
             <Button type="primary">Change Status</Button>
+            <EditAnnouncement data={record} />
           </Space>
         ),
       },
