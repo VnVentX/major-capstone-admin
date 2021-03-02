@@ -6,9 +6,11 @@ const { Search } = Input;
 
 const data = [
   {
+    id: 1,
     title: "Math",
   },
   {
+    id: 2,
     title: "Science",
   },
 ];
@@ -90,7 +92,13 @@ const SubjectComponent = () => {
         dataSource={data}
         renderItem={(item) => (
           <List.Item>
-            <Card title={<Link to="/lesson/grade/1/math">{item.title}</Link>}>
+            <Card
+              title={
+                <Link to={`${window.location.pathname}/${item.id}`}>
+                  {item.title}
+                </Link>
+              }
+            >
               Subject descriptions
             </Card>
           </List.Item>

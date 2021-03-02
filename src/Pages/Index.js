@@ -24,6 +24,8 @@ import Subject from "./Subject";
 import Unit from "./Unit";
 import AddQuizQuestion from "./AddQuizQuestion";
 import Notice from "./Notice";
+import Lesson from "./Lesson";
+import QuestionComponent from "../Components/Question/QuestionComponent";
 
 const { Header, Sider } = Layout;
 
@@ -75,31 +77,22 @@ export default class Index extends React.Component {
                   <span>Account</span>
                 </Link>
               </Menu.Item>
-              <SubMenu key="sub1" icon={<BookOutlined />} title="Lesson">
-                <Menu.Item key="5">
-                  <Link to="/lesson/grade/1">Grade 1</Link>
-                </Menu.Item>
-                <Menu.Item key="6">
-                  <Link to="/lesson/grade/2">Grade 2</Link>
-                </Menu.Item>
-                <Menu.Item key="7">
-                  <Link to="/lesson/grade/3">Grade 3</Link>
-                </Menu.Item>
-                <Menu.Item key="8">
-                  <Link to="/lesson/grade/4">Grade 4</Link>
-                </Menu.Item>
-                <Menu.Item key="9">
-                  <Link to="/lesson/grade/5">Grade 5</Link>
-                </Menu.Item>
-              </SubMenu>
-              <Menu.Item key="10">
-                <Link to="/question">
-                  <BankOutlined />
-                  <span>Question Bank</span>
+              <Menu.Item key="4">
+                <Link to="/lesson">
+                  <BookOutlined />
+                  <span>Lesson</span>
                 </Link>
               </Menu.Item>
+              <SubMenu key="sub2" icon={<BankOutlined />} title="Question Bank">
+                <Menu.Item key="5">
+                  <Link to="/game-question">Exercise</Link>
+                </Menu.Item>
+                <Menu.Item key="6">
+                  <Link to="/exercise-question">Game</Link>
+                </Menu.Item>
+              </SubMenu>
               <div className="seperator"></div>
-              <Menu.Item key="11">
+              <Menu.Item key="7">
                 <Link
                   to=""
                   onClick={() => {
@@ -136,15 +129,15 @@ export default class Index extends React.Component {
                 <Route path="/notice" exact component={Notice} />
                 <Route path="/account" exact component={Account} />
                 <Route path="/account/detail" exact component={AccountDetail} />
-                <Route path="/lesson" exact component={Home} />
-                <Route path="/lesson/grade/1" exact component={Subject} />
-                <Route path="/lesson/grade/2" exact component={Subject} />
-                <Route path="/lesson/grade/3" exact component={Subject} />
-                <Route path="/lesson/grade/4" exact component={Subject} />
-                <Route path="/lesson/grade/5" exact component={Subject} />
-                <Route path="/lesson/grade/1/math" exact component={Unit} />
+                <Route path="/lesson" exact component={Lesson} />
+                <Route path="/lesson/:gradeID" exact component={Subject} />
                 <Route
-                  path="/lesson/grade/1/math/1"
+                  path="/lesson/:gradeID/:subjectID"
+                  exact
+                  component={Unit}
+                />
+                <Route
+                  path="/lesson/:gradeID/:subjectID/:unitID"
                   exact
                   component={UnitDetail}
                 />
@@ -153,7 +146,26 @@ export default class Index extends React.Component {
                   exact
                   component={AddQuizQuestion}
                 />
-                <Route path="/question" exact component={QuestionBank} />
+                <Route
+                  path="/game-question"
+                  exact
+                  component={QuestionComponent}
+                />
+                <Route
+                  path="/exercise-question"
+                  exact
+                  component={QuestionComponent}
+                />
+                <Route
+                  path="/game-question/:gradeID"
+                  exact
+                  component={QuestionBank}
+                />
+                <Route
+                  path="/exercise-question/:gradeID"
+                  exact
+                  component={QuestionBank}
+                />
               </Switch>
             </Row>
           </Layout>

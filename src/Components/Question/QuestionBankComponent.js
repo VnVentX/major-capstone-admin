@@ -85,28 +85,6 @@ const QuestionBankComponent = () => {
         }}
       >
         <Form.Item
-          name="grade"
-          label="Select grade"
-          rules={[
-            {
-              required: true,
-              message: "Please select grade",
-            },
-          ]}
-        >
-          <Select
-            showSearch
-            style={{ width: 200, marginRight: 10 }}
-            placeholder="Select grade"
-          >
-            <Option value="1">Grade 1</Option>
-            <Option value="2">Grade 2</Option>
-            <Option value="3">Grade 3</Option>
-            <Option value="4">Grade 4</Option>
-            <Option value="5">Grade 5</Option>
-          </Select>
-        </Form.Item>
-        <Form.Item
           name="subject"
           label="Select subject"
           rules={[

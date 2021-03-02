@@ -224,6 +224,7 @@ export default class BannerComponent extends React.Component {
           <AddNewBanner />
           {selectedRowKeys.length === 0 ? null : (
             <Popconfirm
+              placement="topRight"
               title="Are you sure to disable selected banners?"
               onConfirm={this.confirm} //Handle disable logic here
               okText="Yes"

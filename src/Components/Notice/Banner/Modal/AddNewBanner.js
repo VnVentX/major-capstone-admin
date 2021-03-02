@@ -40,10 +40,10 @@ const AddNewBanner = () => {
   return (
     <div>
       <Button type="primary" size="large" onClick={showModal}>
-        Create New Banner
+        Create Banner
       </Button>
       <Modal
-        title="Create New Banner"
+        title="Create Banner"
         visible={visible}
         onCancel={handleCancel}
         destroyOnClose

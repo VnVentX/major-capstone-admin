@@ -6,18 +6,23 @@ const { Search } = Input;
 
 const data = [
   {
+    id: 1,
     title: "Unit 1",
   },
   {
+    id: 2,
     title: "Unit 2",
   },
   {
+    id: 3,
     title: "Unit 3",
   },
   {
+    id: 4,
     title: "Unit 4",
   },
   {
+    id: 5,
     title: "Unit 5",
   },
 ];
@@ -150,7 +155,13 @@ const UnitComponent = () => {
         dataSource={data}
         renderItem={(item) => (
           <List.Item>
-            <Card title={<Link to="/lesson/grade/1/math/1">{item.title}</Link>}>
+            <Card
+              title={
+                <Link to={`${window.location.pathname}/${item.id}`}>
+                  {item.title}
+                </Link>
+              }
+            >
               Lesson Descriptions
             </Card>
           </List.Item>

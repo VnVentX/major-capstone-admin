@@ -5,15 +5,17 @@ import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 const { Option } = Select;
 
 const AddNewQuestion = () => {
-  const [key, setkey] = useState(1);
+  const [counter, setCounter] = useState(0);
   const [form] = Form.useForm();
   const [questions, setQuestions] = useState([]);
 
+  const handleCounter = () => {
+    var count = counter;
+    setCounter(count + 1);
+  };
+
   const onFinish = async (values) => {
-    setkey(key + 1);
     const question = {
-      key: key,
-      grade: values.grade,
       subject: values.subject,
       category: values.category,
       q_name: values.question,
@@ -22,6 +24,7 @@ const AddNewQuestion = () => {
       answers: values.answers,
     };
     await setQuestions([...questions, question]);
+    setCounter(0);
     form.resetFields();
     console.log(questions);
   };
@@ -38,24 +41,6 @@ const AddNewQuestion = () => {
       >
         <h2>Question</h2>
         <Divider />
-        <Form.Item
-          name="grade"
-          label="Select grade"
-          rules={[
-            {
-              required: true,
-              message: "Please select grade",
-            },
-          ]}
-        >
-          <Select showSearch placeholder="Select grade">
-            <Option value="1">Grade 1</Option>
-            <Option value="2">Grade 2</Option>
-            <Option value="3">Grade 3</Option>
-            <Option value="4">Grade 4</Option>
-            <Option value="5">Grade 5</Option>
-          </Select>
-        </Form.Item>
         <Form.Item
           name="subject"
           label="Select subject"
@@ -143,8 +128,8 @@ const AddNewQuestion = () => {
         >
           {(fields, { add, remove }, { errors }) => (
             <>
-              {fields.map((field) => (
-                <>
+              {fields.map((field, idx) => (
+                <div key={idx}>
                   <Divider />
                   <Space key={field.key} align="center">
                     <Form.Item
@@ -154,26 +139,6 @@ const AddNewQuestion = () => {
                       fieldKey={[field.fieldKey, "answear"]}
                       dependencies={["question"]}
                       rules={[{ required: true, message: "Missing answer" }]}
-                    >
-                      <Input />
-                    </Form.Item>
-                    <Form.Item
-                      {...field}
-                      label="Audio"
-                      name={[field.name, "audio"]}
-                      fieldKey={[field.fieldKey, "audio"]}
-                      dependencies={["question"]}
-                      rules={[{ required: true, message: "Missing audio" }]}
-                    >
-                      <Input />
-                    </Form.Item>
-                    <Form.Item
-                      {...field}
-                      label="Image"
-                      name={[field.name, "img"]}
-                      fieldKey={[field.fieldKey, "img"]}
-                      dependencies={["question"]}
-                      rules={[{ required: true, message: "Missing image" }]}
                     >
                       <Input />
                     </Form.Item>
@@ -196,21 +161,25 @@ const AddNewQuestion = () => {
                       }}
                     />
                   </Space>
-                </>
+                </div>
               ))}
               <Form.ErrorList errors={errors} />
-              <Form.Item>
-                <Button
-                  type="dashed"
-                  onClick={() => {
-                    add();
-                  }}
-                  block
-                  icon={<PlusOutlined />}
-                >
-                  Add Answer
-                </Button>
-              </Form.Item>
+              {counter === 4 ? null : (
+                <Form.Item>
+                  <Button
+                    type="dashed"
+                    onClick={() => {
+                      add();
+                      handleCounter();
+                      console.log(counter);
+                    }}
+                    block
+                    icon={<PlusOutlined />}
+                  >
+                    Add Answer
+                  </Button>
+                </Form.Item>
+              )}
             </>
           )}
         </Form.List>
