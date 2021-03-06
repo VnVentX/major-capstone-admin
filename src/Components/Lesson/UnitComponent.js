@@ -157,7 +157,7 @@ const UnitComponent = () => {
           <List.Item>
             <Card
               title={
-                <Link to={`${window.location.pathname}/${item.id}`}>
+                <Link to={`${window.location.pathname}/unit/${item.id}`}>
                   {item.title}
                 </Link>
               }

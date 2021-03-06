@@ -26,6 +26,9 @@ import AddQuizQuestion from "./AddQuizQuestion";
 import Notice from "./Notice";
 import Lesson from "./Lesson";
 import QuestionComponent from "../Components/Question/QuestionComponent";
+import Grade from "./Grade";
+import School from "./School";
+import SchoolDetail from "./SchoolDetail";
 
 const { Header, Sider } = Layout;
 
@@ -72,27 +75,39 @@ export default class Index extends React.Component {
                 </Link>
               </Menu.Item>
               <Menu.Item key="3">
+                <Link to="/grade">
+                  <DashboardOutlined />
+                  <span>Grade</span>
+                </Link>
+              </Menu.Item>
+              <Menu.Item key="4">
+                <Link to="/school">
+                  <DashboardOutlined />
+                  <span>School</span>
+                </Link>
+              </Menu.Item>
+              <Menu.Item key="5">
                 <Link to="/account">
                   <UserOutlined />
                   <span>Account</span>
                 </Link>
               </Menu.Item>
-              <Menu.Item key="4">
-                <Link to="/lesson">
+              <Menu.Item key="6">
+                <Link to="/subject">
                   <BookOutlined />
-                  <span>Lesson</span>
+                  <span>Subject</span>
                 </Link>
               </Menu.Item>
               <SubMenu key="sub2" icon={<BankOutlined />} title="Question Bank">
-                <Menu.Item key="5">
+                <Menu.Item key="7">
                   <Link to="/game-question">Exercise</Link>
                 </Menu.Item>
-                <Menu.Item key="6">
+                <Menu.Item key="8">
                   <Link to="/exercise-question">Game</Link>
                 </Menu.Item>
               </SubMenu>
               <div className="seperator"></div>
-              <Menu.Item key="7">
+              <Menu.Item key="9">
                 <Link
                   to=""
                   onClick={() => {
@@ -121,28 +136,40 @@ export default class Index extends React.Component {
               )}
               <h1 style={{ marginRight: 25 }}>Welcome Admin</h1>
             </Header>
-            <BreadcrumbComponent />
+            {/* <BreadcrumbComponent /> */}
             <Row gutter={16} style={{ margin: 0 }}>
               <Switch>
                 <Route path="/" exact component={Home} />
                 {/* <Route path="/dashboard" exact component={DashBoard} /> */}
                 <Route path="/notice" exact component={Notice} />
+                <Route path="/grade" exact component={Grade} />
+                <Route path="/school" exact component={QuestionComponent} />
+                <Route path="/grade/:gradeID/school" exact component={School} />
+                <Route
+                  path="/grade/:gradeID/school/:schoolID"
+                  exact
+                  component={SchoolDetail}
+                />
                 <Route path="/account" exact component={Account} />
                 <Route path="/account/detail" exact component={AccountDetail} />
-                <Route path="/lesson" exact component={Lesson} />
-                <Route path="/lesson/:gradeID" exact component={Subject} />
+                <Route path="/subject" exact component={Lesson} />
                 <Route
-                  path="/lesson/:gradeID/:subjectID"
+                  path="/grade/:gradeID/subject"
+                  exact
+                  component={Subject}
+                />
+                <Route
+                  path="/grade/:gradeID/subject/:subjectID"
                   exact
                   component={Unit}
                 />
                 <Route
-                  path="/lesson/:gradeID/:subjectID/:unitID"
+                  path="/grade/:gradeID/subject/:subjectID/unit/:unitID"
                   exact
                   component={UnitDetail}
                 />
                 <Route
-                  path="/lesson/grade/1/math/1/quiz"
+                  path="/grade/:gradeID/subject/:subjectID/unit/:unitID/excecise/:exceciseID"
                   exact
                   component={AddQuizQuestion}
                 />
@@ -157,12 +184,12 @@ export default class Index extends React.Component {
                   component={QuestionComponent}
                 />
                 <Route
-                  path="/game-question/:gradeID"
+                  path="/grade/:gradeID/game-question"
                   exact
                   component={QuestionBank}
                 />
                 <Route
-                  path="/exercise-question/:gradeID"
+                  path="/grade/:gradeID/exercise-question"
                   exact
                   component={QuestionBank}
                 />

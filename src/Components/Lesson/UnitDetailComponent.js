@@ -21,15 +21,19 @@ const layout = {
 
 const data = [
   {
+    id: 1,
     title: "Quiz 1",
   },
   {
+    id: 2,
     title: "Quiz 2",
   },
   {
+    id: 3,
     title: "Quiz 3",
   },
   {
+    id: 4,
     title: "Quiz 4",
   },
 ];
@@ -210,7 +214,9 @@ const UnitComponent = () => {
             <List.Item>
               <Card
                 title={
-                  <Link to="/lesson/grade/1/math/1/quiz">{item.title}</Link>
+                  <Link to={`${window.location.pathname}/excecise/${item.id}`}>
+                    {item.title}
+                  </Link>
                 }
               >
                 Quiz descriptions
