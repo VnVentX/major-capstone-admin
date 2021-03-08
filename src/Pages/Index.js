@@ -100,10 +100,10 @@ export default class Index extends React.Component {
               </Menu.Item>
               <SubMenu key="sub2" icon={<BankOutlined />} title="Question Bank">
                 <Menu.Item key="7">
-                  <Link to="/game-question">Exercise</Link>
+                  <Link to="/exercise-question">Exercise</Link>
                 </Menu.Item>
                 <Menu.Item key="8">
-                  <Link to="/exercise-question">Game</Link>
+                  <Link to="/game-question">Game</Link>
                 </Menu.Item>
               </SubMenu>
               <div className="seperator"></div>
@@ -136,17 +136,16 @@ export default class Index extends React.Component {
               )}
               <h1 style={{ marginRight: 25 }}>Welcome Admin</h1>
             </Header>
-            {/* <BreadcrumbComponent /> */}
+            <BreadcrumbComponent />
             <Row gutter={16} style={{ margin: 0 }}>
               <Switch>
                 <Route path="/" exact component={Home} />
                 {/* <Route path="/dashboard" exact component={DashBoard} /> */}
                 <Route path="/notice" exact component={Notice} />
                 <Route path="/grade" exact component={Grade} />
-                <Route path="/school" exact component={QuestionComponent} />
-                <Route path="/grade/:gradeID/school" exact component={School} />
+                <Route path="/school" exact component={School} />
                 <Route
-                  path="/grade/:gradeID/school/:schoolID"
+                  path="/school/:schoolID"
                   exact
                   component={SchoolDetail}
                 />

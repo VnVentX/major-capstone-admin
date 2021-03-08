@@ -241,6 +241,7 @@ export default class BannerComponent extends React.Component {
           rowSelection={rowSelection}
           columns={columns}
           dataSource={data}
+          scroll={{ x: true }}
         />
       </div>
     );
