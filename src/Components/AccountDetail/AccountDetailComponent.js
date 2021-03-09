@@ -19,13 +19,7 @@ const AccountDetailComponent = () => {
                 label="Account"
                 labelStyle={{ fontWeight: "bold" }}
               >
-                HCM_12_M_G1_04
-              </Descriptions.Item>
-              <Descriptions.Item
-                label="Site"
-                labelStyle={{ fontWeight: "bold" }}
-              >
-                HCM
+                HDMC_G1_04
               </Descriptions.Item>
               <Descriptions.Item
                 label="DOB"
@@ -36,9 +30,14 @@ const AccountDetailComponent = () => {
               <Descriptions.Item
                 label="Address"
                 labelStyle={{ fontWeight: "bold" }}
-                span={2}
               >
                 No. 18, Nguyen Kim Street, District 10, HCMC
+              </Descriptions.Item>
+              <Descriptions.Item
+                label="Telephone"
+                labelStyle={{ fontWeight: "bold" }}
+              >
+                1810000000
               </Descriptions.Item>
             </Descriptions>
           </Card>
@@ -50,67 +49,26 @@ const AccountDetailComponent = () => {
                 label="School"
                 labelStyle={{ fontWeight: "bold" }}
               >
-                TH Major
+                Dương Minh Châu
               </Descriptions.Item>
               <Descriptions.Item
-                label="Grade"
+                label="Education Level"
                 labelStyle={{ fontWeight: "bold" }}
               >
-                1
+                Primary School
               </Descriptions.Item>
               <Descriptions.Item
-                label="Class"
-                labelStyle={{ fontWeight: "bold" }}
-              >
-                1-1
-              </Descriptions.Item>
-              <Descriptions.Item
-                label="Start Date"
+                label="Linked Date"
                 labelStyle={{ fontWeight: "bold" }}
               >
                 1/1/2021
               </Descriptions.Item>
               <Descriptions.Item
-                label="End Date"
-                labelStyle={{ fontWeight: "bold" }}
-              ></Descriptions.Item>
-              <Descriptions.Item
                 label="Address"
                 labelStyle={{ fontWeight: "bold" }}
                 span={2}
               >
-                No. 18, Phan Huy Ich Street, Go Vap District, HCMC
-              </Descriptions.Item>
-            </Descriptions>
-          </Card>
-        </TabPane>
-        <TabPane tab="Contacts" key="3">
-          <Card>
-            <Descriptions layout="vertical">
-              <Descriptions.Item
-                label="Farther Name"
-                labelStyle={{ fontWeight: "bold" }}
-              >
-                Trần Thiên A
-              </Descriptions.Item>
-              <Descriptions.Item
-                label="Morther Name"
-                labelStyle={{ fontWeight: "bold" }}
-              >
-                Trần Thiên B
-              </Descriptions.Item>
-              <Descriptions.Item
-                label="Telephone"
-                labelStyle={{ fontWeight: "bold" }}
-              >
-                1810000000, 1810000001
-              </Descriptions.Item>
-              <Descriptions.Item
-                label="Address"
-                labelStyle={{ fontWeight: "bold" }}
-                span={2}
-              >
-                No. 18, Nguyen Kim Street, District 10, HCMC
+                No. 34, Nguyen Lam Street, Ward 6, District 10, HMC
               </Descriptions.Item>
             </Descriptions>
           </Card>

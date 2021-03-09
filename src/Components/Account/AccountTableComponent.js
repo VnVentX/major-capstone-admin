@@ -6,7 +6,7 @@ const { TabPane } = Tabs;
 
 const student = [
   {
-    key: "1",
+    id: "1",
     firstName: "Đoàn",
     lastName: "Tuấn Đức",
     school: "Duương Minh Châu",
@@ -18,7 +18,7 @@ const student = [
     email: "mockemail1@mockemail.com",
   },
   {
-    key: "2",
+    id: "2",
     firstName: "Trương",
     lastName: "Thành Đạt",
     school: "Duương Minh Châu",
@@ -30,7 +30,7 @@ const student = [
     email: "mockemail1@mockemail.com",
   },
   {
-    key: "3",
+    id: "3",
     firstName: "Từ",
     lastName: "Thiệu Hào",
     school: "Duương Minh Châu",
@@ -42,7 +42,7 @@ const student = [
     email: "mockemail1@mockemail.com",
   },
   {
-    key: "4",
+    id: "4",
     firstName: "Trần",
     lastName: "Thiên Anh",
     school: "Duương Minh Châu",

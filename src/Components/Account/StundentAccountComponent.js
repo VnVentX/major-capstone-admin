@@ -18,7 +18,6 @@ import EditStudent from "./Modal/EditStudent";
 export default class StudentAccountComponent extends Component {
   state = {
     selectedRowKeys: [],
-    data: [],
     pagination: {
       current: 1,
       pageSize: 10,
@@ -127,7 +126,7 @@ export default class StudentAccountComponent extends Component {
         title: "Name",
         align: "center",
         render: (record) => (
-          <Link to="/student">
+          <Link to={`/student/${record.id}`}>
             {record.firstName} {record.lastName}
           </Link>
         ),

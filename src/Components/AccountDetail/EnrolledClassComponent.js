@@ -3,53 +3,45 @@ import { Table, Card, Tag } from "antd";
 
 const data = [
   {
-    key: "1",
-    site: "HCM",
-    school: "TH Major",
-    account: "HCM_12_M_G1_04",
+    id: "4",
+    firstName: "Trần",
+    lastName: "Thiên Anh",
+    school: "Duương Minh Châu",
+    account: "DMC_G1_04",
     grade: 1,
     class: "1-1",
+    gender: "male",
     status: "learning",
-  },
-  {
-    key: "2",
-    site: "ĐN",
-    school: "TH Major",
-    account: "HCM_12_M_G1_04",
-    grade: 1,
-    class: "1-1",
-    status: "dropout",
+    email: "mockemail1@mockemail.com",
   },
 ];
 
 const columns = [
   {
-    title: "Site",
-    dataIndex: "site",
-    key: "site",
-  },
-  {
     title: "School",
     dataIndex: "school",
-    key: "school",
+    align: "center",
   },
 
   {
     title: "Grade",
     dataIndex: "grade",
+    align: "center",
   },
   {
     title: "Class",
     dataIndex: "class",
+    align: "center",
   },
   {
     title: "Account",
     dataIndex: "account",
+    align: "center",
   },
   {
     title: "Status",
     dataIndex: "status",
-    key: "status",
+    align: "center",
     render: (status) => (
       <span>
         {status === "done" ? (

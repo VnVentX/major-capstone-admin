@@ -146,8 +146,11 @@ export default class Index extends React.Component {
                   exact
                   component={Account}
                 />
-                <Route path="/account" exact component={Account} />
-                <Route path="/account/detail" exact component={AccountDetail} />
+                <Route
+                  path="/student/:studentID"
+                  exact
+                  component={AccountDetail}
+                />
                 <Route path="/subject" exact component={Lesson} />
                 <Route
                   path="/grade/:gradeID/subject"
