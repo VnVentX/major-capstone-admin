@@ -9,7 +9,7 @@ export default function Login(props) {
     props.history.push("/");
   }
   const onSubmit = async (e) => {
-    if (email === "test" && password === "123456") {
+    if (email === "admin" && password === "12345678") {
       localStorage.setItem("token", "token");
       props.history.push("/");
     }
@@ -39,7 +39,7 @@ export default function Login(props) {
   return (
     <div>
       <form className="login-form" onSubmit={onSubmit}>
-        <h1>Food Admin</h1>
+        <h1>Major Education</h1>
         <div className="txtb">
           <input
             type="text"

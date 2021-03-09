@@ -3,51 +3,21 @@ import {
   Table,
   Card,
   Tag,
-  Modal,
   Button,
-  Form,
   Input,
-  Select,
-  DatePicker,
   Space,
-  Upload,
+  Popconfirm,
   message,
 } from "antd";
 import { Link } from "react-router-dom";
-import {
-  InboxOutlined,
-  DownloadOutlined,
-  UploadOutlined,
-  PlusOutlined,
-  SearchOutlined,
-} from "@ant-design/icons";
+import { DownloadOutlined, SearchOutlined } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
-
-const { Dragger } = Upload;
-
-const props = {
-  name: "file",
-  multiple: true,
-  action: "https://www.mocky.io/v2/5cc8019d300000980a055e76",
-  onChange(info) {
-    const { status } = info.file;
-    if (status !== "uploading") {
-      console.log(info.file, info.fileList);
-    }
-    if (status === "done") {
-      message.success(`${info.file.name} file uploaded successfully.`);
-    } else if (status === "error") {
-      message.error(`${info.file.name} file upload failed.`);
-    }
-  },
-};
+import AddNewStudent from "./Modal/AddNewStudent";
+import EditStudent from "./Modal/EditStudent";
 
 export default class StudentAccountComponent extends Component {
   state = {
-    selectedRowKeys: [], // Check here to configure the default column
-    isEditAccount: false,
-    isCreateAccount: false,
-    modalTitle: "",
+    selectedRowKeys: [],
     data: [],
     pagination: {
       current: 1,
@@ -56,58 +26,7 @@ export default class StudentAccountComponent extends Component {
     searchText: "",
     searchedColumn: "",
     loading: false,
-    visible: false,
-    visibleImport: false,
-    visibleExport: false,
   };
-
-  //   Modal Add new
-  showModal = () => {
-    this.setState({
-      visible: true,
-      modalTitle: "Create Account",
-      isCreateAccount: true,
-    });
-  };
-
-  showModalImport = () => {
-    this.setState({
-      visibleImport: true,
-      modalTitle: "Import from Excel",
-    });
-  };
-
-  showModalExport = () => {
-    this.setState({
-      visibleExport: true,
-      modalTitle: "Export to Excel",
-    });
-  };
-
-  handleOk = () => {
-    this.setState({ loading: true });
-    setTimeout(() => {
-      this.setState({
-        loading: false,
-        visible: false,
-        visibleExport: false,
-        visibleImport: false,
-        isEditAccount: false,
-        modalTitle: "",
-      });
-    }, 3000);
-  };
-
-  handleCancel = () => {
-    this.setState({
-      visible: false,
-      visibleExport: false,
-      visibleImport: false,
-      isEditAccount: false,
-      modalTitle: "",
-    });
-  };
-  //   End Modal
 
   onSelectChange = (selectedRowKeys) => {
     console.log("selectedRowKeys changed: ", selectedRowKeys);
@@ -197,53 +116,51 @@ export default class StudentAccountComponent extends Component {
     this.setState({ searchText: "" });
   };
 
+  confirm = (e) => {
+    console.log(e);
+    message.success("Click on Yes");
+  };
+
   render() {
     const columns = [
       {
         title: "Name",
-        dataIndex: "name",
-        key: "name",
-        sorter: true,
-        width: "20%",
-        ...this.getColumnSearchProps("name"),
-      },
-      {
-        title: "Site",
-        dataIndex: "site",
-        key: "site",
-        width: "20%",
+        align: "center",
+        render: (record) => (
+          <Link to="/student">
+            {record.firstName} {record.lastName}
+          </Link>
+        ),
       },
       {
         title: "School",
         dataIndex: "school",
-        key: "school",
-        width: "20%",
-        ...this.getColumnSearchProps("school"),
+        align: "center",
       },
       {
         title: "Gender",
         dataIndex: "gender",
-        width: "10%",
+        align: "center",
       },
       {
         title: "Grade",
         dataIndex: "grade",
-        width: "10%",
+        align: "center",
       },
       {
         title: "Class",
         dataIndex: "class",
-        width: "10%",
+        align: "center",
       },
       {
         title: "Account",
         dataIndex: "account",
-        width: "20%",
+        align: "center",
       },
       {
         title: "Status",
         dataIndex: "status",
-        key: "status",
+        align: "center",
         render: (status) => (
           <span>
             {status === "done" ? (
@@ -264,63 +181,20 @@ export default class StudentAccountComponent extends Component {
       },
       {
         title: "Action",
-        width: "40%",
-        dataIndex: "",
-        key: "x",
+        align: "center",
         render: (record) => (
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-            }}
-          >
-            <button
-              style={{
-                marginRight: 5,
-              }}
-              className="ant-btn-link"
-              onClick={async () => {
-                await this.setState({
-                  visible: true,
-                  isEditAccount: true,
-                  modalTitle: "Edit Account",
-                });
-              }}
-            >
-              Edit
-            </button>
-            |
-            <Button type="link">
-              <Link to="/account/detail">Details</Link>
-            </Button>
-          </div>
+          <Space size="small">
+            <EditStudent data={record} />
+          </Space>
         ),
       },
     ];
 
-    const {
-      selectedRowKeys,
-      pagination,
-      visible,
-      visibleImport,
-      visibleExport,
-      modalTitle,
-      loading,
-    } = this.state;
+    const { selectedRowKeys, pagination, loading } = this.state;
 
     const rowSelection = {
       selectedRowKeys,
       onChange: this.onSelectChange,
-      selections: [Table.SELECTION_ALL, Table.SELECTION_INVERT],
-    };
-
-    const layout = {
-      labelCol: { span: 8 },
-      wrapperCol: { span: 16 },
-    };
-
-    const onFinish = (values) => {
-      console.log(values);
     };
 
     return (
@@ -334,280 +208,41 @@ export default class StudentAccountComponent extends Component {
             }}
           >
             <div>
-              <Button
-                type="primary"
-                size="large"
-                icon={<UploadOutlined />}
-                style={{ marginRight: 5 }}
-                onClick={this.showModalImport}
-              >
-                Import from Excel
+              <Button type="primary" size="large" icon={<DownloadOutlined />}>
+                Export Student List
               </Button>
-              {/* Modal Import excel */}
-              <Modal
-                title={modalTitle}
-                visible={visibleImport}
-                onOk={this.handleOk}
-                onCancel={this.handleCancel}
-              >
-                <Dragger {...props}>
-                  <p className="ant-upload-drag-icon">
-                    <InboxOutlined />
-                  </p>
-                  <p className="ant-upload-text">
-                    Click or drag file to this area to upload
-                  </p>
-                  <p className="ant-upload-hint">
-                    Support for a single or bulk upload. Strictly prohibit from
-                    uploading company data or other band files
-                  </p>
-                </Dragger>
-              </Modal>
-              <Button
-                type="primary"
-                size="large"
-                icon={<DownloadOutlined />}
-                onClick={this.showModalExport}
-              >
-                Export to Excel
-              </Button>
-              {/* Modal Import excel */}
-              <Modal
-                title={modalTitle}
-                visible={visibleExport}
-                onOk={this.handleOk}
-                onCancel={this.handleCancel}
-                okText="Export"
-              >
-                <Form {...layout} name="nest-messages">
-                  <Form.Item
-                    name="site"
-                    label="Site"
-                    rules={[{ required: true }]}
-                  >
-                    <Select>
-                      <Select.Option value="HCM">Hồ Chí Minh</Select.Option>
-                      <Select.Option value="HN">Hà Nội</Select.Option>
-                      <Select.Option value="ĐN">Đà Nẵng</Select.Option>
-                    </Select>
-                  </Form.Item>
-                  <Form.Item
-                    name="school"
-                    label="School"
-                    rules={[{ required: true }]}
-                  >
-                    <Select>
-                      <Select.Option value="TH Major">TH Major</Select.Option>
-                      <Select.Option value="THCS Major">
-                        THCS Major
-                      </Select.Option>
-                      <Select.Option value="THPT Major">
-                        THPT Major
-                      </Select.Option>
-                    </Select>
-                  </Form.Item>
-                  <Form.Item
-                    name="grade"
-                    label="Grade"
-                    rules={[{ required: true }]}
-                  >
-                    <Select>
-                      <Select.Option value="1">1</Select.Option>
-                      <Select.Option value="2">2</Select.Option>
-                      <Select.Option value="3">3</Select.Option>
-                      <Select.Option value="4">4</Select.Option>
-                      <Select.Option value="5">5</Select.Option>
-                      <Select.Option value="6">6</Select.Option>
-                      <Select.Option value="7">7</Select.Option>
-                      <Select.Option value="8">8</Select.Option>
-                      <Select.Option value="9">9</Select.Option>
-                      <Select.Option value="10">10</Select.Option>
-                      <Select.Option value="11">11</Select.Option>
-                      <Select.Option value="12">12</Select.Option>
-                    </Select>
-                  </Form.Item>
-                  <Form.Item
-                    name="class"
-                    label="Class"
-                    rules={[{ required: true }]}
-                  >
-                    <Select>
-                      <Select.Option value="1">1</Select.Option>
-                      <Select.Option value="2">2</Select.Option>
-                      <Select.Option value="3">3</Select.Option>
-                      <Select.Option value="4">4</Select.Option>
-                      <Select.Option value="5">5</Select.Option>
-                      <Select.Option value="6">6</Select.Option>
-                      <Select.Option value="7">7</Select.Option>
-                      <Select.Option value="8">8</Select.Option>
-                      <Select.Option value="9">9</Select.Option>
-                      <Select.Option value="10">10</Select.Option>
-                      <Select.Option value="11">11</Select.Option>
-                      <Select.Option value="12">12</Select.Option>
-                    </Select>
-                  </Form.Item>
-                </Form>
-              </Modal>
             </div>
-            <div>
-              <Button
-                type="primary"
-                size="large"
-                icon={<PlusOutlined />}
-                onClick={this.showModal}
-                style={{ marginRight: 5 }}
-              >
-                Add New Account
-              </Button>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "flex-start",
+                alignItems: "center",
+              }}
+            >
+              <AddNewStudent />
               {selectedRowKeys.length === 0 ? null : (
-                <Button type="danger" size="large">
-                  Disable
-                </Button>
+                <Popconfirm
+                  placement="topRight"
+                  title="Are you sure to disable selected Schools?"
+                  onConfirm={this.confirm} //Handle disable logic here
+                  okText="Yes"
+                  cancelText="No"
+                >
+                  <Button type="danger" size="large" style={{ marginLeft: 5 }}>
+                    Disable
+                  </Button>
+                </Popconfirm>
               )}
             </div>
           </div>
-
-          {/* Modal edit create */}
-          <Modal
-            visible={visible}
-            title={modalTitle}
-            onOk={this.handleOk}
-            onCancel={this.handleCancel}
-            footer={[
-              <Button key="back" onClick={this.handleCancel}>
-                Return
-              </Button>,
-              <Button
-                key="submit"
-                type="primary"
-                loading={loading}
-                onClick={onFinish}
-              >
-                Submit
-              </Button>,
-            ]}
-          >
-            <Form {...layout} name="nest-messages">
-              <Form.Item
-                name="firstName"
-                label="First Name"
-                rules={[{ required: true }]}
-              >
-                <Input />
-              </Form.Item>
-              <Form.Item
-                name="lastName"
-                label="Last Name"
-                rules={[{ required: true }]}
-              >
-                <Input />
-              </Form.Item>
-              <Form.Item name="site" label="Site" rules={[{ required: true }]}>
-                <Select>
-                  <Select.Option value="HCM">Hồ Chí Minh</Select.Option>
-                  <Select.Option value="HN">Hà Nội</Select.Option>
-                  <Select.Option value="ĐN">Đà Nẵng</Select.Option>
-                </Select>
-              </Form.Item>
-              <Form.Item
-                noStyle
-                shouldUpdate={(prevValues, currentValues) =>
-                  prevValues.site !== currentValues.site
-                }
-              >
-                {({ getFieldValue }) => {
-                  return getFieldValue("site") !== undefined ? (
-                    <Form.Item
-                      name="school"
-                      label="School"
-                      rules={[{ required: true }]}
-                    >
-                      <Select>
-                        <Select.Option value="TH Major">TH Major</Select.Option>
-                        <Select.Option value="THCS Major">
-                          THCS Major
-                        </Select.Option>
-                        <Select.Option value="THPT Major">
-                          THPT Major
-                        </Select.Option>
-                      </Select>
-                    </Form.Item>
-                  ) : null;
-                }}
-              </Form.Item>
-              <Form.Item name="age" label="DoB" rules={[{ required: true }]}>
-                <DatePicker />
-              </Form.Item>
-              <Form.Item
-                name="gender"
-                label="Gender"
-                rules={[{ required: true }]}
-              >
-                <Select>
-                  <Select.Option value="male">Male</Select.Option>
-                  <Select.Option value="female">Female</Select.Option>
-                  <Select.Option value="other">Other</Select.Option>
-                </Select>
-              </Form.Item>
-              <Form.Item
-                name="grade"
-                label="Grade"
-                rules={[{ required: true }]}
-              >
-                <Select>
-                  <Select.Option value="1">1</Select.Option>
-                  <Select.Option value="2">2</Select.Option>
-                  <Select.Option value="3">3</Select.Option>
-                  <Select.Option value="4">4</Select.Option>
-                  <Select.Option value="5">5</Select.Option>
-                  <Select.Option value="6">6</Select.Option>
-                  <Select.Option value="7">7</Select.Option>
-                  <Select.Option value="8">8</Select.Option>
-                  <Select.Option value="9">9</Select.Option>
-                  <Select.Option value="10">10</Select.Option>
-                  <Select.Option value="11">11</Select.Option>
-                  <Select.Option value="12">12</Select.Option>
-                </Select>
-              </Form.Item>
-              <Form.Item
-                noStyle
-                shouldUpdate={(prevValues, currentValues) =>
-                  prevValues.grade !== currentValues.grade
-                }
-              >
-                {({ getFieldValue }) => {
-                  return getFieldValue("grade") !== undefined ? (
-                    <Form.Item
-                      name="class"
-                      label="Class"
-                      rules={[
-                        {
-                          required: true,
-                        },
-                      ]}
-                    >
-                      <Select>
-                        <Select.Option value="1-1">1-1</Select.Option>
-                        <Select.Option value="1-2">1-2</Select.Option>
-                        <Select.Option value="1-3">1-3</Select.Option>
-                        <Select.Option value="1-4">1-4</Select.Option>
-                        <Select.Option value="1-5">1-5</Select.Option>
-                        <Select.Option value="1-6">1-6</Select.Option>
-                      </Select>
-                    </Form.Item>
-                  ) : null;
-                }}
-              </Form.Item>
-            </Form>
-          </Modal>
           <Table
+            rowKey={this.props.data.id}
             rowSelection={rowSelection}
             columns={columns}
             dataSource={this.props.data}
-            rowKey={this.props.data.key}
+            scroll={{ x: true }}
             pagination={pagination}
             loading={loading}
-            scroll={{ x: true }}
           />
         </Card>
       </>

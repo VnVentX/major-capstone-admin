@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import TeacherAccountComponent from "./TeacherAccountComponent";
 import StudentAccountComponent from "./StundentAccountComponent";
 import axios from "axios";
 import { Tabs } from "antd";
@@ -8,10 +7,10 @@ const { TabPane } = Tabs;
 const student = [
   {
     key: "1",
-    site: "HCM",
-    name: "Đoàn Tuấn Đức",
-    school: "TH Major",
-    account: "HCM_12_M_G1_01",
+    firstName: "Đoàn",
+    lastName: "Tuấn Đức",
+    school: "Duương Minh Châu",
+    account: "DMC_G1_01",
     grade: 1,
     class: "1-1",
     gender: "male",
@@ -20,10 +19,10 @@ const student = [
   },
   {
     key: "2",
-    site: "HCM",
-    name: "Trương Thành Đạt",
-    school: "TH Major",
-    account: "HCM_12_M_G1_02",
+    firstName: "Trương",
+    lastName: "Thành Đạt",
+    school: "Duương Minh Châu",
+    account: "DMC_G1_02",
     grade: 1,
     class: "1-1",
     gender: "male",
@@ -32,10 +31,10 @@ const student = [
   },
   {
     key: "3",
-    site: "HCM",
-    name: "Từ Thiệu Hào",
-    school: "TH Major",
-    account: "HCM_12_M_G1_03",
+    firstName: "Từ",
+    lastName: "Thiệu Hào",
+    school: "Duương Minh Châu",
+    account: "DMC_G1_03",
     grade: 1,
     class: "1-1",
     gender: "male",
@@ -44,49 +43,15 @@ const student = [
   },
   {
     key: "4",
-    site: "HCM",
-    name: "Trần Thiên Anh",
-    school: "TH Major",
-    account: "HCM_12_M_G1_04",
+    firstName: "Trần",
+    lastName: "Thiên Anh",
+    school: "Duương Minh Châu",
+    account: "DMC_G1_04",
     grade: 1,
     class: "1-1",
     gender: "male",
     status: "learning",
     email: "mockemail1@mockemail.com",
-  },
-];
-const teacher = [
-  {
-    key: "1",
-    name: "Nguyễn Thị Kim Ngân",
-    school: "TH Major",
-    account: "HCM_12_M_nganntk",
-    gender: "female",
-    email: "nganntk@mockemail.com",
-  },
-  {
-    key: "2",
-    name: "Phạm Ngọc Anh",
-    school: "TH Major",
-    account: "HCM_12_M_anhpn",
-    gender: "female",
-    email: "anhpn@mockemail.com",
-  },
-  {
-    key: "3",
-    name: "Trần Gia Huy",
-    school: "TH Major",
-    account: "HCM_12_M_huytg",
-    gender: "male",
-    email: "huytg@mockemail.com",
-  },
-  {
-    key: "4",
-    name: "Trần Thế Hào",
-    school: "TH Major",
-    account: "HCM_12_M_haott",
-    gender: "male",
-    email: "haott@mockemail.com",
   },
 ];
 
@@ -146,9 +111,6 @@ export class AccountTableComponent extends Component {
         <TabPane tab="Student's Account" key="1">
           <StudentAccountComponent data={student} />
         </TabPane>
-        {/* <TabPane tab="Teacher's Account" key="2">
-          <TeacherAccountComponent data={teacher} />
-        </TabPane> */}
       </Tabs>
     );
   }

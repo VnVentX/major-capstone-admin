@@ -3,7 +3,6 @@ import { Layout, Menu, Row } from "antd";
 import {
   MenuUnfoldOutlined,
   MenuFoldOutlined,
-  UserOutlined,
   DashboardOutlined,
   BankOutlined,
   HomeOutlined,
@@ -13,7 +12,6 @@ import {
 import logo from "../Img/major-logo-2.jpg";
 import logobig from "../Img/major-logo-long.svg";
 import { BrowserRouter, Switch, Route, Link } from "react-router-dom";
-import DashBoard from "./DashBoard";
 import Account from "./Account";
 import AccountDetail from "./AccountDetail";
 import BreadcrumbComponent from "../Components/BreadcrumbComponent";
@@ -29,6 +27,7 @@ import QuestionComponent from "../Components/Question/QuestionComponent";
 import Grade from "./Grade";
 import School from "./School";
 import SchoolDetail from "./SchoolDetail";
+import GradeDetail from "./GradeDetail";
 
 const { Header, Sider } = Layout;
 
@@ -68,30 +67,23 @@ export default class Index extends React.Component {
                   <span>Home</span>
                 </Link>
               </Menu.Item>
-              <Menu.Item key="2">
-                <Link to="/notice">
-                  <DashboardOutlined />
-                  <span>Notice</span>
-                </Link>
-              </Menu.Item>
-              <Menu.Item key="3">
-                <Link to="/grade">
-                  <DashboardOutlined />
-                  <span>Grade</span>
-                </Link>
-              </Menu.Item>
-              <Menu.Item key="4">
-                <Link to="/school">
-                  <DashboardOutlined />
-                  <span>School</span>
-                </Link>
-              </Menu.Item>
-              <Menu.Item key="5">
-                <Link to="/account">
-                  <UserOutlined />
-                  <span>Account</span>
-                </Link>
-              </Menu.Item>
+              <SubMenu key="sub1" icon={<DashboardOutlined />} title="Manage">
+                <Menu.Item key="2">
+                  <Link to="/notice">
+                    <span>News</span>
+                  </Link>
+                </Menu.Item>
+                <Menu.Item key="3">
+                  <Link to="/grade">
+                    <span>Grade</span>
+                  </Link>
+                </Menu.Item>
+                <Menu.Item key="4">
+                  <Link to="/school">
+                    <span>School</span>
+                  </Link>
+                </Menu.Item>
+              </SubMenu>
               <Menu.Item key="6">
                 <Link to="/subject">
                   <BookOutlined />
@@ -140,14 +132,19 @@ export default class Index extends React.Component {
             <Row gutter={16} style={{ margin: 0 }}>
               <Switch>
                 <Route path="/" exact component={Home} />
-                {/* <Route path="/dashboard" exact component={DashBoard} /> */}
                 <Route path="/notice" exact component={Notice} />
                 <Route path="/grade" exact component={Grade} />
+                <Route path="/grade/:gradeID" exact component={GradeDetail} />
                 <Route path="/school" exact component={School} />
                 <Route
                   path="/school/:schoolID"
                   exact
                   component={SchoolDetail}
+                />
+                <Route
+                  path="/school/:schoolID/class/:classID"
+                  exact
+                  component={Account}
                 />
                 <Route path="/account" exact component={Account} />
                 <Route path="/account/detail" exact component={AccountDetail} />

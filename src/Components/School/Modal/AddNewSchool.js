@@ -1,5 +1,12 @@
 import React, { useState } from "react";
-import { Button, Modal, Form, Input } from "antd";
+import { Button, Modal, Form, Input, Select } from "antd";
+
+const { Option } = Select;
+
+const layout = {
+  labelCol: { span: 8 },
+  wrapperCol: { span: 16 },
+};
 
 const AddNewSchool = () => {
   const [form] = Form.useForm();
@@ -40,14 +47,41 @@ const AddNewSchool = () => {
             });
         }}
       >
-        <Form form={form}>
+        <Form {...layout} form={form}>
           <Form.Item
-            name="title"
-            label="Title"
-            rules={[{ required: true, message: "Please input a title" }]}
+            name="type"
+            label="Educational level"
+            rules={[
+              {
+                required: true,
+                message: "Please select a level",
+              },
+            ]}
           >
-            <Input placeholder="Title" />
+            <Select placeholder="Select a level">
+              <Option value="PRIMARY">Primary School</Option>
+              <Option value="JUNIOR">Junior High School</Option>
+              <Option value="HIGH">High School</Option>
+            </Select>
           </Form.Item>
+          <Form.Item
+            name="school"
+            label="School Name"
+            rules={[{ required: true, message: "Please input a school" }]}
+          >
+            <Input placeholder="School Name" />
+          </Form.Item>
+          {/* <Form.Item
+            name="distrisct"
+            label="Distrisct"
+            rules={[{ required: true, message: "Please choose a distrisct" }]}
+          >
+            <Select placeholder="Select a level">
+              <Option value="PRIMARY">Primary School</Option>
+              <Option value="JUNIOR">Junior High School</Option>
+              <Option value="HIGH">High School</Option>
+            </Select>
+          </Form.Item> */}
         </Form>
       </Modal>
     </div>

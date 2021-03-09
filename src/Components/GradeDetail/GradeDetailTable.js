@@ -1,58 +1,74 @@
-import React from "react";
-import { Table, Button, Input, Space, Tag, Popconfirm, message } from "antd";
+import React, { Component } from "react";
+import {
+  Card,
+  Table,
+  Button,
+  Input,
+  Space,
+  Tag,
+  Popconfirm,
+  message,
+  AutoComplete,
+} from "antd";
 import Highlighter from "react-highlight-words";
+import { Link } from "react-router-dom";
 import { SearchOutlined } from "@ant-design/icons";
-import AddNewAnnouncement from "./Modal/AddNewAnnouncement";
-import EditAnnouncement from "./Modal/EditAnnouncement";
+import LinkNewSchool from "./Modal/LinkNewSchool";
 
 const data = [
   {
     id: 1,
-    title: "Announce 1",
-    content:
-      "<h2>Lịch nghỉ Tết Nguyên Đán</h2><p>Học sinh của trường Major Edu sẽ được nghỉ tết đến hết tháng 2 năm 2021.</p>",
+    code: "DMC",
+    school: "Dương Minh Châu",
+    district: "Q10",
     status: "active",
-    uploadedBy: "anhtt",
-    uploadedDate: "14:24PM, 24/02/2021",
+    createdBy: "anhtt",
+    createdDate: "14:24PM, 24/02/2021",
+    modifiedBy: "anhtt",
     modifiedDate: "14:50PM, 24/02/2021",
   },
   {
     id: 2,
-    title: "Announce 2",
-    content:
-      "<h2>Lịch nghỉ Tết Nguyên Đán</h2><p>Học sinh của trường Major Edu sẽ được nghỉ tết đến hết tháng 2 năm 2021.</p>",
+    code: "NCT",
+    school: "Nguyễn Chí Thanh",
+    district: "Q10",
     status: "active",
-    uploadedBy: "anhtt",
-    uploadedDate: "14:24PM, 24/02/2021",
+    createdBy: "anhtt",
+    createdDate: "14:24PM, 24/02/2021",
+    modifiedBy: "anhtt",
     modifiedDate: "14:50PM, 24/02/2021",
   },
   {
     id: 3,
-    title: "Announce 3",
-    content:
-      "<h2>Lịch nghỉ Tết Nguyên Đán</h2><p>Học sinh của trường Major Edu sẽ được nghỉ tết đến hết tháng 2 năm 2021.</p>",
+    code: "NVT",
+    school: "Nguyễn Văn Tố",
+    district: "Q10",
     status: "active",
-    uploadedBy: "anhtt",
-    uploadedDate: "14:24PM, 24/02/2021",
+    createdBy: "anhtt",
+    createdDate: "14:24PM, 24/02/2021",
+    modifiedBy: "anhtt",
     modifiedDate: "14:50PM, 24/02/2021",
   },
   {
     id: 4,
-    title: "Announce 4",
-    content:
-      "<h2>Lịch nghỉ Tết Nguyên Đán</h2><p>Học sinh của trường Major Edu sẽ được nghỉ tết đến hết tháng 2 năm 2021.</p>",
+    code: "TQC",
+    school: "Trần Quang Cơ",
+    district: "Q10",
     status: "active",
-    uploadedBy: "anhtt",
-    uploadedDate: "14:24PM, 24/02/2021",
+    createdBy: "anhtt",
+    createdDate: "14:24PM, 24/02/2021",
+    modifiedBy: "anhtt",
     modifiedDate: "14:50PM, 24/02/2021",
   },
 ];
 
-export default class AnnouncementComponent extends React.Component {
+export default class GradeDetailTable extends Component {
   state = {
     searchText: "",
     searchedColumn: "",
     selectedRowKeys: [],
+    dataSource: data,
+    schoolSearch: "",
   };
 
   getColumnSearchProps = (dataIndex) => ({
@@ -151,28 +167,37 @@ export default class AnnouncementComponent extends React.Component {
   render() {
     const columns = [
       {
-        title: "Title",
-        dataIndex: "title",
+        title: "School",
         align: "center",
-        ...this.getColumnSearchProps("title"),
+        render: (record) => (
+          <Link to={`/school/${record.id}`}>{record.school}</Link>
+        ),
       },
       {
-        title: "Uploaded By",
-        dataIndex: "uploadedBy",
+        title: "School Code",
+        dataIndex: "code",
         align: "center",
-        ...this.getColumnSearchProps("uploadedBy"),
+        ...this.getColumnSearchProps("code"),
       },
       {
-        title: "Uploaded Date",
-        dataIndex: "uploadedDate",
+        title: "Created By",
         align: "center",
-        ...this.getColumnSearchProps("uploadedDate"),
+        render: (record) => (
+          <Space direction="vertical" size="small">
+            {record.createdBy}
+            {record.createdDate}
+          </Space>
+        ),
       },
       {
-        title: "Modified Date",
-        dataIndex: "modifiedDate",
+        title: "Modified By",
         align: "center",
-        ...this.getColumnSearchProps("modifiedDate"),
+        render: (record) => (
+          <Space direction="vertical" size="small">
+            {record.modifiedBy}
+            {record.modifiedDate}
+          </Space>
+        ),
       },
       {
         title: "Status",
@@ -195,11 +220,12 @@ export default class AnnouncementComponent extends React.Component {
       },
       {
         title: "Action",
+        dataIndex: "",
+        key: "x",
         align: "center",
         render: (record) => (
           <Space size="small">
             <Button type="primary">Change Status</Button>
-            <EditAnnouncement data={record} />
           </Space>
         ),
       },
@@ -213,37 +239,56 @@ export default class AnnouncementComponent extends React.Component {
     };
 
     return (
-      <div>
+      <Card type="inner" title="Linked Schools">
         <div
           style={{
             display: "flex",
-            justifyContent: "flex-end",
+            justifyContent: "space-between",
+            alignItems: "center",
             marginBottom: 20,
           }}
         >
-          <AddNewAnnouncement />
-          {selectedRowKeys.length === 0 ? null : (
-            <Popconfirm
-              placement="topRight"
-              title="Are you sure to disable selected Titles?"
-              onConfirm={this.confirm} //Handle disable logic here
-              okText="Yes"
-              cancelText="No"
-            >
-              <Button type="danger" size="large" style={{ marginLeft: 5 }}>
-                Disable
-              </Button>
-            </Popconfirm>
-          )}
+          <AutoComplete dataSource={data.map((item) => item.school)}>
+            <Input.Search
+              placeholder="Search a School"
+              allowClear
+              onSearch={(schoolSearch) =>
+                this.setState({
+                  dataSource: data.filter((item) =>
+                    item.school
+                      .toString()
+                      .toLowerCase()
+                      .includes(schoolSearch.toLowerCase())
+                  ),
+                })
+              }
+            />
+          </AutoComplete>
+          <div>
+            <LinkNewSchool />
+            {selectedRowKeys.length === 0 ? null : (
+              <Popconfirm
+                placement="topRight"
+                title="Are you sure to disable selected Schools?"
+                onConfirm={this.confirm} //Handle disable logic here
+                okText="Yes"
+                cancelText="No"
+              >
+                <Button type="danger" size="large" style={{ marginLeft: 5 }}>
+                  Disable
+                </Button>
+              </Popconfirm>
+            )}
+          </div>
         </div>
         <Table
           rowKey={(record) => record.id}
           rowSelection={rowSelection}
           columns={columns}
-          dataSource={data}
+          dataSource={this.state.dataSource}
           scroll={{ x: true }}
         />
-      </div>
+      </Card>
     );
   }
 }

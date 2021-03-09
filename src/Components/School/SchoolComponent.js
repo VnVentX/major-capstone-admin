@@ -8,10 +8,13 @@ import {
   Tag,
   Popconfirm,
   message,
+  AutoComplete,
 } from "antd";
+import { Link } from "react-router-dom";
 import Highlighter from "react-highlight-words";
 import { SearchOutlined } from "@ant-design/icons";
 import AddNewSchool from "./Modal/AddNewSchool";
+import ImportExcel from "./Modal/ImportExcel";
 
 const data = [
   {
@@ -65,6 +68,8 @@ export default class SchoolComponent extends Component {
     searchText: "",
     searchedColumn: "",
     selectedRowKeys: [],
+    dataSource: data,
+    schoolSearch: "",
   };
 
   getColumnSearchProps = (dataIndex) => ({
@@ -163,16 +168,17 @@ export default class SchoolComponent extends Component {
   render() {
     const columns = [
       {
-        title: "Code",
+        title: "School",
+        align: "center",
+        render: (record) => (
+          <Link to={`/school/${record.id}`}>{record.school}</Link>
+        ),
+      },
+      {
+        title: "School Code",
         dataIndex: "code",
         align: "center",
         ...this.getColumnSearchProps("code"),
-      },
-      {
-        title: "School",
-        dataIndex: "school",
-        align: "center",
-        ...this.getColumnSearchProps("school"),
       },
       {
         title: "Created By",
@@ -238,24 +244,50 @@ export default class SchoolComponent extends Component {
         <div
           style={{
             display: "flex",
-            justifyContent: "flex-end",
+            justifyContent: "space-between",
+            alignItems: "center",
             marginBottom: 20,
           }}
         >
-          <AddNewSchool />
-          {selectedRowKeys.length === 0 ? null : (
-            <Popconfirm
-              placement="topRight"
-              title="Are you sure to disable selected Titles?"
-              onConfirm={this.confirm} //Handle disable logic here
-              okText="Yes"
-              cancelText="No"
-            >
-              <Button type="danger" size="large" style={{ marginLeft: 5 }}>
-                Disable
-              </Button>
-            </Popconfirm>
-          )}
+          <AutoComplete dataSource={data.map((item) => item.school)}>
+            <Input.Search
+              placeholder="Search a School"
+              allowClear
+              onSearch={(schoolSearch) =>
+                this.setState({
+                  dataSource: data.filter((item) =>
+                    item.school
+                      .toString()
+                      .toLowerCase()
+                      .includes(schoolSearch.toLowerCase())
+                  ),
+                })
+              }
+            />
+          </AutoComplete>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "flex-start",
+              alignItems: "center",
+            }}
+          >
+            <ImportExcel />
+            <AddNewSchool />
+            {selectedRowKeys.length === 0 ? null : (
+              <Popconfirm
+                placement="topRight"
+                title="Are you sure to disable selected Schools?"
+                onConfirm={this.confirm} //Handle disable logic here
+                okText="Yes"
+                cancelText="No"
+              >
+                <Button type="danger" size="large" style={{ marginLeft: 5 }}>
+                  Disable
+                </Button>
+              </Popconfirm>
+            )}
+          </div>
         </div>
         <Table
           rowKey={(record) => record.id}
