@@ -293,7 +293,7 @@ export default class SchoolComponent extends Component {
           rowKey={(record) => record.id}
           rowSelection={rowSelection}
           columns={columns}
-          dataSource={data}
+          dataSource={this.state.dataSource}
           scroll={{ x: true }}
         />
       </Card>

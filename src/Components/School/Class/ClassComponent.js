@@ -9,7 +9,12 @@ const columns = [
     align: "center",
     width: "20%",
     render: (record) => (
-      <Link to={`${window.location.pathname}/class/${record.id}`}>
+      <Link
+        to={{
+          pathname: "/student",
+          state: record,
+        }}
+      >
         Class {record.class}
       </Link>
     ),
@@ -69,6 +74,8 @@ const columns = [
 const data = [
   {
     id: 1,
+    school: "Dương Minh Châu",
+    grade: 1,
     class: "1-1",
     createdBy: "anhtt",
     modifiedBy: "anhtt",
@@ -78,6 +85,8 @@ const data = [
   },
   {
     id: 2,
+    school: "Dương Minh Châu",
+    grade: 1,
     class: "1-2",
     createdBy: "anhtt",
     modifiedBy: "anhtt",
@@ -87,6 +96,8 @@ const data = [
   },
   {
     id: 3,
+    school: "Dương Minh Châu",
+    grade: 1,
     class: "1-3",
     createdBy: "anhtt",
     modifiedBy: "anhtt",
@@ -96,6 +107,8 @@ const data = [
   },
   {
     id: 4,
+    school: "Dương Minh Châu",
+    grade: 1,
     class: "1-4",
     createdBy: "anhtt",
     modifiedBy: "anhtt",
@@ -105,6 +118,8 @@ const data = [
   },
   {
     id: 5,
+    school: "Dương Minh Châu",
+    grade: 1,
     class: "1-5",
     createdBy: "anhtt",
     modifiedBy: "anhtt",

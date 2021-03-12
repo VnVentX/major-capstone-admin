@@ -3,8 +3,8 @@ import { Modal, Button, Form, Input, Select, DatePicker } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 
 const layout = {
-  labelCol: { span: 8 },
-  wrapperCol: { span: 16 },
+  labelCol: { span: 6 },
+  wrapperCol: { span: 18 },
 };
 
 const AddNewStudent = () => {

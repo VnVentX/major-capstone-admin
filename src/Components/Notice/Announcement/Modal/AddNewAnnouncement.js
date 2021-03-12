@@ -89,7 +89,7 @@ class MyUploadAdapter {
     // CKEditor 5's FileLoader instance.
     this.loader = props;
     // URL where to send files.
-    this.url = "https://stackoverflow.com/upload";
+    this.url = "http://mathscience.azurewebsites.net/api/v1/test";
   }
 
   // Starts the upload process.
@@ -114,8 +114,8 @@ class MyUploadAdapter {
 
     xhr.open("POST", this.url, true);
     xhr.responseType = "json";
-    xhr.setRequestHeader("Access-Control-Allow-Origin", "*");
-    xhr.setRequestHeader("Authorization", "token");
+    // xhr.setRequestHeader("Access-Control-Allow-Origin", "*");
+    // xhr.setRequestHeader("Authorization", "token");
   }
 
   // Initializes XMLHttpRequest listeners.
@@ -128,6 +128,7 @@ class MyUploadAdapter {
     xhr.addEventListener("abort", () => reject());
     xhr.addEventListener("load", () => {
       const response = xhr.response;
+      console.log(response);
       if (!response || response.error) {
         return reject(
           response && response.error ? response.error.message : genericErrorText
@@ -137,7 +138,7 @@ class MyUploadAdapter {
       // If the upload is successful, resolve the upload promise with an object containing
       // at least the "default" URL, pointing to the image on the server.
       resolve({
-        default: response.s3Url,
+        default: response.imageUrl,
       });
     });
 

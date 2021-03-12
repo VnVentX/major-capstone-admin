@@ -93,7 +93,7 @@ class MyUploadAdapter {
     // CKEditor 5's FileLoader instance.
     this.loader = props;
     // URL where to send files.
-    this.url = "https://stackoverflow.com/upload";
+    this.url = "http://mathscience.azurewebsites.net/api/v1/test";
   }
 
   // Starts the upload process.

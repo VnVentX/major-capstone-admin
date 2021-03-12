@@ -8,12 +8,72 @@ import {
   Space,
   Popconfirm,
   message,
+  Cascader,
 } from "antd";
 import { Link } from "react-router-dom";
 import { DownloadOutlined, SearchOutlined } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
 import AddNewStudent from "./Modal/AddNewStudent";
 import EditStudent from "./Modal/EditStudent";
+
+const options = [
+  {
+    id: 1,
+    name: "Dương Minh Châu",
+    items: [
+      {
+        id: 1,
+        name: "Grade 1",
+        items: [
+          {
+            id: 1,
+            name: "Class 1-1",
+          },
+          {
+            id: 2,
+            name: "Class 1-2",
+          },
+          {
+            id: 3,
+            name: "Class 1-4",
+          },
+          {
+            id: 4,
+            name: "Class 1-5",
+          },
+        ],
+      },
+    ],
+  },
+  {
+    id: 2,
+    name: "Nguyễn Chí Thanh",
+    items: [
+      {
+        id: 2,
+        name: "Grade 1",
+        items: [
+          {
+            id: 1,
+            name: "Class 1-1",
+          },
+          {
+            id: 2,
+            name: "Class 1-2",
+          },
+          {
+            id: 3,
+            name: "Class 1-4",
+          },
+          {
+            id: 4,
+            name: "Class 1-5",
+          },
+        ],
+      },
+    ],
+  },
+];
 
 export default class StudentAccountComponent extends Component {
   state = {
@@ -120,6 +180,10 @@ export default class StudentAccountComponent extends Component {
     message.success("Click on Yes");
   };
 
+  onChange = (value) => {
+    console.log(value);
+  };
+
   render() {
     const columns = [
       {
@@ -199,43 +263,49 @@ export default class StudentAccountComponent extends Component {
     return (
       <>
         <Card>
-          <div
-            style={{
-              display: "flex",
-              marginBottom: 10,
-              justifyContent: "space-between",
-            }}
-          >
-            <div>
-              <Button type="primary" size="large" icon={<DownloadOutlined />}>
-                Export Student List
-              </Button>
-            </div>
+          {this.props.data.length > 0 && (
             <div
               style={{
                 display: "flex",
-                justifyContent: "flex-start",
-                alignItems: "center",
+                marginBottom: 10,
+                justifyContent: "space-between",
               }}
             >
-              <AddNewStudent />
-              {selectedRowKeys.length === 0 ? null : (
-                <Popconfirm
-                  placement="topRight"
-                  title="Are you sure to disable selected Schools?"
-                  onConfirm={this.confirm} //Handle disable logic here
-                  okText="Yes"
-                  cancelText="No"
-                >
-                  <Button type="danger" size="large" style={{ marginLeft: 5 }}>
-                    Disable
-                  </Button>
-                </Popconfirm>
-              )}
+              <div>
+                <Button type="primary" size="large" icon={<DownloadOutlined />}>
+                  Export Student List
+                </Button>
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "flex-start",
+                  alignItems: "center",
+                }}
+              >
+                <AddNewStudent />
+                {/* {selectedRowKeys.length === 0 ? null : (
+                  <Popconfirm
+                    placement="topRight"
+                    title="Are you sure to disable selected Schools?"
+                    onConfirm={this.confirm} //Handle disable logic here
+                    okText="Yes"
+                    cancelText="No"
+                  >
+                    <Button
+                      type="danger"
+                      size="large"
+                      style={{ marginLeft: 5 }}
+                    >
+                      Disable
+                    </Button>
+                  </Popconfirm>
+                )} */}
+              </div>
             </div>
-          </div>
+          )}
           <Table
-            rowKey={this.props.data.id}
+            rowKey={(record) => record.id}
             rowSelection={rowSelection}
             columns={columns}
             dataSource={this.props.data}
@@ -243,6 +313,62 @@ export default class StudentAccountComponent extends Component {
             pagination={pagination}
             loading={loading}
           />
+          <div>
+            <h1>With selected:</h1>
+            {selectedRowKeys.length === 0 ? (
+              <>
+                <Button type="danger" disabled style={{ marginRight: 10 }}>
+                  Disable
+                </Button>
+                <Button type="primary" disabled style={{ marginRight: 10 }}>
+                  Move to other School/Class &gt;&gt;
+                </Button>
+                <Cascader
+                  options={options}
+                  placeholder="Please select"
+                  disabled
+                  style={{ width: 300 }}
+                />
+              </>
+            ) : (
+              <>
+                <Popconfirm
+                  placement="topRight"
+                  title="Are you sure to disable selected Students?"
+                  onConfirm={this.confirm} //Handle disable logic here
+                  okText="Yes"
+                  cancelText="No"
+                >
+                  <Button type="danger" style={{ marginRight: 10 }}>
+                    Disable
+                  </Button>
+                </Popconfirm>
+                <Popconfirm
+                  placement="topRight"
+                  title="Are you sure to move selected Students?"
+                  onConfirm={this.confirm} //Handle disable logic here
+                  okText="Yes"
+                  cancelText="No"
+                >
+                  <Button type="primary" style={{ marginRight: 10 }}>
+                    Move to other School/Class &gt;&gt;
+                  </Button>
+                </Popconfirm>
+                <Cascader
+                  options={options}
+                  fieldNames={{
+                    label: "name",
+                    value: "id",
+                    children: "items",
+                  }}
+                  placeholder="Please select destination"
+                  onChange={this.onChange}
+                  matchInputWidth={true}
+                  style={{ width: 300 }}
+                />
+              </>
+            )}
+          </div>
         </Card>
       </>
     );

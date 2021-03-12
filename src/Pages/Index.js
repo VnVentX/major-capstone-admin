@@ -83,6 +83,11 @@ export default class Index extends React.Component {
                     <span>School</span>
                   </Link>
                 </Menu.Item>
+                <Menu.Item key="5">
+                  <Link to="/student">
+                    <span>Student</span>
+                  </Link>
+                </Menu.Item>
               </SubMenu>
               <Menu.Item key="6">
                 <Link to="/subject">
@@ -141,11 +146,7 @@ export default class Index extends React.Component {
                   exact
                   component={SchoolDetail}
                 />
-                <Route
-                  path="/school/:schoolID/class/:classID"
-                  exact
-                  component={Account}
-                />
+                <Route path="/student" exact component={Account} />
                 <Route
                   path="/student/:studentID"
                   exact
