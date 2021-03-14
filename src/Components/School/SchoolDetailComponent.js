@@ -37,7 +37,7 @@ const SchoolDetailComponent = () => {
             labelStyle={{ fontWeight: "bold" }}
             span={2}
           >
-            No. 34, Nguyen Lam St., Ward 6, District 10, HMC
+            No. 34, Nguyen Lam Street, Ward 6, District 10, HMC
           </Descriptions.Item>
         </Descriptions>
       </Card>

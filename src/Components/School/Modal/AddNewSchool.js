@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Button, Modal, Form, Input, Select } from "antd";
+import { PlusOutlined } from "@ant-design/icons";
 
 const { Option } = Select;
 
@@ -27,7 +28,12 @@ const AddNewSchool = () => {
 
   return (
     <div>
-      <Button type="primary" size="large" onClick={showModal}>
+      <Button
+        type="primary"
+        size="large"
+        onClick={showModal}
+        icon={<PlusOutlined />}
+      >
         Create New School
       </Button>
       <Modal

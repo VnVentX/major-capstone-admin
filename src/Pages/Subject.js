@@ -1,6 +1,6 @@
 import React from "react";
 import { Col, Layout } from "antd";
-import SubjectComponent from "../Components/Lesson/SubjectComponent";
+import SubjectComponent from "../Components/Subject/SubjectComponent";
 const { Content } = Layout;
 
 const Subject = () => {

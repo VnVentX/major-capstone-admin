@@ -14,7 +14,6 @@ import { Link } from "react-router-dom";
 import Highlighter from "react-highlight-words";
 import { SearchOutlined } from "@ant-design/icons";
 import AddNewSchool from "./Modal/AddNewSchool";
-import ImportExcel from "./Modal/ImportExcel";
 
 const data = [
   {
@@ -263,6 +262,7 @@ export default class SchoolComponent extends Component {
                   ),
                 })
               }
+              enterButton
             />
           </AutoComplete>
           <div
@@ -272,7 +272,6 @@ export default class SchoolComponent extends Component {
               alignItems: "center",
             }}
           >
-            <ImportExcel />
             <AddNewSchool />
             {selectedRowKeys.length === 0 ? null : (
               <Popconfirm

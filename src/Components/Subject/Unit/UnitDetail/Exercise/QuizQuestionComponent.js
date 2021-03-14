@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Card, Button, Modal, Form, Table, Space, Select } from "antd";
-import EditQuestion from "../Question/EditQuestion";
-import ViewQuestion from "../Question/ViewQuestion";
+import EditQuestion from "../../../../Question/EditQuestion";
+import ViewQuestion from "../../../../Question/ViewQuestion";
 
 const { Option } = Select;
 

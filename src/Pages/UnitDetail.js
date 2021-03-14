@@ -1,6 +1,6 @@
 import React from "react";
 import { Col, Layout } from "antd";
-import UnitDetailComponent from "../Components/Lesson/UnitDetailComponent";
+import UnitDetailComponent from "../Components/Subject/Unit/UnitDetail/UnitDetailComponent";
 const { Content } = Layout;
 
 const UnitDetail = () => {

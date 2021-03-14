@@ -19,15 +19,14 @@ import QuestionBank from "./QuestionBank";
 import Home from "./Home";
 import UnitDetail from "./UnitDetail";
 import Subject from "./Subject";
-import Unit from "./Unit";
 import AddQuizQuestion from "./AddQuizQuestion";
 import Notice from "./Notice";
-import Lesson from "./Lesson";
 import QuestionComponent from "../Components/Question/QuestionComponent";
 import Grade from "./Grade";
 import School from "./School";
 import SchoolDetail from "./SchoolDetail";
 import GradeDetail from "./GradeDetail";
+import SubjectDetail from "./SubjectDetail";
 
 const { Header, Sider } = Layout;
 
@@ -152,24 +151,19 @@ export default class Index extends React.Component {
                   exact
                   component={AccountDetail}
                 />
-                <Route path="/subject" exact component={Lesson} />
+                <Route path="/subject" exact component={Subject} />
                 <Route
-                  path="/grade/:gradeID/subject"
+                  path="/subject/:subjectID"
                   exact
-                  component={Subject}
+                  component={SubjectDetail}
                 />
                 <Route
-                  path="/grade/:gradeID/subject/:subjectID"
-                  exact
-                  component={Unit}
-                />
-                <Route
-                  path="/grade/:gradeID/subject/:subjectID/unit/:unitID"
+                  path="/subject/:subjectID/unit/:unitID"
                   exact
                   component={UnitDetail}
                 />
                 <Route
-                  path="/grade/:gradeID/subject/:subjectID/unit/:unitID/excecise/:exceciseID"
+                  path="/subject/:subjectID/unit/:unitID/excecise/:exceciseID"
                   exact
                   component={AddQuizQuestion}
                 />

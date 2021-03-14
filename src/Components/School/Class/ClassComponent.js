@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Card, Button, Tag, Space, Table, Popconfirm, message } from "antd";
-import ImportClassExcel from "./Modal/ImportClassExcel";
+import AddNewClass from "./Modal/AddNewClass";
 
 const columns = [
   {
@@ -157,7 +157,7 @@ const ClassComponent = (props) => {
           justifyContent: "flex-end",
         }}
       >
-        <ImportClassExcel />
+        <AddNewClass />
         {selectedRowKeys.length === 0 ? null : (
           <Popconfirm
             placement="topRight"

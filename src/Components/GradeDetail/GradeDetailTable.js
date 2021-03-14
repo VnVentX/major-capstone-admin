@@ -262,6 +262,7 @@ export default class GradeDetailTable extends Component {
                   ),
                 })
               }
+              enterButton
             />
           </AutoComplete>
           <div>
