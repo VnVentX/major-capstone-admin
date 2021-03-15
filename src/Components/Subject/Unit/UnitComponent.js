@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { Card, List, AutoComplete, Input } from "antd";
+import { Card, List, AutoComplete, Input, Popconfirm, message } from "antd";
 import { Link } from "react-router-dom";
+import { MinusCircleOutlined } from "@ant-design/icons";
 import AddNewUnit from "./Modal/AddNewUnit";
 
 const { Search } = Input;
@@ -37,6 +38,11 @@ const UnitComponent = () => {
     setSearchData(data);
   }, []);
 
+  const confirm = (e) => {
+    console.log(e);
+    message.success("Click on Yes");
+  };
+
   return (
     <Card type="inner" title="Unit">
       <div
@@ -72,9 +78,26 @@ const UnitComponent = () => {
           <List.Item>
             <Card
               title={
-                <Link to={`${window.location.pathname}/unit/${item.id}`}>
-                  {item.title}
-                </Link>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                  }}
+                >
+                  <Link to={`${window.location.pathname}/unit/${item.id}`}>
+                    {item.title}
+                  </Link>
+                  <Popconfirm
+                    placement="left"
+                    title="Are you sure to delete this Unit?"
+                    onConfirm={confirm} //Handle disable logic here
+                    okText="Yes"
+                    cancelText="No"
+                  >
+                    <MinusCircleOutlined style={{ color: "red" }} />
+                  </Popconfirm>
+                </div>
               }
             >
               Unit Descriptions

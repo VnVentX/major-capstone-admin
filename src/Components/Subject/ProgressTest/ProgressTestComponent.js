@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { Card, List, AutoComplete, Input } from "antd";
+import { Card, List, AutoComplete, Input, Popconfirm, message } from "antd";
 import { Link } from "react-router-dom";
+import { MinusCircleOutlined } from "@ant-design/icons";
 import AddNewProgress from "./Modal/AddNewProgress";
 
 const { Search } = Input;
@@ -28,6 +29,11 @@ const ProgressTestComponent = () => {
     setProgress(data);
     setSearchData(data);
   }, []);
+
+  const confirm = (e) => {
+    console.log(e);
+    message.success("Click on Yes");
+  };
 
   return (
     <Card type="inner" title="Progress Test">
@@ -64,9 +70,26 @@ const ProgressTestComponent = () => {
           <List.Item>
             <Card
               title={
-                <Link to={`${window.location.pathname}/unit/${item.id}`}>
-                  {item.title}
-                </Link>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                  }}
+                >
+                  <Link to={`${window.location.pathname}/unit/${item.id}`}>
+                    {item.title}
+                  </Link>
+                  <Popconfirm
+                    placement="left"
+                    title="Are you sure to delete this Progress Test?"
+                    onConfirm={confirm} //Handle disable logic here
+                    okText="Yes"
+                    cancelText="No"
+                  >
+                    <MinusCircleOutlined style={{ color: "red" }} />
+                  </Popconfirm>
+                </div>
               }
             >
               Unit Descriptions

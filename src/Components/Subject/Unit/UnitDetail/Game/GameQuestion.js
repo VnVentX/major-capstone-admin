@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { Card, Form, Table, Space } from "antd";
+import { Card, Table, Space } from "antd";
 import EditQuestion from "../../../../Question/EditQuestion";
-import AddQuestion from "./AddQuestion";
+import AddQuestion from "./Modal/AddQuestion";
 
 const selectedQuestionCol = [
   {
@@ -38,9 +38,9 @@ const data = [
   },
 ];
 
-const QuizQuestionComponent = () => {
+const GameQuestion = () => {
   return (
-    <Card type="inner" title="Exercise 1">
+    <Card type="inner" title="Game 1">
       <div
         style={{
           marginBottom: 20,
@@ -55,4 +55,4 @@ const QuizQuestionComponent = () => {
   );
 };
 
-export default QuizQuestionComponent;
+export default GameQuestion;

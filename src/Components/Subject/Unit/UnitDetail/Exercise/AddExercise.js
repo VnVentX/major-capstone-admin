@@ -6,7 +6,7 @@ const layout = {
   wrapperCol: { span: 16 },
 };
 
-const AddQuiz = () => {
+const AddExercise = () => {
   const [form] = Form.useForm();
   const [visible, setVisible] = useState(false);
 
@@ -26,13 +26,14 @@ const AddQuiz = () => {
   return (
     <div>
       <Button type="primary" size="middle" onClick={showModal}>
-        Add Quiz
+        Add Exercise
       </Button>
       <Modal
-        title="Add new quiz"
+        title="Add new Exercise"
         visible={visible}
         onCancel={handleCancel}
         destroyOnClose
+        okText="Submit"
         onOk={() => {
           form
             .validateFields()
@@ -45,19 +46,15 @@ const AddQuiz = () => {
             });
         }}
       >
-        <Form {...layout} form={form} name="nest-messages">
+        <Form {...layout} form={form}>
           <Form.Item
             name="name"
-            label="Name"
-            rules={[{ required: true, message: "Please input name" }]}
+            label="Exercise name"
+            rules={[{ required: true, message: "Please input exercise name!" }]}
           >
-            <Input placeholder="Quiz Name" />
+            <Input placeholder="Exercise Name" />
           </Form.Item>
-          <Form.Item
-            name="description"
-            label="Description"
-            rules={[{ required: true, message: "Please input description" }]}
-          >
+          <Form.Item name="description" label="Description">
             <Input.TextArea
               showCount
               maxLength={500}
@@ -70,4 +67,4 @@ const AddQuiz = () => {
   );
 };
 
-export default AddQuiz;
+export default AddExercise;

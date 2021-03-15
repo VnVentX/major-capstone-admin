@@ -27,6 +27,7 @@ import School from "./School";
 import SchoolDetail from "./SchoolDetail";
 import GradeDetail from "./GradeDetail";
 import SubjectDetail from "./SubjectDetail";
+import AddGameQuestion from "./AddGameQuestion";
 
 const { Header, Sider } = Layout;
 
@@ -166,6 +167,11 @@ export default class Index extends React.Component {
                   path="/subject/:subjectID/unit/:unitID/excecise/:exceciseID"
                   exact
                   component={AddQuizQuestion}
+                />
+                <Route
+                  path="/subject/:subjectID/unit/:unitID/game/:gameID"
+                  exact
+                  component={AddGameQuestion}
                 />
                 <Route
                   path="/game-question"
