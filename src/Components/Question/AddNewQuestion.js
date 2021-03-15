@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Form, Input, Button, Space, Select, Divider } from "antd";
+import { Form, Input, Button, Space, Select, Divider, Row, Col } from "antd";
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 
 const { Option } = Select;
@@ -14,18 +14,28 @@ const AddNewQuestion = () => {
     setCounter(count + 1);
   };
 
-  const onFinish = async (values) => {
+  const handleMinus = () => {
+    var count = counter;
+    setCounter(count - 1);
+  };
+
+  const onFinish = (values) => {
     const question = {
       subject: values.subject,
-      category: values.category,
+      unit: values.unit,
       q_name: values.question,
       q_audio: values.q_audio,
       q_img: values.q_img,
-      answers: values.answers,
+      options: values.options,
     };
-    await setQuestions([...questions, question]);
+    setQuestions(question);
     setCounter(0);
-    form.resetFields();
+    form.setFieldsValue({
+      question: null,
+      q_audio: null,
+      q_img: null,
+      options: null,
+    });
     console.log(questions);
   };
 
@@ -43,15 +53,15 @@ const AddNewQuestion = () => {
         <Divider />
         <Form.Item
           name="subject"
-          label="Select subject"
+          label="Select Subject"
           rules={[
             {
               required: true,
-              message: "Please select subject",
+              message: "Please select Subject!",
             },
           ]}
         >
-          <Select showSearch placeholder="Select subject">
+          <Select showSearch placeholder="Select Subject">
             <Option value="math">Math</Option>
             <Option value="science">Science</Option>
           </Select>
@@ -65,16 +75,16 @@ const AddNewQuestion = () => {
           {({ getFieldValue }) => {
             return getFieldValue("subject") !== undefined ? (
               <Form.Item
-                name="category"
-                label="Select Category"
+                name="unit"
+                label="Select Unit"
                 rules={[
                   {
                     required: true,
-                    message: "Please select category",
+                    message: "Please select Unit!",
                   },
                 ]}
               >
-                <Select showSearch placeholder="Select category">
+                <Select showSearch placeholder="Select Unit">
                   <Option value="unit 1">Unit 1</Option>
                   <Option value="unit 2">Unit 2</Option>
                   <Option value="unit 3">Unit 3</Option>
@@ -85,6 +95,8 @@ const AddNewQuestion = () => {
                   <Option value="unit 8">Unit 8</Option>
                   <Option value="unit 9">Unit 9</Option>
                   <Option value="unit 10">Unit 10</Option>
+                  <Option value="unit 11">Unit 11</Option>
+                  <Option value="unit 12">Unit 12</Option>
                 </Select>
               </Form.Item>
             ) : null;
@@ -92,34 +104,39 @@ const AddNewQuestion = () => {
         </Form.Item>
         <Form.Item
           name="question"
-          label="Question"
-          rules={[{ required: true, message: "Missing question" }]}
+          label="Question Text"
+          rules={[{ required: true, message: "Please input a question" }]}
         >
-          <Input.TextArea />
+          <Input.TextArea
+            autoSize
+            maxLength="250"
+            showCount
+            placeholder="Question Text"
+          />
         </Form.Item>
         <Form.Item
           name="q_audio"
-          label="Audio"
-          rules={[{ required: true, message: "Missing audio" }]}
+          label="Audio URL"
+          rules={[{ type: "url", message: "Please input a valid URL!" }]}
         >
-          <Input />
+          <Input placeholder="Audio URL" />
         </Form.Item>
         <Form.Item
           name="q_img"
-          label="Image"
-          rules={[{ required: true, message: "Missing image" }]}
+          label="Image URL"
+          rules={[{ type: "url", message: "Please input a valid URL!" }]}
         >
-          <Input />
+          <Input placeholder="Image URL" />
         </Form.Item>
-        <h2>Answers</h2>
+        <h2>Options</h2>
         <Form.List
-          name="answers"
+          name="options"
           rules={[
             {
-              validator: async (_, answers) => {
-                if (!answers || answers.length < 2) {
+              validator: async (_, options) => {
+                if (!options || options.length < 2) {
                   return Promise.reject(
-                    new Error("At least 2 answers are required")
+                    new Error("At least 2 options are required")
                   );
                 }
               },
@@ -129,39 +146,50 @@ const AddNewQuestion = () => {
           {(fields, { add, remove }, { errors }) => (
             <>
               {fields.map((field, idx) => (
-                <div key={idx}>
+                <Row gutter={24} key={idx}>
                   <Divider />
-                  <Space key={field.key} align="center">
+                  <Col span={12}>
                     <Form.Item
                       {...field}
-                      label="Answear"
-                      name={[field.name, "answear"]}
-                      fieldKey={[field.fieldKey, "answear"]}
+                      label={`Option ${idx + 1}`}
+                      name={[field.name, "option"]}
+                      fieldKey={[field.fieldKey, "option"]}
                       dependencies={["question"]}
-                      rules={[{ required: true, message: "Missing answer" }]}
+                      rules={[
+                        { required: true, message: "Please input option!" },
+                      ]}
                     >
-                      <Input />
+                      <Input.TextArea
+                        autoSize
+                        maxLength="100"
+                        showCount
+                        placeholder="Option Text"
+                      />
                     </Form.Item>
+                  </Col>
+                  <Col span={12}>
                     <Form.Item
                       {...field}
-                      label="Correct"
+                      label="Is Correct"
                       name={[field.name, "correct"]}
                       fieldKey={[field.fieldKey, "correct"]}
                       dependencies={["question"]}
                       rules={[{ required: true, message: "Missing correct" }]}
                     >
-                      <Select style={{ width: 150 }}>
+                      <Select placeholder="Select Is Correct">
                         <Select.Option value="true">True</Select.Option>
                         <Select.Option value="false">False</Select.Option>
                       </Select>
                     </Form.Item>
                     <MinusCircleOutlined
+                      style={{ float: "right", color: "red" }}
                       onClick={() => {
                         remove(field.name);
+                        handleMinus();
                       }}
                     />
-                  </Space>
-                </div>
+                  </Col>
+                </Row>
               ))}
               <Form.ErrorList errors={errors} />
               {counter === 4 ? null : (
@@ -171,12 +199,12 @@ const AddNewQuestion = () => {
                     onClick={() => {
                       add();
                       handleCounter();
-                      console.log(counter);
                     }}
                     block
                     icon={<PlusOutlined />}
+                    style={{ marginTop: 10 }}
                   >
-                    Add Answer
+                    Add Options
                   </Button>
                 </Form.Item>
               )}

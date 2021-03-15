@@ -1,20 +1,14 @@
 import React, { useState } from "react";
-import { Select, Form, Modal, Input, Divider, Space } from "antd";
+import { Select, Form, Modal, Input, Divider, Row, Col } from "antd";
 
-const answers = [
+const options = [
   {
-    key: 1,
-    answer: "A",
-    audio: "A",
-    img: "A",
-    correct: "true",
+    option: "A",
+    correct: "True",
   },
   {
-    key: 2,
-    answer: "B",
-    audio: "B",
-    img: "B",
-    correct: "false",
+    option: "B",
+    correct: "False",
   },
 ];
 
@@ -58,6 +52,7 @@ const EditQuestion = (props) => {
             .then((values) => {
               onFinish(values);
               form.resetFields();
+              handleCancel();
             })
             .catch((info) => {
               console.log("Validate Failed:", info);
@@ -66,68 +61,90 @@ const EditQuestion = (props) => {
       >
         <Form
           form={form}
-          name="update_form"
-          autoComplete="off"
-          preserve={false}
           layout="vertical"
           initialValues={{
-            q_name: props.data.q_name,
+            question: props.data.q_name,
             q_audio: "Q1",
             q_img: "Q1",
+            options: options,
           }}
         >
           <h1>Question</h1>
           <Divider />
-          <Form.Item name="q_name" label="Question">
-            <Input.TextArea />
+          <Form.Item
+            name="question"
+            label="Question Text"
+            rules={[{ required: true, message: "Please input a question" }]}
+          >
+            <Input.TextArea
+              autoSize
+              maxLength="100"
+              showCount
+              placeholder="Question Text"
+            />
           </Form.Item>
-          <Form.Item name="q_audio" label="Audio">
-            <Input />
+          <Form.Item
+            name="q_audio"
+            label="Audio URL"
+            rules={[{ type: "url", message: "Please input a valid URL!" }]}
+          >
+            <Input placeholder="Audio URL" />
           </Form.Item>
-          <Form.Item name="q_img" label="Image">
-            <Input />
+          <Form.Item
+            name="q_img"
+            label="Image URL"
+            rules={[{ type: "url", message: "Please input a valid URL!" }]}
+          >
+            <Input placeholder="Image URL" />
           </Form.Item>
           <h1>Answers</h1>
-          <>
-            {answers.map((answer) => (
-              <div key={answer.key}>
-                <Divider />
-                <Space key={answer.key} align="center">
-                  <Form.Item
-                    label="Answear"
-                    name={"answear" + answer.key}
-                    initialValue={answer.answer}
-                  >
-                    <Input />
-                  </Form.Item>
-                  <Form.Item
-                    label="Audio"
-                    name={"audio" + answer.key}
-                    initialValue={answer.audio}
-                  >
-                    <Input />
-                  </Form.Item>
-                  <Form.Item
-                    label="Image"
-                    name={"img" + answer.key}
-                    initialValue={answer.img}
-                  >
-                    <Input />
-                  </Form.Item>
-                  <Form.Item
-                    label="Correct"
-                    name={"correct" + answer.key}
-                    initialValue={answer.correct}
-                  >
-                    <Select style={{ width: 150 }}>
-                      <Select.Option value="true">True</Select.Option>
-                      <Select.Option value="false">False</Select.Option>
-                    </Select>
-                  </Form.Item>
-                </Space>
-              </div>
-            ))}
-          </>
+          <Form.List name="options">
+            {(fields) => {
+              return (
+                <div>
+                  {fields.map((field, idx) => (
+                    <Row gutter={24} key={idx}>
+                      <Divider />
+                      <Col span={12}>
+                        <Form.Item
+                          {...field}
+                          label={`Option ${idx + 1}`}
+                          name={[field.name, "option"]}
+                          fieldKey={[field.fieldKey, "option"]}
+                          rules={[
+                            { required: true, message: "Please input option!" },
+                          ]}
+                        >
+                          <Input.TextArea
+                            autoSize
+                            maxLength="100"
+                            showCount
+                            placeholder="Option Text"
+                          />
+                        </Form.Item>
+                      </Col>
+                      <Col span={12}>
+                        <Form.Item
+                          {...field}
+                          label="Is Correct"
+                          name={[field.name, "correct"]}
+                          fieldKey={[field.fieldKey, "correct"]}
+                          rules={[
+                            { required: true, message: "Missing correct" },
+                          ]}
+                        >
+                          <Select placeholder="Select Is Correct">
+                            <Select.Option value="true">True</Select.Option>
+                            <Select.Option value="false">False</Select.Option>
+                          </Select>
+                        </Form.Item>
+                      </Col>
+                    </Row>
+                  ))}
+                </div>
+              );
+            }}
+          </Form.List>
         </Form>
       </Modal>
     </div>

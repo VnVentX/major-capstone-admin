@@ -112,12 +112,12 @@ const QuestionBankComponent = () => {
           {({ getFieldValue }) => {
             return getFieldValue("subject") !== undefined ? (
               <Form.Item
-                name="category"
-                label="Select Category"
+                name="unit"
+                label="Select Unit"
                 rules={[
                   {
                     required: true,
-                    message: "Please select category",
+                    message: "Please select Unit",
                   },
                 ]}
               >
