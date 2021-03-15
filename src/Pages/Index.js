@@ -15,7 +15,6 @@ import { BrowserRouter, Switch, Route, Link } from "react-router-dom";
 import Account from "./Account";
 import AccountDetail from "./AccountDetail";
 import BreadcrumbComponent from "../Components/BreadcrumbComponent";
-import QuestionBank from "./QuestionBank";
 import Home from "./Home";
 import UnitDetail from "./UnitDetail";
 import Subject from "./Subject";
@@ -28,6 +27,8 @@ import SchoolDetail from "./SchoolDetail";
 import GradeDetail from "./GradeDetail";
 import SubjectDetail from "./SubjectDetail";
 import AddGameQuestion from "./AddGameQuestion";
+import ExerciseQuestionBank from "./ExerciseQuestionBank";
+import GameQuestionBank from "./GameQuestionBank";
 
 const { Header, Sider } = Layout;
 
@@ -184,14 +185,14 @@ export default class Index extends React.Component {
                   component={QuestionComponent}
                 />
                 <Route
-                  path="/grade/:gradeID/game-question"
-                  exact
-                  component={QuestionBank}
-                />
-                <Route
                   path="/grade/:gradeID/exercise-question"
                   exact
-                  component={QuestionBank}
+                  component={ExerciseQuestionBank}
+                />
+                <Route
+                  path="/grade/:gradeID/game-question"
+                  exact
+                  component={GameQuestionBank}
                 />
               </Switch>
             </Row>

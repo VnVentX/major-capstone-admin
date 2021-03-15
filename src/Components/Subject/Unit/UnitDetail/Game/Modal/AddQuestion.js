@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Button, Modal, Form, Table, Space, Select } from "antd";
-import ViewQuestion from "../../../../../Question/ViewQuestion";
+import ViewQuestion from "../../../../../Question/Exercise/Modal/ViewQuestion";
 
 const { Option } = Select;
 

@@ -1,12 +1,11 @@
 import React from "react";
 import { Col, Layout, Tabs } from "antd";
-import QuestionBankComponent from "../Components/Question/QuestionBankComponent";
-import AddNewQuestion from "../Components/Question/AddNewQuestion";
-// import CategoryComponent from "../Components/Question/CategoryComponent";
+import QuestionBankComponent from "../Components/Question/Game/QuestionBankComponent";
+import AddNewQuestion from "../Components/Question/Game/AddNewQuestion";
 const { Content } = Layout;
 const { TabPane } = Tabs;
 
-const QuestionBank = () => {
+const GameQuestionBank = () => {
   return (
     <Col span={24}>
       <Content className="main-layout site-layout-background">
@@ -14,10 +13,7 @@ const QuestionBank = () => {
           <TabPane tab="Question Bank" key="1">
             <QuestionBankComponent />
           </TabPane>
-          {/* <TabPane tab="Category" key="2">
-            <CategoryComponent />
-          </TabPane> */}
-          <TabPane tab="Add new question" key="3">
+          <TabPane tab="Add new question" key="2">
             <AddNewQuestion />
           </TabPane>
         </Tabs>
@@ -26,4 +22,4 @@ const QuestionBank = () => {
   );
 };
 
-export default QuestionBank;
+export default GameQuestionBank;

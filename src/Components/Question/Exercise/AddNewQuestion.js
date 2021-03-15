@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Form, Input, Button, Space, Select, Divider, Row, Col } from "antd";
+import { Form, Input, Button, Select, Divider, Row, Col } from "antd";
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 
 const { Option } = Select;

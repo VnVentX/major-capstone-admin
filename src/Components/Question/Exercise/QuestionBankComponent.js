@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Table, Select, Form, Button } from "antd";
-import EditQuestion from "./EditQuestion";
+import EditQuestion from "./Modal/EditQuestion";
 const { Option } = Select;
 
 const QuestionBankComponent = () => {

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { Card, Form, Table, Space } from "antd";
-import EditQuestion from "../../../../Question/EditQuestion";
+import { Card, Table, Space } from "antd";
+import EditQuestion from "../../../../Question/Exercise/Modal/EditQuestion";
 import AddQuestion from "./AddQuestion";
 
 const selectedQuestionCol = [
