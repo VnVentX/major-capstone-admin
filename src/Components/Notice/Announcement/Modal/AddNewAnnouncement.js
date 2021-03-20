@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import axios from "axios";
 import { Button, Modal, Form, Input } from "antd";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
@@ -7,6 +8,8 @@ const layout = {
   labelCol: { span: 24 },
   wrapperCol: { span: 24 },
 };
+
+const { htmlToText } = require("html-to-text");
 
 const AddNewAnnouncement = () => {
   const [form] = Form.useForm();
@@ -23,6 +26,30 @@ const AddNewAnnouncement = () => {
 
   const onFinish = (event) => {
     console.log(event);
+    const shortDes = htmlToText(event.content, {
+      wordwrap: 10,
+    });
+    async function createNews() {
+      await axios
+        .post("https://mathscienceeducation.herokuapp.com/news", {
+          id: 0,
+          newsTitle: event.title,
+          shortDescription: shortDes.slice(0, 50),
+          newsContent: event.content,
+          createdDate: null,
+          createdBy: null,
+          modifiedDate: null,
+          accountId: 1,
+          disable: false,
+        })
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    }
+    createNews();
   };
 
   const custom_config = {
@@ -89,7 +116,7 @@ class MyUploadAdapter {
     // CKEditor 5's FileLoader instance.
     this.loader = props;
     // URL where to send files.
-    this.url = "http://mathscience.azurewebsites.net/api/v1/test";
+    this.url = "https://mathscienceeducation.herokuapp.com/api/v1/test";
   }
 
   // Starts the upload process.
@@ -112,10 +139,14 @@ class MyUploadAdapter {
   _initRequest() {
     const xhr = (this.xhr = new XMLHttpRequest());
 
-    xhr.open("POST", this.url, true);
-    xhr.responseType = "json";
+    xhr.open(
+      "POST",
+      "https://mathscienceeducation.herokuapp.com/api/v1/test",
+      true
+    );
+    xhr.responseType = "text";
     // xhr.setRequestHeader("Access-Control-Allow-Origin", "*");
-    // xhr.setRequestHeader("Authorization", "token");
+    // xhr.setRequestHeader("Authorization", getToken());
   }
 
   // Initializes XMLHttpRequest listeners.
@@ -128,7 +159,6 @@ class MyUploadAdapter {
     xhr.addEventListener("abort", () => reject());
     xhr.addEventListener("load", () => {
       const response = xhr.response;
-      console.log(response);
       if (!response || response.error) {
         return reject(
           response && response.error ? response.error.message : genericErrorText
@@ -138,7 +168,7 @@ class MyUploadAdapter {
       // If the upload is successful, resolve the upload promise with an object containing
       // at least the "default" URL, pointing to the image on the server.
       resolve({
-        default: response.imageUrl,
+        default: response,
       });
     });
 
