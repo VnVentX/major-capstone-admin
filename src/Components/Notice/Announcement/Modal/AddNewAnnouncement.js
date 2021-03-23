@@ -9,8 +9,6 @@ const layout = {
   wrapperCol: { span: 24 },
 };
 
-const { htmlToText } = require("html-to-text");
-
 const AddNewAnnouncement = () => {
   const [form] = Form.useForm();
   const [visible, setVisible] = useState(false);
@@ -25,22 +23,15 @@ const AddNewAnnouncement = () => {
   };
 
   const onFinish = (event) => {
-    console.log(event);
-    const shortDes = htmlToText(event.content, {
-      wordwrap: 10,
-    });
     async function createNews() {
       await axios
-        .post("https://mathscienceeducation.herokuapp.com/news", {
-          id: 0,
-          newsTitle: event.title,
-          shortDescription: shortDes.slice(0, 50),
-          newsContent: event.content,
-          createdDate: null,
-          createdBy: null,
-          modifiedDate: null,
-          accountId: 1,
-          disable: false,
+        .post("https://mathscienceeducation.herokuapp.com/news", null, {
+          params: {
+            accountId: 1,
+            newsContent: event.content,
+            newsTitle: event.title,
+            shortDescription: event.shortDes,
+          },
         })
         .then((res) => {
           console.log(res);
@@ -59,7 +50,7 @@ const AddNewAnnouncement = () => {
   return (
     <div>
       <Button type="primary" size="large" onClick={showModal}>
-        Create New Announcement
+        Create News
       </Button>
       <Modal
         title="Create New Announcement"
@@ -86,6 +77,17 @@ const AddNewAnnouncement = () => {
             rules={[{ required: true, message: "Please input a title" }]}
           >
             <Input placeholder="Title" />
+          </Form.Item>
+          <Form.Item
+            name="shortDes"
+            label="Short Description"
+            rules={[{ required: true, message: "Please input a title" }]}
+          >
+            <Input.TextArea
+              placeholder="Short Description"
+              maxLength="40"
+              showCount
+            />
           </Form.Item>
           <Form.Item
             label="Content"
@@ -139,11 +141,7 @@ class MyUploadAdapter {
   _initRequest() {
     const xhr = (this.xhr = new XMLHttpRequest());
 
-    xhr.open(
-      "POST",
-      "https://mathscienceeducation.herokuapp.com/api/v1/test",
-      true
-    );
+    xhr.open("POST", "https://mathscienceeducation.herokuapp.com/file", true);
     xhr.responseType = "text";
     // xhr.setRequestHeader("Access-Control-Allow-Origin", "*");
     // xhr.setRequestHeader("Authorization", getToken());
@@ -187,7 +185,7 @@ class MyUploadAdapter {
     const data = new FormData();
 
     this.loader.file.then((result) => {
-      data.append("file", result);
+      data.append("multipartFile", result);
       this.xhr.send(data);
     });
   }

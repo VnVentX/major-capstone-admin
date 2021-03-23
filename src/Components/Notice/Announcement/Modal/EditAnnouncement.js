@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import axios from "axios";
 import { Button, Modal, Form, Input } from "antd";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
@@ -24,7 +25,24 @@ const EditAnnouncement = (props) => {
   };
 
   const onFinish = (event) => {
-    console.log(event);
+    async function updateNews() {
+      await axios
+        .put("https://mathscienceeducation.herokuapp.com/news", null, {
+          params: {
+            id: 24,
+            newsContent: event.content,
+            newsTitle: event.title,
+            shortDescription: event.shortDes,
+          },
+        })
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    }
+    updateNews();
   };
 
   const custom_config = {
@@ -64,6 +82,17 @@ const EditAnnouncement = (props) => {
             <Input placeholder="Title" />
           </Form.Item>
           <Form.Item
+            name="shortDes"
+            label="Short Description"
+            rules={[{ required: true, message: "Please input a title" }]}
+          >
+            <Input.TextArea
+              placeholder="Short Description"
+              maxLength="40"
+              showCount
+            />
+          </Form.Item>
+          <Form.Item
             label="Content"
             name="content"
             valuePropName="data"
@@ -93,7 +122,7 @@ class MyUploadAdapter {
     // CKEditor 5's FileLoader instance.
     this.loader = props;
     // URL where to send files.
-    this.url = "http://mathscience.azurewebsites.net/api/v1/test";
+    this.url = "https://mathscienceeducation.herokuapp.com/api/v1/test";
   }
 
   // Starts the upload process.
@@ -116,17 +145,17 @@ class MyUploadAdapter {
   _initRequest() {
     const xhr = (this.xhr = new XMLHttpRequest());
 
-    xhr.open("POST", this.url, true);
-    xhr.responseType = "json";
-    xhr.setRequestHeader("Access-Control-Allow-Origin", "*");
-    xhr.setRequestHeader("Authorization", "token");
+    xhr.open("POST", "https://mathscienceeducation.herokuapp.com/file", true);
+    xhr.responseType = "text";
+    // xhr.setRequestHeader("Access-Control-Allow-Origin", "*");
+    // xhr.setRequestHeader("Authorization", getToken());
   }
 
   // Initializes XMLHttpRequest listeners.
   _initListeners(resolve, reject) {
     const xhr = this.xhr;
     const loader = this.loader;
-    const genericErrorText = `Couldn't upload file: ${loader.file.name}.`;
+    const genericErrorText = "Couldn't upload file:" + ` ${loader.file.name}.`;
 
     xhr.addEventListener("error", () => reject(genericErrorText));
     xhr.addEventListener("abort", () => reject());
@@ -141,7 +170,7 @@ class MyUploadAdapter {
       // If the upload is successful, resolve the upload promise with an object containing
       // at least the "default" URL, pointing to the image on the server.
       resolve({
-        default: response.s3Url,
+        default: response,
       });
     });
 
@@ -160,7 +189,7 @@ class MyUploadAdapter {
     const data = new FormData();
 
     this.loader.file.then((result) => {
-      data.append("file", result);
+      data.append("multipartFile", result);
       this.xhr.send(data);
     });
   }

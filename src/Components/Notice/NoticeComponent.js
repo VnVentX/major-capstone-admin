@@ -12,7 +12,7 @@ const NoticeComponent = () => {
         <TabPane tab="Banner" key="1">
           <BannerComponent />
         </TabPane>
-        <TabPane tab="Annoucement" key="2">
+        <TabPane tab="News" key="2">
           <AnnouncementComponent />
         </TabPane>
       </Tabs>
