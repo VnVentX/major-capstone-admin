@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { Button, Modal, Form, Input } from "antd";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
-import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import Editor from "ckeditor5/build/ckeditor";
 
 const layout = {
   labelCol: { span: 24 },
@@ -23,15 +23,14 @@ const AddNewAnnouncement = () => {
   };
 
   const onFinish = (event) => {
+    console.log(event);
     async function createNews() {
       await axios
-        .post("https://mathscienceeducation.herokuapp.com/news", null, {
-          params: {
-            accountId: 1,
-            newsContent: event.content,
-            newsTitle: event.title,
-            shortDescription: event.shortDes,
-          },
+        .post("https://mathscienceeducation.herokuapp.com/news", {
+          accountId: 1,
+          newsContent: event.content,
+          newsTitle: event.title,
+          shortDescription: event.shortDes,
         })
         .then((res) => {
           console.log(res);
@@ -41,10 +40,6 @@ const AddNewAnnouncement = () => {
         });
     }
     createNews();
-  };
-
-  const custom_config = {
-    extraPlugins: [MyCustomUploadAdapterPlugin],
   };
 
   return (
@@ -99,96 +94,187 @@ const AddNewAnnouncement = () => {
             }}
             rules={[{ required: true, message: "Please enter the content" }]}
           >
-            <CKEditor config={custom_config} editor={ClassicEditor} />
+            <CKEditor
+              editor={Editor}
+              config={{
+                toolbar: [
+                  "heading",
+                  "|",
+                  "fontfamily",
+                  "fontsize",
+                  "|",
+                  "alignment",
+                  "horizontalLine",
+                  "|",
+                  "fontColor",
+                  "fontBackgroundColor",
+                  "highlight",
+                  "|",
+                  "bold",
+                  "italic",
+                  "|",
+                  "link",
+                  "|",
+                  "outdent",
+                  "indent",
+                  "|",
+                  "bulletedList",
+                  "numberedList",
+                  "|",
+                  "insertTable",
+                  "|",
+                  "uploadImage",
+                  "mediaEmbed",
+                  "blockQuote",
+                  "|",
+                  "undo",
+                  "redo",
+                ],
+                image: {
+                  // Configure the available styles.
+                  styles: ["alignLeft", "alignCenter", "alignRight"],
+
+                  // Configure the available image resize options.
+                  resizeOptions: [
+                    {
+                      name: "resizeImage:original",
+                      label: "Original",
+                      value: null,
+                    },
+                    {
+                      name: "resizeImage:25",
+                      label: "25%",
+                      value: "25",
+                    },
+                    {
+                      name: "resizeImage:50",
+                      label: "50%",
+                      value: "50",
+                    },
+                    {
+                      name: "resizeImage:75",
+                      label: "75%",
+                      value: "75",
+                    },
+                  ],
+
+                  // You need to configure the image toolbar, too, so it shows the new style
+                  // buttons as well as the resize buttons.
+                  toolbar: [
+                    "imageStyle:alignLeft",
+                    "imageStyle:alignCenter",
+                    "imageStyle:alignRight",
+                    "|",
+                    "resizeImage",
+                    "|",
+                    "imageTextAlternative",
+                  ],
+                },
+                table: {
+                  contentToolbar: [
+                    "tableColumn",
+                    "tableRow",
+                    "mergeTableCells",
+                  ],
+                },
+                highlight: {
+                  options: [
+                    {
+                      model: "yellowMarker",
+                      class: "marker-yellow",
+                      title: "Yellow Marker",
+                      color: "var(--ck-highlight-marker-yellow)",
+                      type: "marker",
+                    },
+                    {
+                      model: "greenMarker",
+                      class: "marker-green",
+                      title: "Green marker",
+                      color: "var(--ck-highlight-marker-green)",
+                      type: "marker",
+                    },
+                    {
+                      model: "pinkMarker",
+                      class: "marker-pink",
+                      title: "Pink marker",
+                      color: "var(--ck-highlight-marker-pink)",
+                      type: "marker",
+                    },
+                    {
+                      model: "blueMarker",
+                      class: "marker-blue",
+                      title: "Blue marker",
+                      color: "var(--ck-highlight-marker-blue)",
+                      type: "marker",
+                    },
+                    {
+                      model: "redPen",
+                      class: "pen-red",
+                      title: "Red pen",
+                      color: "var(--ck-highlight-pen-red)",
+                      type: "pen",
+                    },
+                    {
+                      model: "greenPen",
+                      class: "pen-green",
+                      title: "Green pen",
+                      color: "var(--ck-highlight-pen-green)",
+                      type: "pen",
+                    },
+                  ],
+                },
+                heading: {
+                  options: [
+                    {
+                      model: "paragraph",
+                      title: "Paragraph",
+                      class: "ck-heading_paragraph",
+                    },
+                    {
+                      model: "heading1",
+                      view: "h1",
+                      title: "Heading 1",
+                      class: "ck-heading_heading1",
+                    },
+                    {
+                      model: "heading2",
+                      view: "h2",
+                      title: "Heading 2",
+                      class: "ck-heading_heading2",
+                    },
+                    {
+                      model: "heading3",
+                      view: "h3",
+                      title: "Heading 3",
+                      class: "ck-heading_heading3",
+                    },
+                    {
+                      model: "heading4",
+                      view: "h4",
+                      title: "Heading 4",
+                      class: "ck-heading_heading4",
+                    },
+                    {
+                      model: "heading5",
+                      view: "h5",
+                      title: "Heading 5",
+                      class: "ck-heading_heading5",
+                    },
+                    {
+                      model: "heading6",
+                      view: "h6",
+                      title: "Heading 6",
+                      class: "ck-heading_heading6",
+                    },
+                  ],
+                },
+              }}
+            />
           </Form.Item>
         </Form>
       </Modal>
     </div>
   );
 };
-
-function MyCustomUploadAdapterPlugin(editor) {
-  editor.plugins.get("FileRepository").createUploadAdapter = (loader) => {
-    return new MyUploadAdapter(loader);
-  };
-}
-
-class MyUploadAdapter {
-  constructor(props) {
-    // CKEditor 5's FileLoader instance.
-    this.loader = props;
-    // URL where to send files.
-    this.url = "https://mathscienceeducation.herokuapp.com/api/v1/test";
-  }
-
-  // Starts the upload process.
-  upload() {
-    return new Promise((resolve, reject) => {
-      this._initRequest();
-      this._initListeners(resolve, reject);
-      this._sendRequest();
-    });
-  }
-
-  // Aborts the upload process.
-  abort() {
-    if (this.xhr) {
-      this.xhr.abort();
-    }
-  }
-
-  // Example implementation using XMLHttpRequest.
-  _initRequest() {
-    const xhr = (this.xhr = new XMLHttpRequest());
-
-    xhr.open("POST", "https://mathscienceeducation.herokuapp.com/file", true);
-    xhr.responseType = "text";
-    // xhr.setRequestHeader("Access-Control-Allow-Origin", "*");
-    // xhr.setRequestHeader("Authorization", getToken());
-  }
-
-  // Initializes XMLHttpRequest listeners.
-  _initListeners(resolve, reject) {
-    const xhr = this.xhr;
-    const loader = this.loader;
-    const genericErrorText = "Couldn't upload file:" + ` ${loader.file.name}.`;
-
-    xhr.addEventListener("error", () => reject(genericErrorText));
-    xhr.addEventListener("abort", () => reject());
-    xhr.addEventListener("load", () => {
-      const response = xhr.response;
-      if (!response || response.error) {
-        return reject(
-          response && response.error ? response.error.message : genericErrorText
-        );
-      }
-
-      // If the upload is successful, resolve the upload promise with an object containing
-      // at least the "default" URL, pointing to the image on the server.
-      resolve({
-        default: response,
-      });
-    });
-
-    if (xhr.upload) {
-      xhr.upload.addEventListener("progress", (evt) => {
-        if (evt.lengthComputable) {
-          loader.uploadTotal = evt.total;
-          loader.uploaded = evt.loaded;
-        }
-      });
-    }
-  }
-
-  // Prepares the data and sends the request.
-  _sendRequest() {
-    const data = new FormData();
-
-    this.loader.file.then((result) => {
-      data.append("multipartFile", result);
-      this.xhr.send(data);
-    });
-  }
-}
 
 export default AddNewAnnouncement;

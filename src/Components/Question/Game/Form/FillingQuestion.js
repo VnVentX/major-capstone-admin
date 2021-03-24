@@ -155,27 +155,39 @@ const FillingQuestion = () => {
                       { required: true, message: "Please input option!" },
                     ]}
                   >
-                    <Input.TextArea
-                      autoSize
-                      maxLength="100"
-                      showCount
-                      placeholder="Option Text"
-                    />
+                    <Select showSearch placeholder="Select Subject">
+                      <Option value="mark">Dấu</Option>
+                      <Option value="text">Text</Option>
+                    </Select>
                   </Form.Item>
                 </Col>
                 <Col span={12}>
                   <Form.Item
-                    {...field}
-                    label="Is Correct"
-                    name={[field.name, "correct"]}
-                    fieldKey={[field.fieldKey, "correct"]}
-                    dependencies={["question"]}
-                    rules={[{ required: true, message: "Missing correct" }]}
+                    noStyle
+                    shouldUpdate={(prevValues, currentValues) =>
+                      prevValues.options !== currentValues.options
+                    }
                   >
-                    <Select placeholder="Select Is Correct">
-                      <Select.Option value="true">True</Select.Option>
-                      <Select.Option value="false">False</Select.Option>
-                    </Select>
+                    {() => {
+                      console.log(form.getFieldsValue().options[idx]);
+                      return form.getFieldsValue().options[idx]?.option === "mark" ? (
+                        <Form.Item
+                          {...field}
+                          name={[field.name, "correct"]}
+                          fieldKey={[field.fieldKey, "correct"]}
+                          dependencies={["question"]}
+                          label="Is Correct"
+                          rules={[
+                            { required: true, message: "Missing correct" },
+                          ]}
+                        >
+                          <Select placeholder="Select Is Correct">
+                            <Select.Option value="true">True</Select.Option>
+                            <Select.Option value="false">False</Select.Option>
+                          </Select>
+                        </Form.Item>
+                      ) : null;
+                    }}
                   </Form.Item>
                   <MinusCircleOutlined
                     style={{ float: "right", color: "red" }}
