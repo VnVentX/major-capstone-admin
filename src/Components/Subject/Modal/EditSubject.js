@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Button, Modal, Form, Input, Upload, message } from "antd";
+import { PlusOutlined } from "@ant-design/icons";
 import { UploadOutlined } from "@ant-design/icons";
 
 const layout = {
-  labelCol: { span: 8 },
-  wrapperCol: { span: 16 },
+  labelCol: { span: 6 },
+  wrapperCol: { span: 18 },
 };
 
 const normFile = (e) => {
@@ -14,17 +15,10 @@ const normFile = (e) => {
   return e && e.fileList;
 };
 
-const EditBanner = (props) => {
+const EditSubject = () => {
   const [form] = Form.useForm();
-  // const [data, setData] = useState(false);
   const [visible, setVisible] = useState(false);
   const [fileList, setFileList] = useState([]);
-
-  useEffect(() => {
-    form.setFieldsValue({
-      description: props.data.description,
-    });
-  }, []);
 
   const showModal = () => {
     setVisible(true);
@@ -41,20 +35,23 @@ const EditBanner = (props) => {
 
   const onFinish = (event) => {
     console.log(event);
-    setFileList([]);
   };
 
   return (
     <div>
-      <Button type="primary" onClick={showModal}>
-        Edit
+      <Button
+        type="primary"
+        size="large"
+        onClick={showModal}
+        icon={<PlusOutlined />}
+      >
+        Edit Subject
       </Button>
       <Modal
-        title="Edit Banner"
+        title="Edit Subject"
         visible={visible}
         onCancel={handleCancel}
         destroyOnClose
-        okText="Update"
         onOk={() => {
           form
             .validateFields()
@@ -67,10 +64,17 @@ const EditBanner = (props) => {
             });
         }}
       >
-        <Form {...layout} form={form} name="nest-messages">
+        <Form {...layout} form={form}>
           <Form.Item
-            name="bannerImg"
-            label="Banner Image"
+            name="subject"
+            label="Subject Name"
+            rules={[{ required: true, message: "Please input a subject name" }]}
+          >
+            <Input placeholder="Subject Name" />
+          </Form.Item>
+          <Form.Item
+            name="subjectImg"
+            label="Subject Image"
             getValueFromEvent={normFile}
             rules={[
               { required: true, message: "Please select an image to upload" },
@@ -94,15 +98,11 @@ const EditBanner = (props) => {
               )}
             </Upload>
           </Form.Item>
-          <Form.Item
-            name="description"
-            label="Description"
-            rules={[{ required: true, message: "Please input description" }]}
-          >
+          <Form.Item name="description" label="Description">
             <Input.TextArea
+              placeholder="Subject Description"
+              maxLength={50}
               showCount
-              maxLength={500}
-              placeholder="Banner Description"
             />
           </Form.Item>
         </Form>
@@ -111,4 +111,4 @@ const EditBanner = (props) => {
   );
 };
 
-export default EditBanner;
+export default EditSubject;

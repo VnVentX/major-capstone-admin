@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import axios from "axios";
 import { Button, Modal, Form, Input, Upload, message } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 
@@ -29,11 +30,30 @@ const AddNewBanner = () => {
   };
 
   const handleChange = ({ fileList }) => {
+    console.log(fileList);
     setFileList(fileList);
   };
 
   const onFinish = (event) => {
-    console.log(event);
+    let formData = new FormData();
+    formData.append("description", event.description);
+    formData.append("file", event.bannerImg[0].originFileObj);
+    formData.append("accountId", 1);
+
+    async function createBanner() {
+      await axios
+        .post(
+          "https://mathscienceeducation.herokuapp.com/bannerImages",
+          formData
+        )
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    }
+    createBanner();
     setFileList([]);
   };
 

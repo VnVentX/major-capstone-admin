@@ -1,13 +1,43 @@
 import React, { useState } from "react";
-import { Form, Input, Button, Select, Divider, Row, Col } from "antd";
-import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
+import {
+  Form,
+  Input,
+  Button,
+  Select,
+  Divider,
+  Row,
+  Col,
+  Upload,
+  message,
+} from "antd";
+import {
+  MinusCircleOutlined,
+  PlusOutlined,
+  UploadOutlined,
+} from "@ant-design/icons";
 
 const { Option } = Select;
+
+const normFile = (e) => {
+  if (Array.isArray(e)) {
+    return e;
+  }
+  return e && e.fileList;
+};
 
 const AddNewQuestion = () => {
   const [counter, setCounter] = useState(0);
   const [form] = Form.useForm();
   const [questions, setQuestions] = useState([]);
+  const [audioFile, setAudioFile] = useState([]);
+  const [imgFile, setImgFile] = useState([]);
+
+  const handleChangeImg = ({ fileList }) => {
+    setImgFile(fileList);
+  };
+  const handleChangeAudio = ({ fileList }) => {
+    setAudioFile(fileList);
+  };
 
   const handleCounter = () => {
     var count = counter;
@@ -24,19 +54,20 @@ const AddNewQuestion = () => {
       subject: values.subject,
       unit: values.unit,
       q_name: values.question,
-      q_audio: values.q_audio,
-      q_img: values.q_img,
+      q_audio: values.q_audio[0].originFileObj,
+      q_img: values.q_img[0].originFileObj,
       options: values.options,
     };
-    setQuestions(question);
-    setCounter(0);
-    form.setFieldsValue({
-      question: null,
-      q_audio: null,
-      q_img: null,
-      options: null,
-    });
-    console.log(questions);
+    console.log(question);
+    // setQuestions(question);
+    // setCounter(0);
+    // form.setFieldsValue({
+    //   question: null,
+    //   q_audio: null,
+    //   q_img: null,
+    //   options: null,
+    // });
+    // console.log(questions);
   };
 
   return (
@@ -116,17 +147,49 @@ const AddNewQuestion = () => {
         </Form.Item>
         <Form.Item
           name="q_audio"
-          label="Audio URL"
-          rules={[{ type: "url", message: "Please input a valid URL!" }]}
+          label="Question Audio"
+          getValueFromEvent={normFile}
         >
-          <Input placeholder="Audio URL" />
+          <Upload
+            listType="text"
+            fileList={audioFile}
+            beforeUpload={() => false}
+            onChange={(info) => {
+              if (info.file.type.split("/")[0] !== "audio") {
+                message.error(`${info.file.name} is not an audio file`);
+                setAudioFile([]);
+              } else {
+                handleChangeAudio(info);
+              }
+            }}
+          >
+            {audioFile.length === 1 ? null : (
+              <Button icon={<UploadOutlined />}>Upload</Button>
+            )}
+          </Upload>
         </Form.Item>
         <Form.Item
           name="q_img"
-          label="Image URL"
-          rules={[{ type: "url", message: "Please input a valid URL!" }]}
+          label="Question Image"
+          getValueFromEvent={normFile}
         >
-          <Input placeholder="Image URL" />
+          <Upload
+            listType="text"
+            fileList={imgFile}
+            beforeUpload={() => false}
+            onChange={(info) => {
+              if (info.file.type.split("/")[0] !== "image") {
+                message.error(`${info.file.name} is not an image file`);
+                setImgFile([]);
+              } else {
+                handleChangeImg(info);
+              }
+            }}
+          >
+            {imgFile.length === 1 ? null : (
+              <Button icon={<UploadOutlined />}>Upload</Button>
+            )}
+          </Upload>
         </Form.Item>
         <h2>Options</h2>
         <Form.List

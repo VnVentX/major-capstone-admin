@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Modal, Button, Form, Input, Select, DatePicker } from "antd";
 
 const layout = {
@@ -9,6 +9,14 @@ const layout = {
 const EditStudent = (props) => {
   const [visible, setVisible] = useState(false);
   const [form] = Form.useForm();
+
+  useEffect(() => {
+    form.setFieldsValue({
+      firstName: props.data.firstName,
+      lastName: props.data.lastName,
+      gender: props.data.gender,
+    });
+  }, []);
 
   const showModal = () => {
     setVisible(true);
@@ -45,11 +53,10 @@ const EditStudent = (props) => {
             });
         }}
       >
-        <Form {...layout}>
+        <Form {...layout} form={form}>
           <Form.Item
             name="firstName"
             label="First Name"
-            initialValue={props.data.firstName}
             rules={[
               {
                 required: true,
@@ -62,7 +69,6 @@ const EditStudent = (props) => {
           <Form.Item
             name="lastName"
             label="Last Name"
-            initialValue={props.data.lastName}
             rules={[{ required: true, message: "Please input Last Name" }]}
           >
             <Input />
@@ -70,7 +76,6 @@ const EditStudent = (props) => {
           <Form.Item
             name="age"
             label="DoB"
-            initialValue={props.data.age}
             rules={[{ required: true, message: "Please choose DoB" }]}
           >
             <DatePicker format="DD/MM/YYYY" />
@@ -78,7 +83,6 @@ const EditStudent = (props) => {
           <Form.Item
             name="gender"
             label="Gender"
-            initialValue={props.data.gender}
             rules={[{ required: true, message: "Please choose a Gender" }]}
           >
             <Select>

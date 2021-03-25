@@ -27,12 +27,6 @@ const SchoolDetailComponent = () => {
             Primary School
           </Descriptions.Item>
           <Descriptions.Item
-            label="Linked Date"
-            labelStyle={{ fontWeight: "bold" }}
-          >
-            1/1/2021
-          </Descriptions.Item>
-          <Descriptions.Item
             label="Address"
             labelStyle={{ fontWeight: "bold" }}
             span={2}

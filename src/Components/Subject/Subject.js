@@ -76,7 +76,7 @@ const Subject = () => {
                   </Link>
                   <Popconfirm
                     placement="left"
-                    title="Are you sure to delete this Progress Test?"
+                    title="Are you sure to delete this Subject?"
                     onConfirm={confirm} //Handle disable logic here
                     okText="Yes"
                     cancelText="No"

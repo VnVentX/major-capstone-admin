@@ -2,6 +2,7 @@ import React from "react";
 import { Typography, List, Card, Popconfirm, message } from "antd";
 import { Link } from "react-router-dom";
 import { MinusCircleOutlined } from "@ant-design/icons";
+import AddGame from "./Modal/AddGame";
 
 const { Title } = Typography;
 
@@ -39,6 +40,7 @@ const Game = () => {
         }}
       >
         <Title level={1}>Game</Title>
+        <AddGame />
       </div>
       <List
         itemLayout="horizontal"

@@ -27,7 +27,7 @@ const data = [
 
 const GradeComponent = () => {
   return (
-    <Card type="inner" title="Grade">
+    <Card type="inner" title="Choose a Grade">
       <List
         grid={{ gutter: 16, column: 1 }}
         dataSource={data}

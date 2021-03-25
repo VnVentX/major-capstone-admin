@@ -152,7 +152,7 @@ const QuestionBankComponent = () => {
         rowKey={data.key}
         scroll={{ x: true }}
       />
-      {/* <div>
+      <div>
         <h1>With selected:</h1>
         {selectedRowKeys.length === 0 ? (
           <>
@@ -188,7 +188,7 @@ const QuestionBankComponent = () => {
             </Select>
           </>
         )}
-      </div> */}
+      </div>
     </>
   );
 };

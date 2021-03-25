@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Card, Button, Tag, Space, Table, Popconfirm, message } from "antd";
 import AddNewClass from "./Modal/AddNewClass";
+import ImportClassExcel from "./Modal/ImportClassExcel";
 
 const columns = [
   {
@@ -154,23 +155,32 @@ const ClassComponent = (props) => {
         style={{
           marginBottom: 10,
           display: "flex",
-          justifyContent: "flex-end",
+          justifyContent: "space-between",
         }}
       >
-        <AddNewClass />
-        {selectedRowKeys.length === 0 ? null : (
-          <Popconfirm
-            placement="topRight"
-            title="Are you sure to disable selected Grades?"
-            onConfirm={confirm} //Handle disable logic here
-            okText="Yes"
-            cancelText="No"
-          >
-            <Button type="danger" size="large" style={{ marginLeft: 5 }}>
-              Disable
-            </Button>
-          </Popconfirm>
-        )}
+        <ImportClassExcel />
+        <div
+          style={{
+            marginBottom: 10,
+            display: "flex",
+            justifyContent: "flex-start",
+          }}
+        >
+          <AddNewClass />
+          {selectedRowKeys.length === 0 ? null : (
+            <Popconfirm
+              placement="topRight"
+              title="Are you sure to disable selected Grades?"
+              onConfirm={confirm} //Handle disable logic here
+              okText="Yes"
+              cancelText="No"
+            >
+              <Button type="danger" size="large" style={{ marginLeft: 5 }}>
+                Disable
+              </Button>
+            </Popconfirm>
+          )}
+        </div>
       </div>
       <Table
         rowKey={(record) => record.id}

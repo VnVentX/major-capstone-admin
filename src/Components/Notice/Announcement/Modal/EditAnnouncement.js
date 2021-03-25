@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Button, Modal, Form, Input } from "antd";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
@@ -11,11 +11,18 @@ const layout = {
 
 const EditAnnouncement = (props) => {
   const [form] = Form.useForm();
-  const [data, setData] = useState(false);
   const [visible, setVisible] = useState(false);
 
+  useEffect(() => {
+    console.log(props);
+    form.setFieldsValue({
+      title: props.data.title,
+      shortDes: props.data.shortDes,
+      content: props.data.content,
+    });
+  }, []);
+
   const showModal = () => {
-    setData(props.data);
     setVisible(true);
   };
 
@@ -25,24 +32,25 @@ const EditAnnouncement = (props) => {
   };
 
   const onFinish = (event) => {
-    async function updateNews() {
-      await axios
-        .put("https://mathscienceeducation.herokuapp.com/news", null, {
-          params: {
-            id: 24,
-            newsContent: event.content,
-            newsTitle: event.title,
-            shortDescription: event.shortDes,
-          },
-        })
-        .then((res) => {
-          console.log(res);
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-    }
-    updateNews();
+    console.log(event);
+    // async function updateNews() {
+    //   await axios
+    //     .put("https://mathscienceeducation.herokuapp.com/news", null, {
+    //       params: {
+    //         id: 24,
+    //         newsContent: event.content,
+    //         newsTitle: event.title,
+    //         shortDescription: event.shortDes,
+    //       },
+    //     })
+    //     .then((res) => {
+    //       console.log(res);
+    //     })
+    //     .catch((e) => {
+    //       console.log(e);
+    //     });
+    // }
+    // updateNews();
   };
 
   return (
@@ -72,7 +80,6 @@ const EditAnnouncement = (props) => {
           <Form.Item
             name="title"
             label="Title"
-            initialValue={data.title}
             rules={[{ required: true, message: "Please input a title" }]}
           >
             <Input placeholder="Title" />
@@ -92,7 +99,6 @@ const EditAnnouncement = (props) => {
             label="Content"
             name="content"
             valuePropName="data"
-            initialValue={data.content}
             getValueFromEvent={(event, editor) => {
               const data = editor.getData();
               return data;

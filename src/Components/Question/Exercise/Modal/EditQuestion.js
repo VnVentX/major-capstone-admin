@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Select, Form, Modal, Input, Divider, Row, Col } from "antd";
 
 const options = [
@@ -15,6 +15,15 @@ const options = [
 const EditQuestion = (props) => {
   const [form] = Form.useForm();
   const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    form.setFieldsValue({
+      question: props.data.q_name,
+      q_audio: "Q1",
+      q_img: "Q1",
+      options: options,
+    });
+  }, []);
 
   const onFinish = (event) => {
     console.log(event);
@@ -59,16 +68,7 @@ const EditQuestion = (props) => {
             });
         }}
       >
-        <Form
-          form={form}
-          layout="vertical"
-          initialValues={{
-            question: props.data.q_name,
-            q_audio: "Q1",
-            q_img: "Q1",
-            options: options,
-          }}
-        >
+        <Form form={form} layout="vertical">
           <h1>Question</h1>
           <Divider />
           <Form.Item
