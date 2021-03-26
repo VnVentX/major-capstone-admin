@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import axios from "axios";
 import {
   Card,
   Table,
@@ -15,60 +16,32 @@ import Highlighter from "react-highlight-words";
 import { SearchOutlined } from "@ant-design/icons";
 import AddNewSchool from "./Modal/AddNewSchool";
 
-const data = [
-  {
-    id: 1,
-    code: "DMC",
-    school: "Dương Minh Châu",
-    district: "Q10",
-    status: "active",
-    createdBy: "anhtt",
-    createdDate: "14:24PM, 24/02/2021",
-    modifiedBy: "anhtt",
-    modifiedDate: "14:50PM, 24/02/2021",
-  },
-  {
-    id: 2,
-    code: "NCT",
-    school: "Nguyễn Chí Thanh",
-    district: "Q10",
-    status: "active",
-    createdBy: "anhtt",
-    createdDate: "14:24PM, 24/02/2021",
-    modifiedBy: "anhtt",
-    modifiedDate: "14:50PM, 24/02/2021",
-  },
-  {
-    id: 3,
-    code: "NVT",
-    school: "Nguyễn Văn Tố",
-    district: "Q10",
-    status: "active",
-    createdBy: "anhtt",
-    createdDate: "14:24PM, 24/02/2021",
-    modifiedBy: "anhtt",
-    modifiedDate: "14:50PM, 24/02/2021",
-  },
-  {
-    id: 4,
-    code: "TQC",
-    school: "Trần Quang Cơ",
-    district: "Q10",
-    status: "active",
-    createdBy: "anhtt",
-    createdDate: "14:24PM, 24/02/2021",
-    modifiedBy: "anhtt",
-    modifiedDate: "14:50PM, 24/02/2021",
-  },
-];
-
 export default class SchoolComponent extends Component {
   state = {
     searchText: "",
     searchedColumn: "",
     selectedRowKeys: [],
-    dataSource: data,
+    dataSource: [],
+    dataSearch: [],
     schoolSearch: "",
+  };
+
+  componentDidMount() {
+    this.getAllSchool();
+  }
+
+  getAllSchool = async () => {
+    await axios
+      .get("https://mathscienceeducation.herokuapp.com/schools")
+      .then((res) => {
+        this.setState({
+          dataSource: res.data,
+          dataSearch: res.data.length === 0 ? [] : res.data,
+        });
+      })
+      .catch((e) => {
+        console.log(e);
+      });
   };
 
   getColumnSearchProps = (dataIndex) => ({
@@ -170,14 +143,14 @@ export default class SchoolComponent extends Component {
         title: "School",
         align: "center",
         render: (record) => (
-          <Link to={`/school/${record.id}`}>{record.school}</Link>
+          <Link to={`/school/${record.id}`}>{record.schoolName}</Link>
         ),
       },
       {
         title: "School Code",
-        dataIndex: "code",
+        dataIndex: "schoolCode",
         align: "center",
-        ...this.getColumnSearchProps("code"),
+        ...this.getColumnSearchProps("schoolCode"),
       },
       {
         title: "Created By",
@@ -201,17 +174,17 @@ export default class SchoolComponent extends Component {
       },
       {
         title: "Status",
-        dataIndex: "status",
-        key: "status",
+        dataIndex: "disable",
+        key: "disable",
         align: "center",
-        render: (status) => (
+        render: (disable) => (
           <span>
-            {status === "active" ? (
-              <Tag color={"green"} key={status}>
+            {disable === true ? (
+              <Tag color={"green"} key={disable}>
                 Active
               </Tag>
-            ) : status === "dropout" ? (
-              <Tag color={"volcano"} key={status}>
+            ) : disable === false ? (
+              <Tag color={"volcano"} key={disable}>
                 Disabled
               </Tag>
             ) : null}
@@ -238,6 +211,8 @@ export default class SchoolComponent extends Component {
       onChange: this.onSelectChange,
     };
 
+    console.log(this.state.dataSource);
+
     return (
       <Card type="inner" title="School Management">
         <div
@@ -248,14 +223,16 @@ export default class SchoolComponent extends Component {
             marginBottom: 20,
           }}
         >
-          <AutoComplete dataSource={data.map((item) => item.school)}>
+          <AutoComplete
+            dataSource={this.state.dataSearch.map((item) => item.schoolName)}
+          >
             <Input.Search
               placeholder="Search a School"
               allowClear
               onSearch={(schoolSearch) =>
                 this.setState({
-                  dataSource: data.filter((item) =>
-                    item.school
+                  dataSource: this.state.dataSearch.filter((item) =>
+                    item.schoolName
                       .toString()
                       .toLowerCase()
                       .includes(schoolSearch.toLowerCase())
@@ -272,7 +249,7 @@ export default class SchoolComponent extends Component {
               alignItems: "center",
             }}
           >
-            <AddNewSchool />
+            <AddNewSchool getAllSchool={this.getAllSchool} />
             {selectedRowKeys.length === 0 ? null : (
               <Popconfirm
                 placement="topRight"
