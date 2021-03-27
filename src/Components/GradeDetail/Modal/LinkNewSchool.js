@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Button, Modal, Form, Select } from "antd";
-
+import { LinkOutlined } from "@ant-design/icons";
 const { Option } = Select;
 
 const LinkNewSchool = () => {
@@ -22,8 +22,13 @@ const LinkNewSchool = () => {
   };
   return (
     <>
-      <Button type="primary" size="large" onClick={showModal}>
-        Link A School
+      <Button
+        type="primary"
+        size="large"
+        onClick={showModal}
+        icon={<LinkOutlined />}
+      >
+        Link New School
       </Button>
       <Modal
         title="Link New School"

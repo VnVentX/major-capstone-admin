@@ -13,6 +13,9 @@ const data = [
 ];
 
 const SchoolDetailComponent = () => {
+  const onEdit = () => {
+    console.log("click add");
+  };
   return (
     <>
       <Card type="inner" title="School Info">
@@ -36,9 +39,13 @@ const SchoolDetailComponent = () => {
         </Descriptions>
       </Card>
       <Card type="inner" title="Linked Grades" style={{ marginTop: 20 }}>
-        <Tabs type="line">
+        <Tabs
+          type="editable-card"
+          onEdit={onEdit}
+          hideAdd={(data.length === 12 ? true : false)}
+        >
           {data?.map((i, idx) => (
-            <TabPane tab={`Grade ${i.grade}`} key={idx + 1}>
+            <TabPane tab={`Grade ${i.grade}`} key={idx + 1} closeIcon>
               <ClassComponent gradeID={i.id} />
             </TabPane>
           ))}

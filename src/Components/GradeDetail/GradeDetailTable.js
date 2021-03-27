@@ -9,10 +9,15 @@ import {
   Popconfirm,
   message,
   AutoComplete,
+  Select,
 } from "antd";
+import {
+  SearchOutlined,
+  QuestionCircleOutlined,
+  DeleteOutlined,
+} from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
 import { Link } from "react-router-dom";
-import { SearchOutlined } from "@ant-design/icons";
 import LinkNewSchool from "./Modal/LinkNewSchool";
 
 const data = [
@@ -248,7 +253,13 @@ export default class GradeDetailTable extends Component {
             marginBottom: 20,
           }}
         >
-          <AutoComplete dataSource={data.map((item) => item.school)}>
+          <AutoComplete
+            dataSource={data.map((item, idx) => (
+              <Select.Option key={idx} value={item.school}>
+                {item.school}
+              </Select.Option>
+            ))}
+          >
             <Input.Search
               placeholder="Search a School"
               allowClear
@@ -267,19 +278,6 @@ export default class GradeDetailTable extends Component {
           </AutoComplete>
           <div>
             <LinkNewSchool />
-            {selectedRowKeys.length === 0 ? null : (
-              <Popconfirm
-                placement="topRight"
-                title="Are you sure to disable selected Schools?"
-                onConfirm={this.confirm} //Handle disable logic here
-                okText="Yes"
-                cancelText="No"
-              >
-                <Button type="danger" size="large" style={{ marginLeft: 5 }}>
-                  Disable
-                </Button>
-              </Popconfirm>
-            )}
           </div>
         </div>
         <Table
@@ -289,6 +287,40 @@ export default class GradeDetailTable extends Component {
           dataSource={this.state.dataSource}
           scroll={{ x: true }}
         />
+        <div>
+          <h1>With selected:</h1>
+          {selectedRowKeys.length === 0 ? (
+            <>
+              <Button
+                type="danger"
+                icon={<DeleteOutlined />}
+                disabled
+                style={{ marginRight: 10 }}
+              >
+                Delete
+              </Button>
+            </>
+          ) : (
+            <>
+              <Popconfirm
+                placement="topRight"
+                title="Are you sure to delete selected Schools?"
+                onConfirm={this.confirm} //Handle disable logic here
+                okText="Yes"
+                cancelText="No"
+                icon={<QuestionCircleOutlined style={{ color: "red" }} />}
+              >
+                <Button
+                  type="danger"
+                  icon={<DeleteOutlined />}
+                  style={{ marginRight: 10 }}
+                >
+                  Delete
+                </Button>
+              </Popconfirm>
+            </>
+          )}
+        </div>
       </Card>
     );
   }

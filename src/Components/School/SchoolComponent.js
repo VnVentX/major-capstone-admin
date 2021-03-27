@@ -12,9 +12,13 @@ import {
   AutoComplete,
   Select,
 } from "antd";
+import {
+  SearchOutlined,
+  QuestionCircleOutlined,
+  DeleteOutlined,
+} from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import Highlighter from "react-highlight-words";
-import { SearchOutlined } from "@ant-design/icons";
 import AddNewSchool from "./Modal/AddNewSchool";
 
 export default class SchoolComponent extends Component {
@@ -142,7 +146,6 @@ export default class SchoolComponent extends Component {
     const columns = [
       {
         title: "School",
-        align: "center",
         render: (record) => (
           <Link to={`/school/${record.id}`}>{record.schoolName}</Link>
         ),
@@ -150,12 +153,10 @@ export default class SchoolComponent extends Component {
       {
         title: "School Code",
         dataIndex: "schoolCode",
-        align: "center",
         ...this.getColumnSearchProps("schoolCode"),
       },
       {
         title: "Created By",
-        align: "center",
         render: (record) => (
           <Space direction="vertical" size="small">
             {record.createdBy}
@@ -165,7 +166,6 @@ export default class SchoolComponent extends Component {
       },
       {
         title: "Modified By",
-        align: "center",
         render: (record) => (
           <Space direction="vertical" size="small">
             {record.modifiedBy}
@@ -255,19 +255,6 @@ export default class SchoolComponent extends Component {
             }}
           >
             <AddNewSchool getAllSchool={this.getAllSchool} />
-            {selectedRowKeys.length === 0 ? null : (
-              <Popconfirm
-                placement="topRight"
-                title="Are you sure to disable selected Schools?"
-                onConfirm={this.confirm} //Handle disable logic here
-                okText="Yes"
-                cancelText="No"
-              >
-                <Button type="danger" size="large" style={{ marginLeft: 5 }}>
-                  Disable
-                </Button>
-              </Popconfirm>
-            )}
           </div>
         </div>
         <Table
@@ -277,6 +264,40 @@ export default class SchoolComponent extends Component {
           dataSource={this.state.dataSource}
           scroll={{ x: true }}
         />
+        <div>
+          <h1>With selected:</h1>
+          {selectedRowKeys.length === 0 ? (
+            <>
+              <Button
+                type="danger"
+                icon={<DeleteOutlined />}
+                disabled
+                style={{ marginRight: 10 }}
+              >
+                Delete
+              </Button>
+            </>
+          ) : (
+            <>
+              <Popconfirm
+                placement="topRight"
+                title="Are you sure to delete selected Schools?"
+                onConfirm={this.confirm} //Handle disable logic here
+                okText="Yes"
+                cancelText="No"
+                icon={<QuestionCircleOutlined style={{ color: "red" }} />}
+              >
+                <Button
+                  type="danger"
+                  icon={<DeleteOutlined />}
+                  style={{ marginRight: 10 }}
+                >
+                  Delete
+                </Button>
+              </Popconfirm>
+            </>
+          )}
+        </div>
       </Card>
     );
   }
