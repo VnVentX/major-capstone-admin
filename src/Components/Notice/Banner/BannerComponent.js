@@ -13,6 +13,7 @@ import Highlighter from "react-highlight-words";
 import { SearchOutlined } from "@ant-design/icons";
 import AddNewBanner from "./Modal/AddNewBanner";
 import EditBanner from "./Modal/EditBanner";
+import { QuestionCircleOutlined } from "@ant-design/icons";
 
 const data = [
   {
@@ -21,27 +22,39 @@ const data = [
     description: "Banner 1",
     status: "active",
     uploadedBy: "haotpv",
+    modifiedBy: "haotpv",
+    uploadedDate: "14:24PM, 24/02/2021",
+    modifiedDate: "14:50PM, 24/02/2021",
   },
   {
     id: 2,
     imageUrl: "https://i.ibb.co/MMR1fHg/banner-science.jpg",
     description: "Banner 2",
     status: "active",
-    uploadedBy: "anhtt",
+    uploadedBy: "haotpv",
+    modifiedBy: "haotpv",
+    uploadedDate: "14:24PM, 24/02/2021",
+    modifiedDate: "14:50PM, 24/02/2021",
   },
   {
     id: 3,
     imageUrl: "https://i.ibb.co/MMR1fHg/banner-science.jpg",
     description: "Banner 3",
     status: "active",
-    uploadedBy: "anhtt",
+    uploadedBy: "haotpv",
+    modifiedBy: "haotpv",
+    uploadedDate: "14:24PM, 24/02/2021",
+    modifiedDate: "14:50PM, 24/02/2021",
   },
   {
     id: 4,
     imageUrl: "https://i.ibb.co/MMR1fHg/banner-science.jpg",
     description: "Banner 4",
     status: "active",
-    uploadedBy: "anhtt",
+    uploadedBy: "haotpv",
+    modifiedBy: "haotpv",
+    uploadedDate: "14:24PM, 24/02/2021",
+    modifiedDate: "14:50PM, 24/02/2021",
   },
 ];
 
@@ -151,7 +164,6 @@ export default class BannerComponent extends React.Component {
         title: "Banner",
         dataIndex: "imageUrl",
         width: "20%",
-        align: "center",
         render: (record) => (
           <Image
             width={200}
@@ -163,20 +175,33 @@ export default class BannerComponent extends React.Component {
       {
         title: "Description",
         dataIndex: "description",
-        align: "center",
         ...this.getColumnSearchProps("description"),
       },
       {
         title: "Uploaded By",
         dataIndex: "uploadedBy",
-        align: "center",
         ...this.getColumnSearchProps("uploadedBy"),
       },
       {
+        title: "Uploaded Date",
+        dataIndex: "uploadedDate",
+        ...this.getColumnSearchProps("uploadedBy"),
+      },
+      {
+        title: "Modified By",
+        dataIndex: "modifiedBy",
+        ...this.getColumnSearchProps("modifiedBy"),
+      },
+      {
+        title: "Modified Date",
+        dataIndex: "modifiedDate",
+        ...this.getColumnSearchProps("modifiedDate"),
+      },
+      {
         title: "Status",
+        align: "center",
         dataIndex: "status",
         key: "status",
-        align: "center",
         render: (status) => (
           <span>
             {status === "active" ? (
@@ -193,8 +218,6 @@ export default class BannerComponent extends React.Component {
       },
       {
         title: "Action",
-        dataIndex: "",
-        key: "x",
         align: "center",
         render: (record) => (
           <Space size="small">
@@ -222,19 +245,6 @@ export default class BannerComponent extends React.Component {
           }}
         >
           <AddNewBanner />
-          {selectedRowKeys.length === 0 ? null : (
-            <Popconfirm
-              placement="topRight"
-              title="Are you sure to disable selected banners?"
-              onConfirm={this.confirm} //Handle disable logic here
-              okText="Yes"
-              cancelText="No"
-            >
-              <Button type="danger" size="large" style={{ marginLeft: 5 }}>
-                Disable
-              </Button>
-            </Popconfirm>
-          )}
         </div>
         <Table
           rowKey={(record) => record.id}
@@ -243,6 +253,31 @@ export default class BannerComponent extends React.Component {
           dataSource={data}
           scroll={{ x: true }}
         />
+        <div>
+          <h1>With selected:</h1>
+          {selectedRowKeys.length === 0 ? (
+            <>
+              <Button type="danger" disabled style={{ marginRight: 10 }}>
+                Disable
+              </Button>
+            </>
+          ) : (
+            <>
+              <Popconfirm
+                placement="topRight"
+                title="Are you sure to disable selected Banners?"
+                onConfirm={this.confirm} //Handle disable logic here
+                okText="Yes"
+                cancelText="No"
+                icon={<QuestionCircleOutlined style={{ color: "red" }} />}
+              >
+                <Button type="danger" style={{ marginRight: 10 }}>
+                  Disable
+                </Button>
+              </Popconfirm>
+            </>
+          )}
+        </div>
       </div>
     );
   }

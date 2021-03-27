@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import { Button, Modal, Form, Input } from "antd";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import CustomEditor from "ckeditor5-build-classic";
+import { EyeOutlined } from "@ant-design/icons";
 
 const layout = {
   labelCol: { span: 24 },
@@ -33,66 +33,29 @@ const EditAnnouncement = (props) => {
 
   const onFinish = (event) => {
     console.log(event);
-    // async function updateNews() {
-    //   await axios
-    //     .put("https://mathscienceeducation.herokuapp.com/news", null, {
-    //       params: {
-    //         id: 24,
-    //         newsContent: event.content,
-    //         newsTitle: event.title,
-    //         shortDescription: event.shortDes,
-    //       },
-    //     })
-    //     .then((res) => {
-    //       console.log(res);
-    //     })
-    //     .catch((e) => {
-    //       console.log(e);
-    //     });
-    // }
-    // updateNews();
   };
 
   return (
     <div>
-      <Button type="primary" onClick={showModal}>
-        Edit
+      <Button type="primary" icon={<EyeOutlined />} onClick={showModal}>
+        View
       </Button>
       <Modal
-        title="Edit Announcement"
+        title="View News"
         width={1000}
         visible={visible}
         onCancel={handleCancel}
         destroyOnClose
-        onOk={() => {
-          form
-            .validateFields()
-            .then((values) => {
-              onFinish(values);
-              form.resetFields();
-            })
-            .catch((info) => {
-              console.log("Validate Failed:", info);
-            });
-        }}
+        onOk={handleCancel}
       >
         <Form {...layout} form={form}>
-          <Form.Item
-            name="title"
-            label="Title"
-            rules={[{ required: true, message: "Please input a title" }]}
-          >
-            <Input placeholder="Title" />
+          <Form.Item name="title" label="Title">
+            <Input placeholder="Title" disabled />
           </Form.Item>
-          <Form.Item
-            name="shortDes"
-            label="Short Description"
-            rules={[{ required: true, message: "Please input a title" }]}
-          >
+          <Form.Item name="shortDes" label="Short Description">
             <Input.TextArea
               placeholder="Short Description"
-              maxLength="40"
-              showCount
+              disabled
             />
           </Form.Item>
           <Form.Item
@@ -103,9 +66,8 @@ const EditAnnouncement = (props) => {
               const data = editor.getData();
               return data;
             }}
-            rules={[{ required: true, message: "Please enter the content" }]}
           >
-            <CKEditor editor={CustomEditor} />
+            <CKEditor editor={CustomEditor} disabled />
           </Form.Item>
         </Form>
       </Modal>

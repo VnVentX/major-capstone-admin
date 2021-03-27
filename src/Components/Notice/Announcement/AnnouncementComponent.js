@@ -1,9 +1,10 @@
 import React from "react";
-import { Table, Button, Input, Space, Tag, Popconfirm, message } from "antd";
+import { Table, Button, Input, Space, Popconfirm, message } from "antd";
 import Highlighter from "react-highlight-words";
 import { SearchOutlined } from "@ant-design/icons";
 import AddNewAnnouncement from "./Modal/AddNewAnnouncement";
 import EditAnnouncement from "./Modal/EditAnnouncement";
+import { QuestionCircleOutlined, DeleteOutlined } from "@ant-design/icons";
 
 const data = [
   {
@@ -153,53 +154,37 @@ export default class AnnouncementComponent extends React.Component {
       {
         title: "Title",
         dataIndex: "title",
-        align: "center",
         ...this.getColumnSearchProps("title"),
       },
       {
         title: "Uploaded By",
         dataIndex: "uploadedBy",
-        align: "center",
         ...this.getColumnSearchProps("uploadedBy"),
       },
       {
         title: "Uploaded Date",
         dataIndex: "uploadedDate",
-        align: "center",
         ...this.getColumnSearchProps("uploadedDate"),
-      },
-      {
-        title: "Modified Date",
-        dataIndex: "modifiedDate",
-        align: "center",
-        ...this.getColumnSearchProps("modifiedDate"),
-      },
-      {
-        title: "Status",
-        dataIndex: "status",
-        key: "status",
-        align: "center",
-        render: (status) => (
-          <span>
-            {status === "active" ? (
-              <Tag color={"green"} key={status}>
-                Active
-              </Tag>
-            ) : status === "dropout" ? (
-              <Tag color={"volcano"} key={status}>
-                Disabled
-              </Tag>
-            ) : null}
-          </span>
-        ),
       },
       {
         title: "Action",
         align: "center",
         render: (record) => (
           <Space size="small">
-            <Button type="primary">Change Status</Button>
             <EditAnnouncement data={record} />
+
+            <Popconfirm
+              placement="topRight"
+              title="Are you sure to delete this news?"
+              onConfirm={this.confirm} //Handle disable logic here
+              okText="Yes"
+              cancelText="No"
+              icon={<QuestionCircleOutlined style={{ color: "red" }} />}
+            >
+              <Button type="danger" icon={<DeleteOutlined />}>
+                Delete
+              </Button>
+            </Popconfirm>
           </Space>
         ),
       },
@@ -222,19 +207,6 @@ export default class AnnouncementComponent extends React.Component {
           }}
         >
           <AddNewAnnouncement />
-          {selectedRowKeys.length === 0 ? null : (
-            <Popconfirm
-              placement="topRight"
-              title="Are you sure to disable selected Titles?"
-              onConfirm={this.confirm} //Handle disable logic here
-              okText="Yes"
-              cancelText="No"
-            >
-              <Button type="danger" size="large" style={{ marginLeft: 5 }}>
-                Disable
-              </Button>
-            </Popconfirm>
-          )}
         </div>
         <Table
           rowKey={(record) => record.id}
@@ -243,6 +215,40 @@ export default class AnnouncementComponent extends React.Component {
           dataSource={data}
           scroll={{ x: true }}
         />
+        <div>
+          <h1>With selected:</h1>
+          {selectedRowKeys.length === 0 ? (
+            <>
+              <Button
+                type="danger"
+                icon={<DeleteOutlined />}
+                disabled
+                style={{ marginRight: 10 }}
+              >
+                Delete
+              </Button>
+            </>
+          ) : (
+            <>
+              <Popconfirm
+                placement="topRight"
+                title="Are you sure to delete selected News?"
+                onConfirm={this.confirm} //Handle disable logic here
+                okText="Yes"
+                cancelText="No"
+                icon={<QuestionCircleOutlined style={{ color: "red" }} />}
+              >
+                <Button
+                  type="danger"
+                  icon={<DeleteOutlined />}
+                  style={{ marginRight: 10 }}
+                >
+                  Delete
+                </Button>
+              </Popconfirm>
+            </>
+          )}
+        </div>
       </div>
     );
   }

@@ -10,6 +10,7 @@ import {
   Popconfirm,
   message,
   AutoComplete,
+  Select,
 } from "antd";
 import { Link } from "react-router-dom";
 import Highlighter from "react-highlight-words";
@@ -35,7 +36,7 @@ export default class SchoolComponent extends Component {
       .get("https://mathscienceeducation.herokuapp.com/schools")
       .then((res) => {
         this.setState({
-          dataSource: res.data,
+          dataSource: res.data.length === 0 ? [] : res.data,
           dataSearch: res.data.length === 0 ? [] : res.data,
         });
       })
@@ -224,7 +225,11 @@ export default class SchoolComponent extends Component {
           }}
         >
           <AutoComplete
-            dataSource={this.state.dataSearch.map((item) => item.schoolName)}
+            dataSource={this.state.dataSearch.map((item, idx) => (
+              <Select.Option key={idx} value={item.schoolName}>
+                {item.schoolName}
+              </Select.Option>
+            ))}
           >
             <Input.Search
               placeholder="Search a School"

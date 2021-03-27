@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Button, Modal, Form, Input, Upload, message } from "antd";
-import { UploadOutlined } from "@ant-design/icons";
+import { UploadOutlined, EditOutlined } from "@ant-design/icons";
 
 const layout = {
   labelCol: { span: 8 },
@@ -46,7 +46,7 @@ const EditBanner = (props) => {
 
   return (
     <div>
-      <Button type="primary" onClick={showModal}>
+      <Button type="primary" icon={<EditOutlined />} onClick={showModal}>
         Edit
       </Button>
       <Modal
@@ -72,9 +72,6 @@ const EditBanner = (props) => {
             name="bannerImg"
             label="Banner Image"
             getValueFromEvent={normFile}
-            rules={[
-              { required: true, message: "Please select an image to upload" },
-            ]}
           >
             <Upload
               listType="text"
@@ -94,14 +91,10 @@ const EditBanner = (props) => {
               )}
             </Upload>
           </Form.Item>
-          <Form.Item
-            name="description"
-            label="Description"
-            rules={[{ required: true, message: "Please input description" }]}
-          >
+          <Form.Item name="description" label="Description">
             <Input.TextArea
               showCount
-              maxLength={500}
+              maxLength={100}
               placeholder="Banner Description"
             />
           </Form.Item>

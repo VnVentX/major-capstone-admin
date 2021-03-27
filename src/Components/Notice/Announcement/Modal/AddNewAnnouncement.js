@@ -3,6 +3,7 @@ import axios from "axios";
 import { Button, Modal, Form, Input } from "antd";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import CustomEditor from "ckeditor5-build-classic";
+import { PlusOutlined } from "@ant-design/icons";
 
 const layout = {
   labelCol: { span: 24 },
@@ -44,11 +45,16 @@ const AddNewAnnouncement = () => {
 
   return (
     <div>
-      <Button type="primary" size="large" onClick={showModal}>
+      <Button
+        type="primary"
+        size="large"
+        icon={<PlusOutlined />}
+        onClick={showModal}
+      >
         Create News
       </Button>
       <Modal
-        title="Create New Announcement"
+        title="Create News"
         width={1000}
         visible={visible}
         onCancel={handleCancel}

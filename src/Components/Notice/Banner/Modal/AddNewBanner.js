@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { Button, Modal, Form, Input, Upload, message } from "antd";
-import { UploadOutlined } from "@ant-design/icons";
+import { UploadOutlined, PlusOutlined } from "@ant-design/icons";
 
 const layout = {
   labelCol: { span: 8 },
@@ -59,11 +59,16 @@ const AddNewBanner = () => {
 
   return (
     <div>
-      <Button type="primary" size="large" onClick={showModal}>
-        Create Banner
+      <Button
+        type="primary"
+        size="large"
+        icon={<PlusOutlined />}
+        onClick={showModal}
+      >
+        Add Image
       </Button>
       <Modal
-        title="Create Banner"
+        title="Add Image"
         visible={visible}
         onCancel={handleCancel}
         destroyOnClose
@@ -89,7 +94,7 @@ const AddNewBanner = () => {
             ]}
           >
             <Upload
-              listType="text"
+              listType="picture"
               fileList={fileList}
               beforeUpload={() => false}
               onChange={(info) => {
