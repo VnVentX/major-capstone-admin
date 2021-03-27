@@ -225,12 +225,15 @@ iframe {
 }
 
 /* Antd Table header */
-/* .ant-table-filter-column-title {
+.ant-table-filter-column-title {
   font-size: 1rem;
 }
 .ant-table-thead > tr > th {
   font-size: 1rem;
-} */
+}
+.ant-table-tbody > tr > td {
+  font-size: 1rem;
+}
 input[type="checkbox"] + *::before {
   position: relative;
   top: -1px;

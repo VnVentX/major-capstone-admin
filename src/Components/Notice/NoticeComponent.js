@@ -8,7 +8,7 @@ const { TabPane } = Tabs;
 const NoticeComponent = () => {
   return (
     <Card type="inner" title="News Management">
-      <Tabs defaultActiveKey="1">
+      <Tabs defaultActiveKey="1" type="card">
         <TabPane tab="Banner" key="1">
           <BannerComponent />
         </TabPane>
