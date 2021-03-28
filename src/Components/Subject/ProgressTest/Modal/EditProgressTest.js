@@ -1,17 +1,23 @@
-import React, { useState } from "react";
-import { Button, Modal, Form, Input, Select } from "antd";
-import { PlusOutlined } from "@ant-design/icons";
-
+import React, { useState, useEffect } from "react";
+import { Button, Modal, Form, Input, Select, Tooltip } from "antd";
+import { EditOutlined } from "@ant-design/icons";
 const { Option } = Select;
 
 const layout = {
-  labelCol: { span: 6 },
-  wrapperCol: { span: 18 },
+  labelCol: { span: 8 },
+  wrapperCol: { span: 16 },
 };
 
-const AddNewUnit = () => {
+const EditProgressTest = (props) => {
   const [form] = Form.useForm();
   const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    form.setFieldsValue({
+      progressTest: props.data.title,
+      description: props.data.description,
+    });
+  }, []);
 
   const showModal = () => {
     setVisible(true);
@@ -28,16 +34,11 @@ const AddNewUnit = () => {
 
   return (
     <div>
-      <Button
-        type="primary"
-        size="large"
-        onClick={showModal}
-        icon={<PlusOutlined />}
-      >
-        Create Unit
-      </Button>
+      <Tooltip title="Edit">
+        <Button type="primary" icon={<EditOutlined />} onClick={showModal} />
+      </Tooltip>
       <Modal
-        title="Create Unit"
+        title="Edit Progress Test"
         visible={visible}
         onCancel={handleCancel}
         destroyOnClose
@@ -55,11 +56,25 @@ const AddNewUnit = () => {
       >
         <Form {...layout} form={form}>
           <Form.Item
-            name="unit"
-            label="Unit"
-            rules={[{ required: true, message: "Please select a unit" }]}
+            name="progressTest"
+            label="Progress Test Name"
+            rules={[{ max: 20, message: "Can only input 21 characters" }]}
           >
-            <Select placeholder="Choose a unit">
+            <Input placeholder="Progress Test Name" maxLength={21} />
+          </Form.Item>
+          <Form.Item
+            name="description"
+            label="Description"
+            rules={[{ max: 50, message: "Can only input 50 characters" }]}
+          >
+            <Input.TextArea
+              placeholder="Progress Test Description"
+              maxLength={50}
+              showCount
+            />
+          </Form.Item>
+          <Form.Item name="unitAfter" label="Unit After">
+            <Select placeholder="Place Progress Test after this Unit">
               <Option value="1">Unit 1</Option>
               <Option value="2">Unit 2</Option>
               <Option value="3">Unit 3</Option>
@@ -74,17 +89,10 @@ const AddNewUnit = () => {
               <Option value="12">Unit 12</Option>
             </Select>
           </Form.Item>
-          <Form.Item name="description" label="Description">
-            <Input.TextArea
-              placeholder="Unit Description"
-              maxLength={50}
-              showCount
-            />
-          </Form.Item>
         </Form>
       </Modal>
     </div>
   );
 };
 
-export default AddNewUnit;
+export default EditProgressTest;

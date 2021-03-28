@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import { Button, Modal, Form, Input, Select } from "antd";
-import { PlusOutlined } from "@ant-design/icons";
+import React, { useState, useEffect } from "react";
+import { Button, Modal, Form, Input, Select, Tooltip } from "antd";
+import { EditOutlined } from "@ant-design/icons";
 
 const { Option } = Select;
 
@@ -9,9 +9,16 @@ const layout = {
   wrapperCol: { span: 18 },
 };
 
-const AddNewUnit = () => {
+const EditUnit = (props) => {
   const [form] = Form.useForm();
   const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    form.setFieldsValue({
+      unit: props.data.title,
+      description: props.data.description,
+    });
+  }, []);
 
   const showModal = () => {
     setVisible(true);
@@ -28,16 +35,11 @@ const AddNewUnit = () => {
 
   return (
     <div>
-      <Button
-        type="primary"
-        size="large"
-        onClick={showModal}
-        icon={<PlusOutlined />}
-      >
-        Create Unit
-      </Button>
+      <Tooltip title="Edit">
+        <Button type="primary" icon={<EditOutlined />} onClick={showModal} />
+      </Tooltip>
       <Modal
-        title="Create Unit"
+        title="Edit Unit"
         visible={visible}
         onCancel={handleCancel}
         destroyOnClose
@@ -54,11 +56,7 @@ const AddNewUnit = () => {
         }}
       >
         <Form {...layout} form={form}>
-          <Form.Item
-            name="unit"
-            label="Unit"
-            rules={[{ required: true, message: "Please select a unit" }]}
-          >
+          <Form.Item name="unit" label="Unit">
             <Select placeholder="Choose a unit">
               <Option value="1">Unit 1</Option>
               <Option value="2">Unit 2</Option>
@@ -74,7 +72,11 @@ const AddNewUnit = () => {
               <Option value="12">Unit 12</Option>
             </Select>
           </Form.Item>
-          <Form.Item name="description" label="Description">
+          <Form.Item
+            name="description"
+            label="Description"
+            rules={[{ max: 50, message: "Can only input 50 characters" }]}
+          >
             <Input.TextArea
               placeholder="Unit Description"
               maxLength={50}
@@ -87,4 +89,4 @@ const AddNewUnit = () => {
   );
 };
 
-export default AddNewUnit;
+export default EditUnit;

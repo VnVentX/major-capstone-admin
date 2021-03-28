@@ -1,8 +1,18 @@
 import React, { useState, useEffect } from "react";
-import { Card, List, AutoComplete, Input, Popconfirm, message } from "antd";
+import {
+  Card,
+  List,
+  AutoComplete,
+  Input,
+  Popconfirm,
+  message,
+  Tooltip,
+  Button,
+} from "antd";
 import { Link } from "react-router-dom";
-import { MinusCircleOutlined } from "@ant-design/icons";
+import { QuestionCircleOutlined, DeleteOutlined } from "@ant-design/icons";
 import AddNewProgress from "./Modal/AddNewProgress";
+import EditProgressTest from "./Modal/EditProgressTest";
 
 const { Search } = Input;
 
@@ -30,8 +40,8 @@ const ProgressTestComponent = () => {
     setSearchData(data);
   }, []);
 
-  const confirm = (e) => {
-    console.log(e);
+  const handleDelete = (item) => {
+    console.log(item);
     message.success("Click on Yes");
   };
 
@@ -80,15 +90,27 @@ const ProgressTestComponent = () => {
                   <Link to={`${window.location.pathname}/unit/${item.id}`}>
                     {item.title}
                   </Link>
-                  <Popconfirm
-                    placement="left"
-                    title="Are you sure to delete this Progress Test?"
-                    onConfirm={confirm} //Handle disable logic here
-                    okText="Yes"
-                    cancelText="No"
-                  >
-                    <MinusCircleOutlined style={{ color: "red" }} />
-                  </Popconfirm>
+                  <div style={{ display: "flex", justifyContent: "center" }}>
+                    <Tooltip title="Delete">
+                      <Popconfirm
+                        placement="left"
+                        title="Are you sure to delete this Progress Test?"
+                        onConfirm={() => handleDelete(item.id)} //Handle disable logic here
+                        okText="Yes"
+                        cancelText="No"
+                        icon={
+                          <QuestionCircleOutlined style={{ color: "red" }} />
+                        }
+                      >
+                        <Button
+                          type="danger"
+                          icon={<DeleteOutlined />}
+                          style={{ marginRight: 5 }}
+                        />
+                      </Popconfirm>
+                    </Tooltip>
+                    <EditProgressTest data={item} />
+                  </div>
                 </div>
               }
             >

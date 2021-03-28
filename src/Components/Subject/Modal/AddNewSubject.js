@@ -45,10 +45,10 @@ const AddNewSubject = () => {
         onClick={showModal}
         icon={<PlusOutlined />}
       >
-        Create New Subject
+        Create Subject
       </Button>
       <Modal
-        title="Create New Subject"
+        title="Create Subject"
         visible={visible}
         onCancel={handleCancel}
         destroyOnClose
