@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Button, Modal, Form, Input } from "antd";
+import { PlusOutlined } from "@ant-design/icons";
 
 const layout = {
   labelCol: { span: 8 },
@@ -25,11 +26,16 @@ const AddExercise = () => {
 
   return (
     <div>
-      <Button type="primary" size="middle" onClick={showModal}>
+      <Button
+        type="primary"
+        size="middle"
+        onClick={showModal}
+        icon={<PlusOutlined />}
+      >
         Add Exercise
       </Button>
       <Modal
-        title="Add new Exercise"
+        title="Add Exercise"
         visible={visible}
         onCancel={handleCancel}
         destroyOnClose
@@ -50,14 +56,21 @@ const AddExercise = () => {
           <Form.Item
             name="name"
             label="Exercise name"
-            rules={[{ required: true, message: "Please input exercise name!" }]}
+            rules={[
+              { required: true, message: "Please input exercise name!" },
+              { max: 20, message: "Can only input 20 characters" },
+            ]}
           >
-            <Input placeholder="Exercise Name" />
+            <Input placeholder="Exercise Name" maxLength={21} />
           </Form.Item>
-          <Form.Item name="description" label="Description">
+          <Form.Item
+            name="description"
+            label="Description"
+            rules={[{ max: 50, message: "Can only input 50 characters" }]}
+          >
             <Input.TextArea
               showCount
-              maxLength={500}
+              maxLength={50}
               placeholder="Unit Description"
             />
           </Form.Item>

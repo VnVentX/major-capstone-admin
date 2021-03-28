@@ -24,7 +24,7 @@ const data = [
   {
     id: 1,
     code: "DMC",
-    school: "Dương Minh Châu",
+    school: "TH Dương Minh Châu",
     district: "Q10",
     status: "active",
     createdBy: "anhtt",
@@ -35,7 +35,7 @@ const data = [
   {
     id: 2,
     code: "NCT",
-    school: "Nguyễn Chí Thanh",
+    school: "TH Nguyễn Chí Thanh",
     district: "Q10",
     status: "active",
     createdBy: "anhtt",
@@ -46,7 +46,7 @@ const data = [
   {
     id: 3,
     code: "NVT",
-    school: "Nguyễn Văn Tố",
+    school: "TH Nguyễn Văn Tố",
     district: "Q10",
     status: "active",
     createdBy: "anhtt",
@@ -57,7 +57,7 @@ const data = [
   {
     id: 4,
     code: "TQC",
-    school: "Trần Quang Cơ",
+    school: "TH Trần Quang Cơ",
     district: "Q10",
     status: "active",
     createdBy: "anhtt",
@@ -164,8 +164,8 @@ export default class GradeDetailTable extends Component {
     this.setState({ selectedRowKeys });
   };
 
-  confirm = (e) => {
-    console.log(e);
+  handleDelete = () => {
+    console.log(this.state.selectedRowKeys);
     message.success("Click on Yes");
   };
 
@@ -173,7 +173,6 @@ export default class GradeDetailTable extends Component {
     const columns = [
       {
         title: "School",
-        align: "center",
         render: (record) => (
           <Link to={`/school/${record.id}`}>{record.school}</Link>
         ),
@@ -181,28 +180,27 @@ export default class GradeDetailTable extends Component {
       {
         title: "School Code",
         dataIndex: "code",
-        align: "center",
         ...this.getColumnSearchProps("code"),
       },
       {
         title: "Created By",
-        align: "center",
-        render: (record) => (
-          <Space direction="vertical" size="small">
-            {record.createdBy}
-            {record.createdDate}
-          </Space>
-        ),
+        dataIndex: "createdBy",
+        ...this.getColumnSearchProps("createdBy"),
+      },
+      {
+        title: "Created Date",
+        dataIndex: "createdDate",
+        ...this.getColumnSearchProps("createdDate"),
       },
       {
         title: "Modified By",
-        align: "center",
-        render: (record) => (
-          <Space direction="vertical" size="small">
-            {record.modifiedBy}
-            {record.modifiedDate}
-          </Space>
-        ),
+        dataIndex: "modifiedBy",
+        ...this.getColumnSearchProps("modifiedBy"),
+      },
+      {
+        title: "Modified Date",
+        dataIndex: "modifiedDate",
+        ...this.getColumnSearchProps("modifiedDate"),
       },
       {
         title: "Status",
@@ -305,7 +303,7 @@ export default class GradeDetailTable extends Component {
               <Popconfirm
                 placement="topRight"
                 title="Are you sure to delete selected Schools?"
-                onConfirm={this.confirm} //Handle disable logic here
+                onConfirm={this.handleDelete} //Handle disable logic here
                 okText="Yes"
                 cancelText="No"
                 icon={<QuestionCircleOutlined style={{ color: "red" }} />}

@@ -37,7 +37,7 @@ const Edit = () => {
         Edit PowerPoint
       </Button>
       <Modal
-        title="Create Unit"
+        title="Edit PowerPoint"
         visible={visible}
         onCancel={handleCancel}
         destroyOnClose

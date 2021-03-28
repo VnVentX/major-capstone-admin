@@ -23,23 +23,46 @@ const AddNewSchool = (props) => {
     setVisible(false);
   };
 
+  const warning = (values, form) => {
+    Modal.confirm({
+      title: "Waring",
+      closable: true,
+      content: (
+        <>
+          School Name is very important, are you sure you want to create this
+          School?
+          <br />
+          This action can not be reversed.
+        </>
+      ),
+      okText: "Continue",
+      onOk: () => {
+        onFinish(values);
+        form.resetFields();
+      },
+      onCancel: () => {
+        handleCancel();
+      },
+    });
+  };
+
   const onFinish = (event) => {
-    async function createNewSchool() {
-      await axios
-        .post("https://mathscienceeducation.herokuapp.com/schools", {
-          schoolDistrict: event.schoolDistrict,
-          schoolName: event.schoolName.trim(),
-          schoolStreet: event.schoolStreet.trim(),
-        })
-        .then((res) => {
-          console.log(res);
-          props.getAllSchool();
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-    }
-    createNewSchool();
+    // async function createNewSchool() {
+    //   await axios
+    //     .post("https://mathscienceeducation.herokuapp.com/schools", {
+    //       schoolDistrict: event.schoolDistrict,
+    //       schoolName: event.schoolName.trim(),
+    //       schoolStreet: event.schoolStreet.trim(),
+    //     })
+    //     .then((res) => {
+    //       console.log(res);
+    //       props.getAllSchool();
+    //     })
+    //     .catch((e) => {
+    //       console.log(e);
+    //     });
+    // }
+    // createNewSchool();
     console.log(event);
   };
 
@@ -62,8 +85,7 @@ const AddNewSchool = (props) => {
           form
             .validateFields()
             .then((values) => {
-              onFinish(values);
-              form.resetFields();
+              warning(values, form);
             })
             .catch((info) => {
               console.log("Validate Failed:", info);

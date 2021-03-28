@@ -1,15 +1,22 @@
-import React, { useState } from "react";
-import { Button, Modal, Form, Input } from "antd";
-import { PlusOutlined } from "@ant-design/icons";
+import React, { useState, useEffect } from "react";
+import { Button, Modal, Form, Input, Select, Tooltip } from "antd";
+import { EditOutlined } from "@ant-design/icons";
 
 const layout = {
   labelCol: { span: 8 },
   wrapperCol: { span: 16 },
 };
 
-const AddGame = () => {
+const EditExercise = (props) => {
   const [form] = Form.useForm();
   const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    form.setFieldsValue({
+      name: props.data.title,
+      description: props.data.description,
+    });
+  }, []);
 
   const onFinish = (event) => {
     console.log(event);
@@ -26,16 +33,11 @@ const AddGame = () => {
 
   return (
     <div>
-      <Button
-        type="primary"
-        size="middle"
-        onClick={showModal}
-        icon={<PlusOutlined />}
-      >
-        Add Game
-      </Button>
+      <Tooltip title="Edit">
+        <Button type="primary" icon={<EditOutlined />} onClick={showModal} />
+      </Tooltip>
       <Modal
-        title="Add new Game"
+        title="Edit Exercise"
         visible={visible}
         onCancel={handleCancel}
         destroyOnClose
@@ -55,11 +57,8 @@ const AddGame = () => {
         <Form {...layout} form={form}>
           <Form.Item
             name="name"
-            label="Game name"
-            rules={[
-              { required: true, message: "Please input game name!" },
-              { max: 20, message: "Can only input 20 characters" },
-            ]}
+            label="Exercise name"
+            rules={[{ max: 20, message: "Can only input 20 characters" }]}
           >
             <Input placeholder="Exercise Name" maxLength={21} />
           </Form.Item>
@@ -80,4 +79,4 @@ const AddGame = () => {
   );
 };
 
-export default AddGame;
+export default EditExercise;

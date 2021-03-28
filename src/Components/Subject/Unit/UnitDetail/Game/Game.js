@@ -1,8 +1,17 @@
 import React from "react";
-import { Typography, List, Card, Popconfirm, message } from "antd";
+import {
+  Card,
+  List,
+  Popconfirm,
+  message,
+  Tooltip,
+  Button,
+  Typography,
+} from "antd";
 import { Link } from "react-router-dom";
-import { MinusCircleOutlined } from "@ant-design/icons";
+import { QuestionCircleOutlined, DeleteOutlined } from "@ant-design/icons";
 import AddGame from "./Modal/AddGame";
+import EditGame from "./Modal/EditGame";
 
 const { Title } = Typography;
 
@@ -25,8 +34,8 @@ const data = [
   },
 ];
 const Game = () => {
-  const confirm = (e) => {
-    console.log(e);
+  const handleDelete = (item) => {
+    console.log(item);
     message.success("Click on Yes");
   };
 
@@ -60,15 +69,27 @@ const Game = () => {
                   <Link to={`${window.location.pathname}/game/${item.id}`}>
                     {item.title}
                   </Link>
-                  <Popconfirm
-                    placement="left"
-                    title="Are you sure to delete this Game?"
-                    onConfirm={confirm} //Handle disable logic here
-                    okText="Yes"
-                    cancelText="No"
-                  >
-                    <MinusCircleOutlined style={{ color: "red" }} />
-                  </Popconfirm>
+                  <div style={{ display: "flex", justifyContent: "center" }}>
+                    <Tooltip title="Delete">
+                      <Popconfirm
+                        placement="left"
+                        title="Are you sure to delete this Game?"
+                        onConfirm={() => handleDelete(item.id)} //Handle disable logic here
+                        okText="Yes"
+                        cancelText="No"
+                        icon={
+                          <QuestionCircleOutlined style={{ color: "red" }} />
+                        }
+                      >
+                        <Button
+                          type="danger"
+                          icon={<DeleteOutlined />}
+                          style={{ marginRight: 5 }}
+                        />
+                      </Popconfirm>
+                    </Tooltip>
+                    <EditGame data={item} />
+                  </div>
                 </div>
               }
             >
