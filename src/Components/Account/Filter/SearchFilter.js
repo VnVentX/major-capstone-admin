@@ -6,14 +6,13 @@ const SearchFilter = (props) => {
 
   useEffect(() => {
     form.setFieldsValue({
-      school: props.searchData.school,
-      grade: props.searchData.grade,
-      class: props.searchData.class,
+      school: props.searchData?.school,
+      grade: props.searchData?.grade,
+      class: props.searchData?.class,
     });
-  }, []);
+  });
 
   const onFinish = (values) => {
-    console.log("Clicked Search");
     props.handleSearch(values);
   };
 
@@ -29,7 +28,9 @@ const SearchFilter = (props) => {
         <Col span={8}>
           <Form.Item name="school" label="Search School">
             <AutoComplete
-              dataSource={props.listSchool.map((item) => item.school)}
+              dataSource={props.listSchool.map(
+                (item) => "Trường Tiểu Học " + item?.school
+              )}
             >
               <Input placeholder="Choose a School" allowClear />
             </AutoComplete>

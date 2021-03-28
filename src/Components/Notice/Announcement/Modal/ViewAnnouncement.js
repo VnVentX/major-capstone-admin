@@ -9,12 +9,11 @@ const layout = {
   wrapperCol: { span: 24 },
 };
 
-const EditAnnouncement = (props) => {
+const ViewAnnouncement = (props) => {
   const [form] = Form.useForm();
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    console.log(props);
     form.setFieldsValue({
       title: props.data.title,
       shortDes: props.data.shortDes,
@@ -75,4 +74,4 @@ const EditAnnouncement = (props) => {
   );
 };
 
-export default EditAnnouncement;
+export default ViewAnnouncement;

@@ -12,7 +12,7 @@ const student = [
     id: 1,
     firstName: "Đoàn",
     lastName: "Tuấn Đức",
-    school: "Duương Minh Châu",
+    school: "TH Dương Minh Châu",
     account: "DMC_G1_01",
     grade: 1,
     class: "1-1",
@@ -24,7 +24,7 @@ const student = [
     id: 2,
     firstName: "Trương",
     lastName: "Thành Đạt",
-    school: "Duương Minh Châu",
+    school: "TH Dương Minh Châu",
     account: "DMC_G1_02",
     grade: 1,
     class: "1-1",
@@ -36,7 +36,7 @@ const student = [
     id: 3,
     firstName: "Từ",
     lastName: "Thiệu Hào",
-    school: "Duương Minh Châu",
+    school: "TH Dương Minh Châu",
     account: "DMC_G1_03",
     grade: 1,
     class: "1-1",
@@ -48,7 +48,7 @@ const student = [
     id: 4,
     firstName: "Trần",
     lastName: "Thiên Anh",
-    school: "Duương Minh Châu",
+    school: "TH Dương Minh Châu",
     account: "DMC_G1_04",
     grade: 1,
     class: "1-1",
@@ -126,30 +126,29 @@ const data = [
 export const AccountTableComponent = () => {
   const location = useLocation();
   const [record, setRecord] = useState([]);
+  const [searchData, setSearchData] = useState();
 
   useEffect(() => {
     if (location.state === undefined) {
       return;
     } else {
-      handleSearch();
+      setSearchData({
+        school: "Trường Tiểu Học " + location.state.school,
+        grade: "Grade " + location.state.grade,
+        class: location.state.class,
+      });
+      handleSearch({
+        school: "Trường Tiểu Học " + location.state.school,
+        grade: "Grade " + location.state.grade,
+        class: location.state.class,
+      });
     }
   }, []);
 
   const handleSearch = (data) => {
-    //! Nếu location.state === undefined thì sẽ search data bình thường
-    if (location.state === undefined) {
-      console.log("Searching without state: ", data);
-      setRecord(student);
-    } else {
-      //! Còn không thì search data theo state
-      data = {
-        school: location.state.school,
-        grade: location.state.grade,
-        class: location.state.class,
-      };
-      console.log("Searching state: ", data);
-      setRecord(student);
-    }
+    console.log(data);
+    setSearchData(data);
+    setRecord(student);
   };
 
   return (
@@ -160,21 +159,32 @@ export const AccountTableComponent = () => {
           listGrade={grade}
           listClass={data}
           searchData={
-            location.state === undefined
+            searchData
+              ? searchData
+              : location.state !== undefined
               ? {
-                  school: "",
-                  grade: "",
-                  class: "",
-                }
-              : {
-                  school: location.state.school,
-                  grade: location.state.grade,
+                  school: "Trường Tiểu Học " + location.state.school,
+                  grade: "Grade " + location.state.grade,
                   class: location.state.class,
                 }
+              : null
           }
           handleSearch={handleSearch}
         />
-        <StudentAccountComponent data={record} />
+        <StudentAccountComponent
+          data={record}
+          searchData={
+            searchData
+              ? searchData
+              : location.state !== undefined
+              ? {
+                  school: "Trường Tiểu Học " + location.state.school,
+                  grade: "Grade " + location.state.grade,
+                  class: location.state.class,
+                }
+              : null
+          }
+        />
       </TabPane>
     </Tabs>
   );

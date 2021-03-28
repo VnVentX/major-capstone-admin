@@ -4,17 +4,15 @@ import {
   Card,
   Tag,
   Button,
-  Input,
   Space,
   Popconfirm,
   message,
   Cascader,
 } from "antd";
-import { Link } from "react-router-dom";
-import { DownloadOutlined, SearchOutlined } from "@ant-design/icons";
-import Highlighter from "react-highlight-words";
+import { DownloadOutlined } from "@ant-design/icons";
 import AddNewStudent from "./Modal/AddNewStudent";
 import EditStudent from "./Modal/EditStudent";
+import ViewStudent from "./Modal/ViewStudent";
 
 const options = [
   {
@@ -82,9 +80,8 @@ export default class StudentAccountComponent extends Component {
       current: 1,
       pageSize: 10,
     },
-    searchText: "",
-    searchedColumn: "",
     loading: false,
+    changeSchoolClass: "",
   };
 
   onSelectChange = (selectedRowKeys) => {
@@ -92,133 +89,51 @@ export default class StudentAccountComponent extends Component {
     this.setState({ selectedRowKeys });
   };
 
-  getColumnSearchProps = (dataIndex) => ({
-    filterDropdown: ({
-      setSelectedKeys,
-      selectedKeys,
-      confirm,
-      clearFilters,
-    }) => (
-      <div style={{ padding: 8 }}>
-        <Input
-          ref={(node) => {
-            this.searchInput = node;
-          }}
-          placeholder={`Search ${dataIndex}`}
-          value={selectedKeys[0]}
-          onChange={(e) =>
-            setSelectedKeys(e.target.value ? [e.target.value] : [])
-          }
-          onPressEnter={() =>
-            this.handleSearch(selectedKeys, confirm, dataIndex)
-          }
-          style={{ width: 188, marginBottom: 8, display: "block" }}
-        />
-        <Space>
-          <Button
-            type="primary"
-            onClick={() => this.handleSearch(selectedKeys, confirm, dataIndex)}
-            icon={<SearchOutlined />}
-            size="small"
-            style={{ width: 90 }}
-          >
-            Search
-          </Button>
-          <Button
-            onClick={() => this.handleReset(clearFilters)}
-            size="small"
-            style={{ width: 90 }}
-          >
-            Reset
-          </Button>
-        </Space>
-      </div>
-    ),
-    filterIcon: (filtered) => (
-      <SearchOutlined style={{ color: filtered ? "#1890ff" : undefined }} />
-    ),
-    onFilter: (value, record) =>
-      record[dataIndex]
-        ? record[dataIndex]
-            .toString()
-            .toLowerCase()
-            .includes(value.toLowerCase())
-        : "",
-    onFilterDropdownVisibleChange: (visible) => {
-      if (visible) {
-        setTimeout(() => this.searchInput.select(), 100);
-      }
-    },
-    render: (text) =>
-      this.state.searchedColumn === dataIndex ? (
-        <Highlighter
-          highlightStyle={{ backgroundColor: "#ffc069", padding: 0 }}
-          searchWords={[this.state.searchText]}
-          autoEscape
-          textToHighlight={text ? text.toString() : ""}
-        />
-      ) : (
-        text
-      ),
-  });
-
-  handleSearch = (selectedKeys, confirm, dataIndex) => {
-    confirm();
-    this.setState({
-      searchText: selectedKeys[0],
-      searchedColumn: dataIndex,
-    });
-  };
-
-  handleReset = (clearFilters) => {
-    clearFilters();
-    this.setState({ searchText: "" });
-  };
-
   confirm = (e) => {
     console.log(e);
     message.success("Click on Yes");
   };
 
-  onChange = (value) => {
-    console.log(value);
+  confirmChangeSchoolClass = () => {
+    message.success("Click on Yes");
+    console.log(this.state.changeSchoolClass);
+  };
+
+  onChangeCascader = (value) => {
+    this.setState({
+      changeSchoolClass: {
+        schoolID: value[0],
+        gradeID: value[1],
+        classID: value[2],
+      },
+    });
   };
 
   render() {
     const columns = [
       {
         title: "Name",
-        align: "center",
-        render: (record) => (
-          <Link to={`/student/${record.id}`}>
-            {record.firstName} {record.lastName}
-          </Link>
-        ),
+        render: (record) => <ViewStudent data={record} />,
       },
       {
         title: "School",
         dataIndex: "school",
-        align: "center",
       },
       {
         title: "Gender",
         dataIndex: "gender",
-        align: "center",
       },
       {
         title: "Grade",
         dataIndex: "grade",
-        align: "center",
       },
       {
         title: "Class",
         dataIndex: "class",
-        align: "center",
       },
       {
         title: "Account",
         dataIndex: "account",
-        align: "center",
       },
       {
         title: "Status",
@@ -226,17 +141,13 @@ export default class StudentAccountComponent extends Component {
         align: "center",
         render: (status) => (
           <span>
-            {status === "done" ? (
-              <Tag color={"green"} key={status}>
-                Done
-              </Tag>
-            ) : status === "dropout" ? (
+            {status === "dropout" ? (
               <Tag color={"volcano"} key={status}>
                 Dropout
               </Tag>
             ) : (
               <Tag color={"green"} key={status}>
-                Learning
+                Active
               </Tag>
             )}
           </span>
@@ -263,47 +174,36 @@ export default class StudentAccountComponent extends Component {
     return (
       <>
         <Card>
-          {this.props.data.length > 0 && (
-            <div
-              style={{
-                display: "flex",
-                marginBottom: 10,
-                justifyContent: "space-between",
-              }}
-            >
-              <div>
-                <Button type="primary" size="large" icon={<DownloadOutlined />}>
-                  Export Student List
-                </Button>
-              </div>
+          {this.props.searchData?.school &&
+            this.props.searchData?.grade &&
+            this.props.searchData?.class && (
               <div
                 style={{
                   display: "flex",
-                  justifyContent: "flex-start",
-                  alignItems: "center",
+                  marginBottom: 10,
+                  justifyContent: "space-between",
                 }}
               >
-                <AddNewStudent />
-                {/* {selectedRowKeys.length === 0 ? null : (
-                  <Popconfirm
-                    placement="topRight"
-                    title="Are you sure to disable selected Schools?"
-                    onConfirm={this.confirm} //Handle disable logic here
-                    okText="Yes"
-                    cancelText="No"
+                <div>
+                  <Button
+                    type="primary"
+                    size="large"
+                    icon={<DownloadOutlined />}
                   >
-                    <Button
-                      type="danger"
-                      size="large"
-                      style={{ marginLeft: 5 }}
-                    >
-                      Disable
-                    </Button>
-                  </Popconfirm>
-                )} */}
+                    Export Student List
+                  </Button>
+                </div>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "flex-start",
+                    alignItems: "center",
+                  }}
+                >
+                  <AddNewStudent searchData={this.props.searchData} />
+                </div>
               </div>
-            </div>
-          )}
+            )}
           <Table
             rowKey={(record) => record.id}
             rowSelection={rowSelection}
@@ -320,15 +220,25 @@ export default class StudentAccountComponent extends Component {
                 <Button type="danger" disabled style={{ marginRight: 10 }}>
                   Disable
                 </Button>
-                <Button type="primary" disabled style={{ marginRight: 10 }}>
-                  Move to other School/Class &gt;&gt;
-                </Button>
-                <Cascader
-                  options={options}
-                  placeholder="Please select"
-                  disabled
-                  style={{ width: 300 }}
-                />
+                {this.props.searchData?.school &&
+                  this.props.searchData?.grade &&
+                  this.props.searchData?.class && (
+                    <>
+                      <Button
+                        type="primary"
+                        disabled
+                        style={{ marginRight: 10 }}
+                      >
+                        Move students to other Class &gt;&gt;
+                      </Button>
+                      <Cascader
+                        options={options}
+                        placeholder="Please select"
+                        disabled
+                        style={{ width: 300 }}
+                      />
+                    </>
+                  )}
               </>
             ) : (
               <>
@@ -343,29 +253,45 @@ export default class StudentAccountComponent extends Component {
                     Disable
                   </Button>
                 </Popconfirm>
-                <Popconfirm
-                  placement="topRight"
-                  title="Are you sure to move selected Students?"
-                  onConfirm={this.confirm} //Handle disable logic here
-                  okText="Yes"
-                  cancelText="No"
-                >
-                  <Button type="primary" style={{ marginRight: 10 }}>
-                    Move to other School/Class &gt;&gt;
-                  </Button>
-                </Popconfirm>
-                <Cascader
-                  options={options}
-                  fieldNames={{
-                    label: "name",
-                    value: "id",
-                    children: "items",
-                  }}
-                  placeholder="Please select destination"
-                  onChange={this.onChange}
-                  matchInputWidth={true}
-                  style={{ width: 300 }}
-                />
+                {this.props.searchData?.school &&
+                  this.props.searchData?.grade &&
+                  this.props.searchData?.class && (
+                    <>
+                      {this.state.changeSchoolClass === "" ? (
+                        <Button
+                          type="primary"
+                          style={{ marginRight: 10 }}
+                          disabled
+                        >
+                          Move students to other Class &gt;&gt;
+                        </Button>
+                      ) : (
+                        <Popconfirm
+                          placement="topRight"
+                          title="Are you sure to move selected Students?"
+                          onConfirm={this.confirmChangeSchoolClass} //Handle disable logic here
+                          okText="Yes"
+                          cancelText="No"
+                        >
+                          <Button type="primary" style={{ marginRight: 10 }}>
+                            Move students to other Class &gt;&gt;
+                          </Button>
+                        </Popconfirm>
+                      )}
+                      <Cascader
+                        options={options}
+                        fieldNames={{
+                          label: "name",
+                          value: "id",
+                          children: "items",
+                        }}
+                        placeholder="Please select destination"
+                        onChange={this.onChangeCascader}
+                        matchInputWidth={true}
+                        style={{ width: 300 }}
+                      />
+                    </>
+                  )}
               </>
             )}
           </div>

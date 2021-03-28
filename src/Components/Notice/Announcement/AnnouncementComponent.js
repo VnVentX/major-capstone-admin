@@ -3,7 +3,7 @@ import { Table, Button, Input, Space, Popconfirm, message } from "antd";
 import Highlighter from "react-highlight-words";
 import { SearchOutlined } from "@ant-design/icons";
 import AddNewAnnouncement from "./Modal/AddNewAnnouncement";
-import EditAnnouncement from "./Modal/EditAnnouncement";
+import ViewAnnouncement from "./Modal/ViewAnnouncement";
 import { QuestionCircleOutlined, DeleteOutlined } from "@ant-design/icons";
 
 const data = [
@@ -171,8 +171,7 @@ export default class AnnouncementComponent extends React.Component {
         align: "center",
         render: (record) => (
           <Space size="small">
-            <EditAnnouncement data={record} />
-
+            <ViewAnnouncement data={record} />
             <Popconfirm
               placement="topRight"
               title="Are you sure to delete this news?"

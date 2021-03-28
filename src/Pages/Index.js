@@ -73,13 +73,13 @@ export default class Index extends React.Component {
     var path = window.location.pathname.split("/")[1];
     var gradePath = window.location.pathname.split("/")[2];
     if (path === "") {
-      this.setState({ activePath: "1" });
+      this.setState({ activePath: "home" });
     } else if (path === "news") {
-      this.setState({ activePath: "2", activeSub: ["sub1"] });
+      this.setState({ activePath: "news", activeSub: ["sub1"] });
     } else if (path === "school") {
-      this.setState({ activePath: "4", activeSub: ["sub1"] });
+      this.setState({ activePath: "school", activeSub: ["sub1"] });
     } else if (path === "student") {
-      this.setState({ activePath: "5", activeSub: ["sub1"] });
+      this.setState({ activePath: "student", activeSub: ["sub1"] });
     } else if (path === "grade" && gradePath === "1") {
       this.setState({ activePath: "20", activeSub: ["sub1", "sub3"] });
     } else if (path === "grade" && gradePath === "2") {
@@ -91,7 +91,7 @@ export default class Index extends React.Component {
     } else if (path === "grade" && gradePath === "5") {
       this.setState({ activePath: "24", activeSub: ["sub1", "sub3"] });
     } else if (path === "subject") {
-      this.setState({ activePath: "6" });
+      this.setState({ activePath: "subject" });
     }
   }
 
@@ -134,7 +134,7 @@ export default class Index extends React.Component {
               openKeys={this.state.activeSub}
               onClick={this.handleClickMenuItem}
             >
-              <Menu.Item key="1">
+              <Menu.Item key="home">
                 <Link to="/">
                   <HomeOutlined />
                   <span>Home</span>
@@ -146,7 +146,7 @@ export default class Index extends React.Component {
                 title="Manage"
                 onTitleClick={this.handleClickSubMenu}
               >
-                <Menu.Item key="2">
+                <Menu.Item key="news">
                   <Link to="/news">
                     <span>News</span>
                   </Link>
@@ -164,18 +164,18 @@ export default class Index extends React.Component {
                     </Menu.Item>
                   ))}
                 </SubMenu>
-                <Menu.Item key="4">
+                <Menu.Item key="school">
                   <Link to="/school">
                     <span>School</span>
                   </Link>
                 </Menu.Item>
-                <Menu.Item key="5">
+                <Menu.Item key="student">
                   <Link to="/student">
                     <span>Student</span>
                   </Link>
                 </Menu.Item>
               </SubMenu>
-              <Menu.Item key="6">
+              <Menu.Item key="subject">
                 <Link to="/subject">
                   <BookOutlined />
                   <span>Subject</span>

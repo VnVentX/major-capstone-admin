@@ -28,10 +28,10 @@ const AccountDetailComponent = () => {
                 1998/06/11
               </Descriptions.Item>
               <Descriptions.Item
-                label="Address"
+                label="Parent Name"
                 labelStyle={{ fontWeight: "bold" }}
               >
-                No. 18, Nguyen Kim Street, District 10, HCMC
+                Tran Minh Thanh
               </Descriptions.Item>
               <Descriptions.Item
                 label="Telephone"

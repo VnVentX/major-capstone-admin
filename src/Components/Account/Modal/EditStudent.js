@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Modal, Button, Form, Input, Select, DatePicker } from "antd";
+import { EditOutlined } from "@ant-design/icons";
 
 const layout = {
   labelCol: { span: 6 },
@@ -33,7 +34,12 @@ const EditStudent = (props) => {
 
   return (
     <div>
-      <Button type="primary" size="middle" onClick={showModal}>
+      <Button
+        type="primary"
+        size="middle"
+        onClick={showModal}
+        icon={<EditOutlined />}
+      >
         Edit
       </Button>
       <Modal
@@ -57,38 +63,47 @@ const EditStudent = (props) => {
           <Form.Item
             name="firstName"
             label="First Name"
-            rules={[
-              {
-                required: true,
-                message: "Please input First Name",
-              },
-            ]}
+            rules={[{ max: 50, message: "Can only input 50 characters" }]}
           >
-            <Input />
+            <Input maxLength={51} />
           </Form.Item>
           <Form.Item
             name="lastName"
             label="Last Name"
-            rules={[{ required: true, message: "Please input Last Name" }]}
+            rules={[{ max: 50, message: "Can only input 50 characters" }]}
           >
-            <Input />
+            <Input maxLength={51} />
           </Form.Item>
-          <Form.Item
-            name="age"
-            label="DoB"
-            rules={[{ required: true, message: "Please choose DoB" }]}
-          >
+          <Form.Item name="age" label="DoB">
             <DatePicker format="DD/MM/YYYY" />
           </Form.Item>
-          <Form.Item
-            name="gender"
-            label="Gender"
-            rules={[{ required: true, message: "Please choose a Gender" }]}
-          >
+          <Form.Item name="gender" label="Gender">
             <Select>
               <Select.Option value="male">Male</Select.Option>
               <Select.Option value="female">Female</Select.Option>
+              <Select.Option value="other">Other</Select.Option>
             </Select>
+          </Form.Item>
+          <Form.Item
+            name="parentName"
+            label="Parent Name"
+            rules={[{ max: 50, message: "Can only input 50 characters" }]}
+          >
+            <Input maxLength={51} />
+          </Form.Item>
+          <Form.Item
+            name="parentPhone"
+            label="Parent Phone"
+            rules={[
+              {
+                pattern: new RegExp(
+                  /^(0|\+84)(\s|\.)?((3[2-9])|(5[689])|(7[06-9])|(8[1-689])|(9[0-46-9]))(\d)(\s|\.)?(\d{3})(\s|\.)?(\d{3})$/
+                ),
+                message: "Please input a valid phone number",
+              },
+            ]}
+          >
+            <Input maxLength={51} />
           </Form.Item>
         </Form>
       </Modal>
