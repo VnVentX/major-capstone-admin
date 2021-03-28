@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import { Button, Modal, Form, Input, Upload, message } from "antd";
-import { PlusOutlined } from "@ant-design/icons";
+import React, { useState, useEffect } from "react";
+import { Button, Modal, Form, Input, Upload, message, Tooltip } from "antd";
+import { EditOutlined } from "@ant-design/icons";
 import { UploadOutlined } from "@ant-design/icons";
 
 const layout = {
@@ -15,10 +15,17 @@ const normFile = (e) => {
   return e && e.fileList;
 };
 
-const EditSubject = () => {
+const EditSubject = (props) => {
   const [form] = Form.useForm();
   const [visible, setVisible] = useState(false);
   const [fileList, setFileList] = useState([]);
+
+  useEffect(() => {
+    form.setFieldsValue({
+      subject: props.data.title,
+      description: props.data.description,
+    });
+  }, []);
 
   const showModal = () => {
     setVisible(true);
@@ -39,14 +46,9 @@ const EditSubject = () => {
 
   return (
     <div>
-      <Button
-        type="primary"
-        size="large"
-        onClick={showModal}
-        icon={<PlusOutlined />}
-      >
-        Edit Subject
-      </Button>
+      <Tooltip title="Edit">
+        <Button type="primary" icon={<EditOutlined />} onClick={showModal} />
+      </Tooltip>
       <Modal
         title="Edit Subject"
         visible={visible}
@@ -68,17 +70,14 @@ const EditSubject = () => {
           <Form.Item
             name="subject"
             label="Subject Name"
-            rules={[{ required: true, message: "Please input a subject name" }]}
+            rules={[{ max: 20, message: "Can only input 20 characters" }]}
           >
-            <Input placeholder="Subject Name" />
+            <Input placeholder="Subject Name" maxLength={21} />
           </Form.Item>
           <Form.Item
             name="subjectImg"
             label="Subject Image"
             getValueFromEvent={normFile}
-            rules={[
-              { required: true, message: "Please select an image to upload" },
-            ]}
           >
             <Upload
               listType="text"
@@ -98,7 +97,11 @@ const EditSubject = () => {
               )}
             </Upload>
           </Form.Item>
-          <Form.Item name="description" label="Description">
+          <Form.Item
+            name="description"
+            label="Description"
+            rules={[{ max: 50, message: "Can only input 50 characters" }]}
+          >
             <Input.TextArea
               placeholder="Subject Description"
               maxLength={50}

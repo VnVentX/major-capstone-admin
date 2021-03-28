@@ -260,3 +260,8 @@ input[type="checkbox"] + *::before {
   cursor: auto;
   opacity: 1;
 }
+
+.ant-btn > .anticon + span,
+.ant-btn > span + .anticon {
+  margin-left: 3px !important;
+}
