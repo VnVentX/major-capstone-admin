@@ -36,33 +36,31 @@ const AddNewSchool = (props) => {
         </>
       ),
       okText: "Continue",
-      onOk: () => {
-        onFinish(values);
-        form.resetFields();
-      },
-      onCancel: () => {
+      onOk: async () => {
+        await onFinish(values);
         handleCancel();
+        form.resetFields();
       },
     });
   };
 
   const onFinish = (event) => {
-    // async function createNewSchool() {
-    //   await axios
-    //     .post("https://mathscienceeducation.herokuapp.com/schools", {
-    //       schoolDistrict: event.schoolDistrict,
-    //       schoolName: event.schoolName.trim(),
-    //       schoolStreet: event.schoolStreet.trim(),
-    //     })
-    //     .then((res) => {
-    //       console.log(res);
-    //       props.getAllSchool();
-    //     })
-    //     .catch((e) => {
-    //       console.log(e);
-    //     });
-    // }
-    // createNewSchool();
+    async function createNewSchool() {
+      await axios
+        .post("https://mathscienceeducation.herokuapp.com/schools", {
+          schoolDistrict: event.schoolDistrict,
+          schoolName: event.schoolName.trim(),
+          schoolStreet: event.schoolStreet.trim(),
+        })
+        .then((res) => {
+          console.log(res);
+          props.getAllSchool();
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    }
+    createNewSchool();
     console.log(event);
   };
 

@@ -29,10 +29,12 @@ export default class SchoolComponent extends Component {
     dataSource: [],
     dataSearch: [],
     schoolSearch: "",
+    isLoading: true,
   };
 
   componentDidMount() {
     this.getAllSchool();
+    this.setState({ isLoading: false });
   }
 
   getAllSchool = async () => {
@@ -147,7 +149,7 @@ export default class SchoolComponent extends Component {
       {
         title: "School",
         render: (record) => (
-          <Link to={`/school/${record.id}`}>{record.schoolName}</Link>
+          <Link to={`/school/${record.id}`}>TH {record.schoolName}</Link>
         ),
       },
       {
@@ -157,21 +159,23 @@ export default class SchoolComponent extends Component {
       },
       {
         title: "Created By",
-        render: (record) => (
-          <Space direction="vertical" size="small">
-            {record.createdBy}
-            {record.createdDate}
-          </Space>
-        ),
+        dataIndex: "createdBy",
+        ...this.getColumnSearchProps("createdBy"),
+      },
+      {
+        title: "Created Date",
+        dataIndex: "createdDate",
+        ...this.getColumnSearchProps("createdDate"),
       },
       {
         title: "Modified By",
-        render: (record) => (
-          <Space direction="vertical" size="small">
-            {record.modifiedBy}
-            {record.modifiedDate}
-          </Space>
-        ),
+        dataIndex: "modifiedBy",
+        ...this.getColumnSearchProps("modifiedBy"),
+      },
+      {
+        title: "Modified Date",
+        dataIndex: "modifiedDate",
+        ...this.getColumnSearchProps("modifiedDate"),
       },
       {
         title: "Status",
@@ -263,6 +267,7 @@ export default class SchoolComponent extends Component {
           columns={columns}
           dataSource={this.state.dataSource}
           scroll={{ x: true }}
+          loading={this.state.isLoading}
         />
         <div>
           <h1>With selected:</h1>
