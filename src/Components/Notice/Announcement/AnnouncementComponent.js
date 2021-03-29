@@ -20,7 +20,6 @@ export default class AnnouncementComponent extends React.Component {
   }
 
   getAllNews = async () => {
-    console.log("get all news");
     await axios
       .get(
         "https://mathscienceeducation.herokuapp.com/news/all?isStudent=false"

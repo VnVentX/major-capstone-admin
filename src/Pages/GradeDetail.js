@@ -4,11 +4,11 @@ import GradeDetailTable from "../Components/GradeDetail/GradeDetailTable";
 
 const { Content } = Layout;
 
-const GradeDetail = () => {
+const GradeDetail = (props) => {
   return (
     <Col span={24}>
       <Content className="main-layout site-layout-background">
-        <GradeDetailTable />
+        <GradeDetailTable gradeID={props.gradeID} />
       </Content>
     </Col>
   );

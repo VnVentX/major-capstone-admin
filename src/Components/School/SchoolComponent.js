@@ -39,7 +39,7 @@ export default class SchoolComponent extends Component {
 
   getAllSchool = async () => {
     await axios
-      .get("https://mathscienceeducation.herokuapp.com/schools")
+      .get("https://mathscienceeducation.herokuapp.com/school/all")
       .then((res) => {
         this.setState({
           dataSource: res.data.length === 0 ? [] : res.data,

@@ -1,11 +1,36 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import { Button, Modal, Form, Select } from "antd";
 import { LinkOutlined } from "@ant-design/icons";
 const { Option } = Select;
 
-const LinkNewSchool = () => {
+var gradeID = window.location.pathname.split("/")[2];
+var resArr = [];
+
+const LinkNewSchool = (props) => {
   const [form] = Form.useForm();
   const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    resArr = Array.from(props.allSchool);
+    var ids = new Set(props.data.map(({ id }) => id));
+    resArr = resArr.filter(({ id }) => !ids.has(id));
+  }, [props.allSchool, props.data]);
+
+  const linkSchool = async (gradeID, schoolID) => {
+    let formData = new FormData();
+    formData.append("gradeId ", gradeID);
+    formData.append("schoolId ", schoolID);
+    await axios
+      .post("https://mathscienceeducation.herokuapp.com/schoolGrade", formData)
+      .then((res) => {
+        console.log(res);
+        props.getSchoolByGradeID(gradeID);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
 
   const showModal = () => {
     setVisible(true);
@@ -16,8 +41,8 @@ const LinkNewSchool = () => {
     setVisible(false);
   };
 
-  const onFinish = (values) => {
-    console.log(values);
+  const onFinish = async (values) => {
+    await linkSchool(gradeID, values.school);
     handleCancel();
   };
   return (
@@ -60,10 +85,11 @@ const LinkNewSchool = () => {
             ]}
           >
             <Select showSearch placeholder="Select a School">
-              <Option value="DMC">Dương Minh Châu</Option>
-              <Option value="NCT">Nguyễn Chí Thanh</Option>
-              <Option value="NVT">Nguyễn Văn Tố</Option>
-              <Option value="TQC">Trần Quang Cơ</Option>
+              {resArr?.map((i) => (
+                <Option key={i.id} value={i.id}>
+                  {i.schoolName}
+                </Option>
+              ))}
             </Select>
           </Form.Item>
         </Form>

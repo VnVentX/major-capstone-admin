@@ -1,4 +1,5 @@
 import React from "react";
+import axios from "axios";
 import { Layout, Menu, Row } from "antd";
 import {
   MenuUnfoldOutlined,
@@ -34,40 +35,23 @@ const { Header, Sider } = Layout;
 
 const { SubMenu } = Menu;
 
-const grade = [
-  {
-    id: 1,
-    gradeName: "Grade 1",
-  },
-  {
-    id: 2,
-    gradeName: "Grade 2",
-  },
-  {
-    id: 3,
-    gradeName: "Grade 3",
-  },
-  {
-    id: 4,
-    gradeName: "Grade 4",
-  },
-  {
-    id: 5,
-    gradeName: "Grade 5",
-  },
-];
-
 export default class Index extends React.Component {
   state = {
     collapsed: false,
     activePath: "",
     activeSub: [],
+    grade: [],
+    gradePath: "",
   };
   toggle = () => {
     this.setState({
       collapsed: !this.state.collapsed,
     });
   };
+
+  componentDidMount() {
+    this.getAllGrade();
+  }
 
   componentWillMount() {
     var path = window.location.pathname.split("/")[1];
@@ -82,21 +66,35 @@ export default class Index extends React.Component {
       this.setState({ activePath: "student", activeSub: ["sub1"] });
     } else if (path === "grade" && gradePath === "1") {
       this.setState({ activePath: "20", activeSub: ["sub1", "sub3"] });
-    } else if (path === "grade" && gradePath === "2") {
+    } else if (path === "grade" && gradePath === "5") {
       this.setState({ activePath: "21", activeSub: ["sub1", "sub3"] });
-    } else if (path === "grade" && gradePath === "3") {
+    } else if (path === "grade" && gradePath === "2") {
       this.setState({ activePath: "22", activeSub: ["sub1", "sub3"] });
     } else if (path === "grade" && gradePath === "4") {
       this.setState({ activePath: "23", activeSub: ["sub1", "sub3"] });
-    } else if (path === "grade" && gradePath === "5") {
+    } else if (path === "grade" && gradePath === "3") {
       this.setState({ activePath: "24", activeSub: ["sub1", "sub3"] });
     } else if (path === "subject") {
       this.setState({ activePath: "subject" });
     }
   }
 
+  getAllGrade = async () => {
+    await axios
+      .get("https://mathscienceeducation.herokuapp.com/grade/all")
+      .then((res) => {
+        this.setState({
+          grade: res.data.length === 0 ? [] : res.data,
+        });
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
+
   handleClickMenuItem = (e) => {
-    this.setState({ activePath: e.key });
+    var gradePath = window.location.pathname.split("/")[2];
+    this.setState({ activePath: e.key, gradePath: gradePath });
   };
 
   handleClickSubMenu = (e) => {
@@ -156,9 +154,14 @@ export default class Index extends React.Component {
                   title="Grade"
                   onTitleClick={this.handleClickSubMenu}
                 >
-                  {grade?.map((i, idx) => (
+                  {this.state.grade?.map((i, idx) => (
                     <Menu.Item key={idx + 20}>
-                      <Link to={`/grade/${i.id}`}>
+                      <Link
+                        to={{
+                          pathname: `/grade/${i.id}`,
+                          key: idx,
+                        }}
+                      >
                         <span>{i.gradeName}</span>
                       </Link>
                     </Menu.Item>
@@ -230,7 +233,13 @@ export default class Index extends React.Component {
                 <Route path="/" exact component={Home} />
                 <Route path="/news" exact component={Notice} />
                 <Route path="/grade" exact component={Grade} />
-                <Route path="/grade/:gradeID" exact component={GradeDetail} />
+                <Route
+                  path="/grade/:gradeID"
+                  exact
+                  component={() => (
+                    <GradeDetail gradeID={this.state.gradePath} />
+                  )}
+                />
                 <Route path="/school" exact component={School} />
                 <Route
                   path="/school/:schoolID"

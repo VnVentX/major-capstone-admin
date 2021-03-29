@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import axios from "axios";
 import {
   Card,
   Table,
@@ -20,60 +21,52 @@ import Highlighter from "react-highlight-words";
 import { Link } from "react-router-dom";
 import LinkNewSchool from "./Modal/LinkNewSchool";
 
-const data = [
-  {
-    id: 1,
-    code: "DMC",
-    school: "TH Dương Minh Châu",
-    district: "Q10",
-    status: "active",
-    createdBy: "anhtt",
-    createdDate: "14:24PM, 24/02/2021",
-    modifiedBy: "anhtt",
-    modifiedDate: "14:50PM, 24/02/2021",
-  },
-  {
-    id: 2,
-    code: "NCT",
-    school: "TH Nguyễn Chí Thanh",
-    district: "Q10",
-    status: "active",
-    createdBy: "anhtt",
-    createdDate: "14:24PM, 24/02/2021",
-    modifiedBy: "anhtt",
-    modifiedDate: "14:50PM, 24/02/2021",
-  },
-  {
-    id: 3,
-    code: "NVT",
-    school: "TH Nguyễn Văn Tố",
-    district: "Q10",
-    status: "active",
-    createdBy: "anhtt",
-    createdDate: "14:24PM, 24/02/2021",
-    modifiedBy: "anhtt",
-    modifiedDate: "14:50PM, 24/02/2021",
-  },
-  {
-    id: 4,
-    code: "TQC",
-    school: "TH Trần Quang Cơ",
-    district: "Q10",
-    status: "active",
-    createdBy: "anhtt",
-    createdDate: "14:24PM, 24/02/2021",
-    modifiedBy: "anhtt",
-    modifiedDate: "14:50PM, 24/02/2021",
-  },
-];
-
 export default class GradeDetailTable extends Component {
   state = {
     searchText: "",
     searchedColumn: "",
     selectedRowKeys: [],
-    dataSource: data,
+    dataSource: [],
+    dataSearch: [],
     schoolSearch: "",
+    allSchool: [],
+  };
+
+  componentDidMount() {
+    this.getSchoolByGradeID(this.props.gradeID);
+    this.getAllSchool();
+  }
+
+  getAllSchool = async () => {
+    await axios
+      .get("https://mathscienceeducation.herokuapp.com/school/all")
+      .then((res) => {
+        this.setState({
+          allSchool: res.data.length === 0 ? [] : res.data,
+        });
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
+
+  getSchoolByGradeID = async (id) => {
+    var gradeID = id;
+    console.log(id);
+    if (id === "") {
+      gradeID = window.location.pathname.split("/")[2];
+    }
+    await axios
+      .get(`https://mathscienceeducation.herokuapp.com/grade/${gradeID}/school`)
+      .then((res) => {
+        this.setState({
+          dataSource: res.data.length === 0 ? [] : res.data,
+          dataSearch: res.data.length === 0 ? [] : res.data,
+        });
+      })
+      .catch((e) => {
+        console.log(e);
+      });
   };
 
   getColumnSearchProps = (dataIndex) => ({
@@ -174,13 +167,13 @@ export default class GradeDetailTable extends Component {
       {
         title: "School",
         render: (record) => (
-          <Link to={`/school/${record.id}`}>{record.school}</Link>
+          <Link to={`/school/${record.id}`}>{record.schoolName}</Link>
         ),
       },
       {
         title: "School Code",
-        dataIndex: "code",
-        ...this.getColumnSearchProps("code"),
+        dataIndex: "schoolCode",
+        ...this.getColumnSearchProps("schoolCode"),
       },
       {
         title: "Created By",
@@ -252,9 +245,9 @@ export default class GradeDetailTable extends Component {
           }}
         >
           <AutoComplete
-            dataSource={data.map((item, idx) => (
-              <Select.Option key={idx} value={item.school}>
-                {item.school}
+            dataSource={this.state.dataSearch.map((item, idx) => (
+              <Select.Option key={idx} value={item.schoolName}>
+                {item.schoolName}
               </Select.Option>
             ))}
           >
@@ -263,8 +256,8 @@ export default class GradeDetailTable extends Component {
               allowClear
               onSearch={(schoolSearch) =>
                 this.setState({
-                  dataSource: data.filter((item) =>
-                    item.school
+                  dataSource: this.state.dataSearch.filter((item) =>
+                    item.schoolName
                       .toString()
                       .toLowerCase()
                       .includes(schoolSearch.toLowerCase())
@@ -275,7 +268,11 @@ export default class GradeDetailTable extends Component {
             />
           </AutoComplete>
           <div>
-            <LinkNewSchool />
+            <LinkNewSchool
+              data={this.state.dataSource}
+              getSchoolByGradeID={this.getSchoolByGradeID}
+              allSchool={this.state.allSchool}
+            />
           </div>
         </div>
         <Table
