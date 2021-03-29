@@ -1,4 +1,5 @@
 import React from "react";
+import axios from "axios";
 import { Table, Button, Input, Space, Popconfirm, message } from "antd";
 import Highlighter from "react-highlight-words";
 import { SearchOutlined } from "@ant-design/icons";
@@ -6,54 +7,44 @@ import AddNewAnnouncement from "./Modal/AddNewAnnouncement";
 import ViewAnnouncement from "./Modal/ViewAnnouncement";
 import { QuestionCircleOutlined, DeleteOutlined } from "@ant-design/icons";
 
-const data = [
-  {
-    id: 1,
-    title: "Announce 1",
-    content:
-      "<h2>Lịch nghỉ Tết Nguyên Đán</h2><p>Học sinh của trường Major Edu sẽ được nghỉ tết đến hết tháng 2 năm 2021.</p>",
-    status: "active",
-    uploadedBy: "anhtt",
-    uploadedDate: "14:24PM, 24/02/2021",
-    modifiedDate: "14:50PM, 24/02/2021",
-  },
-  {
-    id: 2,
-    title: "Announce 2",
-    content:
-      "<h2>Lịch nghỉ Tết Nguyên Đán</h2><p>Học sinh của trường Major Edu sẽ được nghỉ tết đến hết tháng 2 năm 2021.</p>",
-    status: "active",
-    uploadedBy: "anhtt",
-    uploadedDate: "14:24PM, 24/02/2021",
-    modifiedDate: "14:50PM, 24/02/2021",
-  },
-  {
-    id: 3,
-    title: "Announce 3",
-    content:
-      "<h2>Lịch nghỉ Tết Nguyên Đán</h2><p>Học sinh của trường Major Edu sẽ được nghỉ tết đến hết tháng 2 năm 2021.</p>",
-    status: "active",
-    uploadedBy: "anhtt",
-    uploadedDate: "14:24PM, 24/02/2021",
-    modifiedDate: "14:50PM, 24/02/2021",
-  },
-  {
-    id: 4,
-    title: "Announce 4",
-    content:
-      "<h2>Lịch nghỉ Tết Nguyên Đán</h2><p>Học sinh của trường Major Edu sẽ được nghỉ tết đến hết tháng 2 năm 2021.</p>",
-    status: "active",
-    uploadedBy: "anhtt",
-    uploadedDate: "14:24PM, 24/02/2021",
-    modifiedDate: "14:50PM, 24/02/2021",
-  },
-];
-
 export default class AnnouncementComponent extends React.Component {
   state = {
     searchText: "",
     searchedColumn: "",
     selectedRowKeys: [],
+    dataSource: [],
+  };
+
+  componentDidMount() {
+    this.getAllNews();
+  }
+
+  getAllNews = async () => {
+    console.log("get all news");
+    await axios
+      .get(
+        "https://mathscienceeducation.herokuapp.com/news/all?isStudent=false"
+      )
+      .then((res) => {
+        this.setState({
+          dataSource: res.data.length === 0 ? [] : res.data,
+        });
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
+
+  deleteNews = async (id) => {
+    await axios
+      .put(`https://mathscienceeducation.herokuapp.com/news?id=${id}`)
+      .then((res) => {
+        console.log(res);
+        this.getAllNews();
+      })
+      .catch((e) => {
+        console.log(e);
+      });
   };
 
   getColumnSearchProps = (dataIndex) => ({
@@ -144,38 +135,39 @@ export default class AnnouncementComponent extends React.Component {
     this.setState({ selectedRowKeys });
   };
 
-  confirm = (e) => {
-    console.log(e);
-    message.success("Click on Yes");
+  handleDelete = (item) => {
+    console.log(item);
+    this.deleteNews(item);
+    message.success("Delete news successfully!");
   };
 
   render() {
     const columns = [
       {
         title: "Title",
-        dataIndex: "title",
-        ...this.getColumnSearchProps("title"),
+        dataIndex: "newsTitle",
+        ...this.getColumnSearchProps("newsTitle"),
       },
       {
         title: "Uploaded By",
-        dataIndex: "uploadedBy",
-        ...this.getColumnSearchProps("uploadedBy"),
+        dataIndex: "createdBy",
+        ...this.getColumnSearchProps("createdBy"),
       },
       {
         title: "Uploaded Date",
-        dataIndex: "uploadedDate",
-        ...this.getColumnSearchProps("uploadedDate"),
+        dataIndex: "createdDate",
+        ...this.getColumnSearchProps("createdDate"),
       },
       {
         title: "Action",
         align: "center",
         render: (record) => (
           <Space size="small">
-            <ViewAnnouncement data={record} />
+            <ViewAnnouncement id={record.id} />
             <Popconfirm
               placement="topRight"
               title="Are you sure to delete this news?"
-              onConfirm={this.confirm} //Handle disable logic here
+              onConfirm={() => this.handleDelete(record.id)} //Handle disable logic here
               okText="Yes"
               cancelText="No"
               icon={<QuestionCircleOutlined style={{ color: "red" }} />}
@@ -205,13 +197,13 @@ export default class AnnouncementComponent extends React.Component {
             marginBottom: 20,
           }}
         >
-          <AddNewAnnouncement />
+          <AddNewAnnouncement getAllNews={this.getAllNews} />
         </div>
         <Table
           rowKey={(record) => record.id}
           rowSelection={rowSelection}
           columns={columns}
-          dataSource={data}
+          dataSource={this.state.dataSource}
           scroll={{ x: true }}
         />
         <div>

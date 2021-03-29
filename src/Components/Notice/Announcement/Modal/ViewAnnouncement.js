@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import { Button, Modal, Form, Input } from "antd";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import CustomEditor from "ckeditor5-build-classic";
@@ -14,12 +15,23 @@ const ViewAnnouncement = (props) => {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    form.setFieldsValue({
-      title: props.data.title,
-      shortDes: props.data.shortDes,
-      content: props.data.content,
-    });
+    getNewsDetail();
   }, []);
+
+  const getNewsDetail = async () => {
+    await axios
+      .get(`https://mathscienceeducation.herokuapp.com/news/${props.id}`)
+      .then((res) => {
+        form.setFieldsValue({
+          title: res.data.newsTitle,
+          shortDes: res.data.shortDescription,
+          content: res.data.newsContent,
+        });
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
 
   const showModal = () => {
     setVisible(true);
@@ -52,10 +64,7 @@ const ViewAnnouncement = (props) => {
             <Input placeholder="Title" disabled />
           </Form.Item>
           <Form.Item name="shortDes" label="Short Description">
-            <Input.TextArea
-              placeholder="Short Description"
-              disabled
-            />
+            <Input.TextArea placeholder="Short Description" disabled />
           </Form.Item>
           <Form.Item
             label="Content"

@@ -10,7 +10,7 @@ const layout = {
   wrapperCol: { span: 24 },
 };
 
-const AddNewAnnouncement = () => {
+const AddNewAnnouncement = (props) => {
   const [form] = Form.useForm();
   const [visible, setVisible] = useState(false);
 
@@ -24,7 +24,6 @@ const AddNewAnnouncement = () => {
   };
 
   const onFinish = (event) => {
-    console.log(event);
     async function createNews() {
       await axios
         .post("https://mathscienceeducation.herokuapp.com/news", {
@@ -34,7 +33,7 @@ const AddNewAnnouncement = () => {
           shortDescription: event.shortDes,
         })
         .then((res) => {
-          console.log(res);
+          props.getAllNews();
         })
         .catch((e) => {
           console.log(e);

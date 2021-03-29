@@ -103,6 +103,7 @@ export default class StudentAccountComponent extends Component {
   };
 
   onChangeCascader = (value) => {
+    console.log("selected destination");
     this.setState({
       changeSchoolClass: {
         schoolID: value[0],
@@ -110,6 +111,7 @@ export default class StudentAccountComponent extends Component {
         classID: value[2],
       },
     });
+    console.log(this.state.changeSchoolClass);
   };
 
   render() {
@@ -277,7 +279,7 @@ export default class StudentAccountComponent extends Component {
                   this.props.searchData?.grade &&
                   this.props.searchData?.class && (
                     <>
-                      {this.state.changeSchoolClass === "" ? (
+                      {this.state.changeSchoolClass?.schoolID === undefined ? (
                         <Button
                           type="primary"
                           style={{ marginRight: 10 }}
