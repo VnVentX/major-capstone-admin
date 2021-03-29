@@ -8,6 +8,9 @@ import {
   Popconfirm,
   message,
   Cascader,
+  AutoComplete,
+  Select,
+  Input,
 } from "antd";
 import { DownloadOutlined } from "@ant-design/icons";
 import AddNewStudent from "./Modal/AddNewStudent";
@@ -174,25 +177,35 @@ export default class StudentAccountComponent extends Component {
     return (
       <>
         <Card>
-          {this.props.searchData?.school &&
-            this.props.searchData?.grade &&
-            this.props.searchData?.class && (
-              <div
-                style={{
-                  display: "flex",
-                  marginBottom: 10,
-                  justifyContent: "space-between",
-                }}
-              >
-                <div>
-                  <Button
-                    type="primary"
-                    size="large"
-                    icon={<DownloadOutlined />}
+          <div
+            style={{
+              display: "flex",
+              marginBottom: 10,
+              justifyContent: "space-between",
+            }}
+          >
+            <div>
+              <AutoComplete
+                dataSource={this.props.searchRecord.map((item, idx) => (
+                  <Select.Option
+                    key={idx}
+                    value={`${item.firstName} ${item.lastName}`}
                   >
-                    Export Student List
-                  </Button>
-                </div>
+                    {item.firstName} {item.lastName}
+                  </Select.Option>
+                ))}
+              >
+                <Input.Search
+                  placeholder="Search Student"
+                  allowClear
+                  onSearch={(name) => this.props.handleNameSearch(name)}
+                  enterButton
+                />
+              </AutoComplete>
+            </div>
+            {this.props.searchData?.school &&
+              this.props.searchData?.grade &&
+              this.props.searchData?.class && (
                 <div
                   style={{
                     display: "flex",
@@ -200,10 +213,17 @@ export default class StudentAccountComponent extends Component {
                     alignItems: "center",
                   }}
                 >
+                  <Button
+                    type="primary"
+                    size="large"
+                    icon={<DownloadOutlined />}
+                  >
+                    Export Student List
+                  </Button>
                   <AddNewStudent searchData={this.props.searchData} />
                 </div>
-              </div>
-            )}
+              )}
+          </div>
           <Table
             rowKey={(record) => record.id}
             rowSelection={rowSelection}

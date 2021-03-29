@@ -126,6 +126,7 @@ const data = [
 export const AccountTableComponent = () => {
   const location = useLocation();
   const [record, setRecord] = useState([]);
+  const [searchRecord, setSearchRecord] = useState([]);
   const [searchData, setSearchData] = useState();
 
   useEffect(() => {
@@ -138,8 +139,8 @@ export const AccountTableComponent = () => {
         class: location.state.class,
       });
       handleSearch({
-        school: "Trường Tiểu Học " + location.state.school,
-        grade: "Grade " + location.state.grade,
+        school: location.state.school,
+        grade: location.state.grade,
         class: location.state.class,
       });
     }
@@ -149,6 +150,18 @@ export const AccountTableComponent = () => {
     console.log(data);
     setSearchData(data);
     setRecord(student);
+    setSearchRecord(student);
+  };
+
+  const handleNameSearch = (name) => {
+    setRecord(
+      searchRecord.filter((item) =>
+        (item.firstName + " " + item.lastName)
+          .toString()
+          .toLowerCase()
+          .includes(name.toLowerCase())
+      )
+    );
   };
 
   return (
@@ -172,7 +185,9 @@ export const AccountTableComponent = () => {
           handleSearch={handleSearch}
         />
         <StudentAccountComponent
+          handleNameSearch={handleNameSearch}
           data={record}
+          searchRecord={searchRecord}
           searchData={
             searchData
               ? searchData

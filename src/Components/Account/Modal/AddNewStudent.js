@@ -41,6 +41,7 @@ const AddNewStudent = (props) => {
         size="large"
         icon={<PlusOutlined />}
         onClick={showModal}
+        style={{ marginLeft: 5 }}
       >
         Add Student
       </Button>

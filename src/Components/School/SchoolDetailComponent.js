@@ -21,7 +21,7 @@ const SchoolDetailComponent = () => {
       <Card type="inner" title="School Info">
         <Descriptions layout="vertical">
           <Descriptions.Item label="School" labelStyle={{ fontWeight: "bold" }}>
-            Dương Minh Châu
+           TH Dương Minh Châu
           </Descriptions.Item>
           <Descriptions.Item
             label="Education Level"
