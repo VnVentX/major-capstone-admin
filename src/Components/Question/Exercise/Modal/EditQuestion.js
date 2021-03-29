@@ -1,5 +1,23 @@
 import React, { useState, useEffect } from "react";
-import { Select, Form, Modal, Input, Divider, Row, Col } from "antd";
+import {
+  Select,
+  Form,
+  Modal,
+  Button,
+  Input,
+  Divider,
+  Row,
+  Col,
+  Upload,
+  message,
+  Tooltip,
+} from "antd";
+import {
+  UploadOutlined,
+  MinusCircleOutlined,
+  PlusOutlined,
+  EditOutlined,
+} from "@ant-design/icons";
 
 const options = [
   {
@@ -12,18 +30,44 @@ const options = [
   },
 ];
 
+const normFile = (e) => {
+  if (Array.isArray(e)) {
+    return e;
+  }
+  return e && e.fileList;
+};
+
 const EditQuestion = (props) => {
   const [form] = Form.useForm();
+  const [counter, setCounter] = useState(0);
   const [visible, setVisible] = useState(false);
+  const [audioFile, setAudioFile] = useState([]);
+  const [imgFile, setImgFile] = useState([]);
 
   useEffect(() => {
     form.setFieldsValue({
       question: props.data.q_name,
-      q_audio: "Q1",
-      q_img: "Q1",
       options: options,
     });
+    setCounter(options.length);
   }, []);
+
+  const handleChangeImg = ({ fileList }) => {
+    setImgFile(fileList);
+  };
+  const handleChangeAudio = ({ fileList }) => {
+    setAudioFile(fileList);
+  };
+
+  const handleCounter = () => {
+    var count = counter;
+    setCounter(count + 1);
+  };
+
+  const handleMinus = () => {
+    var count = counter;
+    setCounter(count - 1);
+  };
 
   const onFinish = (event) => {
     console.log(event);
@@ -40,14 +84,9 @@ const EditQuestion = (props) => {
 
   return (
     <div>
-      <button
-        className="ant-btn-link"
-        onClick={() => {
-          showModal();
-        }}
-      >
-        Edit
-      </button>
+      <Tooltip title="Edit Question">
+        <Button type="primary" icon={<EditOutlined />} onClick={showModal} />
+      </Tooltip>
       <Modal
         visible={visible}
         width={"45vw"}
@@ -85,21 +124,53 @@ const EditQuestion = (props) => {
           </Form.Item>
           <Form.Item
             name="q_audio"
-            label="Audio URL"
-            rules={[{ type: "url", message: "Please input a valid URL!" }]}
+            label="Question Audio"
+            getValueFromEvent={normFile}
           >
-            <Input placeholder="Audio URL" />
+            <Upload
+              listType="picture"
+              fileList={audioFile}
+              beforeUpload={() => false}
+              onChange={(info) => {
+                if (info.file.type.split("/")[0] !== "audio") {
+                  message.error(`${info.file.name} is not an audio file`);
+                  setAudioFile([]);
+                } else {
+                  handleChangeAudio(info);
+                }
+              }}
+            >
+              {audioFile.length === 1 ? null : (
+                <Button icon={<UploadOutlined />}>Upload</Button>
+              )}
+            </Upload>
           </Form.Item>
           <Form.Item
             name="q_img"
-            label="Image URL"
-            rules={[{ type: "url", message: "Please input a valid URL!" }]}
+            label="Question Image"
+            getValueFromEvent={normFile}
           >
-            <Input placeholder="Image URL" />
+            <Upload
+              listType="picture"
+              fileList={imgFile}
+              beforeUpload={() => false}
+              onChange={(info) => {
+                if (info.file.type.split("/")[0] !== "image") {
+                  message.error(`${info.file.name} is not an image file`);
+                  setImgFile([]);
+                } else {
+                  handleChangeImg(info);
+                }
+              }}
+            >
+              {imgFile.length === 1 ? null : (
+                <Button icon={<UploadOutlined />}>Upload</Button>
+              )}
+            </Upload>
           </Form.Item>
           <h1>Answers</h1>
           <Form.List name="options">
-            {(fields) => {
+            {(fields, { add, remove }, { errors }) => {
               return (
                 <div>
                   {fields.map((field, idx) => (
@@ -138,9 +209,33 @@ const EditQuestion = (props) => {
                             <Select.Option value="false">False</Select.Option>
                           </Select>
                         </Form.Item>
+                        <MinusCircleOutlined
+                          style={{ float: "right", color: "red" }}
+                          onClick={() => {
+                            remove(field.name);
+                            handleMinus();
+                          }}
+                        />
                       </Col>
                     </Row>
                   ))}
+                  <Form.ErrorList errors={errors} />
+                  {counter === 4 ? null : (
+                    <Form.Item>
+                      <Button
+                        type="dashed"
+                        onClick={() => {
+                          add();
+                          handleCounter();
+                        }}
+                        block
+                        icon={<PlusOutlined />}
+                        style={{ marginTop: 10 }}
+                      >
+                        Add Options
+                      </Button>
+                    </Form.Item>
+                  )}
                 </div>
               );
             }}

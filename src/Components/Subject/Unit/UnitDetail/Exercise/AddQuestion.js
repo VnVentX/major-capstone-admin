@@ -1,8 +1,6 @@
 import React, { useState } from "react";
-import { Button, Modal, Form, Table, Space, Select } from "antd";
+import { Button, Modal, Form, Table, Space } from "antd";
 import ViewQuestion from "../../../../Question/Exercise/Modal/ViewQuestion";
-
-const { Option } = Select;
 
 const selectingQuestionCol = [
   {
@@ -13,7 +11,7 @@ const selectingQuestionCol = [
   },
   {
     title: "Action",
-    key: "x",
+    align: "center",
     render: (record) => (
       <Space size="middle">
         <ViewQuestion data={record} />

@@ -1,27 +1,8 @@
 import React, { useState } from "react";
-import { Card, Table, Space } from "antd";
+import { Card, Table, Space, Button, Popconfirm, message, Tooltip } from "antd";
 import EditQuestion from "../../../../Question/Exercise/Modal/EditQuestion";
 import AddQuestion from "./Modal/AddQuestion";
-
-const selectedQuestionCol = [
-  {
-    title: "Question",
-    width: "90%",
-    dataIndex: "q_name",
-    key: "q_name",
-    render: (text) => <a>{text}</a>,
-  },
-  {
-    title: "Action",
-    key: "x",
-    render: (record) => (
-      <Space size="middle">
-        <EditQuestion data={record} />
-        <a>Delete</a>
-      </Space>
-    ),
-  },
-];
+import { QuestionCircleOutlined, DeleteOutlined } from "@ant-design/icons";
 
 const data = [
   {
@@ -39,6 +20,42 @@ const data = [
 ];
 
 const GameQuestion = () => {
+  const handleDelete = (e) => {
+    console.log(e);
+    message.success("Click on Yes");
+  };
+
+  const selectedQuestionCol = [
+    {
+      title: "Question",
+      width: "90%",
+      dataIndex: "q_name",
+      key: "q_name",
+      render: (text) => <a>{text}</a>,
+    },
+    {
+      title: "Action",
+      align: "center",
+      render: (record) => (
+        <Space size="small">
+          <EditQuestion data={record} />
+          <Tooltip title="Delete Question">
+            <Popconfirm
+              placement="topRight"
+              title="Are you sure to delete this question?"
+              onConfirm={() => handleDelete(record.key)} //Handle disable logic here
+              okText="Yes"
+              cancelText="No"
+              icon={<QuestionCircleOutlined style={{ color: "red" }} />}
+            >
+              <Button type="danger" icon={<DeleteOutlined />} />
+            </Popconfirm>
+          </Tooltip>
+        </Space>
+      ),
+    },
+  ];
+
   return (
     <Card type="inner" title="Game 1">
       <div

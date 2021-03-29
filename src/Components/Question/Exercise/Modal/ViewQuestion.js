@@ -1,119 +1,155 @@
-import React, { useState } from "react";
-import { Select, Form, Modal, Input, Divider, Space } from "antd";
+import React, { useState, useEffect } from "react";
+import {
+  Select,
+  Form,
+  Modal,
+  Button,
+  Input,
+  Divider,
+  Row,
+  Col,
+  Image,
+} from "antd";
+import {
+  PlayCircleOutlined,
+  PauseCircleOutlined,
+  EyeOutlined,
+} from "@ant-design/icons";
 
-const answers = [
+const options = [
   {
-    key: 1,
-    answer: "A",
-    audio: "A",
-    img: "A",
-    correct: "true",
+    option: "A",
+    correct: "True",
   },
   {
-    key: 2,
-    answer: "B",
-    audio: "B",
-    img: "B",
-    correct: "false",
+    option: "B",
+    correct: "False",
   },
 ];
+
+const useAudio = (url) => {
+  const [audio] = useState(new Audio(url));
+  const [playing, setPlaying] = useState(false);
+
+  const toggle = () => setPlaying(!playing);
+
+  useEffect(() => {
+    playing ? audio.play() : audio.pause();
+  }, [playing]);
+
+  useEffect(() => {
+    audio.addEventListener("ended", () => setPlaying(false));
+    return () => {
+      audio.removeEventListener("ended", () => setPlaying(false));
+    };
+  }, []);
+
+  return [playing, toggle];
+};
 
 const ViewQuestion = (props) => {
   const [form] = Form.useForm();
   const [visible, setVisible] = useState(false);
+  const [imgFile, setImgFile] = useState([]);
+
+  const [playing, toggle] = useAudio(
+    "https://firebasestorage.googleapis.com/v0/b/mathscience-e425d.appspot.com/o/audios%2F94028074-2bc7-47df-89bb-748a475aee3fmp3?alt=media&token=44a7c7d4-cdbf-4eae-ada8-d5276e64792d"
+  );
+
+  useEffect(() => {
+    form.setFieldsValue({
+      question: props.data.q_name,
+      options: options,
+    });
+  }, []);
 
   const showModal = () => {
     setVisible(true);
   };
 
   const handleCancel = () => {
-    console.log("Clicked cancel button");
     setVisible(false);
   };
 
   return (
     <div>
-      <button
-        className="ant-btn-link"
-        onClick={() => {
-          showModal();
-          console.log(props.data);
-        }}
-      >
+      <Button type="primary" icon={<EyeOutlined />} onClick={showModal}>
         View
-      </button>
+      </Button>
       <Modal
         visible={visible}
         width={"45vw"}
-        title="View Question"
-        cancelText="Cancel"
-        onCancel={handleCancel}
+        title="Edit Question"
         footer={null}
+        onCancel={handleCancel}
       >
-        <Form
-          form={form}
-          name="view-question-form"
-          autoComplete="off"
-          preserve={false}
-          layout="vertical"
-          initialValues={{
-            q_name: props.data.q_name,
-            q_audio: "Q1",
-            q_img: "Q1",
-          }}
-        >
+        <Form form={form} layout="vertical">
           <h1>Question</h1>
           <Divider />
-          <Form.Item name="q_name" label="Question">
-            <Input.TextArea disabled />
+          <Form.Item name="question" label="Question Text">
+            <Input.TextArea
+              autoSize
+              maxLength="100"
+              showCount
+              placeholder="Question Text"
+              disabled
+            />
           </Form.Item>
-          <Form.Item name="q_audio" label="Audio">
-            <Input disabled />
+          <Form.Item name="q_audio" label="Question Audio">
+            <div onClick={toggle}>
+              {playing ? (
+                <Button icon={<PauseCircleOutlined />}>Pause</Button>
+              ) : (
+                <Button icon={<PlayCircleOutlined />}>Play</Button>
+              )}
+            </div>
           </Form.Item>
-          <Form.Item name="q_img" label="Image">
-            <Input disabled />
+          <Form.Item name="q_img" label="Question Image">
+            <Image src="https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg" />
           </Form.Item>
           <h1>Answers</h1>
-          <>
-            {answers.map((answer) => (
-              <div key={answer.key}>
-                <Divider />
-                <Space key={answer.key} align="center">
-                  <Form.Item
-                    label="Answear"
-                    name={"answear" + answer.key}
-                    initialValue={answer.answer}
-                  >
-                    <Input disabled />
-                  </Form.Item>
-                  <Form.Item
-                    label="Audio"
-                    name={"audio" + answer.key}
-                    initialValue={answer.audio}
-                  >
-                    <Input disabled />
-                  </Form.Item>
-                  <Form.Item
-                    label="Image"
-                    name={"img" + answer.key}
-                    initialValue={answer.img}
-                  >
-                    <Input disabled />
-                  </Form.Item>
-                  <Form.Item
-                    label="Correct"
-                    name={"correct" + answer.key}
-                    initialValue={answer.correct}
-                  >
-                    <Select style={{ width: 150 }} disabled>
-                      <Select.Option value="true">True</Select.Option>
-                      <Select.Option value="false">False</Select.Option>
-                    </Select>
-                  </Form.Item>
-                </Space>
-              </div>
-            ))}
-          </>
+          <Form.List name="options">
+            {(fields) => {
+              return (
+                <div>
+                  {fields.map((field, idx) => (
+                    <Row gutter={24} key={idx}>
+                      <Divider />
+                      <Col span={12}>
+                        <Form.Item
+                          {...field}
+                          label={`Option ${idx + 1}`}
+                          name={[field.name, "option"]}
+                          fieldKey={[field.fieldKey, "option"]}
+                        >
+                          <Input.TextArea
+                            autoSize
+                            maxLength="100"
+                            showCount
+                            placeholder="Option Text"
+                            disabled
+                          />
+                        </Form.Item>
+                      </Col>
+                      <Col span={12}>
+                        <Form.Item
+                          {...field}
+                          label="Is Correct"
+                          name={[field.name, "correct"]}
+                          fieldKey={[field.fieldKey, "correct"]}
+                        >
+                          <Select placeholder="Select Is Correct" disabled>
+                            <Select.Option value="true">True</Select.Option>
+                            <Select.Option value="false">False</Select.Option>
+                          </Select>
+                        </Form.Item>
+                      </Col>
+                    </Row>
+                  ))}
+                </div>
+              );
+            }}
+          </Form.List>
         </Form>
       </Modal>
     </div>
