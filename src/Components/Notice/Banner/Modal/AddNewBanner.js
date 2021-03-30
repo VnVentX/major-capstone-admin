@@ -48,6 +48,7 @@ const AddNewBanner = () => {
         )
         .then((res) => {
           console.log(res);
+          this.props.getAllBanner();
         })
         .catch((e) => {
           console.log(e);

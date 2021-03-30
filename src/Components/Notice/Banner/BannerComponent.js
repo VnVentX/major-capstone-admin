@@ -1,4 +1,5 @@
 import React from "react";
+import axios from "axios";
 import {
   Table,
   Image,
@@ -15,54 +16,29 @@ import AddNewBanner from "./Modal/AddNewBanner";
 import EditBanner from "./Modal/EditBanner";
 import { QuestionCircleOutlined } from "@ant-design/icons";
 
-const data = [
-  {
-    id: 1,
-    imageUrl: "https://i.ibb.co/MMR1fHg/banner-science.jpg",
-    description: "Banner 1",
-    status: "active",
-    uploadedBy: "haotpv",
-    modifiedBy: "haotpv",
-    uploadedDate: "14:24PM, 24/02/2021",
-    modifiedDate: "14:50PM, 24/02/2021",
-  },
-  {
-    id: 2,
-    imageUrl: "https://i.ibb.co/MMR1fHg/banner-science.jpg",
-    description: "Banner 2",
-    status: "active",
-    uploadedBy: "haotpv",
-    modifiedBy: "haotpv",
-    uploadedDate: "14:24PM, 24/02/2021",
-    modifiedDate: "14:50PM, 24/02/2021",
-  },
-  {
-    id: 3,
-    imageUrl: "https://i.ibb.co/MMR1fHg/banner-science.jpg",
-    description: "Banner 3",
-    status: "active",
-    uploadedBy: "haotpv",
-    modifiedBy: "haotpv",
-    uploadedDate: "14:24PM, 24/02/2021",
-    modifiedDate: "14:50PM, 24/02/2021",
-  },
-  {
-    id: 4,
-    imageUrl: "https://i.ibb.co/MMR1fHg/banner-science.jpg",
-    description: "Banner 4",
-    status: "active",
-    uploadedBy: "haotpv",
-    modifiedBy: "haotpv",
-    uploadedDate: "14:24PM, 24/02/2021",
-    modifiedDate: "14:50PM, 24/02/2021",
-  },
-];
-
 export default class BannerComponent extends React.Component {
   state = {
     searchText: "",
     searchedColumn: "",
     selectedRowKeys: [],
+    dataSource: [],
+  };
+
+  componentDidMount() {
+    this.getAllBanner();
+  }
+
+  getAllBanner = async () => {
+    await axios
+      .get("https://mathscienceeducation.herokuapp.com/bannerImage/all")
+      .then((res) => {
+        this.setState({
+          dataSource: res.data.length === 0 ? [] : res.data,
+        });
+      })
+      .catch((e) => {
+        console.log(e);
+      });
   };
 
   getColumnSearchProps = (dataIndex) => ({
@@ -179,13 +155,13 @@ export default class BannerComponent extends React.Component {
       },
       {
         title: "Uploaded By",
-        dataIndex: "uploadedBy",
-        ...this.getColumnSearchProps("uploadedBy"),
+        dataIndex: "createdBy",
+        ...this.getColumnSearchProps("createdBy"),
       },
       {
         title: "Uploaded Date",
-        dataIndex: "uploadedDate",
-        ...this.getColumnSearchProps("uploadedBy"),
+        dataIndex: "createdDate",
+        ...this.getColumnSearchProps("createdDate"),
       },
       {
         title: "Modified By",
@@ -200,16 +176,16 @@ export default class BannerComponent extends React.Component {
       {
         title: "Status",
         align: "center",
-        dataIndex: "status",
-        key: "status",
-        render: (status) => (
+        dataIndex: "disable",
+        key: "disable",
+        render: (disable) => (
           <span>
-            {status === "active" ? (
-              <Tag color={"green"} key={status}>
+            {disable === false ? (
+              <Tag color={"green"} key={disable}>
                 Active
               </Tag>
-            ) : status === "dropout" ? (
-              <Tag color={"volcano"} key={status}>
+            ) : disable === true ? (
+              <Tag color={"volcano"} key={disable}>
                 Disabled
               </Tag>
             ) : null}
@@ -244,13 +220,13 @@ export default class BannerComponent extends React.Component {
             marginBottom: 20,
           }}
         >
-          <AddNewBanner />
+          <AddNewBanner getAllBanner={this.getAllBanner} />
         </div>
         <Table
           rowKey={(record) => record.id}
           rowSelection={rowSelection}
           columns={columns}
-          dataSource={data}
+          dataSource={this.state.dataSource}
           scroll={{ x: true }}
         />
         <div>

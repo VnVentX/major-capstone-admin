@@ -90,7 +90,7 @@ const AddNewSchool = (props) => {
             });
         }}
       >
-        <Form {...layout} form={form}>
+        <Form {...layout} form={form} initialValues={{ type: "PRIMARY" }}>
           <Form.Item
             name="type"
             label="Educational level"
@@ -101,7 +101,7 @@ const AddNewSchool = (props) => {
               },
             ]}
           >
-            <Select placeholder="Select a level" defaultValue="PRIMARY">
+            <Select placeholder="Select a level">
               <Option value="PRIMARY">Primary School</Option>
               <Option value="JUNIOR">Junior High School</Option>
               <Option value="HIGH">High School</Option>

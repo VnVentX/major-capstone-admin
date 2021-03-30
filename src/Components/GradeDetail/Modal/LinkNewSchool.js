@@ -4,7 +4,6 @@ import { Button, Modal, Form, Select } from "antd";
 import { LinkOutlined } from "@ant-design/icons";
 const { Option } = Select;
 
-var gradeID = window.location.pathname.split("/")[2];
 var resArr = [];
 
 const LinkNewSchool = (props) => {
@@ -17,7 +16,8 @@ const LinkNewSchool = (props) => {
     resArr = resArr.filter(({ id }) => !ids.has(id));
   }, [props.allSchool, props.data]);
 
-  const linkSchool = async (gradeID, schoolID) => {
+  const linkSchool = async (schoolID) => {
+    let gradeID = window.location.pathname.split("/")[2];
     let formData = new FormData();
     formData.append("gradeId ", gradeID);
     formData.append("schoolId ", schoolID);
@@ -42,7 +42,7 @@ const LinkNewSchool = (props) => {
   };
 
   const onFinish = async (values) => {
-    await linkSchool(gradeID, values.school);
+    await linkSchool(values.school);
     handleCancel();
   };
   return (
