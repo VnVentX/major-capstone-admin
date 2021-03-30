@@ -151,7 +151,7 @@ const AddNewQuestion = () => {
           getValueFromEvent={normFile}
         >
           <Upload
-            listType="text"
+            listType="picture"
             fileList={audioFile}
             beforeUpload={() => false}
             onChange={(info) => {
@@ -174,7 +174,7 @@ const AddNewQuestion = () => {
           getValueFromEvent={normFile}
         >
           <Upload
-            listType="text"
+            listType="picture"
             fileList={imgFile}
             beforeUpload={() => false}
             onChange={(info) => {

@@ -43,7 +43,7 @@ const AddNewBanner = () => {
     async function createBanner() {
       await axios
         .post(
-          "https://mathscienceeducation.herokuapp.com/bannerImages",
+          "https://mathscienceeducation.herokuapp.com/bannerImage",
           formData
         )
         .then((res) => {

@@ -1,6 +1,16 @@
 import React, { useState } from "react";
-import { Table, Select, Form, Button } from "antd";
+import {
+  Table,
+  Select,
+  Form,
+  Button,
+  Space,
+  Popconfirm,
+  message,
+  Tooltip,
+} from "antd";
 import EditQuestion from "./Modal/EditQuestion";
+import { DeleteOutlined, QuestionCircleOutlined } from "@ant-design/icons";
 const { Option } = Select;
 
 const QuestionBankComponent = () => {
@@ -14,6 +24,16 @@ const QuestionBankComponent = () => {
 
   const onFinish = (event) => {
     console.log(event);
+  };
+
+  const handleDelete = (item) => {
+    console.log(item);
+    message.success("Delete Question successfully!");
+  };
+
+  const handleDeleteList = () => {
+    console.log(selectedRowKeys);
+    message.success("Delete news successfully!");
   };
 
   const columns = [
@@ -35,9 +55,24 @@ const QuestionBankComponent = () => {
     },
     {
       title: "Action",
-      dataIndex: "",
-      key: "x",
-      render: (record) => <EditQuestion data={record} />,
+      align: "center",
+      render: (record) => (
+        <Space size="small">
+          <EditQuestion data={record} />
+          <Tooltip title="Delete Question">
+            <Popconfirm
+              placement="topRight"
+              title="Are you sure to delete this news?"
+              onConfirm={() => handleDelete(record.key)} //Handle disable logic here
+              okText="Yes"
+              cancelText="No"
+              icon={<QuestionCircleOutlined style={{ color: "red" }} />}
+            >
+              <Button type="danger" icon={<DeleteOutlined />} />
+            </Popconfirm>
+          </Tooltip>
+        </Space>
+      ),
     },
   ];
 
@@ -48,25 +83,25 @@ const QuestionBankComponent = () => {
 
   const data = [
     {
-      key: "1",
+      key: 1,
       q_name: "Question 1",
       createdby: "Đoàn Tuấn Đức",
       modifiedby: "Trần Thiên Anh",
     },
     {
-      key: "2",
+      key: 2,
       q_name: "Question 2",
       createdby: "Đoàn Tuấn Đức",
       modifiedby: "Từ Thiệu Hào",
     },
     {
-      key: "3",
+      key: 3,
       q_name: "Question 3",
       createdby: "Đoàn Tuấn Đức",
       modifiedby: "Trương Thành Đạt",
     },
     {
-      key: "4",
+      key: 4,
       q_name: "Question 4",
       createdby: "Đoàn Tuấn Đức",
       modifiedby: "Đoàn Tuấn Đức",
@@ -156,10 +191,15 @@ const QuestionBankComponent = () => {
         <h1>With selected:</h1>
         {selectedRowKeys.length === 0 ? (
           <>
-            <Button type="danger" disabled style={{ marginRight: 10 }}>
+            <Button
+              type="danger"
+              icon={<DeleteOutlined />}
+              disabled
+              style={{ marginRight: 10 }}
+            >
               Delete
             </Button>
-            <Button type="primary" disabled style={{ marginRight: 10 }}>
+            {/* <Button type="primary" disabled style={{ marginRight: 10 }}>
               Move to &gt;&gt;
             </Button>
             <Select
@@ -169,23 +209,26 @@ const QuestionBankComponent = () => {
             >
               <Option value="quiz 1">Quiz 1</Option>
               <Option value="quiz 2">Quiz 2</Option>
-            </Select>
+            </Select> */}
           </>
         ) : (
           <>
-            <Button type="danger" style={{ marginRight: 10 }}>
-              Delete
-            </Button>
-            <Button type="primary" style={{ marginRight: 10 }}>
-              Move to &gt;&gt;
-            </Button>
-            <Select
-              defaultValue="quiz 1"
-              style={{ width: 200, marginRight: 10 }}
+            <Popconfirm
+              placement="topRight"
+              title="Are you sure to delete selected Questions?"
+              onConfirm={handleDeleteList} //Handle disable logic here
+              okText="Yes"
+              cancelText="No"
+              icon={<QuestionCircleOutlined style={{ color: "red" }} />}
             >
-              <Option value="quiz1">Quiz 1</Option>
-              <Option value="quiz 2">Quiz 2</Option>
-            </Select>
+              <Button
+                type="danger"
+                icon={<DeleteOutlined />}
+                style={{ marginRight: 10 }}
+              >
+                Delete
+              </Button>
+            </Popconfirm>
           </>
         )}
       </div>

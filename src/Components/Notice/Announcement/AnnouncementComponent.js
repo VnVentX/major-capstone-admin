@@ -140,6 +140,11 @@ export default class AnnouncementComponent extends React.Component {
     message.success("Delete news successfully!");
   };
 
+  handleDeleteList = () => {
+    console.log(this.state.selectedRowKeys);
+    message.success("Delete news successfully!");
+  };
+
   render() {
     const columns = [
       {
@@ -223,7 +228,7 @@ export default class AnnouncementComponent extends React.Component {
               <Popconfirm
                 placement="topRight"
                 title="Are you sure to delete selected News?"
-                onConfirm={this.confirm} //Handle disable logic here
+                onConfirm={this.handleDeleteList} //Handle disable logic here
                 okText="Yes"
                 cancelText="No"
                 icon={<QuestionCircleOutlined style={{ color: "red" }} />}
