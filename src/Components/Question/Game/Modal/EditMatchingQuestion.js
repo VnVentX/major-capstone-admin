@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Form,
   Input,
@@ -21,14 +21,33 @@ const normFile = (e) => {
   return e && e.fileList;
 };
 
-const MatchingQuestion = (props) => {
-  const [form] = Form.useForm();
+const EditMatchingQuestion = (props) => {
   const [imgFile1, setImgFile1] = useState([]);
   const [imgFile2, setImgFile2] = useState([]);
   const [imgFile3, setImgFile3] = useState([]);
   const [imgFile4, setImgFile4] = useState([]);
   const [imgFile5, setImgFile5] = useState([]);
   const [imgFile6, setImgFile6] = useState([]);
+
+  useEffect(() => {
+    props.form.setFieldsValue({
+      subject: "science",
+      unit: "unit 2",
+      question: "Match the word with the right picture",
+      value1: "Hand",
+      value2: "Leg",
+      value3: "Ear",
+      value4: "Nose",
+      value5: "Finger",
+      value6: "Toe",
+      key1: "",
+      key2: "",
+      key3: "",
+      key4: "",
+      key5: "",
+      key6: "",
+    });
+  }, []);
 
   const handleChangeImg1 = ({ fileList }) => {
     setImgFile1(fileList);
@@ -49,32 +68,8 @@ const MatchingQuestion = (props) => {
     setImgFile6(fileList);
   };
 
-  const onFinish = (values) => {
-    const question = {
-      type: props.type,
-      subject: values.subject,
-      unit: values.unit,
-      q_name: values.question,
-      options: [
-        { key: values.key1[0].originFileObj, value: values.value1 },
-        { key: values.key2[0].originFileObj, value: values.value2 },
-        { key: values.key3[0].originFileObj, value: values.value3 },
-        { key: values.key4[0].originFileObj, value: values.value4 },
-        { key: values.key5[0].originFileObj, value: values.value5 },
-        { key: values.key6[0].originFileObj, value: values.value6 },
-      ],
-    };
-    // form.setFieldsValue({
-    // });
-    console.log(question);
-  };
   return (
-    <Form
-      form={form}
-      layout="vertical"
-      onFinish={onFinish}
-      style={{ marginTop: 10 }}
-    >
+    <Form form={props.form} layout="vertical" style={{ marginTop: 10 }}>
       <h2>Matching Question</h2>
       <Divider />
       <Form.Item
@@ -144,7 +139,6 @@ const MatchingQuestion = (props) => {
             name="key1"
             label="Pair's Picture"
             getValueFromEvent={normFile}
-            rules={[{ required: true, message: "Please select an image" }]}
           >
             <Upload
               listType="picture"
@@ -192,7 +186,6 @@ const MatchingQuestion = (props) => {
             name="key2"
             label="Pair's Picture"
             getValueFromEvent={normFile}
-            rules={[{ required: true, message: "Please select an image" }]}
           >
             <Upload
               listType="picture"
@@ -241,7 +234,6 @@ const MatchingQuestion = (props) => {
             name="key3"
             label="Pair's Picture"
             getValueFromEvent={normFile}
-            rules={[{ required: true, message: "Please select an image" }]}
           >
             <Upload
               listType="picture"
@@ -290,7 +282,6 @@ const MatchingQuestion = (props) => {
             name="key4"
             label="Pair's Picture"
             getValueFromEvent={normFile}
-            rules={[{ required: true, message: "Please select an image" }]}
           >
             <Upload
               listType="picture"
@@ -339,7 +330,6 @@ const MatchingQuestion = (props) => {
             name="key5"
             label="Pair's Picture"
             getValueFromEvent={normFile}
-            rules={[{ required: true, message: "Please select an image" }]}
           >
             <Upload
               listType="picture"
@@ -388,7 +378,6 @@ const MatchingQuestion = (props) => {
             name="key6"
             label="Pair's Picture"
             getValueFromEvent={normFile}
-            rules={[{ required: true, message: "Please select an image" }]}
           >
             <Upload
               listType="picture"
@@ -429,20 +418,8 @@ const MatchingQuestion = (props) => {
         </Col>
       </Row>
       <Divider />
-      <Form.Item>
-        <Button
-          type="primary"
-          htmlType="submit"
-          size="large"
-          style={{
-            left: "45%",
-          }}
-        >
-          Submit
-        </Button>
-      </Form.Item>
     </Form>
   );
 };
 
-export default MatchingQuestion;
+export default EditMatchingQuestion;

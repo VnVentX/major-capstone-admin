@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Form,
   Input,
@@ -25,10 +25,26 @@ const normFile = (e) => {
   return e && e.fileList;
 };
 
-const FillingQuestion = (props) => {
-  const [form] = Form.useForm();
+const options = [
+  { option: "operator", operator: "-" },
+  { option: "text", text: "123" },
+  { option: "text", text: "sad" },
+  { option: "text", text: "asd" },
+  { option: "operator", operator: "-" },
+];
+
+const EditFillingQuestion = (props) => {
   const [audioFile, setAudioFile] = useState([]);
   const [imgFile, setImgFile] = useState([]);
+
+  useEffect(() => {
+    props.form.setFieldsValue({
+      subject: "math",
+      unit: "unit 1",
+      question: "Fill in the blank with the correct word",
+      options: options,
+    });
+  }, []);
 
   const handleChangeImg = ({ fileList }) => {
     setImgFile(fileList);
@@ -37,33 +53,8 @@ const FillingQuestion = (props) => {
     setAudioFile(fileList);
   };
 
-  const onFinish = (values) => {
-    const question = {
-      type: props.type,
-      subject: values.subject,
-      unit: values.unit,
-      q_name: values.question,
-      q_audio: values.q_audio ? values.q_audio : "",
-      q_img: values.q_img,
-      options: values.options,
-    };
-    form.setFieldsValue({
-      question: null,
-      q_audio: null,
-      q_img: null,
-      options: null,
-    });
-    setImgFile([]);
-    setAudioFile([]);
-    console.log(question);
-  };
   return (
-    <Form
-      form={form}
-      layout="vertical"
-      onFinish={onFinish}
-      style={{ marginTop: 10 }}
-    >
+    <Form form={props.form} layout="vertical" style={{ marginTop: 10 }}>
       <h2>Filling Question</h2>
       <Divider />
       <Form.Item
@@ -132,7 +123,6 @@ const FillingQuestion = (props) => {
         name="q_img"
         label="Question Image"
         getValueFromEvent={normFile}
-        rules={[{ required: true, message: "Please select an Image" }]}
       >
         <Upload
           listType="picture"
@@ -220,8 +210,8 @@ const FillingQuestion = (props) => {
                     }
                   >
                     {() => {
-                      return form.getFieldsValue().options[idx]?.option ===
-                        "operator" ? (
+                      return props.form.getFieldsValue().options[idx]
+                        ?.option === "operator" ? (
                         <Form.Item
                           {...field}
                           name={[field.name, "operator"]}
@@ -242,7 +232,7 @@ const FillingQuestion = (props) => {
                             <Select.Option value="=">Equal (=)</Select.Option>
                           </Select>
                         </Form.Item>
-                      ) : form.getFieldsValue().options[idx]?.option ===
+                      ) : props.form.getFieldsValue().options[idx]?.option ===
                         "text" ? (
                         <Form.Item
                           {...field}
@@ -290,20 +280,8 @@ const FillingQuestion = (props) => {
           </>
         )}
       </Form.List>
-      <Form.Item>
-        <Button
-          type="primary"
-          htmlType="submit"
-          size="large"
-          style={{
-            left: "45%",
-          }}
-        >
-          Submit
-        </Button>
-      </Form.Item>
     </Form>
   );
 };
 
-export default FillingQuestion;
+export default EditFillingQuestion;

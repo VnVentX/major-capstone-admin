@@ -168,7 +168,7 @@ const EditQuestion = (props) => {
               )}
             </Upload>
           </Form.Item>
-          <h1>Answers</h1>
+          <h1>Options</h1>
           <Form.List name="options">
             {(fields, { add, remove }, { errors }) => {
               return (

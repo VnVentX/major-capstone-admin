@@ -28,7 +28,6 @@ const normFile = (e) => {
 const AddNewQuestion = () => {
   const [counter, setCounter] = useState(0);
   const [form] = Form.useForm();
-  const [questions, setQuestions] = useState([]);
   const [audioFile, setAudioFile] = useState([]);
   const [imgFile, setImgFile] = useState([]);
 
@@ -59,7 +58,6 @@ const AddNewQuestion = () => {
       options: values.options,
     };
     console.log(question);
-    // setQuestions(question);
     // setCounter(0);
     // form.setFieldsValue({
     //   question: null,
@@ -67,7 +65,6 @@ const AddNewQuestion = () => {
     //   q_img: null,
     //   options: null,
     // });
-    // console.log(questions);
   };
 
   return (

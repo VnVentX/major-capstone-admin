@@ -50,7 +50,6 @@ const useAudio = (url) => {
 const ViewQuestion = (props) => {
   const [form] = Form.useForm();
   const [visible, setVisible] = useState(false);
-  const [imgFile, setImgFile] = useState([]);
 
   const [playing, toggle] = useAudio(
     "https://firebasestorage.googleapis.com/v0/b/mathscience-e425d.appspot.com/o/audios%2F94028074-2bc7-47df-89bb-748a475aee3fmp3?alt=media&token=44a7c7d4-cdbf-4eae-ada8-d5276e64792d"
@@ -107,7 +106,7 @@ const ViewQuestion = (props) => {
           <Form.Item name="q_img" label="Question Image">
             <Image src="https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg" />
           </Form.Item>
-          <h1>Answers</h1>
+          <h1>Options</h1>
           <Form.List name="options">
             {(fields) => {
               return (

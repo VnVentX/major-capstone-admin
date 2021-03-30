@@ -15,7 +15,7 @@ const normFile = (e) => {
   return e && e.fileList;
 };
 
-const AddNewBanner = () => {
+const AddNewBanner = (props) => {
   const [form] = Form.useForm();
   const [visible, setVisible] = useState(false);
   const [fileList, setFileList] = useState([]);
@@ -48,7 +48,7 @@ const AddNewBanner = () => {
         )
         .then((res) => {
           console.log(res);
-          this.props.getAllBanner();
+          props.getAllBanner();
         })
         .catch((e) => {
           console.log(e);

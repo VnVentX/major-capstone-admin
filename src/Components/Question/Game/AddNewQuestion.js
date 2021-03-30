@@ -27,13 +27,13 @@ const AddNewQuestion = () => {
         </Col>
       </Row>
       {type === "MATCH" ? (
-        <MatchingQuestion />
+        <MatchingQuestion type={type} />
       ) : type === "FILL" ? (
-        <FillingQuestion />
+        <FillingQuestion type={type} />
       ) : type === "SWAP" ? (
-        <SwappingQuestion />
+        <SwappingQuestion type={type} />
       ) : type === "CHOOSE" ? (
-        <ChoosingQuestion />
+        <ChoosingQuestion type={type} />
       ) : null}
     </>
   );

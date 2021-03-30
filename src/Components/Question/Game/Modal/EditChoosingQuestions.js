@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Form,
   Input,
@@ -21,14 +21,39 @@ const normFile = (e) => {
   return e && e.fileList;
 };
 
-const MatchingQuestion = (props) => {
-  const [form] = Form.useForm();
+const EditChoosingQuestion = (props) => {
   const [imgFile1, setImgFile1] = useState([]);
   const [imgFile2, setImgFile2] = useState([]);
   const [imgFile3, setImgFile3] = useState([]);
   const [imgFile4, setImgFile4] = useState([]);
   const [imgFile5, setImgFile5] = useState([]);
   const [imgFile6, setImgFile6] = useState([]);
+  const [imgFile7, setImgFile7] = useState([]);
+  const [imgFile8, setImgFile8] = useState([]);
+
+  useEffect(() => {
+    props.form.setFieldsValue({
+      subject: "science",
+      unit: "unit 2",
+      question: "Choose the right picture",
+      value1: "Hand",
+      value2: "Leg",
+      value3: "Ear",
+      value4: "Nose",
+      value5: "Finger",
+      value6: "Toe",
+      value7: "Eye",
+      value8: "Mouth",
+      key1: "",
+      key2: "",
+      key3: "",
+      key4: "",
+      key5: "",
+      key6: "",
+      key7: "",
+      key8: "",
+    });
+  }, []);
 
   const handleChangeImg1 = ({ fileList }) => {
     setImgFile1(fileList);
@@ -48,34 +73,16 @@ const MatchingQuestion = (props) => {
   const handleChangeImg6 = ({ fileList }) => {
     setImgFile6(fileList);
   };
-
-  const onFinish = (values) => {
-    const question = {
-      type: props.type,
-      subject: values.subject,
-      unit: values.unit,
-      q_name: values.question,
-      options: [
-        { key: values.key1[0].originFileObj, value: values.value1 },
-        { key: values.key2[0].originFileObj, value: values.value2 },
-        { key: values.key3[0].originFileObj, value: values.value3 },
-        { key: values.key4[0].originFileObj, value: values.value4 },
-        { key: values.key5[0].originFileObj, value: values.value5 },
-        { key: values.key6[0].originFileObj, value: values.value6 },
-      ],
-    };
-    // form.setFieldsValue({
-    // });
-    console.log(question);
+  const handleChangeImg7 = ({ fileList }) => {
+    setImgFile7(fileList);
   };
+  const handleChangeImg8 = ({ fileList }) => {
+    setImgFile8(fileList);
+  };
+
   return (
-    <Form
-      form={form}
-      layout="vertical"
-      onFinish={onFinish}
-      style={{ marginTop: 10 }}
-    >
-      <h2>Matching Question</h2>
+    <Form form={props.form} layout="vertical" style={{ marginTop: 10 }}>
+      <h2>Choosing Question</h2>
       <Divider />
       <Form.Item
         name="subject"
@@ -144,7 +151,6 @@ const MatchingQuestion = (props) => {
             name="key1"
             label="Pair's Picture"
             getValueFromEvent={normFile}
-            rules={[{ required: true, message: "Please select an image" }]}
           >
             <Upload
               listType="picture"
@@ -192,7 +198,6 @@ const MatchingQuestion = (props) => {
             name="key2"
             label="Pair's Picture"
             getValueFromEvent={normFile}
-            rules={[{ required: true, message: "Please select an image" }]}
           >
             <Upload
               listType="picture"
@@ -241,7 +246,6 @@ const MatchingQuestion = (props) => {
             name="key3"
             label="Pair's Picture"
             getValueFromEvent={normFile}
-            rules={[{ required: true, message: "Please select an image" }]}
           >
             <Upload
               listType="picture"
@@ -290,7 +294,6 @@ const MatchingQuestion = (props) => {
             name="key4"
             label="Pair's Picture"
             getValueFromEvent={normFile}
-            rules={[{ required: true, message: "Please select an image" }]}
           >
             <Upload
               listType="picture"
@@ -339,7 +342,6 @@ const MatchingQuestion = (props) => {
             name="key5"
             label="Pair's Picture"
             getValueFromEvent={normFile}
-            rules={[{ required: true, message: "Please select an image" }]}
           >
             <Upload
               listType="picture"
@@ -388,7 +390,6 @@ const MatchingQuestion = (props) => {
             name="key6"
             label="Pair's Picture"
             getValueFromEvent={normFile}
-            rules={[{ required: true, message: "Please select an image" }]}
           >
             <Upload
               listType="picture"
@@ -429,20 +430,104 @@ const MatchingQuestion = (props) => {
         </Col>
       </Row>
       <Divider />
-      <Form.Item>
-        <Button
-          type="primary"
-          htmlType="submit"
-          size="large"
-          style={{
-            left: "45%",
-          }}
-        >
-          Submit
-        </Button>
-      </Form.Item>
+      {/* Option 7 */}
+      <h3>Pair 7</h3>
+      <Row gutter={24}>
+        <Col span={12}>
+          <Form.Item
+            name="key7"
+            label="Pair's Picture"
+            getValueFromEvent={normFile}
+          >
+            <Upload
+              listType="picture"
+              fileList={imgFile7}
+              beforeUpload={() => false}
+              onChange={(info) => {
+                if (info.file.type.split("/")[0] !== "image") {
+                  message.error(`${info.file.name} is not an image file`);
+                  setImgFile7([]);
+                } else {
+                  handleChangeImg7(info);
+                }
+              }}
+            >
+              {imgFile7.length === 1 ? null : (
+                <Button icon={<UploadOutlined />}>Upload</Button>
+              )}
+            </Upload>
+          </Form.Item>
+        </Col>
+        <Col span={12}>
+          <Form.Item
+            name="value7"
+            label="Pair's Answer"
+            rules={[
+              {
+                required: true,
+                message: "Please input an answer for the picture",
+              },
+            ]}
+          >
+            <Input.TextArea
+              maxLength="100"
+              showCount
+              placeholder="Pair's Answer"
+            />
+          </Form.Item>
+        </Col>
+      </Row>
+      <Divider />
+      {/* Option 8 */}
+      <h3>Pair 8</h3>
+      <Row gutter={24}>
+        <Col span={12}>
+          <Form.Item
+            name="key8"
+            label="Pair's Picture"
+            getValueFromEvent={normFile}
+          >
+            <Upload
+              listType="picture"
+              fileList={imgFile8}
+              beforeUpload={() => false}
+              onChange={(info) => {
+                if (info.file.type.split("/")[0] !== "image") {
+                  message.error(`${info.file.name} is not an image file`);
+                  setImgFile8([]);
+                } else {
+                  handleChangeImg8(info);
+                }
+              }}
+            >
+              {imgFile8.length === 1 ? null : (
+                <Button icon={<UploadOutlined />}>Upload</Button>
+              )}
+            </Upload>
+          </Form.Item>
+        </Col>
+        <Col span={12}>
+          <Form.Item
+            name="value8"
+            label="Pair's Answer"
+            rules={[
+              {
+                required: true,
+                message: "Please input an answer for the picture",
+              },
+            ]}
+          >
+            <Input.TextArea
+              maxLength="100"
+              showCount
+              placeholder="Pair's Answer"
+            />
+          </Form.Item>
+        </Col>
+      </Row>
+      <Divider />
     </Form>
   );
 };
 
-export default MatchingQuestion;
+export default EditChoosingQuestion;

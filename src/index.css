@@ -270,3 +270,6 @@ input[type="checkbox"] + *::before {
 .ant-btn > span + .anticon {
   margin-left: 3px !important;
 }
+.ant-upload-list-item {
+  margin: 0 !important;
+}

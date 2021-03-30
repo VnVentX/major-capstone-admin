@@ -1,24 +1,14 @@
 import React, { useState } from "react";
-import { Select, Form, Modal, Input, Divider, Row, Col } from "antd";
-
-const options = [
-  {
-    option: "A",
-    correct: "True",
-  },
-  {
-    option: "B",
-    correct: "False",
-  },
-];
+import { Form, Modal, Tooltip, Button } from "antd";
+import { EditOutlined } from "@ant-design/icons";
+import EditFillingQuestion from "./EditFillingQuestion";
+import EditChoosingQuestion from "./EditChoosingQuestions";
+import EditMatchingQuestion from "./EditMatchingQuestion";
+import EditSwappingQuestion from "./EditSwappingQuestion";
 
 const EditQuestion = (props) => {
   const [form] = Form.useForm();
   const [visible, setVisible] = useState(false);
-
-  const onFinish = (event) => {
-    console.log(event);
-  };
 
   const showModal = () => {
     setVisible(true);
@@ -29,16 +19,143 @@ const EditQuestion = (props) => {
     setVisible(false);
   };
 
+  const onFinish = (values) => {
+    if (props.data?.type === "FILL") {
+      fillingQuestionSubmit(values);
+    } else if (props.data?.type === "CHOOSE") {
+      choosingQuestionSubmit(values);
+    } else if (props.data?.type === "MATCH") {
+      matchingQuestionSubmit(values);
+    } else if (props.data?.type === "SWAP") {
+      swappingQuestionSubmit(values);
+    }
+  };
+
+  const fillingQuestionSubmit = (values) => {
+    const question = {
+      id: props.data.key,
+      subject: values.subject,
+      unit: values.unit,
+      q_name: values.question,
+      q_audio: values.q_audio ? values.q_audio : "",
+      q_img: values.q_img,
+      options: values.options,
+    };
+    console.log(question);
+  };
+
+  const choosingQuestionSubmit = (values) => {
+    const question = {
+      id: props.data.key,
+      subject: values.subject,
+      unit: values.unit,
+      q_name: values.question,
+      options: [
+        {
+          key: values.key1[0] ? values.key1[0].originFileObj : null,
+          value: values.value1,
+        },
+        {
+          key: values.key2[0] ? values.key2[0].originFileObj : null,
+          value: values.value2,
+        },
+        {
+          key: values.key3[0] ? values.key3[0].originFileObj : null,
+          value: values.value3,
+        },
+        {
+          key: values.key4[0] ? values.key4[0].originFileObj : null,
+          value: values.value4,
+        },
+        {
+          key: values.key5[0] ? values.key5[0].originFileObj : null,
+          value: values.value5,
+        },
+        {
+          key: values.key6[0] ? values.key6[0].originFileObj : null,
+          value: values.value6,
+        },
+        {
+          key: values.key7[0] ? values.key7[0].originFileObj : null,
+          value: values.value7,
+        },
+        {
+          key: values.key8[0] ? values.key8[0].originFileObj : null,
+          value: values.value8,
+        },
+      ],
+    };
+    console.log(question);
+  };
+  const swappingQuestionSubmit = (values) => {
+    const question = {
+      id: props.data.key,
+      subject: values.subject,
+      unit: values.unit,
+      q_name: values.question,
+      options: [
+        {
+          key: values.key1[0] ? values.key1[0].originFileObj : null,
+          value: values.value1,
+        },
+        {
+          key: values.key2[0] ? values.key2[0].originFileObj : null,
+          value: values.value2,
+        },
+        {
+          key: values.key3[0] ? values.key3[0].originFileObj : null,
+          value: values.value3,
+        },
+        {
+          key: values.key4[0] ? values.key4[0].originFileObj : null,
+          value: values.value4,
+        },
+      ],
+    };
+    console.log(question);
+  };
+
+  const matchingQuestionSubmit = (values) => {
+    const question = {
+      id: props.key,
+      subject: values.subject,
+      unit: values.unit,
+      q_name: values.question,
+      options: [
+        {
+          key: values.key1[0] ? values.key1[0].originFileObj : null,
+          value: values.value1,
+        },
+        {
+          key: values.key2[0] ? values.key2[0].originFileObj : null,
+          value: values.value2,
+        },
+        {
+          key: values.key3[0] ? values.key3[0].originFileObj : null,
+          value: values.value3,
+        },
+        {
+          key: values.key4[0] ? values.key4[0].originFileObj : null,
+          value: values.value4,
+        },
+        {
+          key: values.key5[0] ? values.key5[0].originFileObj : null,
+          value: values.value5,
+        },
+        {
+          key: values.key6[0] ? values.key6[0].originFileObj : null,
+          value: values.value6,
+        },
+      ],
+    };
+    console.log(question);
+  };
+
   return (
     <div>
-      <button
-        className="ant-btn-link"
-        onClick={() => {
-          showModal();
-        }}
-      >
-        Edit
-      </button>
+      <Tooltip title="Edit Question">
+        <Button type="primary" icon={<EditOutlined />} onClick={showModal} />
+      </Tooltip>
       <Modal
         visible={visible}
         width={"45vw"}
@@ -51,101 +168,21 @@ const EditQuestion = (props) => {
             .validateFields()
             .then((values) => {
               onFinish(values);
-              form.resetFields();
-              handleCancel();
             })
             .catch((info) => {
               console.log("Validate Failed:", info);
             });
         }}
       >
-        <Form
-          form={form}
-          layout="vertical"
-          initialValues={{
-            question: props.data.q_name,
-            q_audio: "Q1",
-            q_img: "Q1",
-            options: options,
-          }}
-        >
-          <h1>Question</h1>
-          <Divider />
-          <Form.Item
-            name="question"
-            label="Question Text"
-            rules={[{ required: true, message: "Please input a question" }]}
-          >
-            <Input.TextArea
-              autoSize
-              maxLength="100"
-              showCount
-              placeholder="Question Text"
-            />
-          </Form.Item>
-          <Form.Item
-            name="q_audio"
-            label="Audio URL"
-            rules={[{ type: "url", message: "Please input a valid URL!" }]}
-          >
-            <Input placeholder="Audio URL" />
-          </Form.Item>
-          <Form.Item
-            name="q_img"
-            label="Image URL"
-            rules={[{ type: "url", message: "Please input a valid URL!" }]}
-          >
-            <Input placeholder="Image URL" />
-          </Form.Item>
-          <h1>Answers</h1>
-          <Form.List name="options">
-            {(fields) => {
-              return (
-                <div>
-                  {fields.map((field, idx) => (
-                    <Row gutter={24} key={idx}>
-                      <Divider />
-                      <Col span={12}>
-                        <Form.Item
-                          {...field}
-                          label={`Option ${idx + 1}`}
-                          name={[field.name, "option"]}
-                          fieldKey={[field.fieldKey, "option"]}
-                          rules={[
-                            { required: true, message: "Please input option!" },
-                          ]}
-                        >
-                          <Input.TextArea
-                            autoSize
-                            maxLength="100"
-                            showCount
-                            placeholder="Option Text"
-                          />
-                        </Form.Item>
-                      </Col>
-                      <Col span={12}>
-                        <Form.Item
-                          {...field}
-                          label="Is Correct"
-                          name={[field.name, "correct"]}
-                          fieldKey={[field.fieldKey, "correct"]}
-                          rules={[
-                            { required: true, message: "Missing correct" },
-                          ]}
-                        >
-                          <Select placeholder="Select Is Correct">
-                            <Select.Option value="true">True</Select.Option>
-                            <Select.Option value="false">False</Select.Option>
-                          </Select>
-                        </Form.Item>
-                      </Col>
-                    </Row>
-                  ))}
-                </div>
-              );
-            }}
-          </Form.List>
-        </Form>
+        {props.data?.type === "MATCH" ? (
+          <EditMatchingQuestion form={form} />
+        ) : props.data?.type === "FILL" ? (
+          <EditFillingQuestion form={form} />
+        ) : props.data?.type === "SWAP" ? (
+          <EditSwappingQuestion form={form} />
+        ) : props.data?.type === "CHOOSE" ? (
+          <EditChoosingQuestion form={form} />
+        ) : null}
       </Modal>
     </div>
   );

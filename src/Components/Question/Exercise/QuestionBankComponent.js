@@ -43,15 +43,19 @@ const QuestionBankComponent = () => {
     },
     {
       title: "Created By",
-      dataIndex: "createdby",
-      sorter: (a, b) => a.createdby.length - b.createdby.length,
-      sortDirections: ["descend", "ascend"],
+      dataIndex: "createdBy",
+    },
+    {
+      title: "Created Date",
+      dataIndex: "createdDate",
     },
     {
       title: "Modified By",
-      dataIndex: "modifiedby",
-      sorter: (a, b) => a.modifiedby.length - b.modifiedby.length,
-      sortDirections: ["descend", "ascend"],
+      dataIndex: "modifiedBy",
+    },
+    {
+      title: "Modified Date",
+      dataIndex: "modifiedDate",
     },
     {
       title: "Action",
@@ -85,26 +89,34 @@ const QuestionBankComponent = () => {
     {
       key: 1,
       q_name: "Question 1",
-      createdby: "Đoàn Tuấn Đức",
-      modifiedby: "Trần Thiên Anh",
+      createdBy: "anhtt",
+      modifiedBy: "anhtt",
+      createdDate: "14:24PM, 24/02/2021",
+      modifiedDate: "14:50PM, 24/02/2021",
     },
     {
       key: 2,
       q_name: "Question 2",
-      createdby: "Đoàn Tuấn Đức",
-      modifiedby: "Từ Thiệu Hào",
+      createdBy: "anhtt",
+      modifiedBy: "anhtt",
+      createdDate: "14:24PM, 24/02/2021",
+      modifiedDate: "14:50PM, 24/02/2021",
     },
     {
       key: 3,
       q_name: "Question 3",
-      createdby: "Đoàn Tuấn Đức",
-      modifiedby: "Trương Thành Đạt",
+      createdBy: "anhtt",
+      modifiedBy: "anhtt",
+      createdDate: "14:24PM, 24/02/2021",
+      modifiedDate: "14:50PM, 24/02/2021",
     },
     {
       key: 4,
       q_name: "Question 4",
-      createdby: "Đoàn Tuấn Đức",
-      modifiedby: "Đoàn Tuấn Đức",
+      createdBy: "anhtt",
+      modifiedBy: "anhtt",
+      createdDate: "14:24PM, 24/02/2021",
+      modifiedDate: "14:50PM, 24/02/2021",
     },
   ];
 

@@ -1,11 +1,31 @@
 import React, { useState } from "react";
-import { Table, Select, Form, Button } from "antd";
+import {
+  Table,
+  Select,
+  Form,
+  Button,
+  Space,
+  Popconfirm,
+  message,
+  Tooltip,
+} from "antd";
 import EditQuestion from "./Modal/EditQuestion";
+import { DeleteOutlined, QuestionCircleOutlined } from "@ant-design/icons";
 const { Option } = Select;
 
 const QuestionBankComponent = () => {
   const [form] = Form.useForm();
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+
+  const handleDelete = (item) => {
+    console.log(item);
+    message.success("Delete Question successfully!");
+  };
+
+  const handleDeleteList = () => {
+    console.log(selectedRowKeys);
+    message.success("Delete news successfully!");
+  };
 
   const onSelectChange = (selectedRowKeys) => {
     console.log("selectedRowKeys changed: ", selectedRowKeys);
@@ -22,22 +42,46 @@ const QuestionBankComponent = () => {
       dataIndex: "q_name",
     },
     {
+      title: "Type",
+      dataIndex: "type",
+    },
+    {
       title: "Created By",
-      dataIndex: "createdby",
-      sorter: (a, b) => a.createdby.length - b.createdby.length,
-      sortDirections: ["descend", "ascend"],
+      dataIndex: "createdBy",
+    },
+    {
+      title: "Created Date",
+      dataIndex: "createdDate",
     },
     {
       title: "Modified By",
-      dataIndex: "modifiedby",
-      sorter: (a, b) => a.modifiedby.length - b.modifiedby.length,
-      sortDirections: ["descend", "ascend"],
+      dataIndex: "modifiedBy",
+    },
+    {
+      title: "Modified Date",
+      dataIndex: "modifiedDate",
     },
     {
       title: "Action",
       dataIndex: "",
       key: "x",
-      render: (record) => <EditQuestion data={record} />,
+      render: (record) => (
+        <Space size="small">
+          <EditQuestion data={record} />
+          <Tooltip title="Delete Question">
+            <Popconfirm
+              placement="topRight"
+              title="Are you sure to delete this news?"
+              onConfirm={() => handleDelete(record.key)} //Handle disable logic here
+              okText="Yes"
+              cancelText="No"
+              icon={<QuestionCircleOutlined style={{ color: "red" }} />}
+            >
+              <Button type="danger" icon={<DeleteOutlined />} />
+            </Popconfirm>
+          </Tooltip>
+        </Space>
+      ),
     },
   ];
 
@@ -50,26 +94,38 @@ const QuestionBankComponent = () => {
     {
       key: "1",
       q_name: "Question 1",
-      createdby: "Đoàn Tuấn Đức",
-      modifiedby: "Trần Thiên Anh",
+      type: "FILL",
+      createdBy: "anhtt",
+      modifiedBy: "anhtt",
+      createdDate: "14:24PM, 24/02/2021",
+      modifiedDate: "14:50PM, 24/02/2021",
     },
     {
       key: "2",
       q_name: "Question 2",
-      createdby: "Đoàn Tuấn Đức",
-      modifiedby: "Từ Thiệu Hào",
+      type: "MATCH",
+      createdBy: "anhtt",
+      modifiedBy: "anhtt",
+      createdDate: "14:24PM, 24/02/2021",
+      modifiedDate: "14:50PM, 24/02/2021",
     },
     {
       key: "3",
       q_name: "Question 3",
-      createdby: "Đoàn Tuấn Đức",
-      modifiedby: "Trương Thành Đạt",
+      type: "SWAP",
+      createdBy: "anhtt",
+      modifiedBy: "anhtt",
+      createdDate: "14:24PM, 24/02/2021",
+      modifiedDate: "14:50PM, 24/02/2021",
     },
     {
       key: "4",
       q_name: "Question 4",
-      createdby: "Đoàn Tuấn Đức",
-      modifiedby: "Đoàn Tuấn Đức",
+      type: "CHOOSE",
+      createdBy: "anhtt",
+      modifiedBy: "anhtt",
+      createdDate: "14:24PM, 24/02/2021",
+      modifiedDate: "14:50PM, 24/02/2021",
     },
   ];
 
@@ -152,14 +208,19 @@ const QuestionBankComponent = () => {
         rowKey={data.key}
         scroll={{ x: true }}
       />
-      {/* <div>
+      <div>
         <h1>With selected:</h1>
         {selectedRowKeys.length === 0 ? (
           <>
-            <Button type="danger" disabled style={{ marginRight: 10 }}>
+            <Button
+              type="danger"
+              icon={<DeleteOutlined />}
+              disabled
+              style={{ marginRight: 10 }}
+            >
               Delete
             </Button>
-            <Button type="primary" disabled style={{ marginRight: 10 }}>
+            {/* <Button type="primary" disabled style={{ marginRight: 10 }}>
               Move to &gt;&gt;
             </Button>
             <Select
@@ -169,26 +230,29 @@ const QuestionBankComponent = () => {
             >
               <Option value="quiz 1">Quiz 1</Option>
               <Option value="quiz 2">Quiz 2</Option>
-            </Select>
+            </Select> */}
           </>
         ) : (
           <>
-            <Button type="danger" style={{ marginRight: 10 }}>
-              Delete
-            </Button>
-            <Button type="primary" style={{ marginRight: 10 }}>
-              Move to &gt;&gt;
-            </Button>
-            <Select
-              defaultValue="quiz 1"
-              style={{ width: 200, marginRight: 10 }}
+            <Popconfirm
+              placement="topRight"
+              title="Are you sure to delete selected Questions?"
+              onConfirm={handleDeleteList} //Handle disable logic here
+              okText="Yes"
+              cancelText="No"
+              icon={<QuestionCircleOutlined style={{ color: "red" }} />}
             >
-              <Option value="quiz1">Quiz 1</Option>
-              <Option value="quiz 2">Quiz 2</Option>
-            </Select>
+              <Button
+                type="danger"
+                icon={<DeleteOutlined />}
+                style={{ marginRight: 10 }}
+              >
+                Delete
+              </Button>
+            </Popconfirm>
           </>
         )}
-      </div> */}
+      </div>
     </>
   );
 };
