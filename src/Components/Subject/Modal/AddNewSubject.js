@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import axios from "axios";
 import { Button, Modal, Form, Input, Upload, message } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import { UploadOutlined } from "@ant-design/icons";
@@ -15,7 +16,7 @@ const normFile = (e) => {
   return e && e.fileList;
 };
 
-const AddNewSubject = () => {
+const AddNewSubject = (props) => {
   const [form] = Form.useForm();
   const [visible, setVisible] = useState(false);
   const [fileList, setFileList] = useState([]);
@@ -34,7 +35,25 @@ const AddNewSubject = () => {
   };
 
   const onFinish = (event) => {
-    console.log(event);
+    let formData = new FormData();
+    formData.append("description", event.description);
+    formData.append("gradeId", props.gradeID);
+    formData.append("subjectName", event.subject);
+    formData.append("multipartFile", event.subjectImg[0].originFileObj);
+
+    async function createSubject() {
+      await axios
+        .post("https://mathscienceeducation.herokuapp.com/subject", formData)
+        .then((res) => {
+          console.log(res);
+          props.getSubjectByGrade(props.gradeID);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    }
+    createSubject();
+    setFileList([]);
   };
 
   return (
@@ -81,7 +100,7 @@ const AddNewSubject = () => {
             ]}
           >
             <Upload
-              listType="text"
+              listType="picture"
               fileList={fileList}
               beforeUpload={() => false}
               onChange={(info) => {

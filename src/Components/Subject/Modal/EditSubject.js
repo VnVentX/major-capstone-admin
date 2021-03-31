@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import { Button, Modal, Form, Input, Upload, message, Tooltip } from "antd";
 import { EditOutlined } from "@ant-design/icons";
 import { UploadOutlined } from "@ant-design/icons";
@@ -18,11 +19,15 @@ const normFile = (e) => {
 const EditSubject = (props) => {
   const [form] = Form.useForm();
   const [visible, setVisible] = useState(false);
-  const [fileList, setFileList] = useState([]);
+  const [fileList, setFileList] = useState([
+    {
+      thumbUrl: props.data.imageUrl,
+    },
+  ]);
 
   useEffect(() => {
     form.setFieldsValue({
-      subject: props.data.title,
+      subject: props.data.subjectName,
       description: props.data.description,
     });
   }, []);
@@ -41,7 +46,33 @@ const EditSubject = (props) => {
   };
 
   const onFinish = (event) => {
-    console.log(event);
+    let formData = new FormData();
+    console.log(event.subjectImg);
+    formData.append("description", event.description);
+    formData.append("gradeId", props.gradeID);
+    formData.append("subjectName", event.subject);
+    if (event.subjectImg || event.subjectImg !== undefined) {
+      formData.append("multipartFile", event.subjectImg[0].originFileObj);
+    }
+    formData.append("id", props.data.id);
+    async function editSubject() {
+      await axios
+        .put(
+          `https://mathscienceeducation.herokuapp.com/subject/${props.data.id}`,
+          formData
+        )
+        .then((res) => {
+          console.log(res);
+          props.getSubjectByGrade(props.gradeID);
+          handleCancel();
+          form.resetFields();
+          setFileList([]);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    }
+    editSubject();
   };
 
   return (
@@ -59,7 +90,6 @@ const EditSubject = (props) => {
             .validateFields()
             .then((values) => {
               onFinish(values);
-              form.resetFields();
             })
             .catch((info) => {
               console.log("Validate Failed:", info);
@@ -80,15 +110,21 @@ const EditSubject = (props) => {
             getValueFromEvent={normFile}
           >
             <Upload
-              listType="text"
+              listType="picture"
               fileList={fileList}
               beforeUpload={() => false}
+              onRemove={() => {
+                setFileList([]);
+              }}
               onChange={(info) => {
-                if (info.file.type.split("/")[0] !== "image") {
-                  message.error(`${info.file.name} is not an image file`);
-                  setFileList([]);
-                } else {
-                  handleChange(info);
+                console.log(info);
+                if (info.file.type) {
+                  if (info.file.type.split("/")[0] !== "image") {
+                    message.error(`${info.file.name} is not an image file`);
+                    setFileList([]);
+                  } else {
+                    handleChange(info);
+                  }
                 }
               }}
             >

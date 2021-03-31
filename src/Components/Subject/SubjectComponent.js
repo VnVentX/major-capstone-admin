@@ -1,22 +1,32 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import Subject from "./Subject";
 import { Tabs } from "antd";
 
 const { TabPane } = Tabs;
 
-const grade = [
-  { id: 1, grade: 1 },
-  { id: 2, grade: 2 },
-  { id: 3, grade: 3 },
-  { id: 4, grade: 4 },
-  { id: 5, grade: 5 },
-];
-
 const SubjectComponent = () => {
+  const [grade, setGrade] = useState([]);
+
+  const getAllGrade = async () => {
+    await axios
+      .get("https://mathscienceeducation.herokuapp.com/grade/all")
+      .then((res) => {
+        setGrade(res.data.length === 0 ? [] : res.data);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
+
+  useEffect(() => {
+    getAllGrade();
+  }, []);
+
   return (
     <Tabs type="line">
       {grade?.map((i, idx) => (
-        <TabPane tab={`Grade ${i.grade}`} key={idx + 1}>
+        <TabPane tab={`${i.gradeName}`} key={idx + 1}>
           <Subject gradeID={i.id} />
         </TabPane>
       ))}

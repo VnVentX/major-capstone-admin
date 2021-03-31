@@ -85,11 +85,13 @@ const LinkNewSchool = (props) => {
             ]}
           >
             <Select showSearch placeholder="Select a School">
-              {resArr?.map((i) => (
-                <Option key={i.id} value={i.id}>
-                  {i.schoolName}
-                </Option>
-              ))}
+              {resArr?.map((i) =>
+                i.disable === false ? (
+                  <Option key={i.id} value={i.id}>
+                    {i.schoolName}
+                  </Option>
+                ) : null
+              )}
             </Select>
           </Form.Item>
         </Form>
