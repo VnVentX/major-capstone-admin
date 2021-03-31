@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import {
   Card,
   List,
@@ -8,6 +9,7 @@ import {
   message,
   Tooltip,
   Button,
+  Select,
 } from "antd";
 import { Link } from "react-router-dom";
 import { QuestionCircleOutlined, DeleteOutlined } from "@ant-design/icons";
@@ -16,41 +18,45 @@ import EditUnit from "./Modal/EditUnit";
 
 const { Search } = Input;
 
-const data = [
-  {
-    id: 1,
-    title: "Unit 1",
-  },
-  {
-    id: 2,
-    title: "Unit 2",
-  },
-  {
-    id: 3,
-    title: "Unit 3",
-  },
-  {
-    id: 4,
-    title: "Unit 4",
-  },
-  {
-    id: 5,
-    title: "Unit 5",
-  },
-];
-
 const UnitComponent = () => {
   const [unit, setUnit] = useState([]);
   const [searchData, setSearchData] = useState([]);
 
+  const getUnitBySubjectID = async () => {
+    let subjectID = window.location.pathname.split("/")[2];
+    await axios
+      .get(
+        `https://mathscienceeducation.herokuapp.com/subject/${subjectID}/units`
+      )
+      .then((res) => {
+        setUnit(res.data.length === 0 ? [] : res.data);
+        setSearchData(res.data.length === 0 ? [] : res.data);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
+
+  const deleteUnit = async (unitID) => {
+    let formData = new FormData();
+    formData.append("id", unitID);
+    await axios
+      .put("https://mathscienceeducation.herokuapp.com/unit/delete", formData)
+      .then((res) => {
+        console.log(res);
+        getUnitBySubjectID();
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
+
   useEffect(() => {
-    setUnit(data);
-    setSearchData(data);
+    getUnitBySubjectID();
   }, []);
 
   const handleDelete = (item) => {
-    console.log(item);
-    message.success("Click on Yes");
+    deleteUnit(item);
   };
 
   return (
@@ -62,17 +68,23 @@ const UnitComponent = () => {
           justifyContent: "space-between",
         }}
       >
-        <AutoComplete dataSource={searchData.map((item) => item.title)}>
+        <AutoComplete
+          dataSource={searchData?.map((item, idx) => (
+            <Select.Option key={idx} value={item.unitName}>
+              {item.unitName}
+            </Select.Option>
+          ))}
+        >
           <Search
             allowClear
             placeholder="Search Unit"
-            onSearch={(subjectSearch) =>
+            onSearch={(unitSearch) =>
               setUnit(
-                searchData.filter((item) =>
-                  item.title
+                searchData?.filter((item) =>
+                  item.unitName
                     .toString()
                     .toLowerCase()
-                    .includes(subjectSearch.toLowerCase())
+                    .includes(unitSearch.toLowerCase())
                 )
               )
             }
@@ -81,52 +93,55 @@ const UnitComponent = () => {
         </AutoComplete>
         <AddNewUnit />
       </div>
-      <List
-        grid={{ gutter: 16, column: 1 }}
-        dataSource={unit}
-        renderItem={(item) => (
-          <List.Item>
-            <Card
-              title={
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                  }}
-                >
-                  <Link to={`${window.location.pathname}/unit/${item.id}`}>
-                    {item.title}
-                  </Link>
-                  <div style={{ display: "flex", justifyContent: "center" }}>
-                    <Tooltip title="Delete">
-                      <Popconfirm
-                        placement="left"
-                        title="Are you sure to delete this Unit?"
-                        onConfirm={() => handleDelete(item.id)} //Handle disable logic here
-                        okText="Yes"
-                        cancelText="No"
-                        icon={
-                          <QuestionCircleOutlined style={{ color: "red" }} />
-                        }
-                      >
-                        <Button
-                          type="danger"
-                          icon={<DeleteOutlined />}
-                          style={{ marginRight: 5 }}
-                        />
-                      </Popconfirm>
-                    </Tooltip>
-                    <EditUnit data={item} />
+
+      {unit && (
+        <List
+          grid={{ gutter: 16, column: 1 }}
+          dataSource={unit}
+          renderItem={(item) => (
+            <List.Item>
+              <Card
+                title={
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Link to={`${window.location.pathname}/unit/${item.id}`}>
+                      Unit {item.unitName}
+                    </Link>
+                    <div style={{ display: "flex", justifyContent: "center" }}>
+                      <Tooltip title="Delete">
+                        <Popconfirm
+                          placement="left"
+                          title="Are you sure to delete this Unit?"
+                          onConfirm={() => handleDelete(item.id)} //Handle disable logic here
+                          okText="Yes"
+                          cancelText="No"
+                          icon={
+                            <QuestionCircleOutlined style={{ color: "red" }} />
+                          }
+                        >
+                          <Button
+                            type="danger"
+                            icon={<DeleteOutlined />}
+                            style={{ marginRight: 5 }}
+                          />
+                        </Popconfirm>
+                      </Tooltip>
+                      <EditUnit data={item} />
+                    </div>
                   </div>
-                </div>
-              }
-            >
-              Unit Descriptions
-            </Card>
-          </List.Item>
-        )}
-      />
+                }
+              >
+                {item.description}
+              </Card>
+            </List.Item>
+          )}
+        />
+      )}
     </Card>
   );
 };

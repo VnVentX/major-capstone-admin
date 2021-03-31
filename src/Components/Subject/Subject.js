@@ -51,7 +51,6 @@ const Subject = (props) => {
 
   useEffect(() => {
     getSubjectByGrade(props.gradeID);
-    console.log("Reload");
   }, [props.gradeID]);
 
   const handleDelete = (item) => {

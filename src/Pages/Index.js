@@ -227,7 +227,7 @@ export default class Index extends React.Component {
               )}
               <h1 style={{ marginRight: 25 }}>Welcome Admin</h1>
             </Header>
-            <BreadcrumbComponent />
+            {/* <BreadcrumbComponent /> */}
             <Row gutter={16} style={{ margin: 0 }}>
               <Switch>
                 <Route path="/" exact component={Home} />
