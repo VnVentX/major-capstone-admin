@@ -8,14 +8,26 @@ const data = [
   {
     key: 1,
     q_name: "Question 1",
+    createdBy: "anhtt",
+    modifiedBy: "anhtt",
+    createdDate: "14:24PM, 24/02/2021",
+    modifiedDate: "14:50PM, 24/02/2021",
   },
   {
     key: 2,
     q_name: "Question 2",
+    createdBy: "anhtt",
+    modifiedBy: "anhtt",
+    createdDate: "14:24PM, 24/02/2021",
+    modifiedDate: "14:50PM, 24/02/2021",
   },
   {
     key: 3,
     q_name: "Question 3",
+    createdBy: "anhtt",
+    modifiedBy: "anhtt",
+    createdDate: "14:24PM, 24/02/2021",
+    modifiedDate: "14:50PM, 24/02/2021",
   },
 ];
 
@@ -28,9 +40,23 @@ const QuizQuestionComponent = () => {
   const selectedQuestionCol = [
     {
       title: "Question",
-      width: "90%",
       dataIndex: "q_name",
-      key: "q_name",
+    },
+    {
+      title: "Created By",
+      dataIndex: "createdBy",
+    },
+    {
+      title: "Created Date",
+      dataIndex: "createdDate",
+    },
+    {
+      title: "Modified By",
+      dataIndex: "modifiedBy",
+    },
+    {
+      title: "Modified Date",
+      dataIndex: "modifiedDate",
     },
     {
       title: "Action",

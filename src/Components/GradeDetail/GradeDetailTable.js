@@ -167,7 +167,7 @@ export default class GradeDetailTable extends Component {
       {
         title: "School",
         render: (record) => (
-          <Link to={`/school/${record.id}`}>{record.schoolName}</Link>
+          <Link to={`/school/${record.id}`}>TH {record.schoolName}</Link>
         ),
       },
       {

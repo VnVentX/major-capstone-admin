@@ -86,7 +86,7 @@ const LinkNewSchool = (props) => {
           >
             <Select showSearch placeholder="Select a School">
               {resArr?.map((i) =>
-                i.disable === false ? (
+                i.status === "ACTIVE" ? (
                   <Option key={i.id} value={i.id}>
                     {i.schoolName}
                   </Option>

@@ -78,7 +78,7 @@ const ViewQuestion = (props) => {
       <Modal
         visible={visible}
         width={"45vw"}
-        title="Edit Question"
+        title="View Question"
         footer={null}
         onCancel={handleCancel}
       >

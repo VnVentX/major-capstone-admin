@@ -66,7 +66,7 @@ const QuestionBankComponent = () => {
           <Tooltip title="Delete Question">
             <Popconfirm
               placement="topRight"
-              title="Are you sure to delete this news?"
+              title="Are you sure to delete this question?"
               onConfirm={() => handleDelete(record.key)} //Handle disable logic here
               okText="Yes"
               cancelText="No"

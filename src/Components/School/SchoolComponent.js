@@ -179,18 +179,16 @@ export default class SchoolComponent extends Component {
       },
       {
         title: "Status",
-        dataIndex: "disable",
-        key: "disable",
-        align: "center",
-        render: (disable) => (
+        dataIndex: "status",
+        render: (status) => (
           <span>
-            {disable === true ? (
-              <Tag color={"green"} key={disable}>
+            {status === "ACTIVE" ? (
+              <Tag color={"green"} key={status}>
                 Active
               </Tag>
-            ) : disable === false ? (
-              <Tag color={"volcano"} key={disable}>
-                Disabled
+            ) : status === "INACTIVE" ? (
+              <Tag color={"volcano"} key={status}>
+                Inactive
               </Tag>
             ) : null}
           </span>
@@ -216,8 +214,6 @@ export default class SchoolComponent extends Component {
       onChange: this.onSelectChange,
     };
 
-    console.log(this.state.dataSource);
-
     return (
       <Card type="inner" title="School Management">
         <div
@@ -229,7 +225,7 @@ export default class SchoolComponent extends Component {
           }}
         >
           <AutoComplete
-            dataSource={this.state.dataSearch.map((item, idx) => (
+            dataSource={this.state.dataSearch?.map((item, idx) => (
               <Select.Option key={idx} value={item.schoolName}>
                 {item.schoolName}
               </Select.Option>
@@ -240,7 +236,7 @@ export default class SchoolComponent extends Component {
               allowClear
               onSearch={(schoolSearch) =>
                 this.setState({
-                  dataSource: this.state.dataSearch.filter((item) =>
+                  dataSource: this.state.dataSearch?.filter((item) =>
                     item.schoolName
                       .toString()
                       .toLowerCase()

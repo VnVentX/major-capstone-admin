@@ -23,45 +23,64 @@ const AddNewSchool = (props) => {
     setVisible(false);
   };
 
+  const createNewSchool = async (values) => {
+    await axios
+      .post("https://mathscienceeducation.herokuapp.com/school", {
+        schoolDistrict: values.schoolDistrict,
+        schoolName: values.schoolName.trim(),
+        schoolStreet: values.schoolStreet.trim(),
+        schoolLevel: values.type,
+      })
+      .then((res) => {
+        console.log(res);
+        props.getAllSchool();
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
+
+  const onFinish = (event) => {
+    async function checkExisted() {
+      await axios
+        .get(
+          `https://mathscienceeducation.herokuapp.com/school?schoolDistrict=${
+            event.schoolDistrict
+          }&schoolLevel=${event.type}&schoolName=${event.schoolName.trim()}`
+        )
+        .then((res) => {
+          console.log(res);
+          if (res.data === "EXISTED") {
+            warning(event, form);
+          }
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    }
+    checkExisted();
+  };
+
   const warning = (values, form) => {
     Modal.confirm({
       title: "Waring",
       closable: true,
       content: (
         <>
-          School Name is very important, are you sure you want to create this
-          School?
+          {console.log(values)}
+          This school name in this district is already existed. Do you want to
+          create this school?
           <br />
           This action can not be reversed.
         </>
       ),
       okText: "Continue",
       onOk: async () => {
-        await onFinish(values);
+        await createNewSchool(values);
         handleCancel();
         form.resetFields();
       },
     });
-  };
-
-  const onFinish = (event) => {
-    async function createNewSchool() {
-      await axios
-        .post("https://mathscienceeducation.herokuapp.com/schools", {
-          schoolDistrict: event.schoolDistrict,
-          schoolName: event.schoolName.trim(),
-          schoolStreet: event.schoolStreet.trim(),
-        })
-        .then((res) => {
-          console.log(res);
-          props.getAllSchool();
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-    }
-    createNewSchool();
-    console.log(event);
   };
 
   return (
@@ -83,7 +102,7 @@ const AddNewSchool = (props) => {
           form
             .validateFields()
             .then((values) => {
-              warning(values, form);
+              onFinish(values);
             })
             .catch((info) => {
               console.log("Validate Failed:", info);
