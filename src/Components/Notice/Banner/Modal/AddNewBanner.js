@@ -49,6 +49,7 @@ const AddNewBanner = (props) => {
         .then((res) => {
           console.log(res);
           props.getAllBanner();
+          message.success("Add banner successfully!");
         })
         .catch((e) => {
           console.log(e);

@@ -35,14 +35,22 @@ export default class AnnouncementComponent extends React.Component {
   };
 
   deleteNews = async (id) => {
+    let ids = [];
+    if (id.length === undefined) {
+      ids.push(id);
+    } else {
+      ids = id;
+    }
     await axios
-      .put(`https://mathscienceeducation.herokuapp.com/news?id=${id}`)
+      .put("https://mathscienceeducation.herokuapp.com/news", ids)
       .then((res) => {
         console.log(res);
         this.getAllNews();
+        message.success("Delete News successfully!");
       })
       .catch((e) => {
         console.log(e);
+        message.error("Fail to delete News!");
       });
   };
 
@@ -134,15 +142,9 @@ export default class AnnouncementComponent extends React.Component {
     this.setState({ selectedRowKeys });
   };
 
-  handleDelete = (item) => {
-    console.log(item);
-    this.deleteNews(item);
-    message.success("Delete news successfully!");
-  };
-
-  handleDeleteList = () => {
-    console.log(this.state.selectedRowKeys);
-    message.success("Delete news successfully!");
+  handleDelete = (e) => {
+    console.log(e);
+    this.deleteNews(e);
   };
 
   render() {
@@ -228,7 +230,7 @@ export default class AnnouncementComponent extends React.Component {
               <Popconfirm
                 placement="topRight"
                 title="Are you sure to delete selected News?"
-                onConfirm={this.handleDeleteList} //Handle disable logic here
+                onConfirm={() => this.handleDelete(this.state.selectedRowKeys)} //Handle disable logic here
                 okText="Yes"
                 cancelText="No"
                 icon={<QuestionCircleOutlined style={{ color: "red" }} />}

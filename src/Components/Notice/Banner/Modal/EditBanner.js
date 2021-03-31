@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import { Button, Modal, Form, Input, Upload, message } from "antd";
 import { UploadOutlined, EditOutlined } from "@ant-design/icons";
 
@@ -16,7 +17,6 @@ const normFile = (e) => {
 
 const EditBanner = (props) => {
   const [form] = Form.useForm();
-  // const [data, setData] = useState(false);
   const [visible, setVisible] = useState(false);
   const [fileList, setFileList] = useState([]);
 
@@ -40,7 +40,27 @@ const EditBanner = (props) => {
   };
 
   const onFinish = (event) => {
-    console.log(event);
+    let formData = new FormData();
+    if (event.bannerImg) {
+      formData.append("file", event.bannerImg[0].originFileObj);
+    }
+    formData.append("description", event.description);
+    formData.append("id", props.data.id);
+    async function editBanner() {
+      await axios
+        .put(
+          `https://mathscienceeducation.herokuapp.com/bannerImage/${props.data.id}`,
+          formData
+        )
+        .then((res) => {
+          console.log(res);
+          props.getAllBanner();
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    }
+    editBanner();
     setFileList([]);
   };
 
@@ -74,7 +94,7 @@ const EditBanner = (props) => {
             getValueFromEvent={normFile}
           >
             <Upload
-              listType="text"
+              listType="picture"
               fileList={fileList}
               beforeUpload={() => false}
               onChange={(info) => {
@@ -87,7 +107,7 @@ const EditBanner = (props) => {
               }}
             >
               {fileList.length === 1 ? null : (
-                <Button icon={<UploadOutlined />}>Upload</Button>
+                <Button icon={<UploadOutlined />}>Upload New Image</Button>
               )}
             </Upload>
           </Form.Item>

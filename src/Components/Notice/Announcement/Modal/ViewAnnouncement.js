@@ -42,10 +42,6 @@ const ViewAnnouncement = (props) => {
     setVisible(false);
   };
 
-  const onFinish = (event) => {
-    console.log(event);
-  };
-
   return (
     <div>
       <Button type="primary" icon={<EyeOutlined />} onClick={showModal}>
@@ -57,7 +53,7 @@ const ViewAnnouncement = (props) => {
         visible={visible}
         onCancel={handleCancel}
         destroyOnClose
-        onOk={handleCancel}
+        footer={null}
       >
         <Form {...layout} form={form}>
           <Form.Item name="title" label="Title">

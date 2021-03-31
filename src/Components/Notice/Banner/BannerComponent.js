@@ -14,7 +14,7 @@ import Highlighter from "react-highlight-words";
 import { SearchOutlined } from "@ant-design/icons";
 import AddNewBanner from "./Modal/AddNewBanner";
 import EditBanner from "./Modal/EditBanner";
-import { QuestionCircleOutlined } from "@ant-design/icons";
+import { QuestionCircleOutlined, DeleteOutlined } from "@ant-design/icons";
 
 export default class BannerComponent extends React.Component {
   state = {
@@ -35,6 +35,27 @@ export default class BannerComponent extends React.Component {
         this.setState({
           dataSource: res.data.length === 0 ? [] : res.data,
         });
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
+
+  disableBanner = async (id, status) => {
+    let ids = [];
+    if (id.length === undefined) {
+      ids.push(id);
+    } else {
+      ids = id;
+    }
+    await axios
+      .put("https://mathscienceeducation.herokuapp.com/bannerImage", {
+        ids: ids,
+        status: status,
+      })
+      .then((res) => {
+        console.log(res);
+        this.getAllBanner();
       })
       .catch((e) => {
         console.log(e);
@@ -129,9 +150,17 @@ export default class BannerComponent extends React.Component {
     this.setState({ selectedRowKeys });
   };
 
-  confirm = (e) => {
+  handleDisableBanner = (e, status) => {
+    let message = "";
+    if (status === "DELETED") {
+      message = "DELETED";
+    } else if (status === "ACTIVE") {
+      message = "INACTIVE";
+    } else if (status === "INACTIVE") {
+      message = "ACTIVE";
+    }
     console.log(e);
-    message.success("Click on Yes");
+    this.disableBanner(e, message);
   };
 
   render() {
@@ -176,16 +205,15 @@ export default class BannerComponent extends React.Component {
       {
         title: "Status",
         align: "center",
-        dataIndex: "disable",
-        key: "disable",
-        render: (disable) => (
+        dataIndex: "status",
+        render: (status) => (
           <span>
-            {disable === false ? (
-              <Tag color={"green"} key={disable}>
+            {status === "ACTIVE" ? (
+              <Tag color={"green"} key={status}>
                 Active
               </Tag>
-            ) : disable === true ? (
-              <Tag color={"volcano"} key={disable}>
+            ) : status === "INACTIVE" ? (
+              <Tag color={"volcano"} key={status}>
                 Disabled
               </Tag>
             ) : null}
@@ -197,8 +225,18 @@ export default class BannerComponent extends React.Component {
         align: "center",
         render: (record) => (
           <Space size="small">
-            <Button type="primary">Change Status</Button>
-            <EditBanner data={record} />
+            <Popconfirm
+              placement="topRight"
+              title="Are you sure to disable this Banner?"
+              onConfirm={() =>
+                this.handleDisableBanner(record.id, record.status)
+              } //Handle disable logic here
+              okText="Yes"
+              cancelText="No"
+            >
+              <Button type="primary">Change Status</Button>
+            </Popconfirm>
+            <EditBanner data={record} getAllBanner={this.getAllBanner} />
           </Space>
         ),
       },
@@ -216,10 +254,52 @@ export default class BannerComponent extends React.Component {
         <div
           style={{
             display: "flex",
-            justifyContent: "flex-end",
+            justifyContent: "space-between",
             marginBottom: 20,
           }}
         >
+          <div
+            style={{
+              display: "flex",
+            }}
+          >
+            <h1>With selected:</h1>
+            {selectedRowKeys.length === 0 ? (
+              <>
+                <Button
+                  type="danger"
+                  size="large"
+                  disabled
+                  style={{ marginLeft: 10 }}
+                  icon={<DeleteOutlined />}
+                >
+                  Delete
+                </Button>
+              </>
+            ) : (
+              <>
+                <Popconfirm
+                  placement="topRight"
+                  title="Are you sure to delete selected Banners?"
+                  onConfirm={() =>
+                    this.handleDisableBanner(selectedRowKeys, "DELETED")
+                  } //Handle disable logic here
+                  okText="Yes"
+                  cancelText="No"
+                  icon={<QuestionCircleOutlined style={{ color: "red" }} />}
+                >
+                  <Button
+                    type="danger"
+                    size="large"
+                    style={{ marginLeft: 10 }}
+                    icon={<DeleteOutlined />}
+                  >
+                    Delete
+                  </Button>
+                </Popconfirm>
+              </>
+            )}
+          </div>
           <AddNewBanner getAllBanner={this.getAllBanner} />
         </div>
         <Table
@@ -229,31 +309,6 @@ export default class BannerComponent extends React.Component {
           dataSource={this.state.dataSource}
           scroll={{ x: true }}
         />
-        <div>
-          <h1>With selected:</h1>
-          {selectedRowKeys.length === 0 ? (
-            <>
-              <Button type="danger" disabled style={{ marginRight: 10 }}>
-                Disable
-              </Button>
-            </>
-          ) : (
-            <>
-              <Popconfirm
-                placement="topRight"
-                title="Are you sure to disable selected Banners?"
-                onConfirm={this.confirm} //Handle disable logic here
-                okText="Yes"
-                cancelText="No"
-                icon={<QuestionCircleOutlined style={{ color: "red" }} />}
-              >
-                <Button type="danger" style={{ marginRight: 10 }}>
-                  Disable
-                </Button>
-              </Popconfirm>
-            </>
-          )}
-        </div>
       </div>
     );
   }
