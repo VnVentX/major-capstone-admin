@@ -52,6 +52,21 @@ export default class SchoolComponent extends Component {
       });
   };
 
+  disableSchool = async (id, status) => {
+    await axios
+      .put("https://mathscienceeducation.herokuapp.com/school/changeStatus", {
+        id: id,
+        status: status,
+      })
+      .then((res) => {
+        console.log(res);
+        this.getAllSchool();
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
+
   getColumnSearchProps = (dataIndex) => ({
     filterDropdown: ({
       setSelectedKeys,
@@ -140,9 +155,16 @@ export default class SchoolComponent extends Component {
     this.setState({ selectedRowKeys });
   };
 
-  confirm = (e) => {
-    console.log(e);
-    message.success("Click on Yes");
+  handleDisableSchool = (e, status) => {
+    let message = "";
+    if (status === "DELETED") {
+      message = "DELETED";
+    } else if (status === "ACTIVE") {
+      message = "INACTIVE";
+    } else if (status === "INACTIVE") {
+      message = "ACTIVE";
+    }
+    this.disableSchool(e, message);
   };
 
   render() {
@@ -189,7 +211,7 @@ export default class SchoolComponent extends Component {
               </Tag>
             ) : status === "INACTIVE" ? (
               <Tag color={"volcano"} key={status}>
-                Inactive
+                Disabled
               </Tag>
             ) : null}
           </span>
@@ -197,13 +219,41 @@ export default class SchoolComponent extends Component {
       },
       {
         title: "Action",
-        dataIndex: "",
-        key: "x",
         align: "center",
         render: (record) => (
           <Space size="small">
-            <Button type="primary">Change Status</Button>
-            <EditSchool getAllSchool={this.getAllSchool} data={record} />
+            <Popconfirm
+              placement="topRight"
+              title={
+                record.status === "ACTIVE"
+                  ? "Are you sure to disable this School?"
+                  : "Are you sure to active this School?"
+              }
+              onConfirm={() =>
+                this.handleDisableSchool(record.id, record.status)
+              }
+              okText="Yes"
+              cancelText="No"
+            >
+              <Button type="primary">Change Status</Button>
+            </Popconfirm>
+            <EditSchool getAllSchool={this.getAllSchool} schoolID={record.id} />
+            <Popconfirm
+              placement="topRight"
+              title="Are you sure to delete selected Schools?"
+              onConfirm={() => this.handleDisableSchool(record.id, "DELETED")}
+              okText="Yes"
+              cancelText="No"
+              icon={<QuestionCircleOutlined style={{ color: "red" }} />}
+            >
+              <Button
+                type="danger"
+                icon={<DeleteOutlined />}
+                style={{ marginRight: 10 }}
+              >
+                Delete
+              </Button>
+            </Popconfirm>
           </Space>
         ),
       },
@@ -267,40 +317,6 @@ export default class SchoolComponent extends Component {
           scroll={{ x: true }}
           loading={this.state.isLoading}
         />
-        <div>
-          <h1>With selected:</h1>
-          {selectedRowKeys.length === 0 ? (
-            <>
-              <Button
-                type="danger"
-                icon={<DeleteOutlined />}
-                disabled
-                style={{ marginRight: 10 }}
-              >
-                Delete
-              </Button>
-            </>
-          ) : (
-            <>
-              <Popconfirm
-                placement="topRight"
-                title="Are you sure to delete selected Schools?"
-                onConfirm={this.confirm} //Handle disable logic here
-                okText="Yes"
-                cancelText="No"
-                icon={<QuestionCircleOutlined style={{ color: "red" }} />}
-              >
-                <Button
-                  type="danger"
-                  icon={<DeleteOutlined />}
-                  style={{ marginRight: 10 }}
-                >
-                  Delete
-                </Button>
-              </Popconfirm>
-            </>
-          )}
-        </div>
       </Card>
     );
   }

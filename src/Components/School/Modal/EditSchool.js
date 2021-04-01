@@ -12,20 +12,54 @@ const layout = {
 
 const EditSchool = (props) => {
   const [form] = Form.useForm();
+  const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    console.log(props);
-    form.setFieldsValue({
-      schoolName: props.data.schoolName,
-      schoolDistrict: props.data.schoolDistrict,
-      schoolStreet: props.data.schoolStreet,
-    });
+    getSchoolByID(props.schoolID);
   }, []);
+
+  const getSchoolByID = async (id) => {
+    await axios
+      .get(`https://mathscienceeducation.herokuapp.com/school/${id}`)
+      .then((res) => {
+        setData(res.data.length === 0 ? [] : res.data);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
+
+  const updateSchool = async (id, values) => {
+    await axios
+      .put(`https://mathscienceeducation.herokuapp.com/school/${id}`, {
+        schoolDistrict: values.schoolDistrict,
+        schoolStreet: values.schoolStreet.trim(),
+        schoolLevel: values.type,
+      })
+      .then((res) => {
+        console.log(res);
+        props.getAllSchool();
+        setLoading(false);
+        handleCancel();
+        form.resetFields();
+        message.success("Edit school successfully!");
+      })
+      .catch((e) => {
+        console.log(e);
+        setLoading(false);
+        message.error("Fail to edit school!");
+      });
+  };
 
   const showModal = () => {
     setVisible(true);
+    form.setFieldsValue({
+      schoolName: data.schoolName,
+      schoolStreet: data.schoolAddress,
+      type: data.schoolLevel,
+    });
   };
 
   const handleCancel = () => {
@@ -33,27 +67,9 @@ const EditSchool = (props) => {
     setVisible(false);
   };
 
-  const createNewSchool = async (values) => {
-    await axios
-      .post("https://mathscienceeducation.herokuapp.com/school", {
-        schoolDistrict: values.schoolDistrict,
-        schoolName: values.schoolName.trim(),
-        schoolStreet: values.schoolStreet.trim(),
-        schoolLevel: values.type,
-      })
-      .then((res) => {
-        console.log(res);
-        props.getAllSchool();
-        message.success("Create new school successfully!");
-      })
-      .catch((e) => {
-        console.log(e);
-        message.error("Fail to create new school!");
-      });
-  };
-
   const onFinish = (event) => {
-    console.log(event);
+    setLoading(true);
+    updateSchool(props.schoolID, event);
   };
 
   return (
@@ -149,17 +165,6 @@ const EditSchool = (props) => {
           >
             <Input.TextArea placeholder="Address" autoSize maxLength={101} />
           </Form.Item>
-          {/* <Form.Item
-            name="distrisct"
-            label="Distrisct"
-            rules={[{ required: true, message: "Please choose a distrisct" }]}
-          >
-            <Select placeholder="Select a level">
-              <Option value="PRIMARY">Primary School</Option>
-              <Option value="JUNIOR">Junior High School</Option>
-              <Option value="HIGH">High School</Option>
-            </Select>
-          </Form.Item> */}
         </Form>
       </Modal>
     </div>

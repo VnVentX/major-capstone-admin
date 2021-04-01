@@ -159,7 +159,6 @@ export default class BannerComponent extends React.Component {
     } else if (status === "INACTIVE") {
       message = "ACTIVE";
     }
-    console.log(e);
     this.disableBanner(e, message);
   };
 
@@ -230,7 +229,7 @@ export default class BannerComponent extends React.Component {
               title="Are you sure to disable this Banner?"
               onConfirm={() =>
                 this.handleDisableBanner(record.id, record.status)
-              } //Handle disable logic here
+              }
               okText="Yes"
               cancelText="No"
             >
@@ -254,52 +253,10 @@ export default class BannerComponent extends React.Component {
         <div
           style={{
             display: "flex",
-            justifyContent: "space-between",
+            justifyContent: "flex-end",
             marginBottom: 20,
           }}
         >
-          <div
-            style={{
-              display: "flex",
-            }}
-          >
-            <h1>With selected:</h1>
-            {selectedRowKeys.length === 0 ? (
-              <>
-                <Button
-                  type="danger"
-                  size="large"
-                  disabled
-                  style={{ marginLeft: 10 }}
-                  icon={<DeleteOutlined />}
-                >
-                  Delete
-                </Button>
-              </>
-            ) : (
-              <>
-                <Popconfirm
-                  placement="topRight"
-                  title="Are you sure to delete selected Banners?"
-                  onConfirm={() =>
-                    this.handleDisableBanner(selectedRowKeys, "DELETED")
-                  } //Handle disable logic here
-                  okText="Yes"
-                  cancelText="No"
-                  icon={<QuestionCircleOutlined style={{ color: "red" }} />}
-                >
-                  <Button
-                    type="danger"
-                    size="large"
-                    style={{ marginLeft: 10 }}
-                    icon={<DeleteOutlined />}
-                  >
-                    Delete
-                  </Button>
-                </Popconfirm>
-              </>
-            )}
-          </div>
           <AddNewBanner getAllBanner={this.getAllBanner} />
         </div>
         <Table
@@ -309,6 +266,33 @@ export default class BannerComponent extends React.Component {
           dataSource={this.state.dataSource}
           scroll={{ x: true }}
         />
+        <div>
+          <h1>With selected:</h1>
+          {selectedRowKeys.length === 0 ? (
+            <>
+              <Button type="danger" disabled icon={<DeleteOutlined />}>
+                Delete
+              </Button>
+            </>
+          ) : (
+            <>
+              <Popconfirm
+                placement="topRight"
+                title="Are you sure to delete selected Banners?"
+                onConfirm={() =>
+                  this.handleDisableBanner(selectedRowKeys, "DELETED")
+                } //Handle disable logic here
+                okText="Yes"
+                cancelText="No"
+                icon={<QuestionCircleOutlined style={{ color: "red" }} />}
+              >
+                <Button type="danger" icon={<DeleteOutlined />}>
+                  Delete
+                </Button>
+              </Popconfirm>
+            </>
+          )}
+        </div>
       </div>
     );
   }
