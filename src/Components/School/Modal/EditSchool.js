@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Button, Modal, Form, Input, Select, message } from "antd";
-import { PlusOutlined } from "@ant-design/icons";
+import { EditOutlined } from "@ant-design/icons";
 
 const { Option } = Select;
 
@@ -10,19 +10,19 @@ const layout = {
   wrapperCol: { span: 16 },
 };
 
-const existedContent = `This school name in this district is already existed. Do you want to
-create this school?
-\n
-This action can not be reversed.`;
-const okContent = `School name is very important. Do you want to
-create this school?
-\n
-This action can not be reversed.`;
-
-const AddNewSchool = (props) => {
+const EditSchool = (props) => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
   const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    console.log(props);
+    form.setFieldsValue({
+      schoolName: props.data.schoolName,
+      schoolDistrict: props.data.schoolDistrict,
+      schoolStreet: props.data.schoolStreet,
+    });
+  }, []);
 
   const showModal = () => {
     setVisible(true);
@@ -53,59 +53,18 @@ const AddNewSchool = (props) => {
   };
 
   const onFinish = (event) => {
-    setLoading(true);
-    async function checkExisted() {
-      await axios
-        .get(
-          `https://mathscienceeducation.herokuapp.com/school?schoolDistrict=${
-            event.schoolDistrict
-          }&schoolLevel=${event.type}&schoolName=${event.schoolName.trim()}`
-        )
-        .then((res) => {
-          console.log(res);
-          setLoading(false);
-          if (res.data === "EXISTED") {
-            warning(event, form, existedContent);
-          } else if (res.data === "OK") {
-            warning(event, form, okContent);
-          }
-        })
-        .catch((e) => {
-          console.log(e);
-          setLoading(false);
-        });
-    }
-    checkExisted();
-  };
-
-  const warning = (values, form, content) => {
-    Modal.confirm({
-      title: "Waring",
-      closable: true,
-      content: content,
-      okText: "Continue",
-      onOk: async () => {
-        await createNewSchool(values);
-        handleCancel();
-        form.resetFields();
-      },
-    });
+    console.log(event);
   };
 
   return (
     <div>
-      <Button
-        type="primary"
-        size="large"
-        onClick={showModal}
-        icon={<PlusOutlined />}
-      >
-        Create School
+      <Button type="primary" onClick={showModal} icon={<EditOutlined />}>
+        Edit
       </Button>
       <Modal
-        title="Create School"
+        title="Edit School"
         visible={visible}
-        okText="Create"
+        okText="Update"
         confirmLoading={loading}
         onCancel={handleCancel}
         destroyOnClose
@@ -137,18 +96,8 @@ const AddNewSchool = (props) => {
               <Option value="HIGH">High School</Option>
             </Select>
           </Form.Item>
-          <Form.Item
-            name="schoolName"
-            label="School Name"
-            rules={[
-              { required: true, message: "Please input a school" },
-              {
-                max: 50,
-                message: "Can only input 50 characters!",
-              },
-            ]}
-          >
-            <Input placeholder="School Name" maxLength={51} />
+          <Form.Item name="schoolName" label="School Name">
+            <Input placeholder="School Name" disabled />
           </Form.Item>
           <Form.Item
             name="schoolDistrict"
@@ -217,4 +166,4 @@ const AddNewSchool = (props) => {
   );
 };
 
-export default AddNewSchool;
+export default EditSchool;

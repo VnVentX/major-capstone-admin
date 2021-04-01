@@ -34,8 +34,18 @@ const options = [
 ];
 
 const EditFillingQuestion = (props) => {
-  const [audioFile, setAudioFile] = useState([]);
-  const [imgFile, setImgFile] = useState([]);
+  // const [audioFile, setAudioFile] = useState([
+  //   {
+  //     thumbUrl: getAudioThumbUrl(),
+  //     url:
+  //       "https://firebasestorage.googleapis.com/v0/b/mathscience-e425d.appspot.com/o/audios%2F94028074-2bc7-47df-89bb-748a475aee3fmp3?alt=media&token=44a7c7d4-cdbf-4eae-ada8-d5276e64792d",
+  //   },
+  // ]);
+  const [imgFile, setImgFile] = useState([
+    {
+      thumbUrl: props.data,
+    },
+  ]);
 
   useEffect(() => {
     props.form.setFieldsValue({
@@ -49,9 +59,9 @@ const EditFillingQuestion = (props) => {
   const handleChangeImg = ({ fileList }) => {
     setImgFile(fileList);
   };
-  const handleChangeAudio = ({ fileList }) => {
-    setAudioFile(fileList);
-  };
+  // const handleChangeAudio = ({ fileList }) => {
+  //   setAudioFile(fileList);
+  // };
 
   return (
     <Form form={props.form} layout="vertical" style={{ marginTop: 10 }}>
@@ -128,12 +138,17 @@ const EditFillingQuestion = (props) => {
           listType="picture"
           fileList={imgFile}
           beforeUpload={() => false}
+          onRemove={() => {
+            setImgFile([]);
+          }}
           onChange={(info) => {
-            if (info.file.type.split("/")[0] !== "image") {
-              message.error(`${info.file.name} is not an image file`);
-              setImgFile([]);
-            } else {
-              handleChangeImg(info);
+            if (info.file.type) {
+              if (info.file.type.split("/")[0] !== "image") {
+                message.error(`${info.file.name} is not an image file`);
+                setImgFile([]);
+              } else {
+                handleChangeImg(info);
+              }
             }
           }}
         >
@@ -142,7 +157,7 @@ const EditFillingQuestion = (props) => {
           )}
         </Upload>
       </Form.Item>
-      <Form.Item
+      {/* <Form.Item
         name="q_audio"
         label="Question Audio"
         getValueFromEvent={normFile}
@@ -151,12 +166,17 @@ const EditFillingQuestion = (props) => {
           listType="picture"
           fileList={audioFile}
           beforeUpload={() => false}
+          onRemove={() => {
+            setAudioFile([]);
+          }}
           onChange={(info) => {
-            if (info.file.type.split("/")[0] !== "audio") {
-              message.error(`${info.file.name} is not an audio file`);
-              setAudioFile([]);
-            } else {
-              handleChangeAudio(info);
+            if (info.file.type) {
+              if (info.file.type.split("/")[0] !== "audio") {
+                message.error(`${info.file.name} is not an audio file`);
+                setAudioFile([]);
+              } else {
+                handleChangeAudio(info);
+              }
             }
           }}
         >
@@ -164,7 +184,7 @@ const EditFillingQuestion = (props) => {
             <Button icon={<UploadOutlined />}>Upload</Button>
           )}
         </Upload>
-      </Form.Item>
+      </Form.Item> */}
       <h2>Options</h2>
       <Form.List
         name="options"

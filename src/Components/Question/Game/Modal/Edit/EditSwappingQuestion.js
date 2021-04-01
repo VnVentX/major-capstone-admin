@@ -22,10 +22,26 @@ const normFile = (e) => {
 };
 
 const EditSwappingQuestion = (props) => {
-  const [imgFile1, setImgFile1] = useState([]);
-  const [imgFile2, setImgFile2] = useState([]);
-  const [imgFile3, setImgFile3] = useState([]);
-  const [imgFile4, setImgFile4] = useState([]);
+  const [imgFile1, setImgFile1] = useState([
+    {
+      thumbUrl: props.data,
+    },
+  ]);
+  const [imgFile2, setImgFile2] = useState([
+    {
+      thumbUrl: props.data,
+    },
+  ]);
+  const [imgFile3, setImgFile3] = useState([
+    {
+      thumbUrl: props.data,
+    },
+  ]);
+  const [imgFile4, setImgFile4] = useState([
+    {
+      thumbUrl: props.data,
+    },
+  ]);
 
   useEffect(() => {
     props.form.setFieldsValue({
@@ -132,12 +148,17 @@ const EditSwappingQuestion = (props) => {
               listType="picture"
               fileList={imgFile1}
               beforeUpload={() => false}
+              onRemove={() => {
+                setImgFile1([]);
+              }}
               onChange={(info) => {
-                if (info.file.type.split("/")[0] !== "image") {
-                  message.error(`${info.file.name} is not an image file`);
-                  setImgFile1([]);
-                } else {
-                  handleChangeImg1(info);
+                if (info.file.type) {
+                  if (info.file.type.split("/")[0] !== "image") {
+                    message.error(`${info.file.name} is not an image file`);
+                    setImgFile1([]);
+                  } else {
+                    handleChangeImg1(info);
+                  }
                 }
               }}
             >
@@ -179,12 +200,17 @@ const EditSwappingQuestion = (props) => {
               listType="picture"
               fileList={imgFile2}
               beforeUpload={() => false}
+              onRemove={() => {
+                setImgFile2([]);
+              }}
               onChange={(info) => {
-                if (info.file.type.split("/")[0] !== "image") {
-                  message.error(`${info.file.name} is not an image file`);
-                  setImgFile2([]);
-                } else {
-                  handleChangeImg2(info);
+                if (info.file.type) {
+                  if (info.file.type.split("/")[0] !== "image") {
+                    message.error(`${info.file.name} is not an image file`);
+                    setImgFile2([]);
+                  } else {
+                    handleChangeImg2(info);
+                  }
                 }
               }}
             >
@@ -227,12 +253,17 @@ const EditSwappingQuestion = (props) => {
               listType="picture"
               fileList={imgFile3}
               beforeUpload={() => false}
+              onRemove={() => {
+                setImgFile3([]);
+              }}
               onChange={(info) => {
-                if (info.file.type.split("/")[0] !== "image") {
-                  message.error(`${info.file.name} is not an image file`);
-                  setImgFile3([]);
-                } else {
-                  handleChangeImg3(info);
+                if (info.file.type) {
+                  if (info.file.type.split("/")[0] !== "image") {
+                    message.error(`${info.file.name} is not an image file`);
+                    setImgFile3([]);
+                  } else {
+                    handleChangeImg3(info);
+                  }
                 }
               }}
             >
@@ -275,12 +306,17 @@ const EditSwappingQuestion = (props) => {
               listType="picture"
               fileList={imgFile4}
               beforeUpload={() => false}
+              onRemove={() => {
+                setImgFile4([]);
+              }}
               onChange={(info) => {
-                if (info.file.type.split("/")[0] !== "image") {
-                  message.error(`${info.file.name} is not an image file`);
-                  setImgFile4([]);
-                } else {
-                  handleChangeImg4(info);
+                if (info.file.type) {
+                  if (info.file.type.split("/")[0] !== "image") {
+                    message.error(`${info.file.name} is not an image file`);
+                    setImgFile4([]);
+                  } else {
+                    handleChangeImg4(info);
+                  }
                 }
               }}
             >

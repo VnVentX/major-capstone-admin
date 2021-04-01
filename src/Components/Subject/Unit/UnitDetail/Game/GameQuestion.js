@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Card, Table, Space, Button, Popconfirm, message, Tooltip } from "antd";
-import EditQuestion from "../../../../Question/Game/Modal/EditQuestion";
+import EditQuestion from "../../../../Question/Game/Modal/Edit/EditQuestion";
+import ViewQuestion from "../../../../Question/Game/Modal/View/ViewQuestion";
 import AddQuestion from "./Modal/AddQuestion";
 import { QuestionCircleOutlined, DeleteOutlined } from "@ant-design/icons";
 
@@ -80,6 +81,7 @@ const GameQuestion = () => {
       key: "x",
       render: (record) => (
         <Space size="small">
+          <ViewQuestion data={record} />
           <EditQuestion data={record} />
           <Tooltip title="Delete Question">
             <Popconfirm

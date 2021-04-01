@@ -21,37 +21,55 @@ const normFile = (e) => {
   return e && e.fileList;
 };
 
-const EditChoosingQuestion = (props) => {
-  const [imgFile1, setImgFile1] = useState([]);
-  const [imgFile2, setImgFile2] = useState([]);
-  const [imgFile3, setImgFile3] = useState([]);
-  const [imgFile4, setImgFile4] = useState([]);
-  const [imgFile5, setImgFile5] = useState([]);
-  const [imgFile6, setImgFile6] = useState([]);
-  const [imgFile7, setImgFile7] = useState([]);
-  const [imgFile8, setImgFile8] = useState([]);
+const EditMatchingQuestion = (props) => {
+  const [imgFile1, setImgFile1] = useState([
+    {
+      thumbUrl: props.data,
+    },
+  ]);
+  const [imgFile2, setImgFile2] = useState([
+    {
+      thumbUrl: props.data,
+    },
+  ]);
+  const [imgFile3, setImgFile3] = useState([
+    {
+      thumbUrl: props.data,
+    },
+  ]);
+  const [imgFile4, setImgFile4] = useState([
+    {
+      thumbUrl: props.data,
+    },
+  ]);
+  const [imgFile5, setImgFile5] = useState([
+    {
+      thumbUrl: props.data,
+    },
+  ]);
+  const [imgFile6, setImgFile6] = useState([
+    {
+      thumbUrl: props.data,
+    },
+  ]);
 
   useEffect(() => {
     props.form.setFieldsValue({
       subject: "science",
       unit: "unit 2",
-      question: "Choose the right picture",
+      question: "Match the word with the right picture",
       value1: "Hand",
       value2: "Leg",
       value3: "Ear",
       value4: "Nose",
       value5: "Finger",
       value6: "Toe",
-      value7: "Eye",
-      value8: "Mouth",
       key1: "",
       key2: "",
       key3: "",
       key4: "",
       key5: "",
       key6: "",
-      key7: "",
-      key8: "",
     });
   }, []);
 
@@ -73,16 +91,10 @@ const EditChoosingQuestion = (props) => {
   const handleChangeImg6 = ({ fileList }) => {
     setImgFile6(fileList);
   };
-  const handleChangeImg7 = ({ fileList }) => {
-    setImgFile7(fileList);
-  };
-  const handleChangeImg8 = ({ fileList }) => {
-    setImgFile8(fileList);
-  };
 
   return (
     <Form form={props.form} layout="vertical" style={{ marginTop: 10 }}>
-      <h2>Choosing Question</h2>
+      <h2>Matching Question</h2>
       <Divider />
       <Form.Item
         name="subject"
@@ -156,12 +168,17 @@ const EditChoosingQuestion = (props) => {
               listType="picture"
               fileList={imgFile1}
               beforeUpload={() => false}
+              onRemove={() => {
+                setImgFile1([]);
+              }}
               onChange={(info) => {
-                if (info.file.type.split("/")[0] !== "image") {
-                  message.error(`${info.file.name} is not an image file`);
-                  setImgFile1([]);
-                } else {
-                  handleChangeImg1(info);
+                if (info.file.type) {
+                  if (info.file.type.split("/")[0] !== "image") {
+                    message.error(`${info.file.name} is not an image file`);
+                    setImgFile1([]);
+                  } else {
+                    handleChangeImg1(info);
+                  }
                 }
               }}
             >
@@ -203,12 +220,17 @@ const EditChoosingQuestion = (props) => {
               listType="picture"
               fileList={imgFile2}
               beforeUpload={() => false}
+              onRemove={() => {
+                setImgFile2([]);
+              }}
               onChange={(info) => {
-                if (info.file.type.split("/")[0] !== "image") {
-                  message.error(`${info.file.name} is not an image file`);
-                  setImgFile2([]);
-                } else {
-                  handleChangeImg2(info);
+                if (info.file.type) {
+                  if (info.file.type.split("/")[0] !== "image") {
+                    message.error(`${info.file.name} is not an image file`);
+                    setImgFile2([]);
+                  } else {
+                    handleChangeImg2(info);
+                  }
                 }
               }}
             >
@@ -251,12 +273,17 @@ const EditChoosingQuestion = (props) => {
               listType="picture"
               fileList={imgFile3}
               beforeUpload={() => false}
+              onRemove={() => {
+                setImgFile3([]);
+              }}
               onChange={(info) => {
-                if (info.file.type.split("/")[0] !== "image") {
-                  message.error(`${info.file.name} is not an image file`);
-                  setImgFile3([]);
-                } else {
-                  handleChangeImg3(info);
+                if (info.file.type) {
+                  if (info.file.type.split("/")[0] !== "image") {
+                    message.error(`${info.file.name} is not an image file`);
+                    setImgFile3([]);
+                  } else {
+                    handleChangeImg3(info);
+                  }
                 }
               }}
             >
@@ -299,12 +326,17 @@ const EditChoosingQuestion = (props) => {
               listType="picture"
               fileList={imgFile4}
               beforeUpload={() => false}
+              onRemove={() => {
+                setImgFile4([]);
+              }}
               onChange={(info) => {
-                if (info.file.type.split("/")[0] !== "image") {
-                  message.error(`${info.file.name} is not an image file`);
-                  setImgFile4([]);
-                } else {
-                  handleChangeImg4(info);
+                if (info.file.type) {
+                  if (info.file.type.split("/")[0] !== "image") {
+                    message.error(`${info.file.name} is not an image file`);
+                    setImgFile4([]);
+                  } else {
+                    handleChangeImg4(info);
+                  }
                 }
               }}
             >
@@ -347,12 +379,17 @@ const EditChoosingQuestion = (props) => {
               listType="picture"
               fileList={imgFile5}
               beforeUpload={() => false}
+              onRemove={() => {
+                setImgFile5([]);
+              }}
               onChange={(info) => {
-                if (info.file.type.split("/")[0] !== "image") {
-                  message.error(`${info.file.name} is not an image file`);
-                  setImgFile5([]);
-                } else {
-                  handleChangeImg5(info);
+                if (info.file.type) {
+                  if (info.file.type.split("/")[0] !== "image") {
+                    message.error(`${info.file.name} is not an image file`);
+                    setImgFile5([]);
+                  } else {
+                    handleChangeImg5(info);
+                  }
                 }
               }}
             >
@@ -395,12 +432,17 @@ const EditChoosingQuestion = (props) => {
               listType="picture"
               fileList={imgFile6}
               beforeUpload={() => false}
+              onRemove={() => {
+                setImgFile6([]);
+              }}
               onChange={(info) => {
-                if (info.file.type.split("/")[0] !== "image") {
-                  message.error(`${info.file.name} is not an image file`);
-                  setImgFile6([]);
-                } else {
-                  handleChangeImg6(info);
+                if (info.file.type) {
+                  if (info.file.type.split("/")[0] !== "image") {
+                    message.error(`${info.file.name} is not an image file`);
+                    setImgFile6([]);
+                  } else {
+                    handleChangeImg6(info);
+                  }
                 }
               }}
             >
@@ -430,104 +472,8 @@ const EditChoosingQuestion = (props) => {
         </Col>
       </Row>
       <Divider />
-      {/* Option 7 */}
-      <h3>Pair 7</h3>
-      <Row gutter={24}>
-        <Col span={12}>
-          <Form.Item
-            name="key7"
-            label="Pair's Picture"
-            getValueFromEvent={normFile}
-          >
-            <Upload
-              listType="picture"
-              fileList={imgFile7}
-              beforeUpload={() => false}
-              onChange={(info) => {
-                if (info.file.type.split("/")[0] !== "image") {
-                  message.error(`${info.file.name} is not an image file`);
-                  setImgFile7([]);
-                } else {
-                  handleChangeImg7(info);
-                }
-              }}
-            >
-              {imgFile7.length === 1 ? null : (
-                <Button icon={<UploadOutlined />}>Upload</Button>
-              )}
-            </Upload>
-          </Form.Item>
-        </Col>
-        <Col span={12}>
-          <Form.Item
-            name="value7"
-            label="Pair's Answer"
-            rules={[
-              {
-                required: true,
-                message: "Please input an answer for the picture",
-              },
-            ]}
-          >
-            <Input.TextArea
-              maxLength="100"
-              showCount
-              placeholder="Pair's Answer"
-            />
-          </Form.Item>
-        </Col>
-      </Row>
-      <Divider />
-      {/* Option 8 */}
-      <h3>Pair 8</h3>
-      <Row gutter={24}>
-        <Col span={12}>
-          <Form.Item
-            name="key8"
-            label="Pair's Picture"
-            getValueFromEvent={normFile}
-          >
-            <Upload
-              listType="picture"
-              fileList={imgFile8}
-              beforeUpload={() => false}
-              onChange={(info) => {
-                if (info.file.type.split("/")[0] !== "image") {
-                  message.error(`${info.file.name} is not an image file`);
-                  setImgFile8([]);
-                } else {
-                  handleChangeImg8(info);
-                }
-              }}
-            >
-              {imgFile8.length === 1 ? null : (
-                <Button icon={<UploadOutlined />}>Upload</Button>
-              )}
-            </Upload>
-          </Form.Item>
-        </Col>
-        <Col span={12}>
-          <Form.Item
-            name="value8"
-            label="Pair's Answer"
-            rules={[
-              {
-                required: true,
-                message: "Please input an answer for the picture",
-              },
-            ]}
-          >
-            <Input.TextArea
-              maxLength="100"
-              showCount
-              placeholder="Pair's Answer"
-            />
-          </Form.Item>
-        </Col>
-      </Row>
-      <Divider />
     </Form>
   );
 };
 
-export default EditChoosingQuestion;
+export default EditMatchingQuestion;

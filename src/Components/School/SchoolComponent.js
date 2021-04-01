@@ -20,6 +20,7 @@ import {
 import { Link } from "react-router-dom";
 import Highlighter from "react-highlight-words";
 import AddNewSchool from "./Modal/AddNewSchool";
+import EditSchool from "./Modal/EditSchool";
 
 export default class SchoolComponent extends Component {
   state = {
@@ -202,6 +203,7 @@ export default class SchoolComponent extends Component {
         render: (record) => (
           <Space size="small">
             <Button type="primary">Change Status</Button>
+            <EditSchool getAllSchool={this.getAllSchool} data={record} />
           </Space>
         ),
       },

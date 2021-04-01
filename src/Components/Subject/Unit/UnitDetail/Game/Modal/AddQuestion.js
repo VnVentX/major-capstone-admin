@@ -1,15 +1,17 @@
 import React, { useState } from "react";
-import { Button, Modal, Form, Table, Space, Select } from "antd";
-import ViewQuestion from "../../../../../Question/Exercise/Modal/ViewQuestion";
-
-const { Option } = Select;
+import { Button, Modal, Form, Table, Space } from "antd";
+import ViewQuestion from "../../../../../Question/Game/Modal/View/ViewQuestion";
 
 const selectingQuestionCol = [
   {
     title: "Question",
-    width: "90%",
+    width: "60%",
     dataIndex: "q_name",
     key: "q_name",
+  },
+  {
+    title: "Type",
+    dataIndex: "type",
   },
   {
     title: "Action",
@@ -24,16 +26,24 @@ const selectingQuestionCol = [
 
 const data = [
   {
-    key: 1,
+    key: "1",
     q_name: "Question 1",
+    type: "FILL",
   },
   {
-    key: 2,
+    key: "2",
     q_name: "Question 2",
+    type: "MATCH",
   },
   {
-    key: 3,
+    key: "3",
     q_name: "Question 3",
+    type: "SWAP",
+  },
+  {
+    key: "4",
+    q_name: "Question 4",
+    type: "CHOOSE",
   },
 ];
 
@@ -71,6 +81,7 @@ const AddQuestion = () => {
       </Button>
       <Modal
         title="Add Questions"
+        width={800}
         visible={visible}
         onCancel={handleCancel}
         footer={[
@@ -103,21 +114,6 @@ const AddQuestion = () => {
         ]}
       >
         <Form form={form} name="add-questions" layout="vertical">
-          {/* <Form.Item
-            name="category"
-            label="Select category"
-            rules={[
-              {
-                required: true,
-                message: "Please select category",
-              },
-            ]}
-          >
-            <Select showSearch placeholder="Select category">
-              <Option value="quiz 1">Quiz 1</Option>
-              <Option value="quiz 2">Quiz 2</Option>
-            </Select>
-          </Form.Item> */}
           <Table
             rowSelection={rowSelection}
             columns={selectingQuestionCol}
