@@ -54,10 +54,12 @@ const AddNewBanner = (props) => {
           handleCancel();
           form.resetFields();
           setFileList([]);
-          message.success("Add banner successfully!");
+          message.success("Create Banner successfully!");
         })
         .catch((e) => {
           console.log(e);
+          setLoading(false);
+          message.error("Fail to create banner!");
         });
     }
     createBanner();

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { Button, Modal, Form, Input } from "antd";
+import { Button, Modal, Form, Input, message } from "antd";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import CustomEditor from "ckeditor5-build-classic";
 import { PlusOutlined } from "@ant-design/icons";
@@ -13,6 +13,7 @@ const layout = {
 const AddNewAnnouncement = (props) => {
   const [form] = Form.useForm();
   const [visible, setVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const showModal = () => {
     setVisible(true);
@@ -24,6 +25,7 @@ const AddNewAnnouncement = (props) => {
   };
 
   const onFinish = (event) => {
+    setLoading(true);
     async function createNews() {
       await axios
         .post("https://mathscienceeducation.herokuapp.com/news", {
@@ -34,9 +36,15 @@ const AddNewAnnouncement = (props) => {
         })
         .then((res) => {
           props.getAllNews();
+          form.resetFields();
+          setLoading(false);
+          handleCancel();
+          message.success("Create News successfully!");
         })
         .catch((e) => {
           console.log(e);
+          setLoading(false);
+          message.error("Fail to create News!");
         });
     }
     createNews();
@@ -56,6 +64,8 @@ const AddNewAnnouncement = (props) => {
         title="Create News"
         width={1000}
         visible={visible}
+        okText="Create"
+        confirmLoading={loading}
         onCancel={handleCancel}
         destroyOnClose
         onOk={() => {
@@ -63,7 +73,6 @@ const AddNewAnnouncement = (props) => {
             .validateFields()
             .then((values) => {
               onFinish(values);
-              form.resetFields();
             })
             .catch((info) => {
               console.log("Validate Failed:", info);

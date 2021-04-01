@@ -61,13 +61,16 @@ const EditBanner = (props) => {
         .then((res) => {
           console.log(res);
           props.getAllBanner();
+          setLoading(false);
+          message.success("Edit Banner successfully!");
+          handleCancel();
           setFileList([]);
           form.resetFields();
-          setLoading(false);
-          handleCancel();
         })
         .catch((e) => {
           console.log(e);
+          setLoading(false);
+          message.error("Fail to edit Banner!");
         });
     }
     editBanner();
