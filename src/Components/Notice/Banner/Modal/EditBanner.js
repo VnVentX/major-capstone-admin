@@ -18,7 +18,12 @@ const normFile = (e) => {
 const EditBanner = (props) => {
   const [form] = Form.useForm();
   const [visible, setVisible] = useState(false);
-  const [fileList, setFileList] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [fileList, setFileList] = useState([
+    {
+      thumbUrl: props.data.imageUrl,
+    },
+  ]);
 
   useEffect(() => {
     form.setFieldsValue({
@@ -40,11 +45,12 @@ const EditBanner = (props) => {
   };
 
   const onFinish = (event) => {
+    setLoading(true);
     let formData = new FormData();
-    if (event.bannerImg) {
+    if (event.bannerImg !== undefined && event.bannerImg.length !== 0) {
       formData.append("file", event.bannerImg[0].originFileObj);
     }
-    formData.append("description", event.description);
+    formData.append("description", event.description.trim());
     formData.append("id", props.data.id);
     async function editBanner() {
       await axios
@@ -55,13 +61,16 @@ const EditBanner = (props) => {
         .then((res) => {
           console.log(res);
           props.getAllBanner();
+          setFileList([]);
+          form.resetFields();
+          setLoading(false);
+          handleCancel();
         })
         .catch((e) => {
           console.log(e);
         });
     }
     editBanner();
-    setFileList([]);
   };
 
   return (
@@ -75,12 +84,12 @@ const EditBanner = (props) => {
         onCancel={handleCancel}
         destroyOnClose
         okText="Update"
+        confirmLoading={loading}
         onOk={() => {
           form
             .validateFields()
             .then((values) => {
               onFinish(values);
-              form.resetFields();
             })
             .catch((info) => {
               console.log("Validate Failed:", info);
@@ -97,12 +106,17 @@ const EditBanner = (props) => {
               listType="picture"
               fileList={fileList}
               beforeUpload={() => false}
+              onRemove={() => {
+                setFileList([]);
+              }}
               onChange={(info) => {
-                if (info.file.type.split("/")[0] !== "image") {
-                  message.error(`${info.file.name} is not an image file`);
-                  setFileList([]);
-                } else {
-                  handleChange(info);
+                if (info.file.type) {
+                  if (info.file.type.split("/")[0] !== "image") {
+                    message.error(`${info.file.name} is not an image file`);
+                    setFileList([]);
+                  } else {
+                    handleChange(info);
+                  }
                 }
               }}
             >
@@ -111,7 +125,14 @@ const EditBanner = (props) => {
               )}
             </Upload>
           </Form.Item>
-          <Form.Item name="description" label="Description">
+          <Form.Item
+            name="description"
+            label="Description"
+            rules={[
+              { required: true, message: "Please input description" },
+              { max: 100, message: "Can only input 100 characters" },
+            ]}
+          >
             <Input.TextArea
               showCount
               maxLength={100}

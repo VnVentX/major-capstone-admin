@@ -51,7 +51,7 @@ const EditSubject = (props) => {
     formData.append("description", event.description);
     formData.append("gradeId", props.gradeID);
     formData.append("subjectName", event.subject);
-    if (event.subjectImg || event.subjectImg !== undefined) {
+    if (event.subjectImg !== undefined && event.subjectImg.length !== 0) {
       formData.append("multipartFile", event.subjectImg[0].originFileObj);
     }
     formData.append("id", props.data.id);
@@ -117,7 +117,6 @@ const EditSubject = (props) => {
                 setFileList([]);
               }}
               onChange={(info) => {
-                console.log(info);
                 if (info.file.type) {
                   if (info.file.type.split("/")[0] !== "image") {
                     message.error(`${info.file.name} is not an image file`);

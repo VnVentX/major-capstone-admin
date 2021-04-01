@@ -18,6 +18,7 @@ const normFile = (e) => {
 const AddNewBanner = (props) => {
   const [form] = Form.useForm();
   const [visible, setVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [fileList, setFileList] = useState([]);
 
   const showModal = () => {
@@ -35,11 +36,11 @@ const AddNewBanner = (props) => {
   };
 
   const onFinish = (event) => {
+    setLoading(true);
     let formData = new FormData();
-    formData.append("description", event.description);
+    formData.append("description", event.description.trim());
     formData.append("file", event.bannerImg[0].originFileObj);
     formData.append("accountId", 1);
-
     async function createBanner() {
       await axios
         .post(
@@ -49,6 +50,10 @@ const AddNewBanner = (props) => {
         .then((res) => {
           console.log(res);
           props.getAllBanner();
+          setLoading(false);
+          handleCancel();
+          form.resetFields();
+          setFileList([]);
           message.success("Add banner successfully!");
         })
         .catch((e) => {
@@ -56,7 +61,6 @@ const AddNewBanner = (props) => {
         });
     }
     createBanner();
-    setFileList([]);
   };
 
   return (
@@ -67,19 +71,20 @@ const AddNewBanner = (props) => {
         icon={<PlusOutlined />}
         onClick={showModal}
       >
-        Add Image
+        Create Banner
       </Button>
       <Modal
-        title="Add Image"
+        title="Create Banner"
         visible={visible}
         onCancel={handleCancel}
         destroyOnClose
+        confirmLoading={loading}
+        okText="Create"
         onOk={() => {
           form
             .validateFields()
             .then((values) => {
               onFinish(values);
-              form.resetFields();
             })
             .catch((info) => {
               console.log("Validate Failed:", info);
@@ -116,11 +121,14 @@ const AddNewBanner = (props) => {
           <Form.Item
             name="description"
             label="Description"
-            rules={[{ required: true, message: "Please input description" }]}
+            rules={[
+              { required: true, message: "Please input description" },
+              { max: 100, message: "Can only input 100 characters" },
+            ]}
           >
             <Input.TextArea
               showCount
-              maxLength={500}
+              maxLength={100}
               placeholder="Unit Description"
             />
           </Form.Item>

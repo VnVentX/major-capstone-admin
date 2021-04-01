@@ -15,12 +15,12 @@ const ViewAnnouncement = (props) => {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    getNewsDetail();
+    getNewsDetail(props.id);
   }, []);
 
-  const getNewsDetail = async () => {
+  const getNewsDetail = async (id) => {
     await axios
-      .get(`https://mathscienceeducation.herokuapp.com/news/${props.id}`)
+      .get(`https://mathscienceeducation.herokuapp.com/news/${id}`)
       .then((res) => {
         form.setFieldsValue({
           title: res.data.newsTitle,

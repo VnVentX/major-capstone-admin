@@ -151,6 +151,7 @@ export default class AnnouncementComponent extends React.Component {
     const columns = [
       {
         title: "Title",
+        width: "40%",
         dataIndex: "newsTitle",
         ...this.getColumnSearchProps("newsTitle"),
       },
