@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Card, Table, Space, Button, Popconfirm, message, Tooltip } from "antd";
 import EditQuestion from "../../../../Question/Exercise/Modal/EditQuestion";
+import ViewQuestion from "../../../../Question/Exercise/Modal/ViewQuestion";
 import AddQuestion from "./AddQuestion";
 import { QuestionCircleOutlined, DeleteOutlined } from "@ant-design/icons";
 
@@ -63,6 +64,7 @@ const QuizQuestionComponent = () => {
       align: "center",
       render: (record) => (
         <Space size="small">
+          <ViewQuestion data={record} />
           <EditQuestion data={record} />
           <Tooltip title="Delete Question">
             <Popconfirm

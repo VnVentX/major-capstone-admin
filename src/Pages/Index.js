@@ -76,6 +76,10 @@ export default class Index extends React.Component {
       this.setState({ activePath: "24", activeSub: ["sub1", "sub3"] });
     } else if (path === "subject") {
       this.setState({ activePath: "subject" });
+    } else if (path === "exercise-question") {
+      this.setState({ activePath: "exercise-question", activeSub: ["sub2"] });
+    } else if (path === "game-question") {
+      this.setState({ activePath: "game-question", activeSub: ["sub2"] });
     }
   }
 
@@ -190,10 +194,10 @@ export default class Index extends React.Component {
                 title="Question Bank"
                 onTitleClick={this.handleClickSubMenu}
               >
-                <Menu.Item key="7">
+                <Menu.Item key="exercise-question">
                   <Link to="/exercise-question">Exercise Questions</Link>
                 </Menu.Item>
-                <Menu.Item key="8">
+                <Menu.Item key="game-question">
                   <Link to="/game-question">Game Questions</Link>
                 </Menu.Item>
               </SubMenu>
@@ -284,12 +288,12 @@ export default class Index extends React.Component {
                   component={QuestionComponent}
                 />
                 <Route
-                  path="/grade/:gradeID/exercise-question"
+                  path="/exercise-question/grade/:gradeID"
                   exact
                   component={ExerciseQuestionBank}
                 />
                 <Route
-                  path="/grade/:gradeID/game-question"
+                  path="/game-question/grade/:gradeID"
                   exact
                   component={GameQuestionBank}
                 />

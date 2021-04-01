@@ -35,7 +35,7 @@ const GradeComponent = () => {
           <List.Item>
             <Card
               title={
-                <Link to={`grade/${item.id}${window.location.pathname}`}>
+                <Link to={`${window.location.pathname}/grade/${item.id}`}>
                   {item.title}
                 </Link>
               }

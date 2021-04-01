@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { Button, Modal, Form, Input, Select } from "antd";
+import { Button, Modal, Form, Input, Select, message } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 
 const { Option } = Select;
@@ -10,8 +10,18 @@ const layout = {
   wrapperCol: { span: 16 },
 };
 
+const existedContent = `This school name in this district is already existed. Do you want to
+create this school?
+\n
+This action can not be reversed.`;
+const okContent = `School name is very important. Do you want to
+create this school?
+\n
+This action can not be reversed.`;
+
 const AddNewSchool = (props) => {
   const [form] = Form.useForm();
+  const [loading, setLoading] = useState(false);
   const [visible, setVisible] = useState(false);
 
   const showModal = () => {
@@ -34,13 +44,16 @@ const AddNewSchool = (props) => {
       .then((res) => {
         console.log(res);
         props.getAllSchool();
+        message.success("Create new school successfully!");
       })
       .catch((e) => {
         console.log(e);
+        message.error("Fail to create new school!");
       });
   };
 
   const onFinish = (event) => {
+    setLoading(true);
     async function checkExisted() {
       await axios
         .get(
@@ -50,30 +63,26 @@ const AddNewSchool = (props) => {
         )
         .then((res) => {
           console.log(res);
+          setLoading(false);
           if (res.data === "EXISTED") {
-            warning(event, form);
+            warning(event, form, existedContent);
+          } else if (res.data === "OK") {
+            warning(event, form, okContent);
           }
         })
         .catch((e) => {
           console.log(e);
+          setLoading(false);
         });
     }
     checkExisted();
   };
 
-  const warning = (values, form) => {
+  const warning = (values, form, content) => {
     Modal.confirm({
       title: "Waring",
       closable: true,
-      content: (
-        <>
-          {console.log(values)}
-          This school name in this district is already existed. Do you want to
-          create this school?
-          <br />
-          This action can not be reversed.
-        </>
-      ),
+      content: content,
       okText: "Continue",
       onOk: async () => {
         await createNewSchool(values);
@@ -91,11 +100,13 @@ const AddNewSchool = (props) => {
         onClick={showModal}
         icon={<PlusOutlined />}
       >
-        Create New School
+        Create School
       </Button>
       <Modal
-        title="Create New School"
+        title="Create School"
         visible={visible}
+        okText="Create"
+        confirmLoading={loading}
         onCancel={handleCancel}
         destroyOnClose
         onOk={() => {

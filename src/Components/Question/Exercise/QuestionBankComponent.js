@@ -10,6 +10,7 @@ import {
   Tooltip,
 } from "antd";
 import EditQuestion from "./Modal/EditQuestion";
+import ViewQuestion from "./Modal/ViewQuestion";
 import { DeleteOutlined, QuestionCircleOutlined } from "@ant-design/icons";
 const { Option } = Select;
 
@@ -62,6 +63,7 @@ const QuestionBankComponent = () => {
       align: "center",
       render: (record) => (
         <Space size="small">
+          <ViewQuestion data={record} />
           <EditQuestion data={record} />
           <Tooltip title="Delete Question">
             <Popconfirm

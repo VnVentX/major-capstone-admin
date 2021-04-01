@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { getAudioThumbUrl } from "../../../../helper/audioThumbUrl";
 import {
   Select,
   Form,
@@ -41,8 +42,18 @@ const EditQuestion = (props) => {
   const [form] = Form.useForm();
   const [counter, setCounter] = useState(0);
   const [visible, setVisible] = useState(false);
-  const [audioFile, setAudioFile] = useState([]);
-  const [imgFile, setImgFile] = useState([]);
+  const [audioFile, setAudioFile] = useState([
+    {
+      thumbUrl: getAudioThumbUrl(),
+      url:
+        "https://firebasestorage.googleapis.com/v0/b/mathscience-e425d.appspot.com/o/audios%2F94028074-2bc7-47df-89bb-748a475aee3fmp3?alt=media&token=44a7c7d4-cdbf-4eae-ada8-d5276e64792d",
+    },
+  ]);
+  const [imgFile, setImgFile] = useState([
+    {
+      thumbUrl: props.data.q_img,
+    },
+  ]);
 
   useEffect(() => {
     form.setFieldsValue({
@@ -100,7 +111,6 @@ const EditQuestion = (props) => {
             .then((values) => {
               onFinish(values);
               form.resetFields();
-              handleCancel();
             })
             .catch((info) => {
               console.log("Validate Failed:", info);
@@ -131,12 +141,17 @@ const EditQuestion = (props) => {
               listType="picture"
               fileList={audioFile}
               beforeUpload={() => false}
+              onRemove={() => {
+                setAudioFile([]);
+              }}
               onChange={(info) => {
-                if (info.file.type.split("/")[0] !== "audio") {
-                  message.error(`${info.file.name} is not an audio file`);
-                  setAudioFile([]);
-                } else {
-                  handleChangeAudio(info);
+                if (info.file.type) {
+                  if (info.file.type.split("/")[0] !== "audio") {
+                    message.error(`${info.file.name} is not an audio file`);
+                    setAudioFile([]);
+                  } else {
+                    handleChangeAudio(info);
+                  }
                 }
               }}
             >
@@ -154,12 +169,17 @@ const EditQuestion = (props) => {
               listType="picture"
               fileList={imgFile}
               beforeUpload={() => false}
+              onRemove={() => {
+                setImgFile([]);
+              }}
               onChange={(info) => {
-                if (info.file.type.split("/")[0] !== "image") {
-                  message.error(`${info.file.name} is not an image file`);
-                  setImgFile([]);
-                } else {
-                  handleChangeImg(info);
+                if (info.file.type) {
+                  if (info.file.type.split("/")[0] !== "image") {
+                    message.error(`${info.file.name} is not an image file`);
+                    setImgFile([]);
+                  } else {
+                    handleChangeImg(info);
+                  }
                 }
               }}
             >

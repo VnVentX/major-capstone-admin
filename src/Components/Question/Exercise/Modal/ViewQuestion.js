@@ -9,6 +9,7 @@ import {
   Row,
   Col,
   Image,
+  Tooltip,
 } from "antd";
 import {
   PlayCircleOutlined,
@@ -72,9 +73,9 @@ const ViewQuestion = (props) => {
 
   return (
     <div>
-      <Button type="primary" icon={<EyeOutlined />} onClick={showModal}>
-        View
-      </Button>
+      <Tooltip title="View Question">
+        <Button type="primary" icon={<EyeOutlined />} onClick={showModal} />
+      </Tooltip>
       <Modal
         visible={visible}
         width={"45vw"}
