@@ -8,6 +8,7 @@ import {
   Popconfirm,
   Button,
   Tooltip,
+  message,
 } from "antd";
 import { Link } from "react-router-dom";
 import { QuestionCircleOutlined, DeleteOutlined } from "@ant-design/icons";
@@ -43,9 +44,11 @@ const Subject = (props) => {
       .then((res) => {
         console.log(res);
         getSubjectByGrade(props.gradeID);
+        message.success("Delete Subject successfully!");
       })
       .catch((e) => {
         console.log(e);
+        message.error("Fail to delete this Subject!");
       });
   };
 

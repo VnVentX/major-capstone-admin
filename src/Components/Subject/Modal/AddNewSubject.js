@@ -19,6 +19,7 @@ const normFile = (e) => {
 const AddNewSubject = (props) => {
   const [form] = Form.useForm();
   const [visible, setVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [fileList, setFileList] = useState([]);
 
   const showModal = () => {
@@ -35,6 +36,7 @@ const AddNewSubject = (props) => {
   };
 
   const onFinish = (event) => {
+    setLoading(true);
     let formData = new FormData();
     formData.append("description", event.description);
     formData.append("gradeId", props.gradeID);
@@ -47,13 +49,19 @@ const AddNewSubject = (props) => {
         .then((res) => {
           console.log(res);
           props.getSubjectByGrade(props.gradeID);
+          setLoading(false);
+          handleCancel();
+          message.success("Create Subject successfully!");
+          form.resetFields();
+          setFileList([]);
         })
         .catch((e) => {
           console.log(e);
+          setLoading(false);
+          message.error("Fail to create Subject!");
         });
     }
     createSubject();
-    setFileList([]);
   };
 
   return (
@@ -70,13 +78,14 @@ const AddNewSubject = (props) => {
         title="Create Subject"
         visible={visible}
         onCancel={handleCancel}
+        okText="Create"
+        confirmLoading={loading}
         destroyOnClose
         onOk={() => {
           form
             .validateFields()
             .then((values) => {
               onFinish(values);
-              form.resetFields();
             })
             .catch((info) => {
               console.log("Validate Failed:", info);
@@ -87,9 +96,12 @@ const AddNewSubject = (props) => {
           <Form.Item
             name="subject"
             label="Subject Name"
-            rules={[{ required: true, message: "Please input a subject name" }]}
+            rules={[
+              { required: true, message: "Please input a subject name" },
+              { max: 20, message: "Can only input 20 characters!" },
+            ]}
           >
-            <Input placeholder="Subject Name" />
+            <Input placeholder="Subject Name" maxLength={21} />
           </Form.Item>
           <Form.Item
             name="subjectImg"
@@ -117,7 +129,11 @@ const AddNewSubject = (props) => {
               )}
             </Upload>
           </Form.Item>
-          <Form.Item name="description" label="Description">
+          <Form.Item
+            name="description"
+            label="Description"
+            rules={[{ max: 50, message: "Can only input 50 characters!" }]}
+          >
             <Input.TextArea
               placeholder="Subject Description"
               maxLength={50}

@@ -19,6 +19,7 @@ const normFile = (e) => {
 const EditSubject = (props) => {
   const [form] = Form.useForm();
   const [visible, setVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [fileList, setFileList] = useState([
     {
       thumbUrl: props.data.imageUrl,
@@ -46,11 +47,11 @@ const EditSubject = (props) => {
   };
 
   const onFinish = (event) => {
+    setLoading(true);
     let formData = new FormData();
-    console.log(event.subjectImg);
-    formData.append("description", event.description);
+    formData.append("description", event.description.trim());
     formData.append("gradeId", props.gradeID);
-    formData.append("subjectName", event.subject);
+    formData.append("subjectName", event.subject.trim());
     if (event.subjectImg !== undefined && event.subjectImg.length !== 0) {
       formData.append("multipartFile", event.subjectImg[0].originFileObj);
     }
@@ -64,12 +65,16 @@ const EditSubject = (props) => {
         .then((res) => {
           console.log(res);
           props.getSubjectByGrade(props.gradeID);
+          setLoading(false);
           handleCancel();
+          message.success("Edit Subject successfully!");
           form.resetFields();
           setFileList([]);
         })
         .catch((e) => {
           console.log(e);
+          message.error("Fail to edit Subject");
+          setLoading(false);
         });
     }
     editSubject();
@@ -84,6 +89,8 @@ const EditSubject = (props) => {
         title="Edit Subject"
         visible={visible}
         onCancel={handleCancel}
+        okText="Update"
+        confirmLoading={loading}
         destroyOnClose
         onOk={() => {
           form
@@ -100,7 +107,10 @@ const EditSubject = (props) => {
           <Form.Item
             name="subject"
             label="Subject Name"
-            rules={[{ max: 20, message: "Can only input 20 characters" }]}
+            rules={[
+              { required: true, message: "Please input a subject name" },
+              { max: 20, message: "Can only input 20 characters" },
+            ]}
           >
             <Input placeholder="Subject Name" maxLength={21} />
           </Form.Item>
