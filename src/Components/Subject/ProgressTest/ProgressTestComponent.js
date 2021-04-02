@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import {
   Card,
   List,
@@ -16,33 +17,50 @@ import EditProgressTest from "./Modal/EditProgressTest";
 
 const { Search } = Input;
 
-const data = [
-  {
-    id: 1,
-    title: "Review 1",
-  },
-  {
-    id: 2,
-    title: "Review 2",
-  },
-  {
-    id: 3,
-    title: "Semester 1",
-  },
-];
-
 const ProgressTestComponent = () => {
   const [progress, setProgress] = useState([]);
   const [searchData, setSearchData] = useState([]);
 
   useEffect(() => {
-    setProgress(data);
-    setSearchData(data);
+    getProgressTestBySubjectID();
   }, []);
 
+  const getProgressTestBySubjectID = async () => {
+    let subjectID = window.location.pathname.split("/")[2];
+    await axios
+      .get(
+        `https://mathscienceeducation.herokuapp.com/subject/${subjectID}/progressTest`
+      )
+      .then((res) => {
+        setProgress(res.data.length === 0 ? [] : res.data);
+        setSearchData(res.data.length === 0 ? [] : res.data);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
+
+  const deleteProgressTest = async (id) => {
+    let formData = new FormData();
+    formData.append("id", id);
+    await axios
+      .put(
+        "https://mathscienceeducation.herokuapp.com/progressTest/delete",
+        formData
+      )
+      .then((res) => {
+        console.log(res);
+        getProgressTestBySubjectID();
+        message.success("Delete Progress Test successfully!");
+      })
+      .catch((e) => {
+        console.log(e);
+        message.success("Fail to delete Progress Test");
+      });
+  };
+
   const handleDelete = (item) => {
-    console.log(item);
-    message.success("Click on Yes");
+    deleteProgressTest(item);
   };
 
   return (
@@ -54,24 +72,28 @@ const ProgressTestComponent = () => {
           justifyContent: "space-between",
         }}
       >
-        <AutoComplete dataSource={searchData.map((item) => item.title)}>
+        <AutoComplete
+          dataSource={searchData?.map((item) => item.progressTestName)}
+        >
           <Search
             allowClear
             placeholder="Search Progress Test"
-            onSearch={(subjectSearch) =>
+            onSearch={(progressTestSearch) =>
               setProgress(
-                searchData.filter((item) =>
-                  item.title
+                searchData?.filter((item) =>
+                  item.progressTestName
                     .toString()
                     .toLowerCase()
-                    .includes(subjectSearch.toLowerCase())
+                    .includes(progressTestSearch.toLowerCase())
                 )
               )
             }
             enterButton
           />
         </AutoComplete>
-        <AddNewProgress />
+        <AddNewProgress
+          getProgressTestBySubjectID={getProgressTestBySubjectID}
+        />
       </div>
       <List
         grid={{ gutter: 16, column: 1 }}
@@ -90,7 +112,7 @@ const ProgressTestComponent = () => {
                   <Link
                     to={`${window.location.pathname}/progress-test/${item.id}`}
                   >
-                    {item.title}
+                    {item.progressTestName}
                   </Link>
                   <div style={{ display: "flex", justifyContent: "center" }}>
                     <Tooltip title="Delete">
@@ -111,12 +133,15 @@ const ProgressTestComponent = () => {
                         />
                       </Popconfirm>
                     </Tooltip>
-                    <EditProgressTest data={item} />
+                    <EditProgressTest
+                      data={item}
+                      getProgressTestBySubjectID={getProgressTestBySubjectID}
+                    />
                   </div>
                 </div>
               }
             >
-              Progress Test Descriptions
+              {item.description}
             </Card>
           </List.Item>
         )}

@@ -224,6 +224,13 @@ iframe {
   position: relative;
 }
 
+#non-fs {
+  width: 100%;
+  height: calc(500px - 24px);
+  overflow: hidden;
+  position: relative;
+}
+
 /* Antd Table header */
 .ant-table-filter-column-title {
   font-size: 1rem;

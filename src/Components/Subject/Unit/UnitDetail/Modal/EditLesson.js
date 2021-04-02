@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Button, Modal, Form, Input, Tooltip } from "antd";
+import axios from "axios";
+import { Button, Modal, Form, Input, Tooltip, message } from "antd";
 import { EditOutlined } from "@ant-design/icons";
 
 const layout = {
@@ -10,13 +11,62 @@ const layout = {
 const EditLesson = (props) => {
   const [form] = Form.useForm();
   const [visible, setVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    form.setFieldsValue({
-      lesson: props.data.title,
-      url: props.data.ppUrl,
-    });
-  }, []);
+    if (props.lessonID) {
+      const getLessonByID = async () => {
+        await axios
+          .get(
+            `https://mathscienceeducation.herokuapp.com//lesson/${props.lessonID}`
+          )
+          .then((res) => {
+            form.setFieldsValue({
+              lesson: res.data.lessonName,
+              url: res.data.lessonUrl,
+              unitId: res.data.unitId,
+            });
+          })
+          .catch((e) => {
+            console.log(e);
+          });
+      };
+      getLessonByID();
+    }
+  }, [form, props.lessonID]);
+
+  const editLesson = async (values) => {
+    let url = "";
+    if (values.url.split("/")[0] === "https:") {
+      url = values.url;
+    } else {
+      url = values.url.split(" ")[1].split("src=")[1].split('"')[1];
+    }
+    setLoading(true);
+    await axios
+      .put(
+        `https://mathscienceeducation.herokuapp.com/lesson/${props.lessonID}`,
+        {
+          id: props.lessonID,
+          lessonName: values.lesson,
+          lessonUrl: url,
+          unitId: values.unitId,
+        }
+      )
+      .then((res) => {
+        console.log(res);
+        props.getLessonByUnitID();
+        setLoading(false);
+        handleCancel();
+        message.success("Edit Lesson successfully!");
+        form.resetFields();
+      })
+      .catch((e) => {
+        console.log(e);
+        message.error("Fail to edit Lesson");
+        setLoading(false);
+      });
+  };
 
   const showModal = () => {
     setVisible(true);
@@ -27,20 +77,25 @@ const EditLesson = (props) => {
     setVisible(false);
   };
 
-  const onFinish = (event) => {
-    let frame = event.url;
-    const url = frame.split(" ")[1].split("src=")[1].split('"')[1];
-    console.log(url, event);
+  const onFinish = (values) => {
+    editLesson(values);
   };
 
   return (
     <div>
       <Tooltip title="Edit Lesson">
-        <EditOutlined onClick={showModal} style={{ marginLeft: 10 }} />
+        <Button
+          type="primary"
+          icon={<EditOutlined />}
+          onClick={showModal}
+          style={{ marginLeft: 5 }}
+        />
       </Tooltip>
       <Modal
-        title="Create New Lesson"
+        title="Edit Lesson"
         visible={visible}
+        okText="Update"
+        confirmLoading={loading}
         onCancel={handleCancel}
         destroyOnClose
         onOk={() => {
@@ -48,7 +103,6 @@ const EditLesson = (props) => {
             .validateFields()
             .then((values) => {
               onFinish(values);
-              form.resetFields();
             })
             .catch((info) => {
               console.log("Validate Failed:", info);
@@ -68,7 +122,7 @@ const EditLesson = (props) => {
             label="PowerPoint URL"
             rules={[{ required: true, message: "Please input an URL!" }]}
           >
-            <Input placeholder="PowerPoint URL" />
+            <Input.TextArea autoSize placeholder="PowerPoint URL" />
           </Form.Item>
         </Form>
       </Modal>

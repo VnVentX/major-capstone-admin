@@ -22,6 +22,10 @@ const UnitComponent = () => {
   const [unit, setUnit] = useState([]);
   const [searchData, setSearchData] = useState([]);
 
+  useEffect(() => {
+    getUnitBySubjectID();
+  }, []);
+
   const getUnitBySubjectID = async () => {
     let subjectID = window.location.pathname.split("/")[2];
     await axios
@@ -45,15 +49,13 @@ const UnitComponent = () => {
       .then((res) => {
         console.log(res);
         getUnitBySubjectID();
+        message.success("Delete Unit successfully!");
       })
       .catch((e) => {
         console.log(e);
+        message.success("Fail to delete Unit");
       });
   };
-
-  useEffect(() => {
-    getUnitBySubjectID();
-  }, []);
 
   const handleDelete = (item) => {
     deleteUnit(item);
@@ -91,7 +93,7 @@ const UnitComponent = () => {
             enterButton
           />
         </AutoComplete>
-        <AddNewUnit />
+        <AddNewUnit getUnitBySubjectID={getUnitBySubjectID} />
       </div>
 
       {unit && (
@@ -131,7 +133,10 @@ const UnitComponent = () => {
                           />
                         </Popconfirm>
                       </Tooltip>
-                      <EditUnit data={item} />
+                      <EditUnit
+                        data={item}
+                        getUnitBySubjectID={getUnitBySubjectID}
+                      />
                     </div>
                   </div>
                 }

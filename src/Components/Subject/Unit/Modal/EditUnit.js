@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Button, Modal, Form, Input, Select, Tooltip } from "antd";
+import axios from "axios";
+import { Button, Modal, Form, Input, Select, Tooltip, message } from "antd";
 import { EditOutlined } from "@ant-design/icons";
 
 const { Option } = Select;
@@ -12,13 +13,40 @@ const layout = {
 const EditUnit = (props) => {
   const [form] = Form.useForm();
   const [visible, setVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     form.setFieldsValue({
-      unit: props.data.title,
+      unit: props.data.unitName + "",
       description: props.data.description,
     });
-  }, []);
+  }, [form, props.data.description, props.data.unitName]);
+
+  const editUnit = async (values) => {
+    setLoading(true);
+    console.log({
+      description: values.description,
+      unitName: values.unit,
+    });
+    await axios
+      .put(`https://mathscienceeducation.herokuapp.com/unit/${props.data.id}`, {
+        description: values.description,
+        unitName: values.unit,
+      })
+      .then((res) => {
+        console.log(res);
+        props.getUnitBySubjectID();
+        setLoading(false);
+        handleCancel();
+        message.success("Edit Unit successfully!");
+        form.resetFields();
+      })
+      .catch((e) => {
+        console.log(e);
+        message.error("Fail to edit Unit");
+        setLoading(false);
+      });
+  };
 
   const showModal = () => {
     setVisible(true);
@@ -29,8 +57,8 @@ const EditUnit = (props) => {
     setVisible(false);
   };
 
-  const onFinish = (event) => {
-    console.log(event);
+  const onFinish = (values) => {
+    editUnit(values);
   };
 
   return (
@@ -41,14 +69,15 @@ const EditUnit = (props) => {
       <Modal
         title="Edit Unit"
         visible={visible}
+        okText="Update"
         onCancel={handleCancel}
+        confirmLoading={loading}
         destroyOnClose
         onOk={() => {
           form
             .validateFields()
             .then((values) => {
               onFinish(values);
-              form.resetFields();
             })
             .catch((info) => {
               console.log("Validate Failed:", info);

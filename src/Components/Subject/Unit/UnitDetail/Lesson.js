@@ -5,7 +5,7 @@ import Exercise from "./Exercise/Exercise";
 import Game from "./Game/Game";
 import { DeleteOutlined } from "@ant-design/icons";
 
-const Lesson = () => {
+const Lesson = (props) => {
   const confirm = (e) => {
     console.log(e);
     message.success("Click on Yes");
@@ -13,7 +13,7 @@ const Lesson = () => {
 
   return (
     <Typography>
-      <PowerPoint />
+      <PowerPoint url={props.lesson.lessonUrl} />
       <Divider />
 
       <Exercise />

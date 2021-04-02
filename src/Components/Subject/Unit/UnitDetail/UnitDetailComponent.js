@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import { Tabs } from "antd";
 import Lesson from "./Lesson";
 import AddNewLesson from "./Modal/AddNewLesson";
@@ -6,39 +7,49 @@ import EditLesson from "./Modal/EditLesson";
 
 const { TabPane } = Tabs;
 
-const data = [
-  {
-    id: 1,
-    title: "Lesson 1",
-    ppUrl: "",
-  },
-  {
-    id: 2,
-    title: "Lesson 2",
-    ppUrl: "",
-  },
-];
-
 const UnitComponent = () => {
   const [lesson, setLesson] = useState([]);
+  const [selectedLessonID, setSelectedLessonID] = useState("");
 
   useEffect(() => {
-    setLesson(data);
+    getLessonByUnitID();
   }, []);
 
+  const getLessonByUnitID = async () => {
+    let unitID = window.location.pathname.split("/")[4];
+    await axios
+      .get(`https://mathscienceeducation.herokuapp.com/unit/${unitID}/lessons`)
+      .then((res) => {
+        setLesson(res.data.length === 0 ? [] : res.data);
+        setSelectedLessonID(res.data.length === 0 ? [] : res.data[0].id);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
+
+  const handleTabClick = (e) => {
+    console.log(e);
+    setSelectedLessonID(e);
+  };
+
   return (
-    <Tabs tabBarExtraContent={<AddNewLesson />}>
-      {lesson?.map((i, idx) => (
-        <TabPane
-          tab={
-            <div style={{ display: "flex" }}>
-              {i.title}
-              <EditLesson data={i} />
-            </div>
-          }
-          key={idx + 1}
-        >
-          <Lesson lesson={i.id} />
+    <Tabs
+      activeKey={selectedLessonID + ""}
+      tabBarExtraContent={
+        <div style={{ display: "flex" }}>
+          <AddNewLesson getLessonByUnitID={getLessonByUnitID} />
+          <EditLesson
+            lessonID={selectedLessonID}
+            getLessonByUnitID={getLessonByUnitID}
+          />
+        </div>
+      }
+      onChange={handleTabClick}
+    >
+      {lesson?.map((i) => (
+        <TabPane tab={i.lessonName} key={i.id}>
+          <Lesson lesson={i} />
         </TabPane>
       ))}
     </Tabs>

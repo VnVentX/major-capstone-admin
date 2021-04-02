@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { Button, Modal, Form, Input, Select } from "antd";
+import axios from "axios";
+import { Button, Modal, Form, Input, Select, message } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 
 const { Option } = Select;
@@ -9,9 +10,33 @@ const layout = {
   wrapperCol: { span: 18 },
 };
 
-const AddNewUnit = () => {
+const AddNewUnit = (props) => {
   const [form] = Form.useForm();
   const [visible, setVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const createUnit = async (values) => {
+    setLoading(true);
+    await axios
+      .post("https://mathscienceeducation.herokuapp.com/unit", {
+        description: values.description,
+        subjectId: window.location.pathname.split("/")[2],
+        unitName: values.unit,
+      })
+      .then((res) => {
+        console.log(res);
+        props.getUnitBySubjectID();
+        setLoading(false);
+        handleCancel();
+        message.success("Create Unit successfully!");
+        form.resetFields();
+      })
+      .catch((e) => {
+        console.log(e);
+        message.error("Fail to create Unit");
+        setLoading(false);
+      });
+  };
 
   const showModal = () => {
     setVisible(true);
@@ -22,8 +47,8 @@ const AddNewUnit = () => {
     setVisible(false);
   };
 
-  const onFinish = (event) => {
-    console.log(event);
+  const onFinish = (values) => {
+    createUnit(values);
   };
 
   return (
@@ -39,6 +64,8 @@ const AddNewUnit = () => {
       <Modal
         title="Create Unit"
         visible={visible}
+        okText="Create"
+        confirmLoading={loading}
         onCancel={handleCancel}
         destroyOnClose
         onOk={() => {
@@ -46,7 +73,6 @@ const AddNewUnit = () => {
             .validateFields()
             .then((values) => {
               onFinish(values);
-              form.resetFields();
             })
             .catch((info) => {
               console.log("Validate Failed:", info);

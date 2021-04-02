@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { Button, Modal, Form, Input, Tooltip } from "antd";
+import axios from "axios";
+import { Button, Modal, Form, Input, Tooltip, message } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 
 const layout = {
@@ -7,9 +8,39 @@ const layout = {
   wrapperCol: { span: 18 },
 };
 
-const AddNewLesson = () => {
+const AddNewLesson = (props) => {
   const [form] = Form.useForm();
   const [visible, setVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const createLesson = async (values) => {
+    let url = "";
+    if (values.url.split("/")[0] === "https:") {
+      url = values.url;
+    } else {
+      url = values.url.split(" ")[1].split("src=")[1].split('"')[1];
+    }
+    setLoading(true);
+    await axios
+      .post("https://mathscienceeducation.herokuapp.com/lesson", {
+        lessonName: values.lesson,
+        lessonUrl: url,
+        unitId: window.location.pathname.split("/")[4],
+      })
+      .then((res) => {
+        console.log(res);
+        props.getLessonByUnitID();
+        setLoading(false);
+        handleCancel();
+        message.success("Add Lesson successfully!");
+        form.resetFields();
+      })
+      .catch((e) => {
+        console.log(e);
+        message.error("Fail to add Lesson");
+        setLoading(false);
+      });
+  };
 
   const showModal = () => {
     setVisible(true);
@@ -20,10 +51,8 @@ const AddNewLesson = () => {
     setVisible(false);
   };
 
-  const onFinish = (event) => {
-    let frame = event.url;
-    const url = frame.split(" ")[1].split("src=")[1].split('"')[1];
-    console.log(url, event);
+  const onFinish = (values) => {
+    createLesson(values);
   };
 
   return (
@@ -32,8 +61,10 @@ const AddNewLesson = () => {
         <Button type="primary" icon={<PlusOutlined />} onClick={showModal} />
       </Tooltip>
       <Modal
-        title="Create New Lesson"
+        title="Add Lesson"
         visible={visible}
+        okText="Add"
+        confirmLoading={loading}
         onCancel={handleCancel}
         destroyOnClose
         onOk={() => {
@@ -41,7 +72,6 @@ const AddNewLesson = () => {
             .validateFields()
             .then((values) => {
               onFinish(values);
-              form.resetFields();
             })
             .catch((info) => {
               console.log("Validate Failed:", info);
@@ -50,7 +80,7 @@ const AddNewLesson = () => {
       >
         <Form {...layout} form={form}>
           <Form.Item
-            name="subject"
+            name="lesson"
             label="Lesson Name"
             rules={[{ required: true, message: "Please input a subject name" }]}
           >
@@ -61,7 +91,7 @@ const AddNewLesson = () => {
             label="PowerPoint URL"
             rules={[{ required: true, message: "Please input an URL!" }]}
           >
-            <Input placeholder="PowerPoint URL" />
+            <Input.TextArea autoSize placeholder="PowerPoint URL" />
           </Form.Item>
         </Form>
       </Modal>

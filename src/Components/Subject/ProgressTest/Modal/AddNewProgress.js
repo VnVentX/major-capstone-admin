@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { Button, Modal, Form, Input, Select } from "antd";
+import axios from "axios";
+import { Button, Modal, Form, Input, Select, message } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 
 const { Option } = Select;
@@ -9,9 +10,10 @@ const layout = {
   wrapperCol: { span: 16 },
 };
 
-const AddNewProgress = () => {
+const AddNewProgress = (props) => {
   const [form] = Form.useForm();
   const [visible, setVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const showModal = () => {
     setVisible(true);
@@ -22,8 +24,28 @@ const AddNewProgress = () => {
     setVisible(false);
   };
 
-  const onFinish = (event) => {
-    console.log(event);
+  const onFinish = async (values) => {
+    setLoading(true);
+    await axios
+      .post(`https://mathscienceeducation.herokuapp.com/progressTest`, {
+        description: values.description,
+        subjectId: window.location.pathname.split("/")[2],
+        progressTestName: values.progressTest,
+        unitAfterId: values.unitAfter,
+      })
+      .then((res) => {
+        console.log(res);
+        props.getProgressTestBySubjectID();
+        setLoading(false);
+        handleCancel();
+        message.success("Create Progress Test successfully!");
+        form.resetFields();
+      })
+      .catch((e) => {
+        console.log(e);
+        message.error("Fail to create Progress Test");
+        setLoading(false);
+      });
   };
 
   return (
@@ -39,14 +61,15 @@ const AddNewProgress = () => {
       <Modal
         title="Create Progress Test"
         visible={visible}
+        okText="Create"
         onCancel={handleCancel}
+        confirmLoading={loading}
         destroyOnClose
         onOk={() => {
           form
             .validateFields()
             .then((values) => {
               onFinish(values);
-              form.resetFields();
             })
             .catch((info) => {
               console.log("Validate Failed:", info);

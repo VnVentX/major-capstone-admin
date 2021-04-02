@@ -31,7 +31,7 @@ const EditSubject = (props) => {
       subject: props.data.subjectName,
       description: props.data.description,
     });
-  }, []);
+  }, [form, props.data.description, props.data.subjectName]);
 
   const showModal = () => {
     setVisible(true);
