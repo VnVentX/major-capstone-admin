@@ -5,6 +5,7 @@ import {
   Modal,
   Button,
   Input,
+  InputNumber,
   Divider,
   Row,
   Col,
@@ -58,7 +59,9 @@ const ViewQuestion = (props) => {
 
   useEffect(() => {
     form.setFieldsValue({
+      questionTitle: "Unit 1 Question",
       question: props.data.q_name,
+      score: 10,
       options: options,
     });
   }, []);
@@ -86,6 +89,15 @@ const ViewQuestion = (props) => {
         <Form form={form} layout="vertical">
           <h1>Question</h1>
           <Divider />
+          <Form.Item name="questionTitle" label="Question Title">
+            <Input.TextArea
+              autoSize
+              maxLength="100"
+              showCount
+              placeholder="Question Title"
+              disabled
+            />
+          </Form.Item>
           <Form.Item name="question" label="Question Text">
             <Input.TextArea
               autoSize
@@ -94,6 +106,9 @@ const ViewQuestion = (props) => {
               placeholder="Question Text"
               disabled
             />
+          </Form.Item>
+          <Form.Item name="score" label="Score">
+            <InputNumber placeholder="Score" disabled />
           </Form.Item>
           <Form.Item name="q_audio" label="Question Audio">
             <div onClick={toggle}>

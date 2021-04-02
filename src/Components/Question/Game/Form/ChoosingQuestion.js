@@ -139,6 +139,18 @@ const ChoosingQuestion = (props) => {
         }}
       </Form.Item>
       <Form.Item
+        name="questionTitle"
+        label="Question Title"
+        rules={[{ required: true, message: "Please input a question title" }]}
+      >
+        <Input.TextArea
+          autoSize
+          maxLength="100"
+          showCount
+          placeholder="Question Title"
+        />
+      </Form.Item>
+      <Form.Item
         name="question"
         label="Question Text"
         rules={[{ required: true, message: "Please input a question" }]}

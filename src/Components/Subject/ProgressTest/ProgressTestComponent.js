@@ -87,7 +87,9 @@ const ProgressTestComponent = () => {
                     alignItems: "center",
                   }}
                 >
-                  <Link to={`${window.location.pathname}/unit/${item.id}`}>
+                  <Link
+                    to={`${window.location.pathname}/progress-test/${item.id}`}
+                  >
                     {item.title}
                   </Link>
                   <div style={{ display: "flex", justifyContent: "center" }}>
@@ -114,7 +116,7 @@ const ProgressTestComponent = () => {
                 </div>
               }
             >
-              Unit Descriptions
+              Progress Test Descriptions
             </Card>
           </List.Item>
         )}

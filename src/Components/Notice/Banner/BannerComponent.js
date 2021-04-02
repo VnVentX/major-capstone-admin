@@ -226,7 +226,11 @@ export default class BannerComponent extends React.Component {
           <Space size="small">
             <Popconfirm
               placement="topRight"
-              title="Are you sure to disable this Banner?"
+              title={
+                record.status === "ACTIVE"
+                  ? "Are you sure to disable this Banner?"
+                  : "Are you sure to active this Banner?"
+              }
               onConfirm={() =>
                 this.handleDisableBanner(record.id, record.status)
               }

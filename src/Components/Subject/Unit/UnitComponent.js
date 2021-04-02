@@ -70,8 +70,8 @@ const UnitComponent = () => {
       >
         <AutoComplete
           dataSource={searchData?.map((item, idx) => (
-            <Select.Option key={idx} value={item.unitName}>
-              {item.unitName}
+            <Select.Option key={idx} value={`Unit ${item.unitName}`}>
+              Unit {item.unitName}
             </Select.Option>
           ))}
         >
@@ -81,7 +81,7 @@ const UnitComponent = () => {
             onSearch={(unitSearch) =>
               setUnit(
                 searchData?.filter((item) =>
-                  item.unitName
+                  `Unit ${item.unitName}`
                     .toString()
                     .toLowerCase()
                     .includes(unitSearch.toLowerCase())

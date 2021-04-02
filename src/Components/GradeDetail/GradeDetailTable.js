@@ -69,6 +69,26 @@ export default class GradeDetailTable extends Component {
       });
   };
 
+  disableLink = async (schoolID, status) => {
+    let ids = [];
+    let gradeID = window.location.pathname.split("/")[2];
+    ids.push(gradeID);
+    ids.push(schoolID);
+    console.log(ids);
+    await axios
+      .put("https://mathscienceeducation.herokuapp.com/schoolGrade", {
+        ids: ids,
+        status: status,
+      })
+      .then((res) => {
+        console.log(res);
+        this.getSchoolByGradeID(this.props.gradeID);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
+
   getColumnSearchProps = (dataIndex) => ({
     filterDropdown: ({
       setSelectedKeys,
@@ -157,9 +177,16 @@ export default class GradeDetailTable extends Component {
     this.setState({ selectedRowKeys });
   };
 
-  handleDelete = () => {
-    console.log(this.state.selectedRowKeys);
-    message.success("Click on Yes");
+  handleDisableLink = (schoolID, status) => {
+    let message = "";
+    if (status === "DELETED") {
+      message = "DELETED";
+    } else if (status === "ACTIVE") {
+      message = "INACTIVE";
+    } else if (status === "INACTIVE") {
+      message = "ACTIVE";
+    }
+    this.disableLink(schoolID, message);
   };
 
   render() {
@@ -198,15 +225,13 @@ export default class GradeDetailTable extends Component {
       {
         title: "Status",
         dataIndex: "status",
-        key: "status",
-        align: "center",
         render: (status) => (
           <span>
-            {status === "active" ? (
+            {status === "ACTIVE" ? (
               <Tag color={"green"} key={status}>
                 Active
               </Tag>
-            ) : status === "dropout" ? (
+            ) : status === "INACTIVE" ? (
               <Tag color={"volcano"} key={status}>
                 Disabled
               </Tag>
@@ -216,12 +241,34 @@ export default class GradeDetailTable extends Component {
       },
       {
         title: "Action",
-        dataIndex: "",
-        key: "x",
         align: "center",
         render: (record) => (
           <Space size="small">
-            <Button type="primary">Change Status</Button>
+            <Popconfirm
+              placement="topRight"
+              title={
+                record.status === "ACTIVE"
+                  ? "Are you sure to disable this School?"
+                  : "Are you sure to active this School?"
+              }
+              onConfirm={() => this.handleDisableLink(record.id, record.status)}
+              okText="Yes"
+              cancelText="No"
+            >
+              <Button type="primary">Change Status</Button>
+            </Popconfirm>
+            <Popconfirm
+              placement="topRight"
+              title="Are you sure to delete this School?"
+              onConfirm={() => this.handleDisableLink(record.id, "DELETED")}
+              okText="Yes"
+              cancelText="No"
+              icon={<QuestionCircleOutlined style={{ color: "red" }} />}
+            >
+              <Button type="danger" icon={<DeleteOutlined />}>
+                Delete
+              </Button>
+            </Popconfirm>
           </Space>
         ),
       },
@@ -282,40 +329,6 @@ export default class GradeDetailTable extends Component {
           dataSource={this.state.dataSource}
           scroll={{ x: true }}
         />
-        <div>
-          <h1>With selected:</h1>
-          {selectedRowKeys.length === 0 ? (
-            <>
-              <Button
-                type="danger"
-                icon={<DeleteOutlined />}
-                disabled
-                style={{ marginRight: 10 }}
-              >
-                Delete
-              </Button>
-            </>
-          ) : (
-            <>
-              <Popconfirm
-                placement="topRight"
-                title="Are you sure to delete selected Schools?"
-                onConfirm={this.handleDelete} //Handle disable logic here
-                okText="Yes"
-                cancelText="No"
-                icon={<QuestionCircleOutlined style={{ color: "red" }} />}
-              >
-                <Button
-                  type="danger"
-                  icon={<DeleteOutlined />}
-                  style={{ marginRight: 10 }}
-                >
-                  Delete
-                </Button>
-              </Popconfirm>
-            </>
-          )}
-        </div>
       </Card>
     );
   }

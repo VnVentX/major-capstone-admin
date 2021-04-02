@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import { Link } from "react-router-dom";
 import { Card, Button, Tag, Space, Table, Popconfirm, message } from "antd";
 import AddNewClass from "./Modal/AddNewClass";
@@ -132,6 +133,28 @@ const data = [
 
 const ClassComponent = (props) => {
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+  const [classData, setClassData] = useState([]);
+
+  useEffect(() => {
+    getClassBySchoolGrade();
+  }, []);
+
+  const getClassBySchoolGrade = async () => {
+    let schoolID = window.location.pathname.split("/")[2];
+    let gradeID = props.gradeID;
+    await axios
+      .post("https://mathscienceeducation.herokuapp.com/class/schoolGradeId", {
+        gradeId: gradeID,
+        schoolId: schoolID,
+      })
+      .then((res) => {
+        console.log(res.data);
+        setClassData(res.data);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
 
   const onSelectChange = (selectedRowKeys) => {
     console.log("selectedRowKeys changed: ", selectedRowKeys);

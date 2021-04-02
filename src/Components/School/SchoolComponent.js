@@ -26,7 +26,6 @@ export default class SchoolComponent extends Component {
   state = {
     searchText: "",
     searchedColumn: "",
-    selectedRowKeys: [],
     dataSource: [],
     dataSearch: [],
     schoolSearch: "",
@@ -150,11 +149,6 @@ export default class SchoolComponent extends Component {
     this.setState({ searchText: "" });
   };
 
-  onSelectChange = (selectedRowKeys) => {
-    console.log("selectedRowKeys changed: ", selectedRowKeys);
-    this.setState({ selectedRowKeys });
-  };
-
   handleDisableSchool = (e, status) => {
     let message = "";
     if (status === "DELETED") {
@@ -240,7 +234,7 @@ export default class SchoolComponent extends Component {
             <EditSchool getAllSchool={this.getAllSchool} schoolID={record.id} />
             <Popconfirm
               placement="topRight"
-              title="Are you sure to delete selected Schools?"
+              title="Are you sure to delete this Schools?"
               onConfirm={() => this.handleDisableSchool(record.id, "DELETED")}
               okText="Yes"
               cancelText="No"
@@ -258,13 +252,6 @@ export default class SchoolComponent extends Component {
         ),
       },
     ];
-
-    const { selectedRowKeys } = this.state;
-
-    const rowSelection = {
-      selectedRowKeys,
-      onChange: this.onSelectChange,
-    };
 
     return (
       <Card type="inner" title="School Management">
@@ -311,7 +298,6 @@ export default class SchoolComponent extends Component {
         </div>
         <Table
           rowKey={(record) => record.id}
-          rowSelection={rowSelection}
           columns={columns}
           dataSource={this.state.dataSource}
           scroll={{ x: true }}

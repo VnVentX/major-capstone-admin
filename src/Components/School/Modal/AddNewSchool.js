@@ -56,11 +56,12 @@ const AddNewSchool = (props) => {
     setLoading(true);
     async function checkExisted() {
       await axios
-        .get(
-          `https://mathscienceeducation.herokuapp.com/school?schoolDistrict=${
-            event.schoolDistrict
-          }&schoolLevel=${event.type}&schoolName=${event.schoolName.trim()}`
-        )
+        .post("https://mathscienceeducation.herokuapp.com/school/check", {
+          schoolDistrict: event.schoolDistrict,
+          schoolName: event.schoolName.trim(),
+          schoolStreet: event.schoolStreet.trim(),
+          schoolLevel: event.type,
+        })
         .then((res) => {
           console.log(res);
           setLoading(false);

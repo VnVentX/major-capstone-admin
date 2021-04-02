@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import {
   Form,
   Input,
+  InputNumber,
   Button,
   Select,
   Divider,
@@ -52,19 +53,14 @@ const AddNewQuestion = () => {
     const question = {
       subject: values.subject,
       unit: values.unit,
+      q_title: values.questionTitle,
       q_name: values.question,
-      q_audio: values.q_audio[0].originFileObj,
-      q_img: values.q_img[0].originFileObj,
+      q_score: values.score,
+      q_audio: values.q_audio ? values.q_audio[0].originFileObj : null,
+      q_img: values.q_img ? values.q_img[0].originFileObj : null,
       options: values.options,
     };
     console.log(question);
-    // setCounter(0);
-    // form.setFieldsValue({
-    //   question: null,
-    //   q_audio: null,
-    //   q_img: null,
-    //   options: null,
-    // });
   };
 
   return (
@@ -131,6 +127,18 @@ const AddNewQuestion = () => {
           }}
         </Form.Item>
         <Form.Item
+          name="questionTitle"
+          label="Question Title"
+          rules={[{ required: true, message: "Please input a question title" }]}
+        >
+          <Input.TextArea
+            autoSize
+            maxLength="100"
+            showCount
+            placeholder="Question Title"
+          />
+        </Form.Item>
+        <Form.Item
           name="question"
           label="Question Text"
           rules={[{ required: true, message: "Please input a question" }]}
@@ -141,6 +149,13 @@ const AddNewQuestion = () => {
             showCount
             placeholder="Question Text"
           />
+        </Form.Item>
+        <Form.Item
+          name="score"
+          label="Score"
+          rules={[{ required: true, message: "Please input a score" }]}
+        >
+          <InputNumber placeholder="Score" />
         </Form.Item>
         <Form.Item
           name="q_audio"

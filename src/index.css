@@ -265,6 +265,11 @@ input[type="checkbox"] + *::before {
   color: black !important;
   background-color: rgba(0, 0, 0, 0) !important;
 }
+.ant-input-number-disabled {
+  color: black !important;
+  background-color: rgba(0, 0, 0, 0) !important;
+  opacity: 1;
+}
 
 .ant-btn > .anticon + span,
 .ant-btn > span + .anticon {

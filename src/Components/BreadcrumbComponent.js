@@ -29,6 +29,7 @@ const routes = [
   },
   { path: "/exercise-question", breadcrumb: "Exercise Question" },
   { path: "/game-question", breadcrumb: "Game Question" },
+  { path: "/subject/:subjectID/progress-test", breadcrumb: "Progress Test" },
 ];
 
 const BreadcrumbComponent = withBreadcrumbs(routes)(({ breadcrumbs }) => (

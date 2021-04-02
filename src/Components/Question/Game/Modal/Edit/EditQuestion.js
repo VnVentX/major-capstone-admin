@@ -36,6 +36,7 @@ const EditQuestion = (props) => {
       id: props.data.key,
       subject: values.subject,
       unit: values.unit,
+      q_title: values.questionTitle,
       q_name: values.question,
       q_audio: values.q_audio ? values.q_audio : "",
       q_img: values.q_img,
@@ -49,6 +50,7 @@ const EditQuestion = (props) => {
       id: props.data.key,
       subject: values.subject,
       unit: values.unit,
+      q_title: values.questionTitle,
       q_name: values.question,
       options: [
         {
@@ -92,6 +94,7 @@ const EditQuestion = (props) => {
       id: props.data.key,
       subject: values.subject,
       unit: values.unit,
+      q_title: values.questionTitle,
       q_name: values.question,
       options: [
         {
@@ -120,6 +123,7 @@ const EditQuestion = (props) => {
       id: props.key,
       subject: values.subject,
       unit: values.unit,
+      q_title: values.questionTitle,
       q_name: values.question,
       options: [
         {

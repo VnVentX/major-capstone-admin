@@ -72,6 +72,15 @@ const ViewMatchingQuestion = (props) => {
           ) : null;
         }}
       </Form.Item>
+      <Form.Item name="questionTitle" label="Question Title">
+        <Input.TextArea
+          autoSize
+          maxLength="100"
+          showCount
+          placeholder="Question Title"
+          disabled
+        />
+      </Form.Item>
       <Form.Item name="question" label="Question Text">
         <Input.TextArea
           maxLength="250"

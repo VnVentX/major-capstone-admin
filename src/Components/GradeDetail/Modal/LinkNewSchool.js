@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Button, Modal, Form, Select } from "antd";
+import { Button, Modal, Form, Select, message } from "antd";
 import { LinkOutlined } from "@ant-design/icons";
 const { Option } = Select;
 
@@ -9,6 +9,7 @@ var resArr = [];
 const LinkNewSchool = (props) => {
   const [form] = Form.useForm();
   const [visible, setVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     resArr = Array.from(props.allSchool);
@@ -17,18 +18,25 @@ const LinkNewSchool = (props) => {
   }, [props.allSchool, props.data]);
 
   const linkSchool = async (schoolID) => {
+    setLoading(true);
     let gradeID = window.location.pathname.split("/")[2];
-    let formData = new FormData();
-    formData.append("gradeId ", gradeID);
-    formData.append("schoolId ", schoolID);
     await axios
-      .post("https://mathscienceeducation.herokuapp.com/schoolGrade", formData)
+      .post("https://mathscienceeducation.herokuapp.com/schoolGrade", {
+        gradeId: gradeID,
+        schoolId: schoolID,
+      })
       .then((res) => {
         console.log(res);
         props.getSchoolByGradeID(gradeID);
+        setLoading(false);
+        handleCancel();
+        message.success("Link School successfully!");
+        form.resetFields();
       })
       .catch((e) => {
         console.log(e);
+        setLoading(false);
+        message.success("Fail to link School");
       });
   };
 
@@ -59,13 +67,13 @@ const LinkNewSchool = (props) => {
         title="Link New School"
         visible={visible}
         onCancel={handleCancel}
+        confirmLoading={loading}
         okText="Create"
         onOk={() => {
           form
             .validateFields()
             .then((values) => {
               onFinish(values);
-              form.resetFields();
             })
             .catch((info) => {
               console.log("Validate Failed:", info);

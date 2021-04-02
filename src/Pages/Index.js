@@ -18,6 +18,7 @@ import AccountDetail from "./AccountDetail";
 import BreadcrumbComponent from "../Components/BreadcrumbComponent";
 import Home from "./Home";
 import UnitDetail from "./UnitDetail";
+import ProcessTestDetail from "./ProgressTestDetail";
 import Subject from "./Subject";
 import AddQuizQuestion from "./AddQuizQuestion";
 import Notice from "./Notice";
@@ -30,6 +31,7 @@ import SubjectDetail from "./SubjectDetail";
 import AddGameQuestion from "./AddGameQuestion";
 import ExerciseQuestionBank from "./ExerciseQuestionBank";
 import GameQuestionBank from "./GameQuestionBank";
+import AddTestQuestion from "./AddTestQuestion";
 
 const { Header, Sider } = Layout;
 
@@ -166,7 +168,7 @@ export default class Index extends React.Component {
                           key: idx,
                         }}
                       >
-                        <span>{i.gradeName}</span>
+                        <span>Grade {i.gradeName}</span>
                       </Link>
                     </Menu.Item>
                   ))}
@@ -268,6 +270,11 @@ export default class Index extends React.Component {
                   component={UnitDetail}
                 />
                 <Route
+                  path="/subject/:subjectID/progress-test/:progressID"
+                  exact
+                  component={ProcessTestDetail}
+                />
+                <Route
                   path="/subject/:subjectID/unit/:unitID/excecise/:exceciseID"
                   exact
                   component={AddQuizQuestion}
@@ -276,6 +283,11 @@ export default class Index extends React.Component {
                   path="/subject/:subjectID/unit/:unitID/game/:gameID"
                   exact
                   component={AddGameQuestion}
+                />
+                <Route
+                  path="/subject/:subjectID/progress-test/:progressID/test/:testID"
+                  exact
+                  component={AddTestQuestion}
                 />
                 <Route
                   path="/game-question"
@@ -288,12 +300,12 @@ export default class Index extends React.Component {
                   component={QuestionComponent}
                 />
                 <Route
-                  path="/exercise-question/grade/:gradeID"
+                  path="/exercise-question/:gradeID"
                   exact
                   component={ExerciseQuestionBank}
                 />
                 <Route
-                  path="/game-question/grade/:gradeID"
+                  path="/game-question/:gradeID"
                   exact
                   component={GameQuestionBank}
                 />

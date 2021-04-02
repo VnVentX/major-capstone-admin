@@ -57,7 +57,8 @@ const EditSchool = (props) => {
     setVisible(true);
     form.setFieldsValue({
       schoolName: data.schoolName,
-      schoolStreet: data.schoolAddress,
+      schoolStreet: data.schoolStreet,
+      schoolDistrict: data.schoolDistrict,
       type: data.schoolLevel,
     });
   };
