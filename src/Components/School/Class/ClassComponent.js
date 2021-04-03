@@ -2,134 +2,10 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { Card, Button, Tag, Space, Table, Popconfirm, message } from "antd";
+import { QuestionCircleOutlined, DeleteOutlined } from "@ant-design/icons";
 import AddNewClass from "./Modal/AddNewClass";
 import ImportClassExcel from "./Modal/ImportClassExcel";
-
-const columns = [
-  {
-    title: "Class",
-    align: "center",
-    width: "20%",
-    render: (record) => (
-      <Link
-        to={{
-          pathname: "/student",
-          state: record,
-        }}
-      >
-        Class {record.class}
-      </Link>
-    ),
-  },
-  {
-    title: "Created By",
-    align: "center",
-    render: (record) => (
-      <Space direction="vertical" size="small">
-        {record.createdBy}
-        {record.createdDate}
-      </Space>
-    ),
-  },
-  {
-    title: "Modified By",
-    align: "center",
-    render: (record) => (
-      <Space direction="vertical" size="small">
-        {record.modifiedBy}
-        {record.modifiedDate}
-      </Space>
-    ),
-  },
-  {
-    title: "Status",
-    dataIndex: "status",
-    key: "status",
-    align: "center",
-    render: (status) => (
-      <span>
-        {status === "active" ? (
-          <Tag color={"green"} key={status}>
-            Active
-          </Tag>
-        ) : status === "dropout" ? (
-          <Tag color={"volcano"} key={status}>
-            Not Active
-          </Tag>
-        ) : null}
-      </span>
-    ),
-  },
-  {
-    title: "Action",
-    dataIndex: "",
-    key: "x",
-    align: "center",
-    render: (record) => (
-      <Space size="small">
-        <Button type="primary">Change Status</Button>
-      </Space>
-    ),
-  },
-];
-
-const data = [
-  {
-    id: 1,
-    school: "Dương Minh Châu",
-    grade: 1,
-    class: "1-1",
-    createdBy: "anhtt",
-    modifiedBy: "anhtt",
-    createdDate: "14:24PM, 24/02/2021",
-    modifiedDate: "14:50PM, 24/02/2021",
-    status: "active",
-  },
-  {
-    id: 2,
-    school: "Dương Minh Châu",
-    grade: 1,
-    class: "1-2",
-    createdBy: "anhtt",
-    modifiedBy: "anhtt",
-    createdDate: "14:24PM, 24/02/2021",
-    modifiedDate: "14:50PM, 24/02/2021",
-    status: "active",
-  },
-  {
-    id: 3,
-    school: "Dương Minh Châu",
-    grade: 1,
-    class: "1-3",
-    createdBy: "anhtt",
-    modifiedBy: "anhtt",
-    createdDate: "14:24PM, 24/02/2021",
-    modifiedDate: "14:50PM, 24/02/2021",
-    status: "active",
-  },
-  {
-    id: 4,
-    school: "Dương Minh Châu",
-    grade: 1,
-    class: "1-4",
-    createdBy: "anhtt",
-    modifiedBy: "anhtt",
-    createdDate: "14:24PM, 24/02/2021",
-    modifiedDate: "14:50PM, 24/02/2021",
-    status: "active",
-  },
-  {
-    id: 5,
-    school: "Dương Minh Châu",
-    grade: 1,
-    class: "1-5",
-    createdBy: "anhtt",
-    modifiedBy: "anhtt",
-    createdDate: "14:24PM, 24/02/2021",
-    modifiedDate: "14:50PM, 24/02/2021",
-    status: "active",
-  },
-];
+import EditClass from "./Modal/EditClass";
 
 const ClassComponent = (props) => {
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
@@ -148,12 +24,32 @@ const ClassComponent = (props) => {
         schoolId: schoolID,
       })
       .then((res) => {
-        console.log(res.data);
-        setClassData(res.data);
+        setClassData(res.data.length === 0 ? [] : res.data);
       })
       .catch((e) => {
         console.log(e);
       });
+  };
+
+  const disableClass = async (id, status) => {
+    let ids = [];
+    if (id.length === undefined) {
+      ids.push(id);
+    } else {
+      ids = id;
+    }
+    // await axios
+    //   .put("https://mathscienceeducation.herokuapp.com/bannerImage", {
+    //     ids: ids,
+    //     status: status,
+    //   })
+    //   .then((res) => {
+    //     console.log(res);
+    //     this.getAllBanner();
+    //   })
+    //   .catch((e) => {
+    //     console.log(e);
+    //   });
   };
 
   const onSelectChange = (selectedRowKeys) => {
@@ -166,11 +62,98 @@ const ClassComponent = (props) => {
     onChange: onSelectChange,
   };
 
-  const confirm = (e) => {
-    console.log(e);
-    message.success("Click on Yes");
-    setSelectedRowKeys([]);
+  const handleDisableClass = (e, status) => {
+    let message = "";
+    if (status === "DELETED") {
+      message = "DELETED";
+    } else if (status === "ACTIVE") {
+      message = "INACTIVE";
+    } else if (status === "INACTIVE") {
+      message = "ACTIVE";
+    }
+    disableClass(e, message);
   };
+
+  const columns = [
+    {
+      title: "Class",
+      align: "center",
+      width: "20%",
+      render: (record) => (
+        <Link
+          to={{
+            pathname: "/student",
+            state: {
+              schoolID: parseInt(window.location.pathname.split("/")[2]),
+              gradeID: props.gradeID,
+              classID: record.id,
+            },
+          }}
+        >
+          {record.className}
+        </Link>
+      ),
+    },
+    {
+      title: "Create By",
+      dataIndex: "createdBy",
+    },
+    {
+      title: "Create Date",
+      dataIndex: "createdDate",
+    },
+    {
+      title: "Modified By",
+      dataIndex: "modifiedBy",
+    },
+    {
+      title: "Modified Date",
+      dataIndex: "modifiedDate",
+    },
+    {
+      title: "Status",
+      align: "center",
+      dataIndex: "status",
+      render: (status) => (
+        <span>
+          {status === "ACTIVE" ? (
+            <Tag color={"green"} key={status}>
+              Active
+            </Tag>
+          ) : status === "INACTIVE" ? (
+            <Tag color={"volcano"} key={status}>
+              Disabled
+            </Tag>
+          ) : null}
+        </span>
+      ),
+    },
+    {
+      title: "Action",
+      align: "center",
+      render: (record) => (
+        <Space size="small">
+          <Popconfirm
+            placement="topRight"
+            title={
+              record.status === "ACTIVE"
+                ? "Are you sure to disable this Class?"
+                : "Are you sure to active this Class?"
+            }
+            onConfirm={() => handleDisableClass(record.id, record.status)}
+            okText="Yes"
+            cancelText="No"
+          >
+            <Button type="primary">Change Status</Button>
+          </Popconfirm>
+          <EditClass
+            data={record}
+            getClassBySchoolGrade={getClassBySchoolGrade}
+          />
+        </Space>
+      ),
+    },
+  ];
 
   return (
     <Card type="inner" title="Class Management">
@@ -182,36 +165,43 @@ const ClassComponent = (props) => {
         }}
       >
         <ImportClassExcel />
-        <div
-          style={{
-            marginBottom: 10,
-            display: "flex",
-            justifyContent: "flex-start",
-          }}
-        >
-          <AddNewClass />
-          {selectedRowKeys.length === 0 ? null : (
-            <Popconfirm
-              placement="topRight"
-              title="Are you sure to disable selected Grades?"
-              onConfirm={confirm} //Handle disable logic here
-              okText="Yes"
-              cancelText="No"
-            >
-              <Button type="danger" size="large" style={{ marginLeft: 5 }}>
-                Disable
-              </Button>
-            </Popconfirm>
-          )}
-        </div>
+        <AddNewClass
+          gradeID={props.gradeID}
+          getClassBySchoolGrade={getClassBySchoolGrade}
+        />
       </div>
       <Table
         rowKey={(record) => record.id}
         rowSelection={rowSelection}
         columns={columns}
-        dataSource={data}
+        dataSource={classData}
         scroll={{ x: true }}
       />
+      <div>
+        <h1>With selected:</h1>
+        {selectedRowKeys.length === 0 ? (
+          <>
+            <Button type="danger" disabled icon={<DeleteOutlined />}>
+              Delete
+            </Button>
+          </>
+        ) : (
+          <>
+            <Popconfirm
+              placement="topRight"
+              title="Are you sure to delete selected Class?"
+              onConfirm={() => handleDisableClass(selectedRowKeys, "DELETED")} //Handle disable logic here
+              okText="Yes"
+              cancelText="No"
+              icon={<QuestionCircleOutlined style={{ color: "red" }} />}
+            >
+              <Button type="danger" icon={<DeleteOutlined />}>
+                Delete
+              </Button>
+            </Popconfirm>
+          </>
+        )}
+      </div>
     </Card>
   );
 };

@@ -1,16 +1,84 @@
-import React, { useEffect } from "react";
-import { Form, Row, Col, Input, Button, AutoComplete, Select } from "antd";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { Form, Row, Col, Button, Select, Spin } from "antd";
 
 const SearchFilter = (props) => {
   const [form] = Form.useForm();
+  const [schoolData, setSchoolData] = useState([]);
+  const [gradeData, setGradeData] = useState([]);
+  const [classData, setClassData] = useState([]);
+  const [selectedSchool, setSelectedSchool] = useState("");
+  const [selectedGrade, setSelectedGrade] = useState("");
+  const [classLoading, setClassLoading] = useState(false);
 
   useEffect(() => {
+    getAllSchool();
+    getAllGrade();
+    if (props.searchData !== null) {
+      getClassByGradeSchoolID(
+        props.searchData?.school,
+        props.searchData?.grade
+      );
+    }
     form.setFieldsValue({
       school: props.searchData?.school,
       grade: props.searchData?.grade,
       class: props.searchData?.class,
     });
-  });
+    setSelectedSchool(props.searchData?.school);
+    setSelectedGrade(props.searchData?.grade);
+  }, [form, props.searchData]);
+
+  useEffect(() => {
+    getClassByGradeSchoolID(selectedSchool, selectedGrade);
+  }, [selectedGrade, selectedSchool]);
+
+  const getClassByGradeSchoolID = async (schoolID, gradeID) => {
+    setClassLoading(true);
+    setClassData([]);
+    await axios
+      .post("https://mathscienceeducation.herokuapp.com/class/schoolGradeId", {
+        gradeId: gradeID,
+        schoolId: schoolID,
+      })
+      .then((res) => {
+        setClassData(res.data.length === 0 ? [] : res.data);
+        setClassLoading(false);
+      })
+      .catch((e) => {
+        console.log(e);
+        setClassLoading(false);
+      });
+  };
+
+  const getAllSchool = async () => {
+    await axios
+      .get("https://mathscienceeducation.herokuapp.com/school/all")
+      .then((res) => {
+        setSchoolData(res.data.length === 0 ? [] : res.data);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
+
+  const getAllGrade = async () => {
+    await axios
+      .get("https://mathscienceeducation.herokuapp.com/grade/all")
+      .then((res) => {
+        setGradeData(res.data.length === 0 ? [] : res.data);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
+
+  const handleChangeSchool = (value) => {
+    setSelectedSchool(value);
+  };
+  const handleChangeGrade = (value) => {
+    setSelectedGrade(value);
+  };
 
   const onFinish = (values) => {
     props.handleSearch(values);
@@ -27,41 +95,38 @@ const SearchFilter = (props) => {
       <Row gutter={24}>
         <Col span={8}>
           <Form.Item name="school" label="Search School">
-            <AutoComplete
-              dataSource={props.listSchool?.map((item, idx) => (
-                <Select.Option key={idx} value={item?.school}>
-                  Trường Tiểu Học {item?.school}
+            <Select placeholder="Choose a School" onChange={handleChangeSchool}>
+              {schoolData?.map((item, idx) => (
+                <Select.Option key={idx} value={item?.id}>
+                  Trường Tiểu Học {item?.schoolName}
                 </Select.Option>
               ))}
-            >
-              <Input placeholder="Choose a School" allowClear />
-            </AutoComplete>
+            </Select>
           </Form.Item>
         </Col>
         <Col span={8}>
           <Form.Item name="grade" label="Search Grade">
-            <AutoComplete
-              dataSource={props.listGrade?.map((item, idx) => (
-                <Select.Option key={idx} value={item?.grade}>
-                  {item?.grade}
+            <Select placeholder="Choose a Grade" onChange={handleChangeGrade}>
+              {gradeData?.map((item, idx) => (
+                <Select.Option key={idx} value={item?.id}>
+                  Grade {item?.gradeName}
                 </Select.Option>
               ))}
-            >
-              <Input placeholder="Choose a Grade" allowClear />
-            </AutoComplete>
+            </Select>
           </Form.Item>
         </Col>
         <Col span={8}>
           <Form.Item name="class" label="Search Class">
-            <AutoComplete
-              dataSource={props.listClass?.map((item, idx) => (
-                <Select.Option key={idx} value={item?.class}>
-                  {item?.class}
+            <Select
+              placeholder="Choose a Class"
+              notFoundContent={classLoading ? <Spin size="default" /> : null}
+            >
+              {classData?.map((item, idx) => (
+                <Select.Option key={idx} value={item?.id}>
+                  {item?.className}
                 </Select.Option>
               ))}
-            >
-              <Input placeholder="Choose a Class" allowClear />
-            </AutoComplete>
+            </Select>
           </Form.Item>
         </Col>
       </Row>

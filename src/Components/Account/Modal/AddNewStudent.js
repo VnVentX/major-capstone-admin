@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { Modal, Button, Form, Input, Select, DatePicker } from "antd";
+import axios from "axios";
+import { Modal, Button, Form, Input, Select, DatePicker, Spin } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
-
-const { Option } = Select;
 
 const layout = {
   labelCol: { span: 6 },
@@ -10,16 +9,70 @@ const layout = {
 };
 
 const AddNewStudent = (props) => {
-  const [visible, setVisible] = useState(false);
   const [form] = Form.useForm();
+  const [visible, setVisible] = useState(false);
+  const [schoolData, setSchoolData] = useState([]);
+  const [gradeData, setGradeData] = useState([]);
+  const [classData, setClassData] = useState([]);
+  const [selectedSchool, setSelectedSchool] = useState("");
+  const [selectedGrade, setSelectedGrade] = useState("");
+  const [classLoading, setClassLoading] = useState(false);
 
   useEffect(() => {
+    getAllSchool();
+    getAllGrade();
     form.setFieldsValue({
-      school: props.searchData.school,
-      grade: props.searchData.grade,
-      class: props.searchData.class,
+      school: props.searchData?.school,
+      grade: props.searchData?.grade,
+      class: props.searchData?.class,
     });
-  });
+    setSelectedSchool(props.searchData?.school);
+    setSelectedGrade(props.searchData?.grade);
+  }, [form, props.searchData]);
+
+  useEffect(() => {
+    getClassByGradeSchoolID(selectedSchool, selectedGrade);
+  }, [selectedGrade, selectedSchool]);
+
+  const getClassByGradeSchoolID = async (schoolID, gradeID) => {
+    setClassLoading(true);
+    setClassData([]);
+    await axios
+      .post("https://mathscienceeducation.herokuapp.com/class/schoolGradeId", {
+        gradeId: gradeID,
+        schoolId: schoolID,
+      })
+      .then((res) => {
+        setClassData(res.data.length === 0 ? [] : res.data);
+        setClassLoading(false);
+      })
+      .catch((e) => {
+        console.log(e);
+        setClassLoading(false);
+      });
+  };
+
+  const getAllSchool = async () => {
+    await axios
+      .get("https://mathscienceeducation.herokuapp.com/school/all")
+      .then((res) => {
+        setSchoolData(res.data.length === 0 ? [] : res.data);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
+
+  const getAllGrade = async () => {
+    await axios
+      .get("https://mathscienceeducation.herokuapp.com/grade/all")
+      .then((res) => {
+        setGradeData(res.data.length === 0 ? [] : res.data);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
 
   const showModal = () => {
     setVisible(true);
@@ -28,6 +81,13 @@ const AddNewStudent = (props) => {
   const handleCancel = () => {
     console.log("Clicked cancel button");
     setVisible(false);
+  };
+
+  const handleChangeSchool = (value) => {
+    setSelectedSchool(value);
+  };
+  const handleChangeGrade = (value) => {
+    setSelectedGrade(value);
   };
 
   const onFinish = (event) => {
@@ -70,10 +130,12 @@ const AddNewStudent = (props) => {
             label="Select School"
             rules={[{ required: true, message: "Please choose a School" }]}
           >
-            <Select placeholder="Select School">
-              <Option value="1">Trường Tiểu Học Dương Minh Châu</Option>
-              <Option value="2">Trường Tiểu Học Nguyễn Chí Thanh</Option>
-              <Option value="3">Trường Tiểu Học Nguyễn Văn Tố</Option>
+            <Select placeholder="Choose a School" onChange={handleChangeSchool}>
+              {schoolData?.map((item, idx) => (
+                <Select.Option key={idx} value={item?.id}>
+                  Trường Tiểu Học {item?.schoolName}
+                </Select.Option>
+              ))}
             </Select>
           </Form.Item>
           <Form.Item
@@ -81,12 +143,12 @@ const AddNewStudent = (props) => {
             label="Select Grade"
             rules={[{ required: true, message: "Please choose a Grade" }]}
           >
-            <Select placeholder="Select Grade">
-              <Option value="1">Grade 1</Option>
-              <Option value="2">Grade 2</Option>
-              <Option value="3">Grade 3</Option>
-              <Option value="4">Grade 4</Option>
-              <Option value="5">Grade 5</Option>
+            <Select placeholder="Choose a Grade" onChange={handleChangeGrade}>
+              {gradeData?.map((item, idx) => (
+                <Select.Option key={idx} value={item?.id}>
+                  Grade {item?.gradeName}
+                </Select.Option>
+              ))}
             </Select>
           </Form.Item>
           <Form.Item
@@ -109,10 +171,17 @@ const AddNewStudent = (props) => {
                     },
                   ]}
                 >
-                  <Select placeholder="Select Class">
-                    <Option value="1">1-1</Option>
-                    <Option value="2">1-2</Option>
-                    <Option value="3">1-3</Option>
+                  <Select
+                    placeholder="Choose a Class"
+                    notFoundContent={
+                      classLoading ? <Spin size="default" /> : null
+                    }
+                  >
+                    {classData?.map((item, idx) => (
+                      <Select.Option key={idx} value={item?.id}>
+                        {item?.className}
+                      </Select.Option>
+                    ))}
                   </Select>
                 </Form.Item>
               ) : null;

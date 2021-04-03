@@ -1,17 +1,23 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Button, Modal, Form, Input, message } from "antd";
-import { PlusOutlined } from "@ant-design/icons";
+import { EditOutlined } from "@ant-design/icons";
 
 const layout = {
   labelCol: { span: 8 },
   wrapperCol: { span: 16 },
 };
 
-const AddNewClass = (props) => {
+const EditClass = (props) => {
   const [form] = Form.useForm();
   const [visible, setVisible] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    form.setFieldsValue({
+      class: props.data.className,
+    });
+  }, [form, props.data.className]);
 
   const showModal = () => {
     setVisible(true);
@@ -45,23 +51,18 @@ const AddNewClass = (props) => {
           message.error("Fail to create Class!");
         });
     }
-    createClass();
+    // createClass();
   };
 
   return (
     <div>
-      <Button
-        type="primary"
-        size="large"
-        onClick={showModal}
-        icon={<PlusOutlined />}
-      >
-        Create Class
+      <Button type="primary" onClick={showModal} icon={<EditOutlined />}>
+        Edit
       </Button>
       <Modal
-        title="Create Class"
+        title="Edit Class"
         visible={visible}
-        okText="Create"
+        okText="Update"
         confirmLoading={loading}
         onCancel={handleCancel}
         destroyOnClose
@@ -93,4 +94,4 @@ const AddNewClass = (props) => {
   );
 };
 
-export default AddNewClass;
+export default EditClass;

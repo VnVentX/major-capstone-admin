@@ -16,7 +16,7 @@ const Lesson = (props) => {
       <PowerPoint url={props.lesson.lessonUrl} />
       <Divider />
 
-      <Exercise />
+      <Exercise lessonID={props.lesson.id} />
       <Divider />
 
       <Game />

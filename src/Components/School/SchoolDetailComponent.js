@@ -5,14 +5,6 @@ import ClassComponent from "./Class/ClassComponent";
 
 const { TabPane } = Tabs;
 
-const data = [
-  { id: 1, grade: 1 },
-  { id: 2, grade: 2 },
-  { id: 3, grade: 3 },
-  { id: 4, grade: 4 },
-  { id: 5, grade: 5 },
-];
-
 const SchoolDetailComponent = () => {
   const [schoolData, setSchoolData] = useState({});
   const [gradeData, setGradeData] = useState([]);
@@ -27,8 +19,7 @@ const SchoolDetailComponent = () => {
     await axios
       .get(`https://mathscienceeducation.herokuapp.com/school/${schoolID}`)
       .then((res) => {
-        console.log(res);
-        setSchoolData(res.data);
+        setSchoolData(res.data.length === 0 ? [] : res.data);
       })
       .catch((e) => {
         console.log(e);
@@ -42,8 +33,8 @@ const SchoolDetailComponent = () => {
     await axios
       .get(`https://mathscienceeducation.herokuapp.com/grade/${schoolID}`)
       .then((res) => {
-        console.log(res);
-        setGradeData(res.data);
+        console.log(res.data);
+        setGradeData(res.data.length === 0 ? [] : res.data);
       })
       .catch((e) => {
         console.log(e);

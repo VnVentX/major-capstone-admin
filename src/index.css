@@ -285,3 +285,6 @@ input[type="checkbox"] + *::before {
 .ant-upload-list-item {
   margin: 0 !important;
 }
+.ant-select-item-empty {
+  text-align: center;
+}

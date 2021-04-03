@@ -63,21 +63,38 @@ const EditStudent = (props) => {
           <Form.Item
             name="firstName"
             label="First Name"
-            rules={[{ max: 50, message: "Can only input 50 characters" }]}
+            rules={[
+              {
+                required: true,
+                message: "Please input First Name",
+              },
+              { max: 50, message: "Can only input 50 characters" },
+            ]}
           >
             <Input maxLength={51} />
           </Form.Item>
           <Form.Item
             name="lastName"
             label="Last Name"
-            rules={[{ max: 50, message: "Can only input 50 characters" }]}
+            rules={[
+              { required: true, message: "Please input Last Name" },
+              { max: 50, message: "Can only input 50 characters" },
+            ]}
           >
             <Input maxLength={51} />
           </Form.Item>
-          <Form.Item name="age" label="DoB">
+          <Form.Item
+            name="age"
+            label="DoB"
+            rules={[{ required: true, message: "Please choose DoB" }]}
+          >
             <DatePicker format="DD/MM/YYYY" />
           </Form.Item>
-          <Form.Item name="gender" label="Gender">
+          <Form.Item
+            name="gender"
+            label="Gender"
+            rules={[{ required: true, message: "Please choose a Gender" }]}
+          >
             <Select>
               <Select.Option value="male">Male</Select.Option>
               <Select.Option value="female">Female</Select.Option>
@@ -87,7 +104,10 @@ const EditStudent = (props) => {
           <Form.Item
             name="parentName"
             label="Parent Name"
-            rules={[{ max: 50, message: "Can only input 50 characters" }]}
+            rules={[
+              { max: 50, message: "Can only input 50 characters" },
+              { required: true, message: "Please input parent name" },
+            ]}
           >
             <Input maxLength={51} />
           </Form.Item>
@@ -101,6 +121,7 @@ const EditStudent = (props) => {
                 ),
                 message: "Please input a valid phone number",
               },
+              { required: true, message: "Please input phone number" },
             ]}
           >
             <Input maxLength={51} />

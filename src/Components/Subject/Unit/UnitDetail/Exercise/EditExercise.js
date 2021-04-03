@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Button, Modal, Form, Input, Select, Tooltip } from "antd";
+import axios from "axios";
+import { Button, Modal, Form, Input, Tooltip, message } from "antd";
 import { EditOutlined } from "@ant-design/icons";
 
 const layout = {
@@ -10,16 +11,42 @@ const layout = {
 const EditExercise = (props) => {
   const [form] = Form.useForm();
   const [visible, setVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     form.setFieldsValue({
-      name: props.data.title,
+      name: props.data.exerciseName,
       description: props.data.description,
     });
   }, []);
 
-  const onFinish = (event) => {
-    console.log(event);
+  const editExercise = async (values) => {
+    setLoading(true);
+    console.log(props.data);
+    await axios
+      .put(`https://mathscienceeducation.herokuapp.com/exercise`, {
+        description: values.description,
+        exerciseName: values.name,
+        lessonId: props.data.lessonId,
+        id: props.data.id,
+      })
+      .then((res) => {
+        console.log(res);
+        props.getExerciseByLessonID();
+        setLoading(false);
+        handleCancel();
+        message.success("Edit Exercise successfully!");
+        form.resetFields();
+      })
+      .catch((e) => {
+        console.log(e);
+        message.error("Fail to edit Exercise");
+        setLoading(false);
+      });
+  };
+
+  const onFinish = (values) => {
+    editExercise(values);
   };
 
   const showModal = () => {
@@ -39,15 +66,15 @@ const EditExercise = (props) => {
       <Modal
         title="Edit Exercise"
         visible={visible}
+        okText="Update"
         onCancel={handleCancel}
+        confirmLoading={loading}
         destroyOnClose
-        okText="Submit"
         onOk={() => {
           form
             .validateFields()
             .then((values) => {
               onFinish(values);
-              form.resetFields();
             })
             .catch((info) => {
               console.log("Validate Failed:", info);

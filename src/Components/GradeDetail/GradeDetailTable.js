@@ -25,7 +25,6 @@ export default class GradeDetailTable extends Component {
   state = {
     searchText: "",
     searchedColumn: "",
-    selectedRowKeys: [],
     dataSource: [],
     dataSearch: [],
     schoolSearch: "",
@@ -52,7 +51,6 @@ export default class GradeDetailTable extends Component {
 
   getSchoolByGradeID = async (id) => {
     var gradeID = id;
-    console.log(id);
     if (id === "") {
       gradeID = window.location.pathname.split("/")[2];
     }
@@ -74,7 +72,6 @@ export default class GradeDetailTable extends Component {
     let gradeID = window.location.pathname.split("/")[2];
     ids.push(gradeID);
     ids.push(schoolID);
-    console.log(ids);
     await axios
       .put("https://mathscienceeducation.herokuapp.com/schoolGrade", {
         ids: ids,
@@ -170,11 +167,6 @@ export default class GradeDetailTable extends Component {
   handleReset = (clearFilters) => {
     clearFilters();
     this.setState({ searchText: "" });
-  };
-
-  onSelectChange = (selectedRowKeys) => {
-    console.log("selectedRowKeys changed: ", selectedRowKeys);
-    this.setState({ selectedRowKeys });
   };
 
   handleDisableLink = (schoolID, status) => {
@@ -274,13 +266,6 @@ export default class GradeDetailTable extends Component {
       },
     ];
 
-    const { selectedRowKeys } = this.state;
-
-    const rowSelection = {
-      selectedRowKeys,
-      onChange: this.onSelectChange,
-    };
-
     return (
       <Card type="inner" title="Linked Schools">
         <div
@@ -324,7 +309,6 @@ export default class GradeDetailTable extends Component {
         </div>
         <Table
           rowKey={(record) => record.id}
-          rowSelection={rowSelection}
           columns={columns}
           dataSource={this.state.dataSource}
           scroll={{ x: true }}

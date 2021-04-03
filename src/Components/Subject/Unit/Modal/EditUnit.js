@@ -24,10 +24,6 @@ const EditUnit = (props) => {
 
   const editUnit = async (values) => {
     setLoading(true);
-    console.log({
-      description: values.description,
-      unitName: values.unit,
-    });
     await axios
       .put(`https://mathscienceeducation.herokuapp.com/unit/${props.data.id}`, {
         description: values.description,
