@@ -11,6 +11,7 @@ const layout = {
 const AddNewStudent = (props) => {
   const [form] = Form.useForm();
   const [visible, setVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [schoolData, setSchoolData] = useState([]);
   const [gradeData, setGradeData] = useState([]);
   const [classData, setClassData] = useState([]);
@@ -90,8 +91,45 @@ const AddNewStudent = (props) => {
     setSelectedGrade(value);
   };
 
-  const onFinish = (event) => {
-    console.log(event.age.format("DD/MM/YYYY"));
+  const onFinish = (values) => {
+    createStudent(values);
+  };
+
+  const createStudent = async (values) => {
+    setLoading(true);
+    setClassData([]);
+    console.log({
+      schoolId: values.school,
+      gradeId: values.grade,
+      classId: values.class,
+      doB: values.age.format("DD/MM/YYYY"),
+      firtName: values.firstName,
+      lastName: values.lastName,
+      gender: values.gender,
+      parentName: values.parentName,
+      parentPhone: values.parentPhone,
+    });
+    await axios
+      .post("https://mathscienceeducation.herokuapp.com/student", {
+        schoolId: values.school,
+        gradeId: values.grade,
+        classId: values.class,
+        doB: values.age.format("DD/MM/YYYY"),
+        firtName: values.firstName,
+        lastName: values.lastName,
+        gender: values.gender,
+        parentName: values.parentName,
+        parentPhone: values.parentPhone,
+      })
+      .then((res) => {
+        console.log(res);
+        props.handleSearch(values);
+        setLoading(false);
+      })
+      .catch((e) => {
+        console.log(e);
+        setLoading(false);
+      });
   };
 
   return (
@@ -108,9 +146,8 @@ const AddNewStudent = (props) => {
       <Modal
         title="Add Student"
         visible={visible}
-        onCancel={() => {
-          handleCancel();
-        }}
+        confirmLoading={loading}
+        onCancel={handleCancel}
         destroyOnClose
         onOk={() => {
           form

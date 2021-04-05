@@ -31,6 +31,15 @@ export const AccountTableComponent = () => {
   }, []);
 
   const searchStudent = async (schoolID, gradeID, classID) => {
+    if (schoolID === undefined) {
+      schoolID = 0;
+    }
+    if (gradeID === undefined) {
+      gradeID = 0;
+    }
+    if (classID === undefined) {
+      classID = 0;
+    }
     await axios
       .post("https://mathscienceeducation.herokuapp.com/student/all", [
         schoolID,
@@ -38,7 +47,7 @@ export const AccountTableComponent = () => {
         classID,
       ])
       .then((res) => {
-        console.log(res.data);
+        console.log("get", res.data);
         setRecord(res.data.length === 0 ? [] : res.data);
         setSearchRecord(res.data.length === 0 ? [] : res.data);
       })
@@ -68,6 +77,7 @@ export const AccountTableComponent = () => {
       <TabPane tab="Student's Account" key="1">
         <SearchFilter searchData={searchData} handleSearch={handleSearch} />
         <StudentAccountComponent
+          handleSearch={handleSearch}
           handleNameSearch={handleNameSearch}
           data={record}
           searchRecord={searchRecord}

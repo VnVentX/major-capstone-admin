@@ -222,7 +222,10 @@ export default class StudentAccountComponent extends Component {
                   >
                     Export Student List
                   </Button>
-                  <AddNewStudent searchData={this.props.searchData} />
+                  <AddNewStudent
+                    searchData={this.props.searchData}
+                    handleSearch={this.props.handleSearch}
+                  />
                 </div>
               )}
           </div>
