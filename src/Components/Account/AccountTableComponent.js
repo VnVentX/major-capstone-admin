@@ -66,11 +66,7 @@ export const AccountTableComponent = () => {
   return (
     <Tabs defaultActiveKey="1">
       <TabPane tab="Student's Account" key="1">
-        <SearchFilter
-          listClass={data}
-          searchData={searchData}
-          handleSearch={handleSearch}
-        />
+        <SearchFilter searchData={searchData} handleSearch={handleSearch} />
         <StudentAccountComponent
           handleNameSearch={handleNameSearch}
           data={record}

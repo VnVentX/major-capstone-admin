@@ -59,8 +59,8 @@ const ViewQuestion = (props) => {
 
   useEffect(() => {
     form.setFieldsValue({
-      questionTitle: "Unit 1 Question",
-      question: props.data.q_name,
+      questionTitle: props.data.q_name,
+      description: "Unit 1 Question",
       score: 10,
       options: options,
     });
@@ -92,18 +92,18 @@ const ViewQuestion = (props) => {
           <Form.Item name="questionTitle" label="Question Title">
             <Input.TextArea
               autoSize
-              maxLength="100"
+              maxLength="250"
               showCount
               placeholder="Question Title"
               disabled
             />
           </Form.Item>
-          <Form.Item name="question" label="Question Text">
+          <Form.Item name="description" label="Description">
             <Input.TextArea
               autoSize
-              maxLength="100"
+              maxLength="50"
               showCount
-              placeholder="Question Text"
+              placeholder="Description"
               disabled
             />
           </Form.Item>

@@ -62,8 +62,8 @@ const EditQuestion = (props) => {
     form.setFieldsValue({
       subject: "science",
       unit: "unit 2",
-      questionTitle: props.data.q_name,
-      question: "Multiple chooise",
+      questionTitle: "Multiple chooise",
+      description: props.data.q_name,
       score: 10,
       options: options,
     });
@@ -187,21 +187,17 @@ const EditQuestion = (props) => {
           >
             <Input.TextArea
               autoSize
-              maxLength="100"
+              maxLength="250"
               showCount
               placeholder="Question Title"
             />
           </Form.Item>
-          <Form.Item
-            name="question"
-            label="Question Text"
-            rules={[{ required: true, message: "Please input a question" }]}
-          >
+          <Form.Item name="description" label="Description">
             <Input.TextArea
               autoSize
-              maxLength="250"
+              maxLength="50"
               showCount
-              placeholder="Question Text"
+              placeholder="Description"
             />
           </Form.Item>
           <Form.Item

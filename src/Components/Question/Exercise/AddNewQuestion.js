@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import {
   Form,
   Input,
@@ -31,6 +32,44 @@ const AddNewQuestion = () => {
   const [form] = Form.useForm();
   const [audioFile, setAudioFile] = useState([]);
   const [imgFile, setImgFile] = useState([]);
+  const [subject, setSubject] = useState([]);
+  const [unit, setUnit] = useState([]);
+  const [selectedSubject, setSelectedSubject] = useState("");
+
+  useEffect(() => {
+    getSubjectByGrade();
+  }, []);
+
+  useEffect(() => {
+    getUnitBySubjectID(selectedSubject);
+  }, [selectedSubject]);
+
+  const getSubjectByGrade = async () => {
+    let gradeID = window.location.pathname.split("/")[2];
+    await axios
+      .get(
+        `https://mathscienceeducation.herokuapp.com/grade/${gradeID}/subjects`
+      )
+      .then((res) => {
+        setSubject(res.data.length === 0 ? [] : res.data);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
+
+  const getUnitBySubjectID = async (subjectID) => {
+    await axios
+      .get(
+        `https://mathscienceeducation.herokuapp.com/subject/${subjectID}/units`
+      )
+      .then((res) => {
+        setUnit(res.data.length === 0 ? [] : res.data);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
 
   const handleChangeImg = ({ fileList }) => {
     setImgFile(fileList);
@@ -50,17 +89,52 @@ const AddNewQuestion = () => {
   };
 
   const onFinish = (values) => {
-    const question = {
-      subject: values.subject,
-      unit: values.unit,
-      q_title: values.questionTitle,
-      q_name: values.question,
-      q_score: values.score,
-      q_audio: values.q_audio ? values.q_audio[0].originFileObj : null,
-      q_img: values.q_img ? values.q_img[0].originFileObj : null,
-      options: values.options,
-    };
-    console.log(question);
+    let optionTextList = [];
+    let isCorrectList = [];
+    values.options.forEach((item) => {
+      optionTextList.push(item.option);
+      isCorrectList.push(item.correct);
+    });
+    let formData = new FormData();
+    formData.append("unitId", values.unit);
+    formData.append("questionTitle", values.questionTitle);
+    formData.append("questionType", "EXCERCISE");
+    formData.append("score", values.score);
+    formData.append("description", values.description);
+    if (values.imgFile !== undefined && values.imgFile.length !== 0) {
+      formData.append("imageFile", values.imgFile[0].originFileObj);
+    }
+    if (values.audioFile !== undefined && values.audioFile.length !== 0) {
+      formData.append("audioFile", values.audioFile[0].originFileObj);
+    }
+    formData.append("isCorrectList", [isCorrectList]);
+    formData.append("optionTextList", optionTextList);
+    console.log(formData.get("unitId"));
+    console.log(formData.get("questionTitle"));
+    console.log(formData.get("questionType"));
+    console.log(formData.get("score"));
+    console.log(formData.get("description"));
+    console.log(formData.get("imageFile"));
+    console.log(formData.get("audioFile"));
+    console.log(formData.get("isCorrectList"));
+    console.log(formData.get("optionTextList"));
+
+    createQuestion(formData);
+  };
+
+  const createQuestion = async (formData) => {
+    await axios
+      .post("https://mathscienceeducation.herokuapp.com/question", formData)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
+
+  const handleChangeSubject = (value) => {
+    setSelectedSubject(value);
   };
 
   return (
@@ -85,9 +159,16 @@ const AddNewQuestion = () => {
             },
           ]}
         >
-          <Select showSearch placeholder="Select Subject">
-            <Option value="math">Math</Option>
-            <Option value="science">Science</Option>
+          <Select
+            showSearch
+            placeholder="Select Subject"
+            onChange={handleChangeSubject}
+          >
+            {subject?.map((item, idx) => (
+              <Select.Option key={idx} value={item?.id}>
+                {item?.subjectName}
+              </Select.Option>
+            ))}
           </Select>
         </Form.Item>
         <Form.Item
@@ -109,18 +190,11 @@ const AddNewQuestion = () => {
                 ]}
               >
                 <Select showSearch placeholder="Select Unit">
-                  <Option value="unit 1">Unit 1</Option>
-                  <Option value="unit 2">Unit 2</Option>
-                  <Option value="unit 3">Unit 3</Option>
-                  <Option value="unit 4">Unit 4</Option>
-                  <Option value="unit 5">Unit 5</Option>
-                  <Option value="unit 6">Unit 6</Option>
-                  <Option value="unit 7">Unit 7</Option>
-                  <Option value="unit 8">Unit 8</Option>
-                  <Option value="unit 9">Unit 9</Option>
-                  <Option value="unit 10">Unit 10</Option>
-                  <Option value="unit 11">Unit 11</Option>
-                  <Option value="unit 12">Unit 12</Option>
+                  {unit?.map((item, idx) => (
+                    <Select.Option key={idx} value={item?.id}>
+                      Unit {item?.unitName}
+                    </Select.Option>
+                  ))}
                 </Select>
               </Form.Item>
             ) : null;
@@ -133,21 +207,17 @@ const AddNewQuestion = () => {
         >
           <Input.TextArea
             autoSize
-            maxLength="100"
+            maxLength="250"
             showCount
             placeholder="Question Title"
           />
         </Form.Item>
-        <Form.Item
-          name="question"
-          label="Question Text"
-          rules={[{ required: true, message: "Please input a question" }]}
-        >
+        <Form.Item name="description" label="Description">
           <Input.TextArea
             autoSize
-            maxLength="250"
+            maxLength="50"
             showCount
-            placeholder="Question Text"
+            placeholder="Question Description"
           />
         </Form.Item>
         <Form.Item
@@ -158,7 +228,7 @@ const AddNewQuestion = () => {
           <InputNumber placeholder="Score" />
         </Form.Item>
         <Form.Item
-          name="q_audio"
+          name="audioFile"
           label="Question Audio"
           getValueFromEvent={normFile}
         >
@@ -181,7 +251,7 @@ const AddNewQuestion = () => {
           </Upload>
         </Form.Item>
         <Form.Item
-          name="q_img"
+          name="imgFile"
           label="Question Image"
           getValueFromEvent={normFile}
         >

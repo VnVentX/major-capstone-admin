@@ -22,14 +22,16 @@ const EditExercise = (props) => {
 
   const editExercise = async (values) => {
     setLoading(true);
-    console.log(props.data);
     await axios
-      .put(`https://mathscienceeducation.herokuapp.com/exercise`, {
-        description: values.description,
-        exerciseName: values.name,
-        lessonId: props.data.lessonId,
-        id: props.data.id,
-      })
+      .put(
+        `https://mathscienceeducation.herokuapp.com/exercise/${props.data.id}`,
+        {
+          description: values.description,
+          exerciseName: values.name,
+          lessonId: props.data.lessonId,
+          id: props.data.id,
+        }
+      )
       .then((res) => {
         console.log(res);
         props.getExerciseByLessonID();

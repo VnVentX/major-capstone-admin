@@ -91,7 +91,7 @@ const AddNewStudent = (props) => {
   };
 
   const onFinish = (event) => {
-    console.log(event);
+    console.log(event.age.format("DD/MM/YYYY"));
   };
 
   return (
@@ -117,7 +117,6 @@ const AddNewStudent = (props) => {
             .validateFields()
             .then((values) => {
               onFinish(values);
-              form.resetFields();
             })
             .catch((info) => {
               console.log("Validate Failed:", info);
