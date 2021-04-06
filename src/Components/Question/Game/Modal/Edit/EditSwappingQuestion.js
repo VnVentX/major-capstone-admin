@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import {
   Form,
   Input,
@@ -20,42 +21,55 @@ const normFile = (e) => {
 };
 
 const EditSwappingQuestion = (props) => {
-  const [imgFile1, setImgFile1] = useState([
-    {
-      thumbUrl: props.data,
-    },
-  ]);
-  const [imgFile2, setImgFile2] = useState([
-    {
-      thumbUrl: props.data,
-    },
-  ]);
-  const [imgFile3, setImgFile3] = useState([
-    {
-      thumbUrl: props.data,
-    },
-  ]);
-  const [imgFile4, setImgFile4] = useState([
-    {
-      thumbUrl: props.data,
-    },
-  ]);
+  const [imgFile1, setImgFile1] = useState([]);
+  const [imgFile2, setImgFile2] = useState([]);
+  const [imgFile3, setImgFile3] = useState([]);
+  const [imgFile4, setImgFile4] = useState([]);
 
   useEffect(() => {
-    props.form.setFieldsValue({
-      subject: "science",
-      unit: "unit 2",
-      question: "Swap the word with the right picture",
-      value1: "Hand",
-      value2: "Leg",
-      value3: "Ear",
-      value4: "Nose",
-      key1: "",
-      key2: "",
-      key3: "",
-      key4: "",
-    });
+    getQuestionByID();
   }, []);
+
+  const getQuestionByID = async () => {
+    await axios
+      .get(
+        `https://mathscienceeducation.herokuapp.com/question/${props.data.id}?questionType=SWAP`
+      )
+      .then((res) => {
+        props.form.setFieldsValue({
+          questionTitle: res.data.questionTitle,
+          description: res.data.description,
+          score: res.data.score,
+          value1: res.data.optionQuestionDTOList[0].optionText,
+          value2: res.data.optionQuestionDTOList[1].optionText,
+          value3: res.data.optionQuestionDTOList[2].optionText,
+          value4: res.data.optionQuestionDTOList[3].optionText,
+        });
+        setImgFile1([
+          {
+            thumbUrl: res.data.optionQuestionDTOList[0].optionImageUrl,
+          },
+        ]);
+        setImgFile2([
+          {
+            thumbUrl: res.data.optionQuestionDTOList[1].optionImageUrl,
+          },
+        ]);
+        setImgFile3([
+          {
+            thumbUrl: res.data.optionQuestionDTOList[2].optionImageUrl,
+          },
+        ]);
+        setImgFile4([
+          {
+            thumbUrl: res.data.optionQuestionDTOList[3].optionImageUrl,
+          },
+        ]);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
 
   const handleChangeImg1 = ({ fileList }) => {
     setImgFile1(fileList);

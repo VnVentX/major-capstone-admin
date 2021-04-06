@@ -145,6 +145,7 @@ const AddNewQuestion = () => {
         });
         setAudioFile([]);
         setImgFile([]);
+        setCounter(0);
       })
       .catch((e) => {
         console.log(e);

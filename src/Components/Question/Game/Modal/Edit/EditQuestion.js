@@ -20,13 +20,13 @@ const EditQuestion = (props) => {
   };
 
   const onFinish = (values) => {
-    if (props.data?.type === "FILL") {
+    if (props.data?.questionType === "FILL") {
       fillingQuestionSubmit(values);
-    } else if (props.data?.type === "CHOOSE") {
+    } else if (props.data?.questionType === "CHOOSE") {
       choosingQuestionSubmit(values);
-    } else if (props.data?.type === "MATCH") {
+    } else if (props.data?.questionType === "MATCH") {
       matchingQuestionSubmit(values);
-    } else if (props.data?.type === "SWAP") {
+    } else if (props.data?.questionType === "SWAP") {
       swappingQuestionSubmit(values);
     }
   };
@@ -54,35 +54,59 @@ const EditQuestion = (props) => {
       q_name: values.question,
       options: [
         {
-          key: values.key1[0] ? values.key1[0].originFileObj : null,
+          key:
+            values.key1 && values.key1.length !== 0
+              ? values.key1[0]?.originFileObj
+              : null,
           value: values.value1,
         },
         {
-          key: values.key2[0] ? values.key2[0].originFileObj : null,
+          key:
+            values.key2 && values.key2.length !== 0
+              ? values.key2[0]?.originFileObj
+              : null,
           value: values.value2,
         },
         {
-          key: values.key3[0] ? values.key3[0].originFileObj : null,
+          key:
+            values.key3 && values.key3.length !== 0
+              ? values.key3[0]?.originFileObj
+              : null,
           value: values.value3,
         },
         {
-          key: values.key4[0] ? values.key4[0].originFileObj : null,
+          key:
+            values.key4 && values.key4.length !== 0
+              ? values.key4[0]?.originFileObj
+              : null,
           value: values.value4,
         },
         {
-          key: values.key5[0] ? values.key5[0].originFileObj : null,
+          key:
+            values.key5 && values.key5.length !== 0
+              ? values.key5[0]?.originFileObj
+              : null,
           value: values.value5,
         },
         {
-          key: values.key6[0] ? values.key6[0].originFileObj : null,
+          key:
+            values.key6 && values.key6.length !== 0
+              ? values.key6[0]?.originFileObj
+              : null,
           value: values.value6,
         },
         {
-          key: values.key7[0] ? values.key7[0].originFileObj : null,
+          key:
+            values.key7 && values.key7.length !== 0
+              ? values.key7[0]?.originFileObj
+              : null,
           value: values.value7,
         },
         {
-          key: values.key8[0] ? values.key8[0].originFileObj : null,
+          key:
+            values.key8 && values.key8.length !== 0
+              ? values.key8[0]?.originFileObj
+              : null,
           value: values.value8,
         },
       ],
@@ -91,26 +115,37 @@ const EditQuestion = (props) => {
   };
   const swappingQuestionSubmit = (values) => {
     const question = {
-      id: props.data.key,
-      subject: values.subject,
-      unit: values.unit,
-      q_title: values.questionTitle,
-      q_name: values.question,
+      id: props.data.id,
+      questionTitle: values.questionTitle,
+      description: values.description,
+      score: values.score,
       options: [
         {
-          key: values.key1[0] ? values.key1[0].originFileObj : null,
+          key:
+            values.key1 && values.key1.length !== 0
+              ? values.key1[0]?.originFileObj
+              : null,
           value: values.value1,
         },
         {
-          key: values.key2[0] ? values.key2[0].originFileObj : null,
+          key:
+            values.key2 && values.key2.length !== 0
+              ? values.key2[0]?.originFileObj
+              : null,
           value: values.value2,
         },
         {
-          key: values.key3[0] ? values.key3[0].originFileObj : null,
+          key:
+            values.key3 && values.key3.length !== 0
+              ? values.key3[0]?.originFileObj
+              : null,
           value: values.value3,
         },
         {
-          key: values.key4[0] ? values.key4[0].originFileObj : null,
+          key:
+            values.key4 && values.key4.length !== 0
+              ? values.key4[0]?.originFileObj
+              : null,
           value: values.value4,
         },
       ],
@@ -119,35 +154,53 @@ const EditQuestion = (props) => {
   };
 
   const matchingQuestionSubmit = (values) => {
+    console.log(values);
     const question = {
-      id: props.key,
-      subject: values.subject,
-      unit: values.unit,
-      q_title: values.questionTitle,
-      q_name: values.question,
+      id: props.data.id,
+      questionTitle: values.questionTitle,
+      description: values.description,
+      score: values.score,
       options: [
         {
-          key: values.key1[0] ? values.key1[0].originFileObj : null,
+          key:
+            values.key1 && values.key1.length !== 0
+              ? values.key1[0]?.originFileObj
+              : null,
           value: values.value1,
         },
         {
-          key: values.key2[0] ? values.key2[0].originFileObj : null,
+          key:
+            values.key2 && values.key2.length !== 0
+              ? values.key2[0]?.originFileObj
+              : null,
           value: values.value2,
         },
         {
-          key: values.key3[0] ? values.key3[0].originFileObj : null,
+          key:
+            values.key3 && values.key3.length !== 0
+              ? values.key3[0]?.originFileObj
+              : null,
           value: values.value3,
         },
         {
-          key: values.key4[0] ? values.key4[0].originFileObj : null,
+          key:
+            values.key4 && values.key4.length !== 0
+              ? values.key4[0]?.originFileObj
+              : null,
           value: values.value4,
         },
         {
-          key: values.key5[0] ? values.key5[0].originFileObj : null,
+          key:
+            values.key5 && values.key5.length !== 0
+              ? values.key5[0]?.originFileObj
+              : null,
           value: values.value5,
         },
         {
-          key: values.key6[0] ? values.key6[0].originFileObj : null,
+          key:
+            values.key6 && values.key6.length !== 0
+              ? values.key6[0]?.originFileObj
+              : null,
           value: values.value6,
         },
       ],
@@ -178,14 +231,14 @@ const EditQuestion = (props) => {
             });
         }}
       >
-        {props.data?.type === "MATCH" ? (
-          <EditMatchingQuestion form={form} />
-        ) : props.data?.type === "FILL" ? (
-          <EditFillingQuestion form={form} />
-        ) : props.data?.type === "SWAP" ? (
-          <EditSwappingQuestion form={form} />
-        ) : props.data?.type === "CHOOSE" ? (
-          <EditChoosingQuestion form={form} />
+        {props.data?.questionType === "MATCH" ? (
+          <EditMatchingQuestion form={form} data={props.data} />
+        ) : props.data?.questionType === "FILL" ? (
+          <EditFillingQuestion form={form} data={props.data} />
+        ) : props.data?.questionType === "SWAP" ? (
+          <EditSwappingQuestion form={form} data={props.data} />
+        ) : props.data?.questionType === "CHOOSE" ? (
+          <EditChoosingQuestion form={form} data={props.data} />
         ) : null}
       </Modal>
     </div>

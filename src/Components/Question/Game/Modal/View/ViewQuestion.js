@@ -32,14 +32,14 @@ const ViewQuestion = (props) => {
         onCancel={handleCancel}
         footer={null}
       >
-        {props.data?.type === "MATCH" ? (
-          <ViewMatchingQuestion form={form} />
-        ) : props.data?.type === "CHOOSE" ? (
-          <ViewChoosingQuestion form={form} />
-        ) : props.data?.type === "FILL" ? (
-          <ViewFillingQuestion form={form} />
-        ) : props.data?.type === "SWAP" ? (
-          <ViewSwappingQuestion form={form} />
+        {props.data?.questionType === "MATCH" ? (
+          <ViewMatchingQuestion form={form} data={props.data} />
+        ) : props.data?.questionType === "CHOOSE" ? (
+          <ViewChoosingQuestion form={form} data={props.data} />
+        ) : props.data?.questionType === "FILL" ? (
+          <ViewFillingQuestion form={form} data={props.data} />
+        ) : props.data?.questionType === "SWAP" ? (
+          <ViewSwappingQuestion form={form} data={props.data} />
         ) : null}
       </Modal>
     </div>

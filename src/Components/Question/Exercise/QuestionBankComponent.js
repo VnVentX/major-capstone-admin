@@ -63,7 +63,7 @@ const QuestionBankComponent = () => {
     setLoading(true);
     await axios
       .get(
-        `https://mathscienceeducation.herokuapp.com/question/${unitID}/questions`
+        `https://mathscienceeducation.herokuapp.com/unit/${unitID}/questions?isExercise=true`
       )
       .then((res) => {
         setQuestionData(res.data.length === 0 ? [] : res.data);
@@ -76,8 +76,19 @@ const QuestionBankComponent = () => {
   };
 
   const deleteQuestion = async (id) => {
+    let ids = [];
+    if (id.length === undefined) {
+      ids.push(id);
+    } else {
+      ids = id;
+    }
+    let formData = new FormData();
+    formData.append("ids", ids);
     await axios
-      .put(`https://mathscienceeducation.herokuapp.com/question/delete/${id}`)
+      .put(
+        "https://mathscienceeducation.herokuapp.com/question/delete",
+        formData
+      )
       .then((res) => {
         console.log(res);
         getQuestionByUnitID(selectedUnit);
@@ -118,23 +129,6 @@ const QuestionBankComponent = () => {
     {
       title: "Description",
       dataIndex: "description",
-    },
-    {
-      title: "Type",
-      dataIndex: "questionTypeId",
-      render: (questionTypeId) => (
-        <span>
-          {questionTypeId === 2
-            ? "FILL"
-            : questionTypeId === 3
-            ? "MATCH"
-            : questionTypeId === 4
-            ? "SWAP"
-            : questionTypeId === 5
-            ? "CHOOSE"
-            : null}
-        </span>
-      ),
     },
     {
       title: "Created By",
@@ -271,7 +265,7 @@ const QuestionBankComponent = () => {
           <>
             <Popconfirm
               placement="topRight"
-              title="Are you sure to delete selected Class?"
+              title="Are you sure to delete selected Questions?"
               onConfirm={() => handleDeleteQuestion(selectedRowKeys)} //Handle disable logic here
               okText="Yes"
               cancelText="No"

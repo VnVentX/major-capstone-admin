@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import { getAudioThumbUrl } from "../../../../helper/audioThumbUrl";
 import {
   Select,
@@ -21,19 +22,6 @@ import {
   EditOutlined,
 } from "@ant-design/icons";
 
-const { Option } = Select;
-
-const options = [
-  {
-    option: "A",
-    correct: "True",
-  },
-  {
-    option: "B",
-    correct: "False",
-  },
-];
-
 const normFile = (e) => {
   if (Array.isArray(e)) {
     return e;
@@ -44,31 +32,42 @@ const normFile = (e) => {
 const EditQuestion = (props) => {
   const [form] = Form.useForm();
   const [counter, setCounter] = useState(0);
+  const [correctCount, setCorrectCount] = useState(0);
   const [visible, setVisible] = useState(false);
   const [audioFile, setAudioFile] = useState([
     {
       thumbUrl: getAudioThumbUrl(),
-      url:
-        "https://firebasestorage.googleapis.com/v0/b/mathscience-e425d.appspot.com/o/audios%2F94028074-2bc7-47df-89bb-748a475aee3fmp3?alt=media&token=44a7c7d4-cdbf-4eae-ada8-d5276e64792d",
+      url: props.data.questionAudioUrl,
     },
   ]);
   const [imgFile, setImgFile] = useState([
     {
-      thumbUrl: props.data.q_img,
+      thumbUrl: props.data.questionImageUrl,
     },
   ]);
 
   useEffect(() => {
-    form.setFieldsValue({
-      subject: "science",
-      unit: "unit 2",
-      questionTitle: "Multiple chooise",
-      description: props.data.q_name,
-      score: 10,
-      options: options,
-    });
-    setCounter(options.length);
+    getQuestionByID();
   }, []);
+
+  const getQuestionByID = async () => {
+    await axios
+      .get(
+        `https://mathscienceeducation.herokuapp.com/question/${props.data.id}?questionType=EXERCISE`
+      )
+      .then((res) => {
+        form.setFieldsValue({
+          questionTitle: res.data.questionTitle,
+          description: res.data.description,
+          score: res.data.score,
+          options: res.data.optionQuestionDTOList,
+        });
+        setCounter(res.data.optionQuestionDTOList.length);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
 
   const handleChangeImg = ({ fileList }) => {
     setImgFile(fileList);
@@ -87,8 +86,23 @@ const EditQuestion = (props) => {
     setCounter(count - 1);
   };
 
+  const handleCorrectCount = () => {
+    console.log(form.getFieldsValue().options);
+    let count = 0;
+    form.getFieldsValue().options.forEach((item) => {
+      if (item !== undefined) {
+        if (item.isCorrect === true) {
+          count = count + 1;
+        }
+      }
+    });
+    setCorrectCount(count);
+    console.log(count);
+  };
+
   const onFinish = (event) => {
     console.log(event);
+    setCounter(0);
   };
 
   const showModal = () => {
@@ -117,7 +131,6 @@ const EditQuestion = (props) => {
             .validateFields()
             .then((values) => {
               onFinish(values);
-              form.resetFields();
             })
             .catch((info) => {
               console.log("Validate Failed:", info);
@@ -213,7 +226,25 @@ const EditQuestion = (props) => {
             </Upload>
           </Form.Item>
           <h1>Options</h1>
-          <Form.List name="options">
+          <Form.List
+            name="options"
+            rules={[
+              {
+                validator: async (_, options) => {
+                  if (!options || options.length < 2) {
+                    return Promise.reject(
+                      new Error("At least 2 options are required")
+                    );
+                  }
+                  if (correctCount > 1) {
+                    return Promise.reject(
+                      new Error("Can only have one correct option")
+                    );
+                  }
+                },
+              },
+            ]}
+          >
             {(fields, { add, remove }, { errors }) => {
               return (
                 <div>
@@ -224,8 +255,8 @@ const EditQuestion = (props) => {
                         <Form.Item
                           {...field}
                           label={`Option ${idx + 1}`}
-                          name={[field.name, "option"]}
-                          fieldKey={[field.fieldKey, "option"]}
+                          name={[field.name, "optionText"]}
+                          fieldKey={[field.fieldKey, "optionText"]}
                           rules={[
                             { required: true, message: "Please input option!" },
                           ]}
@@ -242,15 +273,18 @@ const EditQuestion = (props) => {
                         <Form.Item
                           {...field}
                           label="Is Correct"
-                          name={[field.name, "correct"]}
-                          fieldKey={[field.fieldKey, "correct"]}
+                          name={[field.name, "isCorrect"]}
+                          fieldKey={[field.fieldKey, "isCorrect"]}
                           rules={[
                             { required: true, message: "Missing correct" },
                           ]}
                         >
-                          <Select placeholder="Select Is Correct">
-                            <Select.Option value="true">True</Select.Option>
-                            <Select.Option value="false">False</Select.Option>
+                          <Select
+                            placeholder="Select Is Correct"
+                            onChange={handleCorrectCount}
+                          >
+                            <Select.Option value={true}>True</Select.Option>
+                            <Select.Option value={false}>False</Select.Option>
                           </Select>
                         </Form.Item>
                         <MinusCircleOutlined

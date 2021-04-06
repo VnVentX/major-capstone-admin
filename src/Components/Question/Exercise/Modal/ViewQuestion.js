@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import {
   Select,
   Form,
@@ -17,17 +18,6 @@ import {
   PauseCircleOutlined,
   EyeOutlined,
 } from "@ant-design/icons";
-
-const options = [
-  {
-    option: "A",
-    correct: "True",
-  },
-  {
-    option: "B",
-    correct: "False",
-  },
-];
 
 const useAudio = (url) => {
   const [audio] = useState(new Audio(url));
@@ -52,19 +42,29 @@ const useAudio = (url) => {
 const ViewQuestion = (props) => {
   const [form] = Form.useForm();
   const [visible, setVisible] = useState(false);
-
-  const [playing, toggle] = useAudio(
-    "https://firebasestorage.googleapis.com/v0/b/mathscience-e425d.appspot.com/o/audios%2F94028074-2bc7-47df-89bb-748a475aee3fmp3?alt=media&token=44a7c7d4-cdbf-4eae-ada8-d5276e64792d"
-  );
+  const [playing, toggle] = useAudio(props.data.questionAudioUrl);
 
   useEffect(() => {
-    form.setFieldsValue({
-      questionTitle: props.data.q_name,
-      description: "Unit 1 Question",
-      score: 10,
-      options: options,
-    });
+    getQuestionByID();
   }, []);
+
+  const getQuestionByID = async () => {
+    await axios
+      .get(
+        `https://mathscienceeducation.herokuapp.com/question/${props.data.id}?questionType=EXERCISE`
+      )
+      .then((res) => {
+        form.setFieldsValue({
+          questionTitle: res.data.questionTitle,
+          description: res.data.description,
+          score: res.data.score,
+          options: res.data.optionQuestionDTOList,
+        });
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
 
   const showModal = () => {
     setVisible(true);
@@ -120,7 +120,7 @@ const ViewQuestion = (props) => {
             </div>
           </Form.Item>
           <Form.Item name="q_img" label="Question Image">
-            <Image src="https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg" />
+            <Image src={props.data.questionImageUrl} />
           </Form.Item>
           <h1>Options</h1>
           <Form.List name="options">
@@ -134,8 +134,8 @@ const ViewQuestion = (props) => {
                         <Form.Item
                           {...field}
                           label={`Option ${idx + 1}`}
-                          name={[field.name, "option"]}
-                          fieldKey={[field.fieldKey, "option"]}
+                          name={[field.name, "optionText"]}
+                          fieldKey={[field.fieldKey, "optionText"]}
                         >
                           <Input.TextArea
                             autoSize
@@ -150,12 +150,12 @@ const ViewQuestion = (props) => {
                         <Form.Item
                           {...field}
                           label="Is Correct"
-                          name={[field.name, "correct"]}
-                          fieldKey={[field.fieldKey, "correct"]}
+                          name={[field.name, "isCorrect"]}
+                          fieldKey={[field.fieldKey, "isCorrect"]}
                         >
                           <Select placeholder="Select Is Correct" disabled>
-                            <Select.Option value="true">True</Select.Option>
-                            <Select.Option value="false">False</Select.Option>
+                            <Select.Option value={true}>True</Select.Option>
+                            <Select.Option value={false}>False</Select.Option>
                           </Select>
                         </Form.Item>
                       </Col>

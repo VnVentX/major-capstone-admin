@@ -18,7 +18,7 @@ const EditGame = (props) => {
       name: props.data.gameName,
       description: props.data.description,
     });
-  }, []);
+  }, [form, props.data.description, props.data.gameName]);
 
   const editGame = async (values) => {
     setLoading(true);

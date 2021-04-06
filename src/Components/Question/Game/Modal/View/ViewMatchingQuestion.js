@@ -1,93 +1,61 @@
 import React, { useState, useEffect } from "react";
-import {
-  Form,
-  Input,
-  Button,
-  Select,
-  Divider,
-  Row,
-  Col,
-  message,
-  Image,
-} from "antd";
-import { UploadOutlined } from "@ant-design/icons";
-
-const { Option } = Select;
+import axios from "axios";
+import { Form, Input, Divider, Row, Col, Image, InputNumber } from "antd";
 
 const ViewMatchingQuestion = (props) => {
+  const [option, setOption] = useState([]);
   useEffect(() => {
-    props.form.setFieldsValue({
-      subject: "science",
-      unit: "unit 2",
-      question: "Match the word with the right picture",
-      value1: "Hand",
-      value2: "Leg",
-      value3: "Ear",
-      value4: "Nose",
-      value5: "Finger",
-      value6: "Toe",
-      key1: "",
-      key2: "",
-      key3: "",
-      key4: "",
-      key5: "",
-      key6: "",
-    });
+    getQuestionByID();
   }, []);
+
+  const getQuestionByID = async () => {
+    await axios
+      .get(
+        `https://mathscienceeducation.herokuapp.com/question/${props.data.id}?questionType=MATCH`
+      )
+      .then((res) => {
+        props.form.setFieldsValue({
+          questionTitle: res.data.questionTitle,
+          description: res.data.description,
+          score: res.data.score,
+          value1: res.data.optionQuestionDTOList[0].optionText,
+          value2: res.data.optionQuestionDTOList[1].optionText,
+          value3: res.data.optionQuestionDTOList[2].optionText,
+          value4: res.data.optionQuestionDTOList[3].optionText,
+          value5: res.data.optionQuestionDTOList[4].optionText,
+          value6: res.data.optionQuestionDTOList[5].optionText,
+        });
+        setOption(res.data.optionQuestionDTOList);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
 
   return (
     <Form form={props.form} layout="vertical" style={{ marginTop: 10 }}>
       <h2>Matching Question</h2>
       <Divider />
-      <Form.Item name="subject" label="Select Subject">
-        <Select showSearch placeholder="Select Subject" disabled>
-          <Option value="math">Math</Option>
-          <Option value="science">Science</Option>
-        </Select>
-      </Form.Item>
-      <Form.Item
-        noStyle
-        shouldUpdate={(prevValues, currentValues) =>
-          prevValues.subject !== currentValues.subject
-        }
-      >
-        {({ getFieldValue }) => {
-          return getFieldValue("subject") !== undefined ? (
-            <Form.Item name="unit" label="Select Unit">
-              <Select showSearch placeholder="Select Unit" disabled>
-                <Option value="unit 1">Unit 1</Option>
-                <Option value="unit 2">Unit 2</Option>
-                <Option value="unit 3">Unit 3</Option>
-                <Option value="unit 4">Unit 4</Option>
-                <Option value="unit 5">Unit 5</Option>
-                <Option value="unit 6">Unit 6</Option>
-                <Option value="unit 7">Unit 7</Option>
-                <Option value="unit 8">Unit 8</Option>
-                <Option value="unit 9">Unit 9</Option>
-                <Option value="unit 10">Unit 10</Option>
-                <Option value="unit 11">Unit 11</Option>
-                <Option value="unit 12">Unit 12</Option>
-              </Select>
-            </Form.Item>
-          ) : null;
-        }}
-      </Form.Item>
       <Form.Item name="questionTitle" label="Question Title">
         <Input.TextArea
           autoSize
-          maxLength="100"
+          maxLength="250"
           showCount
           placeholder="Question Title"
           disabled
         />
       </Form.Item>
-      <Form.Item name="question" label="Question Text">
+      <Form.Item name="description" label="Description">
         <Input.TextArea
-          maxLength="250"
+          autoSize
+          maxLength="50"
           showCount
-          placeholder="Question Text"
+          placeholder="Description"
           disabled
         />
+      </Form.Item>
+      <Form.Item name="score" label="Score">
+        <InputNumber placeholder="Score" disabled />
       </Form.Item>
       <h2>Options</h2>
       <Divider />
@@ -95,7 +63,7 @@ const ViewMatchingQuestion = (props) => {
       <Row gutter={24}>
         <Col span={12}>
           <Form.Item name="key1" label="Pair's Picture">
-            <Image src="https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg" />
+            {option && <Image src={option[0]?.optionImageUrl} />}
           </Form.Item>
         </Col>
         <Col span={12}>
@@ -114,7 +82,7 @@ const ViewMatchingQuestion = (props) => {
       <Row gutter={24}>
         <Col span={12}>
           <Form.Item name="key2" label="Pair's Picture">
-            <Image src="https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg" />
+            {option && <Image src={option[1]?.optionImageUrl} />}
           </Form.Item>
         </Col>
         <Col span={12}>
@@ -134,7 +102,7 @@ const ViewMatchingQuestion = (props) => {
       <Row gutter={24}>
         <Col span={12}>
           <Form.Item name="key3" label="Pair's Picture">
-            <Image src="https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg" />
+            {option && <Image src={option[2]?.optionImageUrl} />}
           </Form.Item>
         </Col>
         <Col span={12}>
@@ -154,7 +122,7 @@ const ViewMatchingQuestion = (props) => {
       <Row gutter={24}>
         <Col span={12}>
           <Form.Item name="key4" label="Pair's Picture">
-            <Image src="https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg" />
+            {option && <Image src={option[3]?.optionImageUrl} />}
           </Form.Item>
         </Col>
         <Col span={12}>
@@ -174,7 +142,7 @@ const ViewMatchingQuestion = (props) => {
       <Row gutter={24}>
         <Col span={12}>
           <Form.Item name="key5" label="Pair's Picture">
-            <Image src="https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg" />
+            {option && <Image src={option[4]?.optionImageUrl} />}
           </Form.Item>
         </Col>
         <Col span={12}>
@@ -194,7 +162,7 @@ const ViewMatchingQuestion = (props) => {
       <Row gutter={24}>
         <Col span={12}>
           <Form.Item name="key6" label="Pair's Picture">
-            <Image src="https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg" />
+            <Image src={option[5]?.optionImageUrl} />
           </Form.Item>
         </Col>
         <Col span={12}>

@@ -1,5 +1,15 @@
-import React, { useState, useEffect } from "react";
-import { Form, Input, Select, Divider, Row, Col, Image } from "antd";
+import React, { useEffect } from "react";
+import axios from "axios";
+import {
+  Form,
+  Input,
+  Select,
+  Divider,
+  Row,
+  Col,
+  Image,
+  InputNumber,
+} from "antd";
 
 const { Option } = Select;
 
@@ -13,99 +23,56 @@ const options = [
 
 const ViewFillingQuestion = (props) => {
   useEffect(() => {
-    props.form.setFieldsValue({
-      subject: "math",
-      unit: "unit 1",
-      question: "Fill in the blank with the correct word",
-      options: options,
-    });
+    getQuestionByID();
   }, []);
+
+  const getQuestionByID = async () => {
+    await axios
+      .get(
+        `https://mathscienceeducation.herokuapp.com/question/${props.data.id}?questionType=FILL`
+      )
+      .then((res) => {
+        props.form.setFieldsValue({
+          questionTitle: res.data.questionTitle,
+          description: res.data.description,
+          score: res.data.score,
+          options: options,
+        });
+        console.log(res);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
 
   return (
     <Form form={props.form} layout="vertical" style={{ marginTop: 10 }}>
       <h2>Filling Question</h2>
       <Divider />
-      <Form.Item name="subject" label="Select Subject">
-        <Select showSearch placeholder="Select Subject" disabled>
-          <Option value="math">Math</Option>
-        </Select>
-      </Form.Item>
-      <Form.Item
-        noStyle
-        shouldUpdate={(prevValues, currentValues) =>
-          prevValues.subject !== currentValues.subject
-        }
-      >
-        {({ getFieldValue }) => {
-          return getFieldValue("subject") !== undefined ? (
-            <Form.Item name="unit" label="Select Unit">
-              <Select showSearch placeholder="Select Unit" disabled>
-                <Option value="unit 1">Unit 1</Option>
-                <Option value="unit 2">Unit 2</Option>
-                <Option value="unit 3">Unit 3</Option>
-                <Option value="unit 4">Unit 4</Option>
-                <Option value="unit 5">Unit 5</Option>
-                <Option value="unit 6">Unit 6</Option>
-                <Option value="unit 7">Unit 7</Option>
-                <Option value="unit 8">Unit 8</Option>
-                <Option value="unit 9">Unit 9</Option>
-                <Option value="unit 10">Unit 10</Option>
-                <Option value="unit 11">Unit 11</Option>
-                <Option value="unit 12">Unit 12</Option>
-              </Select>
-            </Form.Item>
-          ) : null;
-        }}
-      </Form.Item>
       <Form.Item name="questionTitle" label="Question Title">
         <Input.TextArea
           autoSize
-          maxLength="100"
+          maxLength="250"
           showCount
           placeholder="Question Title"
           disabled
         />
       </Form.Item>
-      <Form.Item name="question" label="Question Text">
+      <Form.Item name="description" label="Description">
         <Input.TextArea
           autoSize
-          maxLength="250"
+          maxLength="50"
           showCount
-          placeholder="Question Text"
+          placeholder="Description"
           disabled
         />
       </Form.Item>
       <Form.Item name="q_img" label="Question Image">
         <Image src="https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg" />
       </Form.Item>
-      {/* <Form.Item
-        name="q_audio"
-        label="Question Audio"
-        getValueFromEvent={normFile}
-      >
-        <Upload
-          listType="picture"
-          fileList={audioFile}
-          beforeUpload={() => false}
-          onRemove={() => {
-            setAudioFile([]);
-          }}
-          onChange={(info) => {
-            if (info.file.type) {
-              if (info.file.type.split("/")[0] !== "audio") {
-                message.error(`${info.file.name} is not an audio file`);
-                setAudioFile([]);
-              } else {
-                handleChangeAudio(info);
-              }
-            }
-          }}
-        >
-          {audioFile.length === 1 ? null : (
-            <Button icon={<UploadOutlined />}>Upload</Button>
-          )}
-        </Upload>
-      </Form.Item> */}
+      <Form.Item name="score" label="Score">
+        <InputNumber placeholder="Score" disabled />
+      </Form.Item>
       <h2>Options</h2>
       <Form.List name="options">
         {(fields) => (
