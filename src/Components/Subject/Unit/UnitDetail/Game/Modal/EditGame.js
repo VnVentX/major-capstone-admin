@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Button, Modal, Form, Input, Select, Tooltip } from "antd";
+import axios from "axios";
+import { Button, Modal, Form, Input, Tooltip, message } from "antd";
 import { EditOutlined } from "@ant-design/icons";
 
 const layout = {
@@ -10,16 +11,40 @@ const layout = {
 const EditGame = (props) => {
   const [form] = Form.useForm();
   const [visible, setVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     form.setFieldsValue({
-      name: props.data.title,
+      name: props.data.gameName,
       description: props.data.description,
     });
   }, []);
 
-  const onFinish = (event) => {
-    console.log(event);
+  const editGame = async (values) => {
+    setLoading(true);
+    await axios
+      .put(`https://mathscienceeducation.herokuapp.com/game/${props.data.id}`, {
+        gameName: values.name,
+        lessonId: props.lessonID,
+        description: values.description,
+      })
+      .then((res) => {
+        console.log(res);
+        props.getGameByLessonID();
+        setLoading(false);
+        handleCancel();
+        message.success("Edit Game successfully!");
+        form.resetFields();
+      })
+      .catch((e) => {
+        console.log(e);
+        message.error("Fail to edit Game");
+        setLoading(false);
+      });
+  };
+
+  const onFinish = (values) => {
+    editGame(values);
   };
 
   const showModal = () => {
@@ -39,15 +64,15 @@ const EditGame = (props) => {
       <Modal
         title="Edit Game"
         visible={visible}
+        okText="Update"
         onCancel={handleCancel}
+        confirmLoading={loading}
         destroyOnClose
-        okText="Submit"
         onOk={() => {
           form
             .validateFields()
             .then((values) => {
               onFinish(values);
-              form.resetFields();
             })
             .catch((info) => {
               console.log("Validate Failed:", info);

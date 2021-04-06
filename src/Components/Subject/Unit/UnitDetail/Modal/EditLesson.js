@@ -37,11 +37,15 @@ const EditLesson = (props) => {
 
   const editLesson = async (values) => {
     let url = "";
-    if (values.url.split("/")[0] === "https:") {
+    if (
+      values.url.split("/")[0] === "https:" &&
+      values.url.split("/")[0] !== undefined
+    ) {
       url = values.url;
-    } else {
+    } else if (values.url.split(" ")[1] !== undefined) {
       url = values.url.split(" ")[1].split("src=")[1].split('"')[1];
     }
+
     setLoading(true);
     await axios
       .put(

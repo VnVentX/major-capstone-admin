@@ -19,7 +19,7 @@ const Lesson = (props) => {
       <Exercise lessonID={props.lesson.id} />
       <Divider />
 
-      <Game />
+      <Game lessonID={props.lesson.id} />
       <Divider />
       <Popconfirm
         placement="top"

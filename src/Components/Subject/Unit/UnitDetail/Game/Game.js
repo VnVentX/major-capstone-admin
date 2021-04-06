@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import {
   Card,
   List,
@@ -15,28 +16,47 @@ import EditGame from "./Modal/EditGame";
 
 const { Title } = Typography;
 
-const data = [
-  {
-    id: 1,
-    title: "Game 1",
-  },
-  {
-    id: 2,
-    title: "Game 2",
-  },
-  {
-    id: 3,
-    title: "Game 3",
-  },
-  {
-    id: 4,
-    title: "Game 4",
-  },
-];
-const Game = () => {
+const Game = (props) => {
+  const [game, setGame] = useState([]);
+
+  useEffect(() => {
+    getGameByLessonID();
+  }, []);
+
+  const getGameByLessonID = async () => {
+    await axios
+      .get(
+        `https://mathscienceeducation.herokuapp.com/lesson/${props.lessonID}/game/all`
+      )
+      .then((res) => {
+        setGame(res.data.length === 0 ? [] : res.data);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
+
+  const deleteGame = async (exerciseID) => {
+    // let formData = new FormData();
+    // formData.append("id", exerciseID);
+    // await axios
+    //   .put(
+    //     "https://mathscienceeducation.herokuapp.com/exercise/delete",
+    //     formData
+    //   )
+    //   .then((res) => {
+    //     console.log(res);
+    //     getExerciseByLessonID();
+    //     message.success("Delete Exercise successfully!");
+    //   })
+    //   .catch((e) => {
+    //     console.log(e);
+    //     message.success("Fail to delete Exercise");
+    //   });
+  };
+
   const handleDelete = (item) => {
-    console.log(item);
-    message.success("Click on Yes");
+    deleteGame(item);
   };
 
   return (
@@ -49,12 +69,15 @@ const Game = () => {
         }}
       >
         <Title level={1}>Game</Title>
-        <AddGame />
+        <AddGame
+          lessonID={props.lessonID}
+          getGameByLessonID={getGameByLessonID}
+        />
       </div>
       <List
         itemLayout="horizontal"
         grid={{ gutter: 16, column: 1 }}
-        dataSource={data}
+        dataSource={game}
         renderItem={(item) => (
           <List.Item>
             <Card
@@ -67,7 +90,7 @@ const Game = () => {
                   }}
                 >
                   <Link to={`${window.location.pathname}/game/${item.id}`}>
-                    {item.title}
+                    {item.gameName}
                   </Link>
                   <div style={{ display: "flex", justifyContent: "center" }}>
                     <Tooltip title="Delete">
@@ -88,12 +111,16 @@ const Game = () => {
                         />
                       </Popconfirm>
                     </Tooltip>
-                    <EditGame data={item} />
+                    <EditGame
+                      data={item}
+                      lessonID={props.lessonID}
+                      getGameByLessonID={getGameByLessonID}
+                    />
                   </div>
                 </div>
               }
             >
-              Game descriptions
+              {item.description}
             </Card>
           </List.Item>
         )}
