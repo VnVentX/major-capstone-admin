@@ -98,17 +98,6 @@ const AddNewStudent = (props) => {
   const createStudent = async (values) => {
     setLoading(true);
     setClassData([]);
-    console.log({
-      schoolId: values.school,
-      gradeId: values.grade,
-      classId: values.class,
-      doB: values.age.format("DD/MM/YYYY"),
-      firtName: values.firstName,
-      lastName: values.lastName,
-      gender: values.gender,
-      parentName: values.parentName,
-      parentPhone: values.parentPhone,
-    });
     await axios
       .post("https://mathscienceeducation.herokuapp.com/student", {
         schoolId: values.school,

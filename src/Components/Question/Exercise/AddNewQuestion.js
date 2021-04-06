@@ -18,8 +18,6 @@ import {
   UploadOutlined,
 } from "@ant-design/icons";
 
-const { Option } = Select;
-
 const normFile = (e) => {
   if (Array.isArray(e)) {
     return e;
@@ -29,12 +27,14 @@ const normFile = (e) => {
 
 const AddNewQuestion = () => {
   const [counter, setCounter] = useState(0);
+  const [correctCount, setCorrectCount] = useState(0);
   const [form] = Form.useForm();
   const [audioFile, setAudioFile] = useState([]);
   const [imgFile, setImgFile] = useState([]);
   const [subject, setSubject] = useState([]);
   const [unit, setUnit] = useState([]);
   const [selectedSubject, setSelectedSubject] = useState("");
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     getSubjectByGrade();
@@ -88,6 +88,19 @@ const AddNewQuestion = () => {
     setCounter(count - 1);
   };
 
+  const handleCorrectCount = () => {
+    console.log(form.getFieldsValue().options);
+    let count = 0;
+    form.getFieldsValue().options.forEach((item) => {
+      if (item !== undefined) {
+        if (item.correct === "true") {
+          count = count + 1;
+        }
+      }
+    });
+    setCorrectCount(count);
+  };
+
   const onFinish = (values) => {
     let optionTextList = [];
     let isCorrectList = [];
@@ -109,27 +122,34 @@ const AddNewQuestion = () => {
     }
     formData.append("isCorrectList", [isCorrectList]);
     formData.append("optionTextList", optionTextList);
-    console.log(formData.get("unitId"));
-    console.log(formData.get("questionTitle"));
-    console.log(formData.get("questionType"));
-    console.log(formData.get("score"));
-    console.log(formData.get("description"));
-    console.log(formData.get("imageFile"));
-    console.log(formData.get("audioFile"));
-    console.log(formData.get("isCorrectList"));
-    console.log(formData.get("optionTextList"));
 
     createQuestion(formData);
   };
 
   const createQuestion = async (formData) => {
+    setLoading(true);
     await axios
-      .post("https://mathscienceeducation.herokuapp.com/question", formData)
+      .post(
+        "https://mathscienceeducation.herokuapp.com/question/exercise",
+        formData
+      )
       .then((res) => {
         console.log(res);
+        setLoading(false);
+        message.success("Create Exercise Question successfully");
+        form.setFieldsValue({
+          questionTitle: "",
+          description: "",
+          score: "",
+          options: "",
+        });
+        setAudioFile([]);
+        setImgFile([]);
       })
       .catch((e) => {
         console.log(e);
+        setLoading(false);
+        message.error("Fail to create Exercise Question");
       });
   };
 
@@ -284,6 +304,11 @@ const AddNewQuestion = () => {
                     new Error("At least 2 options are required")
                   );
                 }
+                if (correctCount > 1) {
+                  return Promise.reject(
+                    new Error("Can only have one correct option")
+                  );
+                }
               },
             },
           ]}
@@ -321,7 +346,10 @@ const AddNewQuestion = () => {
                       dependencies={["question"]}
                       rules={[{ required: true, message: "Missing correct" }]}
                     >
-                      <Select placeholder="Select Is Correct">
+                      <Select
+                        placeholder="Select Is Correct"
+                        onChange={handleCorrectCount}
+                      >
                         <Select.Option value="true">True</Select.Option>
                         <Select.Option value="false">False</Select.Option>
                       </Select>
@@ -358,6 +386,7 @@ const AddNewQuestion = () => {
         </Form.List>
         <Form.Item>
           <Button
+            loading={loading}
             type="primary"
             htmlType="submit"
             size="large"

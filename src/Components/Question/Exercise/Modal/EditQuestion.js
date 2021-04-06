@@ -128,57 +128,6 @@ const EditQuestion = (props) => {
           <h1>Question</h1>
           <Divider />
           <Form.Item
-            name="subject"
-            label="Select Subject"
-            rules={[
-              {
-                required: true,
-                message: "Please select Subject!",
-              },
-            ]}
-          >
-            <Select showSearch placeholder="Select Subject">
-              <Option value="math">Math</Option>
-              <Option value="science">Science</Option>
-            </Select>
-          </Form.Item>
-          <Form.Item
-            noStyle
-            shouldUpdate={(prevValues, currentValues) =>
-              prevValues.subject !== currentValues.subject
-            }
-          >
-            {({ getFieldValue }) => {
-              return getFieldValue("subject") !== undefined ? (
-                <Form.Item
-                  name="unit"
-                  label="Select Unit"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Please select Unit!",
-                    },
-                  ]}
-                >
-                  <Select showSearch placeholder="Select Unit">
-                    <Option value="unit 1">Unit 1</Option>
-                    <Option value="unit 2">Unit 2</Option>
-                    <Option value="unit 3">Unit 3</Option>
-                    <Option value="unit 4">Unit 4</Option>
-                    <Option value="unit 5">Unit 5</Option>
-                    <Option value="unit 6">Unit 6</Option>
-                    <Option value="unit 7">Unit 7</Option>
-                    <Option value="unit 8">Unit 8</Option>
-                    <Option value="unit 9">Unit 9</Option>
-                    <Option value="unit 10">Unit 10</Option>
-                    <Option value="unit 11">Unit 11</Option>
-                    <Option value="unit 12">Unit 12</Option>
-                  </Select>
-                </Form.Item>
-              ) : null;
-            }}
-          </Form.Item>
-          <Form.Item
             name="questionTitle"
             label="Question Title"
             rules={[

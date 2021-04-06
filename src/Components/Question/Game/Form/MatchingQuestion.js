@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import {
   Form,
   Input,
@@ -9,10 +10,9 @@ import {
   Col,
   Upload,
   message,
+  InputNumber,
 } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
-
-const { Option } = Select;
 
 const normFile = (e) => {
   if (Array.isArray(e)) {
@@ -29,6 +29,45 @@ const MatchingQuestion = (props) => {
   const [imgFile4, setImgFile4] = useState([]);
   const [imgFile5, setImgFile5] = useState([]);
   const [imgFile6, setImgFile6] = useState([]);
+  const [subject, setSubject] = useState([]);
+  const [unit, setUnit] = useState([]);
+  const [selectedSubject, setSelectedSubject] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    getSubjectByGrade();
+  }, []);
+
+  useEffect(() => {
+    getUnitBySubjectID(selectedSubject);
+  }, [selectedSubject]);
+
+  const getSubjectByGrade = async () => {
+    let gradeID = window.location.pathname.split("/")[2];
+    await axios
+      .get(
+        `https://mathscienceeducation.herokuapp.com/grade/${gradeID}/subjects`
+      )
+      .then((res) => {
+        setSubject(res.data.length === 0 ? [] : res.data);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
+
+  const getUnitBySubjectID = async (subjectID) => {
+    await axios
+      .get(
+        `https://mathscienceeducation.herokuapp.com/subject/${subjectID}/units`
+      )
+      .then((res) => {
+        setUnit(res.data.length === 0 ? [] : res.data);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
 
   const handleChangeImg1 = ({ fileList }) => {
     setImgFile1(fileList);
@@ -50,24 +89,54 @@ const MatchingQuestion = (props) => {
   };
 
   const onFinish = (values) => {
-    const question = {
-      type: props.type,
-      subject: values.subject,
-      unit: values.unit,
-      q_name: values.question,
-      options: [
-        { key: values.key1[0].originFileObj, value: values.value1 },
-        { key: values.key2[0].originFileObj, value: values.value2 },
-        { key: values.key3[0].originFileObj, value: values.value3 },
-        { key: values.key4[0].originFileObj, value: values.value4 },
-        { key: values.key5[0].originFileObj, value: values.value5 },
-        { key: values.key6[0].originFileObj, value: values.value6 },
-      ],
-    };
-    // form.setFieldsValue({
-    // });
-    console.log(question);
+    let formData = new FormData();
+    let options = [
+      { key: values.key1[0].originFileObj, value: values.value1 },
+      { key: values.key2[0].originFileObj, value: values.value2 },
+      { key: values.key3[0].originFileObj, value: values.value3 },
+      { key: values.key4[0].originFileObj, value: values.value4 },
+      { key: values.key5[0].originFileObj, value: values.value5 },
+      { key: values.key6[0].originFileObj, value: values.value6 },
+    ];
+    let optionTextList = [];
+    options.forEach((item) => {
+      formData.append("imageFileList", item.key);
+      optionTextList.push(item.value.toUpperCase());
+    });
+
+    formData.append("unitId", values.unit);
+    formData.append("questionTitle", values.questionTitle);
+    formData.append("questionType", props.type);
+    formData.append("score", values.score);
+    formData.append("description", values.description);
+    formData.append("optionTextList", optionTextList);
+
+    createMatchQuestion(formData);
   };
+
+  const createMatchQuestion = async (formData) => {
+    setLoading(true);
+    await axios
+      .post(
+        "https://mathscienceeducation.herokuapp.com/question/game/others",
+        formData
+      )
+      .then((res) => {
+        console.log(res);
+        setLoading(false);
+        message.success("Create Matching Question successfully");
+      })
+      .catch((e) => {
+        console.log(e);
+        setLoading(false);
+        message.error("Fail to create Matching Question");
+      });
+  };
+
+  const handleChangeSubject = (value) => {
+    setSelectedSubject(value);
+  };
+
   return (
     <Form
       form={form}
@@ -87,9 +156,16 @@ const MatchingQuestion = (props) => {
           },
         ]}
       >
-        <Select showSearch placeholder="Select Subject">
-          <Option value="math">Math</Option>
-          <Option value="science">Science</Option>
+        <Select
+          showSearch
+          placeholder="Select Subject"
+          onChange={handleChangeSubject}
+        >
+          {subject?.map((item, idx) => (
+            <Select.Option key={idx} value={item?.id}>
+              {item?.subjectName}
+            </Select.Option>
+          ))}
         </Select>
       </Form.Item>
       <Form.Item
@@ -111,18 +187,11 @@ const MatchingQuestion = (props) => {
               ]}
             >
               <Select showSearch placeholder="Select Unit">
-                <Option value="unit 1">Unit 1</Option>
-                <Option value="unit 2">Unit 2</Option>
-                <Option value="unit 3">Unit 3</Option>
-                <Option value="unit 4">Unit 4</Option>
-                <Option value="unit 5">Unit 5</Option>
-                <Option value="unit 6">Unit 6</Option>
-                <Option value="unit 7">Unit 7</Option>
-                <Option value="unit 8">Unit 8</Option>
-                <Option value="unit 9">Unit 9</Option>
-                <Option value="unit 10">Unit 10</Option>
-                <Option value="unit 11">Unit 11</Option>
-                <Option value="unit 12">Unit 12</Option>
+                {unit?.map((item, idx) => (
+                  <Select.Option key={idx} value={item?.id}>
+                    Unit {item?.unitName}
+                  </Select.Option>
+                ))}
               </Select>
             </Form.Item>
           ) : null;
@@ -135,17 +204,20 @@ const MatchingQuestion = (props) => {
       >
         <Input.TextArea
           autoSize
-          maxLength="100"
+          maxLength="250"
           showCount
           placeholder="Question Title"
         />
       </Form.Item>
+      <Form.Item name="description" label="Description">
+        <Input.TextArea maxLength="50" showCount placeholder="Description" />
+      </Form.Item>
       <Form.Item
-        name="question"
-        label="Question Text"
-        rules={[{ required: true, message: "Please input a question" }]}
+        name="score"
+        label="Score"
+        rules={[{ required: true, message: "Please input a score" }]}
       >
-        <Input.TextArea maxLength="250" showCount placeholder="Question Text" />
+        <InputNumber placeholder="Score" />
       </Form.Item>
       <h2>Options</h2>
       <Divider />
@@ -443,6 +515,7 @@ const MatchingQuestion = (props) => {
       <Divider />
       <Form.Item>
         <Button
+          loading={loading}
           type="primary"
           htmlType="submit"
           size="large"

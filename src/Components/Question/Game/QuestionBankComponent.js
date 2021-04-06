@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import {
   Table,
   Select,
@@ -12,20 +13,93 @@ import {
 import EditQuestion from "./Modal/Edit/EditQuestion";
 import { DeleteOutlined, QuestionCircleOutlined } from "@ant-design/icons";
 import ViewQuestion from "./Modal/View/ViewQuestion";
-const { Option } = Select;
 
 const QuestionBankComponent = () => {
   const [form] = Form.useForm();
+  const [questionData, setQuestionData] = useState([]);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+  const [subject, setSubject] = useState([]);
+  const [unit, setUnit] = useState([]);
+  const [selectedSubject, setSelectedSubject] = useState("");
+  const [selectedUnit, setSelectedUnit] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleDelete = (item) => {
-    console.log(item);
-    message.success("Delete Question successfully!");
+  useEffect(() => {
+    getSubjectByGrade();
+  }, []);
+
+  useEffect(() => {
+    getUnitBySubjectID(selectedSubject);
+  }, [selectedSubject]);
+
+  const getSubjectByGrade = async () => {
+    let gradeID = window.location.pathname.split("/")[2];
+    await axios
+      .get(
+        `https://mathscienceeducation.herokuapp.com/grade/${gradeID}/subjects`
+      )
+      .then((res) => {
+        setSubject(res.data.length === 0 ? [] : res.data);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
   };
 
-  const handleDeleteList = () => {
-    console.log(selectedRowKeys);
-    message.success("Delete news successfully!");
+  const getUnitBySubjectID = async (subjectID) => {
+    await axios
+      .get(
+        `https://mathscienceeducation.herokuapp.com/subject/${subjectID}/units`
+      )
+      .then((res) => {
+        setUnit(res.data.length === 0 ? [] : res.data);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
+
+  const getQuestionByUnitID = async (unitID) => {
+    setLoading(true);
+    await axios
+      .get(
+        `https://mathscienceeducation.herokuapp.com/question/${unitID}/questions`
+      )
+      .then((res) => {
+        setQuestionData(res.data.length === 0 ? [] : res.data);
+        setLoading(false);
+      })
+      .catch((e) => {
+        console.log(e);
+        setLoading(false);
+      });
+  };
+
+  const deleteQuestion = async (id) => {
+    await axios
+      .put(`https://mathscienceeducation.herokuapp.com/question/delete/${id}`)
+      .then((res) => {
+        console.log(res);
+        getQuestionByUnitID(selectedUnit);
+        message.success("Delete Question successfully");
+      })
+      .catch((e) => {
+        console.log(e);
+        message.error("Fail to delete this Question");
+      });
+  };
+
+  const handleChangeSubject = (value) => {
+    setSelectedSubject(value);
+  };
+
+  const handleChangeUnit = (value) => {
+    setSelectedUnit(value);
+  };
+
+  const handleDeleteQuestion = (item) => {
+    console.log(item);
+    deleteQuestion(item);
   };
 
   const onSelectChange = (selectedRowKeys) => {
@@ -34,17 +108,34 @@ const QuestionBankComponent = () => {
   };
 
   const onFinish = (event) => {
-    console.log(event);
+    getQuestionByUnitID(event.unit);
   };
 
   const columns = [
     {
       title: "Question",
-      dataIndex: "q_name",
+      dataIndex: "questionTitle",
+    },
+    {
+      title: "Description",
+      dataIndex: "description",
     },
     {
       title: "Type",
-      dataIndex: "type",
+      dataIndex: "questionTypeId",
+      render: (questionTypeId) => (
+        <span>
+          {questionTypeId === 2
+            ? "FILL"
+            : questionTypeId === 3
+            ? "MATCH"
+            : questionTypeId === 4
+            ? "SWAP"
+            : questionTypeId === 5
+            ? "CHOOSE"
+            : null}
+        </span>
+      ),
     },
     {
       title: "Created By",
@@ -74,7 +165,7 @@ const QuestionBankComponent = () => {
             <Popconfirm
               placement="topRight"
               title="Are you sure to delete this question?"
-              onConfirm={() => handleDelete(record.key)} //Handle disable logic here
+              onConfirm={() => handleDeleteQuestion(record.id)}
               okText="Yes"
               cancelText="No"
               icon={<QuestionCircleOutlined style={{ color: "red" }} />}
@@ -91,45 +182,6 @@ const QuestionBankComponent = () => {
     selectedRowKeys,
     onChange: onSelectChange,
   };
-
-  const data = [
-    {
-      key: "1",
-      q_name: "Question 1",
-      type: "FILL",
-      createdBy: "anhtt",
-      modifiedBy: "anhtt",
-      createdDate: "14:24PM, 24/02/2021",
-      modifiedDate: "14:50PM, 24/02/2021",
-    },
-    {
-      key: "2",
-      q_name: "Question 2",
-      type: "MATCH",
-      createdBy: "anhtt",
-      modifiedBy: "anhtt",
-      createdDate: "14:24PM, 24/02/2021",
-      modifiedDate: "14:50PM, 24/02/2021",
-    },
-    {
-      key: "3",
-      q_name: "Question 3",
-      type: "SWAP",
-      createdBy: "anhtt",
-      modifiedBy: "anhtt",
-      createdDate: "14:24PM, 24/02/2021",
-      modifiedDate: "14:50PM, 24/02/2021",
-    },
-    {
-      key: "4",
-      q_name: "Question 4",
-      type: "CHOOSE",
-      createdBy: "anhtt",
-      modifiedBy: "anhtt",
-      createdDate: "14:24PM, 24/02/2021",
-      modifiedDate: "14:50PM, 24/02/2021",
-    },
-  ];
 
   return (
     <>
@@ -154,11 +206,15 @@ const QuestionBankComponent = () => {
         >
           <Select
             showSearch
+            placeholder="Select Subject"
             style={{ width: 200, marginRight: 10 }}
-            placeholder="Select subject"
+            onChange={handleChangeSubject}
           >
-            <Option value="math">Math</Option>
-            <Option value="science">Science</Option>
+            {subject?.map((item, idx) => (
+              <Select.Option key={idx} value={item?.id}>
+                {item?.subjectName}
+              </Select.Option>
+            ))}
           </Select>
         </Form.Item>
         <Form.Item
@@ -181,74 +237,50 @@ const QuestionBankComponent = () => {
               >
                 <Select
                   showSearch
-                  placeholder="Select category"
+                  placeholder="Select Unit"
+                  onChange={handleChangeUnit}
                   style={{ width: 200, marginRight: 10 }}
                 >
-                  <Option value="unit 1">Unit 1</Option>
-                  <Option value="unit 2">Unit 2</Option>
-                  <Option value="unit 3">Unit 3</Option>
-                  <Option value="unit 4">Unit 4</Option>
-                  <Option value="unit 5">Unit 5</Option>
-                  <Option value="unit 6">Unit 6</Option>
-                  <Option value="unit 7">Unit 7</Option>
-                  <Option value="unit 8">Unit 8</Option>
-                  <Option value="unit 9">Unit 9</Option>
-                  <Option value="unit 10">Unit 10</Option>
+                  {unit?.map((item, idx) => (
+                    <Select.Option key={idx} value={item?.id}>
+                      Unit {item?.unitName}
+                    </Select.Option>
+                  ))}
                 </Select>
               </Form.Item>
             ) : null;
           }}
         </Form.Item>
-        <Button type="primary" htmlType="submit">
+        <Button type="primary" htmlType="submit" loading={loading}>
           Search
         </Button>
       </Form>
       <Table
+        rowKey={(record) => record.id}
         rowSelection={rowSelection}
         columns={columns}
-        dataSource={data}
-        rowKey={data.key}
+        dataSource={questionData}
         scroll={{ x: true }}
       />
       <div>
         <h1>With selected:</h1>
         {selectedRowKeys.length === 0 ? (
           <>
-            <Button
-              type="danger"
-              icon={<DeleteOutlined />}
-              disabled
-              style={{ marginRight: 10 }}
-            >
+            <Button type="danger" disabled icon={<DeleteOutlined />}>
               Delete
             </Button>
-            {/* <Button type="primary" disabled style={{ marginRight: 10 }}>
-              Move to &gt;&gt;
-            </Button>
-            <Select
-              defaultValue="quiz 1"
-              style={{ width: 200, marginRight: 10 }}
-              disabled
-            >
-              <Option value="quiz 1">Quiz 1</Option>
-              <Option value="quiz 2">Quiz 2</Option>
-            </Select> */}
           </>
         ) : (
           <>
             <Popconfirm
               placement="topRight"
-              title="Are you sure to delete selected Questions?"
-              onConfirm={handleDeleteList} //Handle disable logic here
+              title="Are you sure to delete selected Class?"
+              onConfirm={() => handleDeleteQuestion(selectedRowKeys)} //Handle disable logic here
               okText="Yes"
               cancelText="No"
               icon={<QuestionCircleOutlined style={{ color: "red" }} />}
             >
-              <Button
-                type="danger"
-                icon={<DeleteOutlined />}
-                style={{ marginRight: 10 }}
-              >
+              <Button type="danger" icon={<DeleteOutlined />}>
                 Delete
               </Button>
             </Popconfirm>

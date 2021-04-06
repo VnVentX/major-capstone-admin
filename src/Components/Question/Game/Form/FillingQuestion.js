@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import {
   Form,
   Input,
@@ -9,6 +10,7 @@ import {
   Col,
   Upload,
   message,
+  InputNumber,
 } from "antd";
 import {
   MinusCircleOutlined,
@@ -29,6 +31,45 @@ const FillingQuestion = (props) => {
   const [form] = Form.useForm();
   const [audioFile, setAudioFile] = useState([]);
   const [imgFile, setImgFile] = useState([]);
+  const [subject, setSubject] = useState([]);
+  const [unit, setUnit] = useState([]);
+  const [selectedSubject, setSelectedSubject] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    getSubjectByGrade();
+  }, []);
+
+  useEffect(() => {
+    getUnitBySubjectID(selectedSubject);
+  }, [selectedSubject]);
+
+  const getSubjectByGrade = async () => {
+    let gradeID = window.location.pathname.split("/")[2];
+    await axios
+      .get(
+        `https://mathscienceeducation.herokuapp.com/grade/${gradeID}/subjects`
+      )
+      .then((res) => {
+        setSubject(res.data.length === 0 ? [] : res.data);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
+
+  const getUnitBySubjectID = async (subjectID) => {
+    await axios
+      .get(
+        `https://mathscienceeducation.herokuapp.com/subject/${subjectID}/units`
+      )
+      .then((res) => {
+        setUnit(res.data.length === 0 ? [] : res.data);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
 
   const handleChangeImg = ({ fileList }) => {
     setImgFile(fileList);
@@ -38,25 +79,60 @@ const FillingQuestion = (props) => {
   };
 
   const onFinish = (values) => {
-    const question = {
-      type: props.type,
-      subject: values.subject,
-      unit: values.unit,
-      q_name: values.question,
-      q_audio: values.q_audio ? values.q_audio : "",
-      q_img: values.q_img,
-      options: values.options,
-    };
-    form.setFieldsValue({
-      question: null,
-      q_audio: null,
-      q_img: null,
-      options: null,
+    let optionTextList = [];
+    let optionInputTypeList = [];
+    values.options.forEach((item) => {
+      optionInputTypeList.push(item.option);
+      if (item.text) {
+        optionTextList.push(item.text.toLowerCase());
+      }
+      if (item.operator) {
+        optionTextList.push(item.operator.toLowerCase());
+      }
     });
-    setImgFile([]);
-    setAudioFile([]);
-    console.log(question);
+    let formData = new FormData();
+    formData.append("unitId", values.unit);
+    formData.append("questionTitle", values.questionTitle);
+    formData.append("questionType", props.type);
+    formData.append("score", values.score);
+    formData.append("description", values.description);
+    if (values.q_img !== undefined && values.q_img.length !== 0) {
+      formData.append("imageFile", values.q_img[0].originFileObj);
+    }
+    if (values.q_audio !== undefined && values.q_audio.length !== 0) {
+      formData.append("audioFile", values.q_audio[0].originFileObj);
+    }
+    formData.append("optionInputTypeList", optionInputTypeList);
+    formData.append("optionTextList", optionTextList);
+
+    createFillQuestion(formData);
   };
+
+  const createFillQuestion = async (formData) => {
+    setLoading(true);
+    await axios
+      .post(
+        "https://mathscienceeducation.herokuapp.com/question/game/fillInBlank",
+        formData
+      )
+      .then((res) => {
+        console.log(res);
+        setLoading(false);
+        message.success("Create Filling Question successfully");
+        setImgFile([]);
+        setAudioFile([]);
+      })
+      .catch((e) => {
+        console.log(e);
+        setLoading(false);
+        message.error("Fail to create Filling Question");
+      });
+  };
+
+  const handleChangeSubject = (value) => {
+    setSelectedSubject(value);
+  };
+
   return (
     <Form
       form={form}
@@ -76,8 +152,18 @@ const FillingQuestion = (props) => {
           },
         ]}
       >
-        <Select showSearch placeholder="Select Subject">
-          <Option value="math">Math</Option>
+        <Select
+          showSearch
+          placeholder="Select Subject"
+          onChange={handleChangeSubject}
+        >
+          {subject?.map((item, idx) =>
+            item.subjectName === "Math" ? (
+              <Select.Option key={idx} value={item?.id}>
+                {item?.subjectName}
+              </Select.Option>
+            ) : null
+          )}
         </Select>
       </Form.Item>
       <Form.Item
@@ -99,18 +185,11 @@ const FillingQuestion = (props) => {
               ]}
             >
               <Select showSearch placeholder="Select Unit">
-                <Option value="unit 1">Unit 1</Option>
-                <Option value="unit 2">Unit 2</Option>
-                <Option value="unit 3">Unit 3</Option>
-                <Option value="unit 4">Unit 4</Option>
-                <Option value="unit 5">Unit 5</Option>
-                <Option value="unit 6">Unit 6</Option>
-                <Option value="unit 7">Unit 7</Option>
-                <Option value="unit 8">Unit 8</Option>
-                <Option value="unit 9">Unit 9</Option>
-                <Option value="unit 10">Unit 10</Option>
-                <Option value="unit 11">Unit 11</Option>
-                <Option value="unit 12">Unit 12</Option>
+                {unit?.map((item, idx) => (
+                  <Select.Option key={idx} value={item?.id}>
+                    Unit {item?.unitName}
+                  </Select.Option>
+                ))}
               </Select>
             </Form.Item>
           ) : null;
@@ -122,22 +201,20 @@ const FillingQuestion = (props) => {
         rules={[{ required: true, message: "Please input a question title" }]}
       >
         <Input.TextArea
-          autoSize
-          maxLength="100"
+          maxLength="250"
           showCount
           placeholder="Question Title"
         />
       </Form.Item>
+      <Form.Item name="description" label="Description">
+        <Input.TextArea maxLength="50" showCount placeholder="Description" />
+      </Form.Item>
       <Form.Item
-        name="question"
-        label="Question Text"
-        rules={[{ required: true, message: "Please input a question" }]}
+        name="score"
+        label="Score"
+        rules={[{ required: true, message: "Please input a score" }]}
       >
-        <Input.TextArea
-          maxLength="250"
-          showCount
-          placeholder="Question Text"
-        />
+        <InputNumber placeholder="Score" />
       </Form.Item>
       <Form.Item
         name="q_img"
@@ -250,7 +327,7 @@ const FillingQuestion = (props) => {
                               Multiply (x)
                             </Select.Option>
                             <Select.Option value="/">Divide (/)</Select.Option>
-                            <Select.Option value="=">Equal (=)</Select.Option>
+                            <Select.Option value="=">Equals (=)</Select.Option>
                           </Select>
                         </Form.Item>
                       ) : form.getFieldsValue().options[idx]?.option ===
@@ -303,6 +380,7 @@ const FillingQuestion = (props) => {
       </Form.List>
       <Form.Item>
         <Button
+          loading={loading}
           type="primary"
           htmlType="submit"
           size="large"
