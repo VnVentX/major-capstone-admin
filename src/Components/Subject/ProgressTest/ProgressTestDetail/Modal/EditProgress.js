@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Button, Modal, Form, Input, Select, Tooltip } from "antd";
+import axios from "axios";
+import { Button, Modal, Form, Input, message, Tooltip } from "antd";
 import { EditOutlined } from "@ant-design/icons";
 
 const layout = {
@@ -10,16 +11,44 @@ const layout = {
 const EditProgress = (props) => {
   const [form] = Form.useForm();
   const [visible, setVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     form.setFieldsValue({
-      name: props.data.title,
+      name: props.data.exerciseName,
       description: props.data.description,
     });
   }, []);
 
-  const onFinish = (event) => {
-    console.log(event);
+  const editExercise = async (values) => {
+    setLoading(true);
+    await axios
+      .put(
+        `https://mathscienceeducation.herokuapp.com/exercise/${props.data.id}`,
+        {
+          description: values.description,
+          exerciseName: values.name,
+          progressTestId: window.location.pathname.split("/")[4],
+          id: props.data.id,
+        }
+      )
+      .then((res) => {
+        console.log(res);
+        props.getProgressTestByID();
+        setLoading(false);
+        handleCancel();
+        message.success("Edit Test successfully!");
+        form.resetFields();
+      })
+      .catch((e) => {
+        console.log(e);
+        message.error("Fail to edit Test");
+        setLoading(false);
+      });
+  };
+
+  const onFinish = (values) => {
+    editExercise(values);
   };
 
   const showModal = () => {
@@ -41,13 +70,13 @@ const EditProgress = (props) => {
         visible={visible}
         onCancel={handleCancel}
         destroyOnClose
-        okText="Submit"
+        confirmLoading={loading}
+        okText="Update"
         onOk={() => {
           form
             .validateFields()
             .then((values) => {
               onFinish(values);
-              form.resetFields();
             })
             .catch((info) => {
               console.log("Validate Failed:", info);

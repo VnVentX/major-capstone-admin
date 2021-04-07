@@ -1,14 +1,24 @@
 import React from "react";
+import axios from "axios";
 import { Typography, Divider, Button, Popconfirm, message } from "antd";
 import PowerPoint from "./PowerPoint/PowerPoint";
 import Exercise from "./Exercise/Exercise";
 import Game from "./Game/Game";
-import { DeleteOutlined } from "@ant-design/icons";
+import { DeleteOutlined, QuestionCircleOutlined } from "@ant-design/icons";
 
 const Lesson = (props) => {
-  const confirm = (e) => {
-    console.log(e);
-    message.success("Click on Yes");
+  const handleDelete = async (item) => {
+    await axios
+      .put(`https://mathscienceeducation.herokuapp.com/lesson?id=${item}`)
+      .then((res) => {
+        console.log(res);
+        props.getLessonByUnitID();
+        message.success("Delete Lesson successfully!");
+      })
+      .catch((e) => {
+        console.log(e);
+        message.error("Fail to delete Lesson");
+      });
   };
 
   return (
@@ -24,9 +34,10 @@ const Lesson = (props) => {
       <Popconfirm
         placement="top"
         title="Are you sure to delete this Lesson?"
-        onConfirm={confirm} //Handle disable logic here
+        onConfirm={() => handleDelete(props.lesson.id)} //Handle disable logic here
         okText="Yes"
         cancelText="No"
+        icon={<QuestionCircleOutlined style={{ color: "red" }} />}
       >
         <Button
           type="primary"

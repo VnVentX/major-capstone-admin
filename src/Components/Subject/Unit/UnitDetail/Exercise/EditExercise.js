@@ -18,7 +18,7 @@ const EditExercise = (props) => {
       name: props.data.exerciseName,
       description: props.data.description,
     });
-  }, []);
+  }, [form, props.data.description, props.data.exerciseName]);
 
   const editExercise = async (values) => {
     setLoading(true);

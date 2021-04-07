@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Button, Modal, Form, Input, Select, Tooltip, message } from "antd";
 import { EditOutlined } from "@ant-design/icons";
-const { Option } = Select;
 
 const layout = {
   labelCol: { span: 8 },
@@ -13,8 +12,23 @@ const EditProgressTest = (props) => {
   const [form] = Form.useForm();
   const [visible, setVisible] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [unit, setUnit] = useState([]);
 
   useEffect(() => {
+    const getUnitBySubjectID = async () => {
+      let subjectID = window.location.pathname.split("/")[2];
+      await axios
+        .get(
+          `https://mathscienceeducation.herokuapp.com/subject/${subjectID}/units`
+        )
+        .then((res) => {
+          setUnit(res.data.length === 0 ? [] : res.data);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    };
+    getUnitBySubjectID();
     form.setFieldsValue({
       progressTest: props.data.progressTestName,
       description: props.data.description,
@@ -108,18 +122,9 @@ const EditProgressTest = (props) => {
           </Form.Item>
           <Form.Item name="unitAfter" label="Unit After">
             <Select placeholder="Place Progress Test after this Unit">
-              <Option value={1}>Unit 1</Option>
-              <Option value={2}>Unit 2</Option>
-              <Option value={3}>Unit 3</Option>
-              <Option value={4}>Unit 4</Option>
-              <Option value={5}>Unit 5</Option>
-              <Option value={6}>Unit 6</Option>
-              <Option value={7}>Unit 7</Option>
-              <Option value={8}>Unit 8</Option>
-              <Option value={9}>Unit 9</Option>
-              <Option value={10}>Unit 10</Option>
-              <Option value={11}>Unit 11</Option>
-              <Option value={12}>Unit 12</Option>
+              {unit?.map((i) => (
+                <Select.Option value={i.id}>Unit {i.unitName}</Select.Option>
+              ))}
             </Select>
           </Form.Item>
         </Form>

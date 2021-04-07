@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Button, Modal, Form, Input, Select, message } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
@@ -14,6 +14,24 @@ const AddNewProgress = (props) => {
   const [form] = Form.useForm();
   const [visible, setVisible] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [unit, setUnit] = useState([]);
+
+  useEffect(() => {
+    const getUnitBySubjectID = async () => {
+      let subjectID = window.location.pathname.split("/")[2];
+      await axios
+        .get(
+          `https://mathscienceeducation.herokuapp.com/subject/${subjectID}/units`
+        )
+        .then((res) => {
+          setUnit(res.data.length === 0 ? [] : res.data);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    };
+    getUnitBySubjectID();
+  }, []);
 
   const showModal = () => {
     setVisible(true);
@@ -97,17 +115,9 @@ const AddNewProgress = (props) => {
             rules={[{ required: true, message: "Please select a unit" }]}
           >
             <Select placeholder="Place Progress Test after this Unit">
-              <Option value="1">Unit 1</Option>
-              <Option value="2">Unit 2</Option>
-              <Option value="3">Unit 3</Option>
-              <Option value="4">Unit 4</Option>
-              <Option value="5">Unit 5</Option>
-              <Option value="6">Unit 6</Option>
-              <Option value="7">Unit 7</Option>
-              <Option value="8">Unit 8</Option>
-              <Option value="9">Unit 9</Option>
-              <Option value="10">Unit 10</Option>
-              <Option value="11">Unit 11</Option>
+              {unit?.map((i) => (
+                <Select.Option value={i.id}>Unit {i.unitName}</Select.Option>
+              ))}
             </Select>
           </Form.Item>
         </Form>

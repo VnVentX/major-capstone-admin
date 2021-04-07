@@ -1,6 +1,15 @@
 import React from "react";
 import axios from "axios";
-import { Table, Button, Input, Space, Popconfirm, message } from "antd";
+import {
+  Table,
+  Button,
+  Input,
+  Space,
+  Popconfirm,
+  message,
+  AutoComplete,
+  Select,
+} from "antd";
 import Highlighter from "react-highlight-words";
 import { SearchOutlined } from "@ant-design/icons";
 import AddNewAnnouncement from "./Modal/AddNewAnnouncement";
@@ -13,6 +22,7 @@ export default class AnnouncementComponent extends React.Component {
     searchedColumn: "",
     selectedRowKeys: [],
     dataSource: [],
+    dataSearch: [],
   };
 
   componentDidMount() {
@@ -27,6 +37,7 @@ export default class AnnouncementComponent extends React.Component {
       .then((res) => {
         this.setState({
           dataSource: res.data.length === 0 ? [] : res.data,
+          dataSearch: res.data.length === 0 ? [] : res.data,
         });
       })
       .catch((e) => {
@@ -54,89 +65,6 @@ export default class AnnouncementComponent extends React.Component {
       });
   };
 
-  getColumnSearchProps = (dataIndex) => ({
-    filterDropdown: ({
-      setSelectedKeys,
-      selectedKeys,
-      confirm,
-      clearFilters,
-    }) => (
-      <div style={{ padding: 8 }}>
-        <Input
-          ref={(node) => {
-            this.searchInput = node;
-          }}
-          placeholder={`Search ${dataIndex}`}
-          value={selectedKeys[0]}
-          onChange={(e) =>
-            setSelectedKeys(e.target.value ? [e.target.value] : [])
-          }
-          onPressEnter={() =>
-            this.handleSearch(selectedKeys, confirm, dataIndex)
-          }
-          style={{ width: 188, marginBottom: 8, display: "block" }}
-        />
-        <Space>
-          <Button
-            type="primary"
-            onClick={() => this.handleSearch(selectedKeys, confirm, dataIndex)}
-            icon={<SearchOutlined />}
-            size="small"
-            style={{ width: 90 }}
-          >
-            Search
-          </Button>
-          <Button
-            onClick={() => this.handleReset(clearFilters)}
-            size="small"
-            style={{ width: 90 }}
-          >
-            Reset
-          </Button>
-        </Space>
-      </div>
-    ),
-    filterIcon: (filtered) => (
-      <SearchOutlined style={{ color: filtered ? "#1890ff" : undefined }} />
-    ),
-    onFilter: (value, record) =>
-      record[dataIndex]
-        ? record[dataIndex]
-            .toString()
-            .toLowerCase()
-            .includes(value.toLowerCase())
-        : "",
-    onFilterDropdownVisibleChange: (visible) => {
-      if (visible) {
-        setTimeout(() => this.searchInput.select(), 100);
-      }
-    },
-    render: (text) =>
-      this.state.searchedColumn === dataIndex ? (
-        <Highlighter
-          highlightStyle={{ backgroundColor: "#ffc069", padding: 0 }}
-          searchWords={[this.state.searchText]}
-          autoEscape
-          textToHighlight={text ? text.toString() : ""}
-        />
-      ) : (
-        text
-      ),
-  });
-
-  handleSearch = (selectedKeys, confirm, dataIndex) => {
-    confirm();
-    this.setState({
-      searchText: selectedKeys[0],
-      searchedColumn: dataIndex,
-    });
-  };
-
-  handleReset = (clearFilters) => {
-    clearFilters();
-    this.setState({ searchText: "" });
-  };
-
   onSelectChange = (selectedRowKeys) => {
     console.log("selectedRowKeys changed: ", selectedRowKeys);
     this.setState({ selectedRowKeys });
@@ -153,17 +81,14 @@ export default class AnnouncementComponent extends React.Component {
         title: "Title",
         width: "40%",
         dataIndex: "newsTitle",
-        ...this.getColumnSearchProps("newsTitle"),
       },
       {
         title: "Uploaded By",
         dataIndex: "createdBy",
-        ...this.getColumnSearchProps("createdBy"),
       },
       {
         title: "Uploaded Date",
         dataIndex: "createdDate",
-        ...this.getColumnSearchProps("createdDate"),
       },
       {
         title: "Action",
@@ -200,10 +125,33 @@ export default class AnnouncementComponent extends React.Component {
         <div
           style={{
             display: "flex",
-            justifyContent: "flex-end",
+            justifyContent: "space-between",
             marginBottom: 20,
           }}
         >
+          <AutoComplete
+            dataSource={this.state.dataSearch?.map((item, idx) => (
+              <Select.Option key={idx} value={item.newsTitle}>
+                {item.newsTitle}
+              </Select.Option>
+            ))}
+          >
+            <Input.Search
+              placeholder="Search News"
+              allowClear
+              onSearch={(newsSearch) =>
+                this.setState({
+                  dataSource: this.state.dataSearch?.filter((item) =>
+                    item.newsTitle
+                      .toString()
+                      .toLowerCase()
+                      .includes(newsSearch.toLowerCase())
+                  ),
+                })
+              }
+              enterButton
+            />
+          </AutoComplete>
           <AddNewAnnouncement getAllNews={this.getAllNews} />
         </div>
         <Table

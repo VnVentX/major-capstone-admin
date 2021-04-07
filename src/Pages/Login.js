@@ -2,14 +2,14 @@ import React, { useState } from "react";
 import axios from "axios";
 
 export default function Login(props) {
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
   if (localStorage.getItem("token")) {
     props.history.push("/");
   }
   const onSubmit = async (e) => {
-    if (email === "admin" && password === "12345678") {
+    if (username === "admin" && password === "12345678") {
       localStorage.setItem("token", "token");
       props.history.push("/");
     }
@@ -43,11 +43,11 @@ export default function Login(props) {
         <div className="txtb">
           <input
             type="text"
-            name="email"
-            placeholder="Email"
-            value={email}
+            name="username"
+            placeholder="Username"
+            value={username}
             onChange={(e) => {
-              setEmail(e.target.value);
+              setUsername(e.target.value);
             }}
           />
         </div>

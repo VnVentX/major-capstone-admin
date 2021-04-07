@@ -1,18 +1,42 @@
 import React, { useState } from "react";
-import { Button, Modal, Form, Input } from "antd";
+import axios from "axios";
+import { Button, Modal, Form, Input, message } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 
 const layout = {
-  labelCol: { span: 8 },
-  wrapperCol: { span: 16 },
+  labelCol: { span: 7 },
+  wrapperCol: { span: 17 },
 };
 
-const AddProgress = () => {
+const AddProgress = (props) => {
   const [form] = Form.useForm();
   const [visible, setVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const onFinish = (event) => {
-    console.log(event);
+  const createExercise = async (values) => {
+    setLoading(true);
+    await axios
+      .post("https://mathscienceeducation.herokuapp.com/exercise", {
+        description: values.description,
+        exerciseName: values.name,
+        progressTestId: window.location.pathname.split("/")[4],
+      })
+      .then((res) => {
+        console.log(res);
+        props.getProgressTestByID();
+        setLoading(false);
+        handleCancel();
+        message.success("Create Test successfully!");
+        form.resetFields();
+      })
+      .catch((e) => {
+        console.log(e);
+        message.error("Fail to create Test");
+        setLoading(false);
+      });
+  };
+  const onFinish = (values) => {
+    createExercise(values);
   };
 
   const showModal = () => {
@@ -37,15 +61,15 @@ const AddProgress = () => {
       <Modal
         title="Add Test"
         visible={visible}
+        confirmLoading={loading}
         onCancel={handleCancel}
         destroyOnClose
-        okText="Submit"
+        okText="Create"
         onOk={() => {
           form
             .validateFields()
             .then((values) => {
               onFinish(values);
-              form.resetFields();
             })
             .catch((info) => {
               console.log("Validate Failed:", info);

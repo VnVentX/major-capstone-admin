@@ -49,7 +49,7 @@ const UnitComponent = () => {
     >
       {lesson?.map((i) => (
         <TabPane tab={i.lessonName} key={i.id}>
-          <Lesson lesson={i} />
+          <Lesson lesson={i} getLessonByUnitID={getLessonByUnitID} />
         </TabPane>
       ))}
     </Tabs>

@@ -1,24 +1,50 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import { Card, List, Popconfirm, message, Tooltip, Button } from "antd";
 import { Link } from "react-router-dom";
 import { QuestionCircleOutlined, DeleteOutlined } from "@ant-design/icons";
 import AddProgress from "./Modal/AddProgress";
 import EditProgress from "./Modal/EditProgress";
 
-const data = [
-  {
-    id: 1,
-    title: "Test 1",
-  },
-  {
-    id: 2,
-    title: "Test 2",
-  },
-];
 const ProgressTestDetailComponent = () => {
-  const handleDelete = (item) => {
-    console.log(item);
-    message.success("Click on Yes");
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    getProgressTestByID();
+  }, []);
+
+  const getProgressTestByID = async () => {
+    let progressTestID = window.location.pathname.split("/")[4];
+    console.log(progressTestID);
+    await axios
+      .get(
+        `https://mathscienceeducation.herokuapp.com/progressTest/${progressTestID}/exercises`
+      )
+      .then((res) => {
+        setData(res.data.length === 0 ? [] : res.data);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
+
+  const handleDelete = async (item) => {
+    let formData = new FormData();
+    formData.append("id", item);
+    await axios
+      .put(
+        "https://mathscienceeducation.herokuapp.com/exercise/delete",
+        formData
+      )
+      .then((res) => {
+        console.log(res);
+        getProgressTestByID();
+        message.success("Delete Test successfully!");
+      })
+      .catch((e) => {
+        console.log(e);
+        message.success("Fail to delete Test");
+      });
   };
 
   return (
@@ -32,7 +58,7 @@ const ProgressTestDetailComponent = () => {
           }}
         >
           Review 1
-          <AddProgress />
+          <AddProgress getProgressTestByID={getProgressTestByID} />
         </div>
       }
       type="inner"
@@ -53,7 +79,7 @@ const ProgressTestDetailComponent = () => {
                   }}
                 >
                   <Link to={`${window.location.pathname}/test/${item.id}`}>
-                    {item.title}
+                    {item.exerciseName}
                   </Link>
                   <div
                     style={{
@@ -79,12 +105,15 @@ const ProgressTestDetailComponent = () => {
                         />
                       </Popconfirm>
                     </Tooltip>
-                    <EditProgress data={item} />
+                    <EditProgress
+                      data={item}
+                      getProgressTestByID={getProgressTestByID}
+                    />
                   </div>
                 </div>
               }
             >
-              Test descriptions
+              {item.description}
             </Card>
           </List.Item>
         )}
