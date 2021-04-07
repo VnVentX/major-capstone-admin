@@ -150,8 +150,8 @@ const ViewQuestion = (props) => {
                         <Form.Item
                           {...field}
                           label="Is Correct"
-                          name={[field.name, "isCorrect"]}
-                          fieldKey={[field.fieldKey, "isCorrect"]}
+                          name={[field.name, "correct"]}
+                          fieldKey={[field.fieldKey, "correct"]}
                         >
                           <Select placeholder="Select Is Correct" disabled>
                             <Select.Option value={true}>True</Select.Option>

@@ -45,6 +45,14 @@ const EditChoosingQuestion = (props) => {
           questionTitle: res.data.questionTitle,
           description: res.data.description,
           score: res.data.score,
+          id1: res.data.optionQuestionDTOList[0].id,
+          id2: res.data.optionQuestionDTOList[1].id,
+          id3: res.data.optionQuestionDTOList[2].id,
+          id4: res.data.optionQuestionDTOList[3].id,
+          id5: res.data.optionQuestionDTOList[4].id,
+          id6: res.data.optionQuestionDTOList[5].id,
+          id7: res.data.optionQuestionDTOList[6].id,
+          id8: res.data.optionQuestionDTOList[7].id,
           value1: res.data.optionQuestionDTOList[0].optionText,
           value2: res.data.optionQuestionDTOList[1].optionText,
           value3: res.data.optionQuestionDTOList[2].optionText,
@@ -155,6 +163,9 @@ const EditChoosingQuestion = (props) => {
       <Divider />
       <h3>Pair 1</h3>
       <Row gutter={24}>
+        <Form.Item name="id1">
+          <Input type="text" style={{ display: "none" }} />
+        </Form.Item>
         <Col span={12}>
           <Form.Item
             name="key1"
@@ -207,6 +218,9 @@ const EditChoosingQuestion = (props) => {
       <Divider />
       <h3>Pair 2</h3>
       <Row gutter={24}>
+        <Form.Item name="id2">
+          <Input type="text" style={{ display: "none" }} />
+        </Form.Item>
         <Col span={12}>
           <Form.Item
             name="key2"
@@ -260,6 +274,9 @@ const EditChoosingQuestion = (props) => {
       {/* !Option 3 */}
       <h3>Pair 3</h3>
       <Row gutter={24}>
+        <Form.Item name="id3">
+          <Input type="text" style={{ display: "none" }} />
+        </Form.Item>
         <Col span={12}>
           <Form.Item
             name="key3"
@@ -313,6 +330,9 @@ const EditChoosingQuestion = (props) => {
       {/* Option 4 */}
       <h3>Pair 4</h3>
       <Row gutter={24}>
+        <Form.Item name="id4">
+          <Input type="text" style={{ display: "none" }} />
+        </Form.Item>
         <Col span={12}>
           <Form.Item
             name="key4"
@@ -366,6 +386,9 @@ const EditChoosingQuestion = (props) => {
       {/* Option 5 */}
       <h3>Pair 5</h3>
       <Row gutter={24}>
+        <Form.Item name="id5">
+          <Input type="text" style={{ display: "none" }} />
+        </Form.Item>
         <Col span={12}>
           <Form.Item
             name="key5"
@@ -419,6 +442,9 @@ const EditChoosingQuestion = (props) => {
       {/* Option 6 */}
       <h3>Pair 6</h3>
       <Row gutter={24}>
+        <Form.Item name="id6">
+          <Input type="text" style={{ display: "none" }} />
+        </Form.Item>
         <Col span={12}>
           <Form.Item
             name="key6"
@@ -472,6 +498,9 @@ const EditChoosingQuestion = (props) => {
       {/* Option 7 */}
       <h3>Pair 7</h3>
       <Row gutter={24}>
+        <Form.Item name="id7">
+          <Input type="text" style={{ display: "none" }} />
+        </Form.Item>
         <Col span={12}>
           <Form.Item
             name="key7"
@@ -525,6 +554,9 @@ const EditChoosingQuestion = (props) => {
       {/* Option 8 */}
       <h3>Pair 8</h3>
       <Row gutter={24}>
+        <Form.Item name="id8">
+          <Input type="text" style={{ display: "none" }} />
+        </Form.Item>
         <Col span={12}>
           <Form.Item
             name="key8"

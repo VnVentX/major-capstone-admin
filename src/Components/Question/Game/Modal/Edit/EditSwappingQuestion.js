@@ -40,6 +40,10 @@ const EditSwappingQuestion = (props) => {
           questionTitle: res.data.questionTitle,
           description: res.data.description,
           score: res.data.score,
+          id1: res.data.optionQuestionDTOList[0].id,
+          id2: res.data.optionQuestionDTOList[1].id,
+          id3: res.data.optionQuestionDTOList[2].id,
+          id4: res.data.optionQuestionDTOList[3].id,
           value1: res.data.optionQuestionDTOList[0].optionText,
           value2: res.data.optionQuestionDTOList[1].optionText,
           value3: res.data.optionQuestionDTOList[2].optionText,
@@ -114,6 +118,9 @@ const EditSwappingQuestion = (props) => {
       <Divider />
       <h3>Pair 1</h3>
       <Row gutter={24}>
+        <Form.Item name="id1">
+          <Input type="text" style={{ display: "none" }} />
+        </Form.Item>
         <Col span={12}>
           <Form.Item
             name="key1"
@@ -166,6 +173,9 @@ const EditSwappingQuestion = (props) => {
       <Divider />
       <h3>Pair 2</h3>
       <Row gutter={24}>
+        <Form.Item name="id2">
+          <Input type="text" style={{ display: "none" }} />
+        </Form.Item>
         <Col span={12}>
           <Form.Item
             name="key2"
@@ -219,6 +229,9 @@ const EditSwappingQuestion = (props) => {
       {/* !Option 3 */}
       <h3>Pair 3</h3>
       <Row gutter={24}>
+        <Form.Item name="id3">
+          <Input type="text" style={{ display: "none" }} />
+        </Form.Item>
         <Col span={12}>
           <Form.Item
             name="key3"
@@ -272,6 +285,9 @@ const EditSwappingQuestion = (props) => {
       {/* Option 4 */}
       <h3>Pair 4</h3>
       <Row gutter={24}>
+        <Form.Item name="id4">
+          <Input type="text" style={{ display: "none" }} />
+        </Form.Item>
         <Col span={12}>
           <Form.Item
             name="key4"

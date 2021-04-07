@@ -158,7 +158,11 @@ const QuestionBankComponent = () => {
       render: (record) => (
         <Space size="small">
           <ViewQuestion data={record} />
-          <EditQuestion data={record} />
+          <EditQuestion
+            data={record}
+            unitID={selectedUnit}
+            getQuestionByUnitID={getQuestionByUnitID}
+          />
           <Tooltip title="Delete Question">
             <Popconfirm
               placement="topRight"

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import {
   Form,
   Input,
@@ -26,43 +27,39 @@ const normFile = (e) => {
   return e && e.fileList;
 };
 
-const options = [
-  { option: "operator", operator: "-" },
-  { option: "text", text: "123" },
-  { option: "text", text: "sad" },
-  { option: "text", text: "asd" },
-  { option: "operator", operator: "-" },
-];
-
 const EditFillingQuestion = (props) => {
-  // const [audioFile, setAudioFile] = useState([
-  //   {
-  //     thumbUrl: getAudioThumbUrl(),
-  //     url:
-  //       "https://firebasestorage.googleapis.com/v0/b/mathscience-e425d.appspot.com/o/audios%2F94028074-2bc7-47df-89bb-748a475aee3fmp3?alt=media&token=44a7c7d4-cdbf-4eae-ada8-d5276e64792d",
-  //   },
-  // ]);
-  const [imgFile, setImgFile] = useState([
-    {
-      thumbUrl: props.data,
-    },
-  ]);
+  const [imgFile, setImgFile] = useState([]);
 
   useEffect(() => {
-    props.form.setFieldsValue({
-      subject: "math",
-      unit: "unit 1",
-      question: "Fill in the blank with the correct word",
-      options: options,
-    });
+    getQuestionByID();
   }, []);
+
+  const getQuestionByID = async () => {
+    await axios
+      .get(
+        `https://mathscienceeducation.herokuapp.com/question/${props.data.id}?questionType=FILL`
+      )
+      .then((res) => {
+        props.form.setFieldsValue({
+          questionTitle: res.data.questionTitle,
+          description: res.data.description,
+          score: res.data.score,
+          options: res.data.optionQuestionDTOList,
+        });
+        setImgFile([
+          {
+            thumbUrl: res.data.questionImageUrl,
+          },
+        ]);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
 
   const handleChangeImg = ({ fileList }) => {
     setImgFile(fileList);
   };
-  // const handleChangeAudio = ({ fileList }) => {
-  //   setAudioFile(fileList);
-  // };
 
   return (
     <Form form={props.form} layout="vertical" style={{ marginTop: 10 }}>
@@ -91,7 +88,7 @@ const EditFillingQuestion = (props) => {
         <InputNumber placeholder="Score" />
       </Form.Item>
       <Form.Item
-        name="q_img"
+        name="questionImg"
         label="Question Image"
         getValueFromEvent={normFile}
       >
@@ -118,34 +115,6 @@ const EditFillingQuestion = (props) => {
           )}
         </Upload>
       </Form.Item>
-      {/* <Form.Item
-        name="q_audio"
-        label="Question Audio"
-        getValueFromEvent={normFile}
-      >
-        <Upload
-          listType="picture"
-          fileList={audioFile}
-          beforeUpload={() => false}
-          onRemove={() => {
-            setAudioFile([]);
-          }}
-          onChange={(info) => {
-            if (info.file.type) {
-              if (info.file.type.split("/")[0] !== "audio") {
-                message.error(`${info.file.name} is not an audio file`);
-                setAudioFile([]);
-              } else {
-                handleChangeAudio(info);
-              }
-            }
-          }}
-        >
-          {audioFile.length === 1 ? null : (
-            <Button icon={<UploadOutlined />}>Upload</Button>
-          )}
-        </Upload>
-      </Form.Item> */}
       <h2>Options</h2>
       <Form.List
         name="options"
@@ -166,12 +135,20 @@ const EditFillingQuestion = (props) => {
             {fields.map((field, idx) => (
               <Row gutter={24} key={idx}>
                 <Divider />
+                <Form.Item
+                  {...field}
+                  name={[field.name, "id"]}
+                  fieldKey={[field.fieldKey, "id"]}
+                  style={{ display: "none" }}
+                >
+                  <Input type="text" />
+                </Form.Item>
                 <Col span={12}>
                   <Form.Item
                     {...field}
                     label="Input Type"
-                    name={[field.name, "option"]}
-                    fieldKey={[field.fieldKey, "option"]}
+                    name={[field.name, "optionInputType"]}
+                    fieldKey={[field.fieldKey, "optionInputType"]}
                     dependencies={["question"]}
                     rules={[
                       { required: true, message: "Please select input option" },
@@ -192,7 +169,7 @@ const EditFillingQuestion = (props) => {
                   >
                     {() => {
                       return props.form.getFieldsValue().options[idx]
-                        ?.option === "operator" ? (
+                        ?.optionInputType === "operator" ? (
                         <Form.Item
                           {...field}
                           name={[field.name, "operator"]}
@@ -210,11 +187,11 @@ const EditFillingQuestion = (props) => {
                               Multiply (x)
                             </Select.Option>
                             <Select.Option value="/">Divide (/)</Select.Option>
-                            <Select.Option value="=">Equal (=)</Select.Option>
+                            <Select.Option value="=">Equals (=)</Select.Option>
                           </Select>
                         </Form.Item>
-                      ) : props.form.getFieldsValue().options[idx]?.option ===
-                        "text" ? (
+                      ) : props.form.getFieldsValue().options[idx]
+                          ?.optionInputType === "text" ? (
                         <Form.Item
                           {...field}
                           name={[field.name, "text"]}

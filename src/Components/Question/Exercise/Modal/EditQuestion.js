@@ -34,6 +34,7 @@ const EditQuestion = (props) => {
   const [counter, setCounter] = useState(0);
   const [correctCount, setCorrectCount] = useState(0);
   const [visible, setVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [audioFile, setAudioFile] = useState([
     {
       thumbUrl: getAudioThumbUrl(),
@@ -47,25 +48,54 @@ const EditQuestion = (props) => {
   ]);
 
   useEffect(() => {
+    const getQuestionByID = async () => {
+      await axios
+        .get(
+          `https://mathscienceeducation.herokuapp.com/question/${props.data.id}?questionType=EXERCISE`
+        )
+        .then((res) => {
+          form.setFieldsValue({
+            questionTitle: res.data.questionTitle,
+            description: res.data.description,
+            score: res.data.score,
+            options: res.data.optionQuestionDTOList,
+          });
+          setCounter(res.data.optionQuestionDTOList.length);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    };
     getQuestionByID();
-  }, []);
+  }, [form, props.data.id]);
 
-  const getQuestionByID = async () => {
+  const editQuestion = async (formData) => {
+    setLoading(true);
     await axios
-      .get(
-        `https://mathscienceeducation.herokuapp.com/question/${props.data.id}?questionType=EXERCISE`
+      .put(
+        `https://mathscienceeducation.herokuapp.com/question/${props.data.id}/exercise`,
+        formData
       )
       .then((res) => {
+        console.log(res);
+        props.getQuestionByUnitID(props.unitID);
+        setLoading(false);
+        handleCancel();
+        message.success("Edit Exercise Question successfully");
         form.setFieldsValue({
-          questionTitle: res.data.questionTitle,
-          description: res.data.description,
-          score: res.data.score,
-          options: res.data.optionQuestionDTOList,
+          questionTitle: "",
+          description: "",
+          score: "",
+          options: "",
         });
-        setCounter(res.data.optionQuestionDTOList.length);
+        setAudioFile([]);
+        setImgFile([]);
+        setCounter(0);
       })
       .catch((e) => {
         console.log(e);
+        setLoading(false);
+        message.error("Fail to edit Exercise Question");
       });
   };
 
@@ -91,7 +121,7 @@ const EditQuestion = (props) => {
     let count = 0;
     form.getFieldsValue().options.forEach((item) => {
       if (item !== undefined) {
-        if (item.isCorrect === true) {
+        if (item.correct === true) {
           count = count + 1;
         }
       }
@@ -100,9 +130,31 @@ const EditQuestion = (props) => {
     console.log(count);
   };
 
-  const onFinish = (event) => {
-    console.log(event);
-    setCounter(0);
+  const onFinish = (values) => {
+    let optionIdList = [];
+    let optionTextList = [];
+    let isCorrectList = [];
+    values.options.forEach((item) => {
+      optionIdList.push(item.id);
+      optionTextList.push(item.optionText);
+      isCorrectList.push(item.correct);
+    });
+    let formData = new FormData();
+    formData.append("id", props.data.id);
+    formData.append("questionTitle", values.questionTitle);
+    formData.append("score", values.score);
+    formData.append("description", values.description);
+    if (values.imgFile !== undefined && values.imgFile.length !== 0) {
+      formData.append("imageFile", values.imgFile[0].originFileObj);
+    }
+    if (values.audioFile !== undefined && values.audioFile.length !== 0) {
+      formData.append("audioFile", values.audioFile[0].originFileObj);
+    }
+    formData.append("isCorrectList", [isCorrectList]);
+    formData.append("optionTextList", optionTextList);
+    formData.append("optionIdList", optionIdList);
+
+    editQuestion(formData);
   };
 
   const showModal = () => {
@@ -123,6 +175,7 @@ const EditQuestion = (props) => {
         visible={visible}
         width={"45vw"}
         title="Edit Question"
+        confirmLoading={loading}
         okText="Update"
         cancelText="Cancel"
         onCancel={handleCancel}
@@ -170,7 +223,7 @@ const EditQuestion = (props) => {
             <InputNumber placeholder="Score" />
           </Form.Item>
           <Form.Item
-            name="q_audio"
+            name="audioFile"
             label="Question Audio"
             getValueFromEvent={normFile}
           >
@@ -198,7 +251,7 @@ const EditQuestion = (props) => {
             </Upload>
           </Form.Item>
           <Form.Item
-            name="q_img"
+            name="imgFile"
             label="Question Image"
             getValueFromEvent={normFile}
           >
@@ -251,6 +304,14 @@ const EditQuestion = (props) => {
                   {fields.map((field, idx) => (
                     <Row gutter={24} key={idx}>
                       <Divider />
+                      <Form.Item
+                        {...field}
+                        name={[field.name, "id"]}
+                        fieldKey={[field.fieldKey, "id"]}
+                        style={{ display: "none" }}
+                      >
+                        <Input type="text" />
+                      </Form.Item>
                       <Col span={12}>
                         <Form.Item
                           {...field}
@@ -273,8 +334,8 @@ const EditQuestion = (props) => {
                         <Form.Item
                           {...field}
                           label="Is Correct"
-                          name={[field.name, "isCorrect"]}
-                          fieldKey={[field.fieldKey, "isCorrect"]}
+                          name={[field.name, "correct"]}
+                          fieldKey={[field.fieldKey, "correct"]}
                           rules={[
                             { required: true, message: "Missing correct" },
                           ]}

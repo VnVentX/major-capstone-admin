@@ -36,23 +36,20 @@ const Game = (props) => {
       });
   };
 
-  const deleteGame = async (exerciseID) => {
-    // let formData = new FormData();
-    // formData.append("id", exerciseID);
-    // await axios
-    //   .put(
-    //     "https://mathscienceeducation.herokuapp.com/exercise/delete",
-    //     formData
-    //   )
-    //   .then((res) => {
-    //     console.log(res);
-    //     getExerciseByLessonID();
-    //     message.success("Delete Exercise successfully!");
-    //   })
-    //   .catch((e) => {
-    //     console.log(e);
-    //     message.success("Fail to delete Exercise");
-    //   });
+  const deleteGame = async (gameID) => {
+    let formData = new FormData();
+    formData.append("id", gameID);
+    await axios
+      .put("https://mathscienceeducation.herokuapp.com/game", formData)
+      .then((res) => {
+        console.log(res);
+        getGameByLessonID();
+        message.success("Delete Game successfully!");
+      })
+      .catch((e) => {
+        console.log(e);
+        message.success("Fail to delete Game");
+      });
   };
 
   const handleDelete = (item) => {

@@ -13,14 +13,6 @@ import {
 
 const { Option } = Select;
 
-const options = [
-  { option: "operator", operator: "-" },
-  { option: "text", text: "123" },
-  { option: "text", text: "sad" },
-  { option: "text", text: "asd" },
-  { option: "operator", operator: "-" },
-];
-
 const ViewFillingQuestion = (props) => {
   useEffect(() => {
     getQuestionByID();
@@ -36,9 +28,8 @@ const ViewFillingQuestion = (props) => {
           questionTitle: res.data.questionTitle,
           description: res.data.description,
           score: res.data.score,
-          options: options,
+          options: res.data.optionQuestionDTOList,
         });
-        console.log(res);
       })
       .catch((e) => {
         console.log(e);
@@ -68,7 +59,7 @@ const ViewFillingQuestion = (props) => {
         />
       </Form.Item>
       <Form.Item name="q_img" label="Question Image">
-        <Image src="https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg" />
+        <Image src={props.data.questionImageUrl} />
       </Form.Item>
       <Form.Item name="score" label="Score">
         <InputNumber placeholder="Score" disabled />
@@ -84,8 +75,8 @@ const ViewFillingQuestion = (props) => {
                   <Form.Item
                     {...field}
                     label="Input Type"
-                    name={[field.name, "option"]}
-                    fieldKey={[field.fieldKey, "option"]}
+                    name={[field.name, "optionInputType"]}
+                    fieldKey={[field.fieldKey, "optionInputType"]}
                     dependencies={["question"]}
                   >
                     <Select placeholder="Select input type" disabled>
@@ -103,7 +94,7 @@ const ViewFillingQuestion = (props) => {
                   >
                     {() => {
                       return props.form.getFieldsValue().options[idx]
-                        ?.option === "operator" ? (
+                        ?.optionInputType === "operator" ? (
                         <Form.Item
                           {...field}
                           name={[field.name, "operator"]}
@@ -118,11 +109,11 @@ const ViewFillingQuestion = (props) => {
                               Multiply (x)
                             </Select.Option>
                             <Select.Option value="/">Divide (/)</Select.Option>
-                            <Select.Option value="=">Equal (=)</Select.Option>
+                            <Select.Option value="=">Equals (=)</Select.Option>
                           </Select>
                         </Form.Item>
-                      ) : props.form.getFieldsValue().options[idx]?.option ===
-                        "text" ? (
+                      ) : props.form.getFieldsValue().options[idx]
+                          ?.optionInputType === "text" ? (
                         <Form.Item
                           {...field}
                           name={[field.name, "text"]}
