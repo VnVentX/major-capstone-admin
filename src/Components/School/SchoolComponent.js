@@ -266,7 +266,7 @@ export default class SchoolComponent extends Component {
           <AutoComplete
             dataSource={this.state.dataSearch?.map((item, idx) => (
               <Select.Option key={idx} value={item.schoolName}>
-                {item.schoolName}
+                Trường Tiểu Học {item.schoolName}
               </Select.Option>
             ))}
           >

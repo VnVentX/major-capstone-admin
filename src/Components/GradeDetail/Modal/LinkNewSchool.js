@@ -96,7 +96,7 @@ const LinkNewSchool = (props) => {
               {resArr?.map((i) =>
                 i.status === "ACTIVE" ? (
                   <Option key={i.id} value={i.id}>
-                    {i.schoolName}
+                    Trường Tiểu Học {i.schoolName}
                   </Option>
                 ) : null
               )}

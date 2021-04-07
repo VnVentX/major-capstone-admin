@@ -51,7 +51,7 @@ const SchoolDetailComponent = () => {
                 label="School"
                 labelStyle={{ fontWeight: "bold" }}
               >
-                {schoolData.schoolName}
+                TH {schoolData.schoolName}
               </Descriptions.Item>
               <Descriptions.Item
                 label="Education Level"

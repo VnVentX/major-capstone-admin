@@ -220,7 +220,7 @@ const EditQuestion = (props) => {
             label="Score"
             rules={[{ required: true, message: "Please input a score" }]}
           >
-            <InputNumber placeholder="Score" />
+            <InputNumber placeholder="Score" min={1} />
           </Form.Item>
           <Form.Item
             name="audioFile"

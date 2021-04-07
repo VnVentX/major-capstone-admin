@@ -38,18 +38,18 @@ const ClassComponent = (props) => {
     } else {
       ids = id;
     }
-    // await axios
-    //   .put("https://mathscienceeducation.herokuapp.com/bannerImage", {
-    //     ids: ids,
-    //     status: status,
-    //   })
-    //   .then((res) => {
-    //     console.log(res);
-    //     this.getAllBanner();
-    //   })
-    //   .catch((e) => {
-    //     console.log(e);
-    //   });
+    await axios
+      .put("https://mathscienceeducation.herokuapp.com/class/changeStatus", {
+        ids: ids,
+        status: status,
+      })
+      .then((res) => {
+        console.log(res);
+        getClassBySchoolGrade();
+      })
+      .catch((e) => {
+        console.log(e);
+      });
   };
 
   const onSelectChange = (selectedRowKeys) => {

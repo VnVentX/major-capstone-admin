@@ -207,7 +207,7 @@ const SwappingQuestion = (props) => {
         label="Score"
         rules={[{ required: true, message: "Please input a score" }]}
       >
-        <InputNumber placeholder="Score" />
+        <InputNumber placeholder="Score" min={1} />
       </Form.Item>
       <h2>Options</h2>
       <Divider />
