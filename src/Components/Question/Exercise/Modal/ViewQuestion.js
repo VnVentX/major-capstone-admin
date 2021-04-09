@@ -44,10 +44,6 @@ const ViewQuestion = (props) => {
   const [visible, setVisible] = useState(false);
   const [playing, toggle] = useAudio(props.data.questionAudioUrl);
 
-  useEffect(() => {
-    getQuestionByID();
-  }, []);
-
   const getQuestionByID = async () => {
     await axios
       .get(
@@ -68,6 +64,7 @@ const ViewQuestion = (props) => {
 
   const showModal = () => {
     setVisible(true);
+    getQuestionByID();
   };
 
   const handleCancel = () => {

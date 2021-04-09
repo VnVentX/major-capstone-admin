@@ -32,7 +32,7 @@ const ViewQuestion = (props) => {
         onCancel={handleCancel}
         footer={null}
       >
-        {"props.data?.questionType" === "MATCH" ? (
+        {props.data?.questionType === "MATCH" ? (
           <ViewMatchingQuestion form={form} data={props.data} />
         ) : props.data?.questionType === "CHOOSE" ? (
           <ViewChoosingQuestion form={form} data={props.data} />

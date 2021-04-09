@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Button, Modal, Form, Table, Space, message } from "antd";
+import { PlusOutlined } from "@ant-design/icons";
 import ViewQuestion from "../../../../../Question/Game/Modal/View/ViewQuestion";
 
 const selectingQuestionCol = [
@@ -11,7 +12,7 @@ const selectingQuestionCol = [
   },
   {
     title: "Type",
-    dataIndex: "type",
+    dataIndex: "questionType",
   },
   {
     title: "Action",
@@ -99,7 +100,12 @@ const AddQuestion = (props) => {
   };
   return (
     <>
-      <Button type="primary" size="middle" onClick={showModal}>
+      <Button
+        type="primary"
+        size="middle"
+        onClick={showModal}
+        icon={<PlusOutlined />}
+      >
         Add Question from Question Bank
       </Button>
       <Modal

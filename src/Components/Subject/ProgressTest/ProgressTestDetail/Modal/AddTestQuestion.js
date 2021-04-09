@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Button, Modal, Form, Table, Space, Select, message } from "antd";
+import { PlusOutlined } from "@ant-design/icons";
 import ViewQuestion from "../../../../Question/Exercise/Modal/ViewQuestion";
 
 const selectingQuestionCol = [
@@ -25,6 +26,7 @@ var resArr = [];
 const AddTestQuestion = (props) => {
   const [visible, setVisible] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [tableLoading, setTableLoading] = useState(false);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [data, setData] = useState([]);
   const [unit, setUnit] = useState([]);
@@ -32,6 +34,7 @@ const AddTestQuestion = (props) => {
 
   useEffect(() => {
     const getQuestionByUnitID = async (unitID) => {
+      setTableLoading(true);
       await axios
         .get(
           `https://mathscienceeducation.herokuapp.com/unit/${unitID}/questions?isExercise=true`
@@ -41,9 +44,11 @@ const AddTestQuestion = (props) => {
           var ids = new Set(props.data.map(({ id }) => id));
           resArr = resArr.filter(({ id }) => !ids.has(id));
           setData(resArr);
+          setTableLoading(false);
         })
         .catch((e) => {
           console.log(e);
+          setTableLoading(false);
         });
     };
     getQuestionByUnitID(selectedUnit);
@@ -116,7 +121,12 @@ const AddTestQuestion = (props) => {
 
   return (
     <>
-      <Button type="primary" size="middle" onClick={showModal}>
+      <Button
+        type="primary"
+        size="middle"
+        onClick={showModal}
+        icon={<PlusOutlined />}
+      >
         Add Question from Question Bank
       </Button>
       <Modal
@@ -171,6 +181,7 @@ const AddTestQuestion = (props) => {
             columns={selectingQuestionCol}
             dataSource={data}
             rowKey={(record) => record.id}
+            loading={tableLoading}
           />
         </Form>
       </Modal>

@@ -21,7 +21,12 @@ const EditQuestion = (props) => {
       )
       .then((res) => {
         console.log(res);
-        props.getQuestionByUnitID(props.unitID);
+        if (props.getQuestionByUnitID) {
+          props.getQuestionByUnitID(props.unitID);
+        }
+        if (props.getQuestionByGameID) {
+          props.getQuestionByGameID();
+        }
         setLoading(false);
         handleCancel();
         message.success("Edit Question successfully");
@@ -43,21 +48,21 @@ const EditQuestion = (props) => {
       )
       .then((res) => {
         console.log(res);
-        props.getQuestionByUnitID(props.unitID);
+        if (props.getQuestionByUnitID) {
+          props.getQuestionByUnitID(props.unitID);
+        }
+        if (props.getQuestionByGameID) {
+          props.getQuestionByGameID();
+        }
         setLoading(false);
         handleCancel();
-        message.success("Edit Filling Question successfully");
-        form.setFieldsValue({
-          questionTitle: "",
-          description: "",
-          score: "",
-          options: "",
-        });
+        message.success("Edit Question successfully");
+        form.resetFields();
       })
       .catch((e) => {
         console.log(e);
         setLoading(false);
-        message.error("Fail to edit Filling Question");
+        message.error("Fail to edit Question");
       });
   };
 

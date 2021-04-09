@@ -8,6 +8,7 @@ import { QuestionCircleOutlined, DeleteOutlined } from "@ant-design/icons";
 
 const GameQuestion = () => {
   const [data, setData] = useState([]);
+  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
 
   useEffect(() => {
     getQuestionByGameID();
@@ -28,9 +29,43 @@ const GameQuestion = () => {
       });
   };
 
-  const handleDelete = (e) => {
-    console.log(e);
-    message.success("Click on Yes");
+  const handleDelete = async (id) => {
+    let gameID = window.location.pathname.split("/")[6];
+    let ids = [];
+    if (id.length === undefined) {
+      ids.push(id);
+    } else {
+      ids = id;
+    }
+    await axios
+      .put(
+        "https://mathscienceeducation.herokuapp.com/exerciseGameQuestion/delete",
+        {
+          exercise: false,
+          gameId: gameID,
+          questionIds: ids,
+        }
+      )
+      .then((res) => {
+        console.log(res);
+        getQuestionByGameID();
+        message.success("Delete Question successfully");
+      })
+      .catch((e) => {
+        console.log(e);
+
+        message.error("Fail to delete Question");
+      });
+  };
+
+  const onSelectChange = (selectedRowKeys) => {
+    console.log("selectedRowKeys changed: ", selectedRowKeys);
+    setSelectedRowKeys(selectedRowKeys);
+  };
+
+  const rowSelection = {
+    selectedRowKeys,
+    onChange: onSelectChange,
   };
 
   const selectedQuestionCol = [
@@ -65,12 +100,15 @@ const GameQuestion = () => {
       render: (record) => (
         <Space size="small">
           <ViewQuestion data={record} />
-          <EditQuestion data={record} />
+          <EditQuestion
+            data={record}
+            getQuestionByGameID={getQuestionByGameID}
+          />
           <Tooltip title="Delete Question">
             <Popconfirm
               placement="topRight"
               title="Are you sure to delete this question?"
-              onConfirm={() => handleDelete(record.key)} //Handle disable logic here
+              onConfirm={() => handleDelete(record.id)}
               okText="Yes"
               cancelText="No"
               icon={<QuestionCircleOutlined style={{ color: "red" }} />}
@@ -89,16 +127,42 @@ const GameQuestion = () => {
         style={{
           marginBottom: 20,
           display: "flex",
-          justifyContent: "space-between",
+          justifyContent: "flex-end",
         }}
       >
         <AddQuestion getQuestionByGameID={getQuestionByGameID} data={data} />
       </div>
       <Table
+        rowSelection={rowSelection}
         columns={selectedQuestionCol}
         dataSource={data}
         rowKey={(record) => record.id}
       />
+      <div>
+        <h1>With selected:</h1>
+        {selectedRowKeys.length === 0 ? (
+          <>
+            <Button type="danger" disabled icon={<DeleteOutlined />}>
+              Delete
+            </Button>
+          </>
+        ) : (
+          <>
+            <Popconfirm
+              placement="topRight"
+              title="Are you sure to delete selected Questions?"
+              onConfirm={() => handleDelete(selectedRowKeys)}
+              okText="Yes"
+              cancelText="No"
+              icon={<QuestionCircleOutlined style={{ color: "red" }} />}
+            >
+              <Button type="danger" icon={<DeleteOutlined />}>
+                Delete
+              </Button>
+            </Popconfirm>
+          </>
+        )}
+      </div>
     </Card>
   );
 };
