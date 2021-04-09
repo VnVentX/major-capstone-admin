@@ -1,13 +1,13 @@
-import React, { useState } from "react";
-import { Button, Modal, Form, Table, Space } from "antd";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { Button, Modal, Form, Table, Space, message } from "antd";
 import ViewQuestion from "../../../../Question/Exercise/Modal/ViewQuestion";
 
 const selectingQuestionCol = [
   {
     title: "Question",
     width: "90%",
-    dataIndex: "q_name",
-    key: "q_name",
+    dataIndex: "questionTitle",
   },
   {
     title: "Action",
@@ -20,28 +20,59 @@ const selectingQuestionCol = [
   },
 ];
 
-const data = [
-  {
-    key: 1,
-    q_name: "Question 1",
-  },
-  {
-    key: 2,
-    q_name: "Question 2",
-  },
-  {
-    key: 3,
-    q_name: "Question 3",
-  },
-];
+var resArr = [];
 
-const AddQuestion = () => {
-  const [form] = Form.useForm();
+const AddQuestion = (props) => {
   const [visible, setVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    const getQuestionByUnitID = async () => {
+      let unitID = window.location.pathname.split("/")[4];
+      await axios
+        .get(
+          `https://mathscienceeducation.herokuapp.com/unit/${unitID}/questions?isExercise=true`
+        )
+        .then((res) => {
+          resArr = Array.from(res.data);
+          var ids = new Set(props.data.map(({ id }) => id));
+          resArr = resArr.filter(({ id }) => !ids.has(id));
+          setData(resArr);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    };
+    getQuestionByUnitID();
+  }, [props.data]);
+
+  const addQuestion = async () => {
+    setLoading(true);
+    let exerciseID = window.location.pathname.split("/")[6];
+    await axios
+      .post("https://mathscienceeducation.herokuapp.com/exerciseGameQuestion", {
+        exercise: true,
+        exerciseId: exerciseID,
+        questionIds: selectedRowKeys,
+      })
+      .then((res) => {
+        console.log(res);
+        props.getQuestionByExerciseID();
+        setSelectedRowKeys([]);
+        setLoading(false);
+        handleCancel();
+        message.success("Add Question successfully");
+      })
+      .catch((e) => {
+        console.log(e);
+        setLoading(false);
+        message.error("Fail to add Question");
+      });
+  };
 
   const onSelectChange = (selectedRowKeys) => {
-    console.log("selectedRowKeys changed: ", selectedRowKeys);
     setSelectedRowKeys(selectedRowKeys);
   };
 
@@ -59,9 +90,10 @@ const AddQuestion = () => {
     setVisible(false);
   };
 
-  const onFinish = (values) => {
-    console.log(values);
+  const onFinish = () => {
+    addQuestion();
   };
+
   return (
     <>
       <Button type="primary" size="middle" onClick={showModal}>
@@ -77,50 +109,26 @@ const AddQuestion = () => {
           </Button>,
           selectedRowKeys.length === 0 ? (
             <Button key="submit" type="primary" disabled>
-              Submit
+              Add Question
             </Button>
           ) : (
             <Button
               key="submit"
               type="primary"
-              onClick={() => {
-                form
-                  .validateFields()
-                  .then((values) => {
-                    onFinish(values);
-                    form.resetFields();
-                  })
-                  .catch((info) => {
-                    console.log("Validate Failed:", info);
-                  });
-              }}
+              onClick={onFinish}
+              loading={loading}
             >
-              Submit
+              Add Question
             </Button>
           ),
         ]}
       >
-        <Form form={form} name="add-questions" layout="vertical">
-          {/* <Form.Item
-            name="category"
-            label="Select category"
-            rules={[
-              {
-                required: true,
-                message: "Please select category",
-              },
-            ]}
-          >
-            <Select showSearch placeholder="Select category">
-              <Option value="quiz 1">Quiz 1</Option>
-              <Option value="quiz 2">Quiz 2</Option>
-            </Select>
-          </Form.Item> */}
+        <Form name="add-questions" layout="vertical">
           <Table
             rowSelection={rowSelection}
             columns={selectingQuestionCol}
             dataSource={data}
-            rowKey={data.key}
+            rowKey={(record) => record.id}
           />
         </Form>
       </Modal>

@@ -1,13 +1,13 @@
-import React, { useState } from "react";
-import { Button, Modal, Form, Table, Space } from "antd";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { Button, Modal, Form, Table, Space, message } from "antd";
 import ViewQuestion from "../../../../../Question/Game/Modal/View/ViewQuestion";
 
 const selectingQuestionCol = [
   {
     title: "Question",
     width: "60%",
-    dataIndex: "q_name",
-    key: "q_name",
+    dataIndex: "questionTitle",
   },
   {
     title: "Type",
@@ -24,36 +24,59 @@ const selectingQuestionCol = [
   },
 ];
 
-const data = [
-  {
-    key: "1",
-    q_name: "Question 1",
-    type: "FILL",
-  },
-  {
-    key: "2",
-    q_name: "Question 2",
-    type: "MATCH",
-  },
-  {
-    key: "3",
-    q_name: "Question 3",
-    type: "SWAP",
-  },
-  {
-    key: "4",
-    q_name: "Question 4",
-    type: "CHOOSE",
-  },
-];
+var resArr = [];
 
-const AddQuestion = () => {
-  const [form] = Form.useForm();
+const AddQuestion = (props) => {
   const [visible, setVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    const getQuestionByUnitID = async () => {
+      let unitID = window.location.pathname.split("/")[4];
+      await axios
+        .get(
+          `https://mathscienceeducation.herokuapp.com/unit/${unitID}/questions?isExercise=false`
+        )
+        .then((res) => {
+          resArr = Array.from(res.data);
+          var ids = new Set(props.data.map(({ id }) => id));
+          resArr = resArr.filter(({ id }) => !ids.has(id));
+          setData(resArr);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    };
+    getQuestionByUnitID();
+  }, [props.data]);
+
+  const addQuestion = async () => {
+    setLoading(true);
+    let gameID = window.location.pathname.split("/")[6];
+    await axios
+      .post("https://mathscienceeducation.herokuapp.com/exerciseGameQuestion", {
+        exercise: false,
+        gameId: gameID,
+        questionIds: selectedRowKeys,
+      })
+      .then((res) => {
+        console.log(res);
+        props.getQuestionByGameID();
+        setSelectedRowKeys([]);
+        setLoading(false);
+        handleCancel();
+        message.success("Add Question successfully");
+      })
+      .catch((e) => {
+        setLoading(false);
+        console.log(e);
+        message.error("Fail to add Question");
+      });
+  };
 
   const onSelectChange = (selectedRowKeys) => {
-    console.log("selectedRowKeys changed: ", selectedRowKeys);
     setSelectedRowKeys(selectedRowKeys);
   };
 
@@ -71,8 +94,8 @@ const AddQuestion = () => {
     setVisible(false);
   };
 
-  const onFinish = (values) => {
-    console.log(values);
+  const onFinish = () => {
+    addQuestion();
   };
   return (
     <>
@@ -90,35 +113,26 @@ const AddQuestion = () => {
           </Button>,
           selectedRowKeys.length === 0 ? (
             <Button key="submit" type="primary" disabled>
-              Submit
+              Add Question
             </Button>
           ) : (
             <Button
               key="submit"
               type="primary"
-              onClick={() => {
-                form
-                  .validateFields()
-                  .then((values) => {
-                    onFinish(values);
-                    form.resetFields();
-                  })
-                  .catch((info) => {
-                    console.log("Validate Failed:", info);
-                  });
-              }}
+              onClick={onFinish}
+              loading={loading}
             >
-              Submit
+              Add Question
             </Button>
           ),
         ]}
       >
-        <Form form={form} name="add-questions" layout="vertical">
+        <Form name="add-questions" layout="vertical">
           <Table
             rowSelection={rowSelection}
             columns={selectingQuestionCol}
             dataSource={data}
-            rowKey={data.key}
+            rowKey={(record) => record.id}
           />
         </Form>
       </Modal>

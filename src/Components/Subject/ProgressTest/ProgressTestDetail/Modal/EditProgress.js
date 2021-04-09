@@ -29,6 +29,7 @@ const EditProgress = (props) => {
           description: values.description,
           exerciseName: values.name,
           progressTestId: window.location.pathname.split("/")[4],
+          progressTest: true,
           id: props.data.id,
         }
       )

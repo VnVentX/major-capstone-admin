@@ -47,27 +47,24 @@ const EditQuestion = (props) => {
     },
   ]);
 
-  useEffect(() => {
-    const getQuestionByID = async () => {
-      await axios
-        .get(
-          `https://mathscienceeducation.herokuapp.com/question/${props.data.id}?questionType=EXERCISE`
-        )
-        .then((res) => {
-          form.setFieldsValue({
-            questionTitle: res.data.questionTitle,
-            description: res.data.description,
-            score: res.data.score,
-            options: res.data.optionQuestionDTOList,
-          });
-          setCounter(res.data.optionQuestionDTOList.length);
-        })
-        .catch((e) => {
-          console.log(e);
+  const getQuestionByID = async () => {
+    await axios
+      .get(
+        `https://mathscienceeducation.herokuapp.com/question/${props.data.id}?questionType=EXERCISE`
+      )
+      .then((res) => {
+        form.setFieldsValue({
+          questionTitle: res.data.questionTitle,
+          description: res.data.description,
+          score: res.data.score,
+          options: res.data.optionQuestionDTOList,
         });
-    };
-    getQuestionByID();
-  }, [form, props.data.id]);
+        setCounter(res.data.optionQuestionDTOList.length);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
 
   const editQuestion = async (formData) => {
     setLoading(true);
@@ -78,7 +75,12 @@ const EditQuestion = (props) => {
       )
       .then((res) => {
         console.log(res);
-        props.getQuestionByUnitID(props.unitID);
+        if (props.getQuestionByUnitID) {
+          props.getQuestionByUnitID(props.unitID);
+        }
+        if (props.getQuestionByExerciseID) {
+          props.getQuestionByExerciseID();
+        }
         setLoading(false);
         handleCancel();
         message.success("Edit Exercise Question successfully");
@@ -159,6 +161,7 @@ const EditQuestion = (props) => {
 
   const showModal = () => {
     setVisible(true);
+    getQuestionByID();
   };
 
   const handleCancel = () => {

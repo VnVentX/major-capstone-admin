@@ -19,6 +19,7 @@ const AddProgress = (props) => {
       .post("https://mathscienceeducation.herokuapp.com/exercise", {
         description: values.description,
         exerciseName: values.name,
+        progressTest: true,
         progressTestId: window.location.pathname.split("/")[4],
       })
       .then((res) => {

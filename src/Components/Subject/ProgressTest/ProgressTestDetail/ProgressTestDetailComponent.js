@@ -90,8 +90,8 @@ const ProgressTestDetailComponent = () => {
                     <Tooltip title="Delete">
                       <Popconfirm
                         placement="left"
-                        title="Are you sure to delete this Exercise?"
-                        onConfirm={() => handleDelete(item.id)} //Handle disable logic here
+                        title="Are you sure to delete this Test?"
+                        onConfirm={() => handleDelete(item.id)}
                         okText="Yes"
                         cancelText="No"
                         icon={

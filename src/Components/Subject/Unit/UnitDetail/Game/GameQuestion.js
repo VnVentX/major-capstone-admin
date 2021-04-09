@@ -1,50 +1,33 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import { Card, Table, Space, Button, Popconfirm, message, Tooltip } from "antd";
 import EditQuestion from "../../../../Question/Game/Modal/Edit/EditQuestion";
 import ViewQuestion from "../../../../Question/Game/Modal/View/ViewQuestion";
 import AddQuestion from "./Modal/AddQuestion";
 import { QuestionCircleOutlined, DeleteOutlined } from "@ant-design/icons";
 
-const data = [
-  {
-    key: "1",
-    q_name: "Question 1",
-    type: "FILL",
-    createdBy: "anhtt",
-    modifiedBy: "anhtt",
-    createdDate: "14:24PM, 24/02/2021",
-    modifiedDate: "14:50PM, 24/02/2021",
-  },
-  {
-    key: "2",
-    q_name: "Question 2",
-    type: "MATCH",
-    createdBy: "anhtt",
-    modifiedBy: "anhtt",
-    createdDate: "14:24PM, 24/02/2021",
-    modifiedDate: "14:50PM, 24/02/2021",
-  },
-  {
-    key: "3",
-    q_name: "Question 3",
-    type: "SWAP",
-    createdBy: "anhtt",
-    modifiedBy: "anhtt",
-    createdDate: "14:24PM, 24/02/2021",
-    modifiedDate: "14:50PM, 24/02/2021",
-  },
-  {
-    key: "4",
-    q_name: "Question 4",
-    type: "CHOOSE",
-    createdBy: "anhtt",
-    modifiedBy: "anhtt",
-    createdDate: "14:24PM, 24/02/2021",
-    modifiedDate: "14:50PM, 24/02/2021",
-  },
-];
-
 const GameQuestion = () => {
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    getQuestionByGameID();
+  }, []);
+
+  const getQuestionByGameID = async () => {
+    let exerciseID = window.location.pathname.split("/")[6];
+    await axios
+      .get(
+        `https://mathscienceeducation.herokuapp.com/exerciseOrGame/${exerciseID}/questions?isExericse=false`
+      )
+      .then((res) => {
+        console.log(res);
+        setData(res.data);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
+
   const handleDelete = (e) => {
     console.log(e);
     message.success("Click on Yes");
@@ -53,11 +36,11 @@ const GameQuestion = () => {
   const selectedQuestionCol = [
     {
       title: "Question",
-      dataIndex: "q_name",
+      dataIndex: "questionTitle",
     },
     {
       title: "Type",
-      dataIndex: "type",
+      dataIndex: "questionType",
     },
     {
       title: "Created By",
@@ -109,9 +92,13 @@ const GameQuestion = () => {
           justifyContent: "space-between",
         }}
       >
-        <AddQuestion />
+        <AddQuestion getQuestionByGameID={getQuestionByGameID} data={data} />
       </div>
-      <Table columns={selectedQuestionCol} dataSource={data} />
+      <Table
+        columns={selectedQuestionCol}
+        dataSource={data}
+        rowKey={(record) => record.id}
+      />
     </Card>
   );
 };

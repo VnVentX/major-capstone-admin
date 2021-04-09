@@ -1,47 +1,54 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import { Card, Table, Space, Button, Popconfirm, message, Tooltip } from "antd";
 import EditQuestion from "../../../Question/Exercise/Modal/EditQuestion";
 import ViewQuestion from "../../../Question/Exercise/Modal/ViewQuestion";
 import AddQuestion from "./Modal/AddTestQuestion";
 import { QuestionCircleOutlined, DeleteOutlined } from "@ant-design/icons";
 
-const data = [
-  {
-    key: 1,
-    q_name: "Question 1",
-    createdBy: "anhtt",
-    modifiedBy: "anhtt",
-    createdDate: "14:24PM, 24/02/2021",
-    modifiedDate: "14:50PM, 24/02/2021",
-  },
-  {
-    key: 2,
-    q_name: "Question 2",
-    createdBy: "anhtt",
-    modifiedBy: "anhtt",
-    createdDate: "14:24PM, 24/02/2021",
-    modifiedDate: "14:50PM, 24/02/2021",
-  },
-  {
-    key: 3,
-    q_name: "Question 3",
-    createdBy: "anhtt",
-    modifiedBy: "anhtt",
-    createdDate: "14:24PM, 24/02/2021",
-    modifiedDate: "14:50PM, 24/02/2021",
-  },
-];
-
 const TestQuestionComponent = () => {
-  const handleDelete = (e) => {
-    console.log(e);
-    message.success("Click on Yes");
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    getQuestionByExerciseID();
+  }, []);
+
+  const getQuestionByExerciseID = async () => {
+    let exerciseID = window.location.pathname.split("/")[6];
+    await axios
+      .get(
+        `https://mathscienceeducation.herokuapp.com/exerciseOrGame/${exerciseID}/questions?isExericse=true`
+      )
+      .then((res) => {
+        console.log(res.data);
+        setData(res.data);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
+
+  const handleDelete = async (item) => {
+    let formData = new FormData();
+    formData.append("id", item);
+    await axios
+      .put(
+        "https://mathscienceeducation.herokuapp.com/exerciseGameQuestion/delete",
+        formData
+      )
+      .then((res) => {
+        console.log(res);
+        getQuestionByExerciseID();
+      })
+      .catch((e) => {
+        console.log(e);
+      });
   };
 
   const selectedQuestionCol = [
     {
       title: "Question",
-      dataIndex: "q_name",
+      dataIndex: "questionTitle",
     },
     {
       title: "Created By",
@@ -65,12 +72,15 @@ const TestQuestionComponent = () => {
       render: (record) => (
         <Space size="small">
           <ViewQuestion data={record} />
-          <EditQuestion data={record} />
+          <EditQuestion
+            data={record}
+            getQuestionByExerciseID={getQuestionByExerciseID}
+          />
           <Tooltip title="Delete Question">
             <Popconfirm
               placement="topRight"
               title="Are you sure to delete this question?"
-              onConfirm={() => handleDelete(record.key)} //Handle disable logic here
+              onConfirm={() => handleDelete(record.id)}
               okText="Yes"
               cancelText="No"
               icon={<QuestionCircleOutlined style={{ color: "red" }} />}
@@ -92,7 +102,10 @@ const TestQuestionComponent = () => {
           justifyContent: "space-between",
         }}
       >
-        <AddQuestion />
+        <AddQuestion
+          getQuestionByExerciseID={getQuestionByExerciseID}
+          data={data}
+        />
       </div>
       <Table columns={selectedQuestionCol} dataSource={data} />
     </Card>
