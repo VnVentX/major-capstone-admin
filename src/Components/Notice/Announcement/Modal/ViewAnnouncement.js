@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Button, Modal, Form, Input } from "antd";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
-import CustomEditor from "ckeditor5-build-classic";
+// import CustomEditor from "ckeditor5-build-classic";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { EyeOutlined } from "@ant-design/icons";
 
 const layout = {
@@ -71,7 +72,7 @@ const ViewAnnouncement = (props) => {
               return data;
             }}
           >
-            <CKEditor editor={CustomEditor} disabled />
+            <CKEditor editor={ClassicEditor} disabled />
           </Form.Item>
         </Form>
       </Modal>
