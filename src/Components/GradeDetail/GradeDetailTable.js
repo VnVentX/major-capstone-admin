@@ -8,7 +8,6 @@ import {
   Space,
   Tag,
   Popconfirm,
-  message,
   AutoComplete,
   Select,
 } from "antd";
@@ -29,6 +28,7 @@ export default class GradeDetailTable extends Component {
     dataSearch: [],
     schoolSearch: "",
     allSchool: [],
+    tableLoading: true,
   };
 
   componentDidMount() {
@@ -58,12 +58,14 @@ export default class GradeDetailTable extends Component {
       .get(`https://mathscienceeducation.herokuapp.com/grade/${gradeID}/school`)
       .then((res) => {
         this.setState({
+          tableLoading: false,
           dataSource: res.data.length === 0 ? [] : res.data,
           dataSearch: res.data.length === 0 ? [] : res.data,
         });
       })
       .catch((e) => {
         console.log(e);
+        this.setState({ tableLoading: false });
       });
   };
 
@@ -308,6 +310,7 @@ export default class GradeDetailTable extends Component {
           </div>
         </div>
         <Table
+          loading={this.state.tableLoading}
           rowKey={(record) => record.id}
           columns={columns}
           dataSource={this.state.dataSource}

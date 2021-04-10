@@ -10,8 +10,6 @@ import {
   AutoComplete,
   Select,
 } from "antd";
-import Highlighter from "react-highlight-words";
-import { SearchOutlined } from "@ant-design/icons";
 import AddNewAnnouncement from "./Modal/AddNewAnnouncement";
 import ViewAnnouncement from "./Modal/ViewAnnouncement";
 import { QuestionCircleOutlined, DeleteOutlined } from "@ant-design/icons";

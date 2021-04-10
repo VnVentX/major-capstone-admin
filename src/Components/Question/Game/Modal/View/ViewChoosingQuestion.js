@@ -1,17 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import {
-  Form,
-  Input,
-  Image,
-  Select,
-  Divider,
-  Row,
-  Col,
-  InputNumber,
-} from "antd";
-
-const { Option } = Select;
+import { Form, Input, Image, Divider, Row, Col, InputNumber } from "antd";
 
 const ViewChoosingQuestion = (props) => {
   const [option, setOption] = useState([]);
