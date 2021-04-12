@@ -51,10 +51,9 @@ const EditLesson = (props) => {
       .put(
         `https://mathscienceeducation.herokuapp.com/lesson/${props.lessonID}`,
         {
-          id: props.lessonID,
           lessonName: values.lesson,
           lessonUrl: url,
-          unitId: values.unitId,
+          unitId: window.location.pathname.split("/")[4],
         }
       )
       .then((res) => {

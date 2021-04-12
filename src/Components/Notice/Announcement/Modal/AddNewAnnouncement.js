@@ -100,14 +100,11 @@ const AddNewAnnouncement = (props) => {
           <Form.Item
             name="shortDes"
             label="Short Description"
-            rules={[
-              { required: true, message: "Please input a title" },
-              { max: 51, message: "Can only input 51 characters" },
-            ]}
+            rules={[{ required: true, message: "Please input a title" }]}
           >
             <Input.TextArea
               placeholder="Short Description"
-              maxLength="50"
+              maxLength="100"
               showCount
             />
           </Form.Item>

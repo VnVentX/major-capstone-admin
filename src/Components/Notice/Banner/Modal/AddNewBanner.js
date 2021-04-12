@@ -125,12 +125,12 @@ const AddNewBanner = (props) => {
             label="Description"
             rules={[
               { required: true, message: "Please input description" },
-              { max: 100, message: "Can only input 100 characters" },
+              { max: 50, message: "Can only input 100 characters" },
             ]}
           >
             <Input.TextArea
               showCount
-              maxLength={100}
+              maxLength={50}
               placeholder="Unit Description"
             />
           </Form.Item>

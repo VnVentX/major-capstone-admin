@@ -103,7 +103,7 @@ const AddNewStudent = (props) => {
         schoolId: values.school,
         gradeId: values.grade,
         classId: values.class,
-        doB: values.age.format("DD/MM/YYYY"),
+        doB: values.age.format("DD-MM-YYYY"),
         firtName: values.firstName,
         lastName: values.lastName,
         gender: values.gender,
@@ -130,12 +130,13 @@ const AddNewStudent = (props) => {
         onClick={showModal}
         style={{ marginLeft: 5 }}
       >
-        Add Student
+        Create Student
       </Button>
       <Modal
-        title="Add Student"
+        title="Create Student"
         visible={visible}
         confirmLoading={loading}
+        okText="Create"
         onCancel={handleCancel}
         destroyOnClose
         onOk={() => {

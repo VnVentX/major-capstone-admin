@@ -29,7 +29,6 @@ const UnitComponent = () => {
   };
 
   const handleTabClick = (e) => {
-    console.log(e);
     setSelectedLessonID(e);
   };
 

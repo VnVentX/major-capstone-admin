@@ -21,7 +21,6 @@ const GameQuestion = () => {
         `https://mathscienceeducation.herokuapp.com/exerciseOrGame/${exerciseID}/questions?isExericse=false`
       )
       .then((res) => {
-        console.log(res);
         setData(res.data);
       })
       .catch((e) => {

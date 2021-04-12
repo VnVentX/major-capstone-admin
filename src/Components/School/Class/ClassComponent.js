@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import { Card, Button, Tag, Space, Table, Popconfirm, message } from "antd";
-import { QuestionCircleOutlined, DeleteOutlined } from "@ant-design/icons";
+import { Card, Button, Tag, Space, Table, Popconfirm } from "antd";
+import {
+  QuestionCircleOutlined,
+  DeleteOutlined,
+  DownloadOutlined,
+} from "@ant-design/icons";
 import AddNewClass from "./Modal/AddNewClass";
 import ImportClassExcel from "./Modal/ImportClassExcel";
 import EditClass from "./Modal/EditClass";
@@ -156,7 +160,23 @@ const ClassComponent = (props) => {
   ];
 
   return (
-    <Card type="inner" title="Class Management">
+    <Card
+      type="inner"
+      title={
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          Class Management
+          <Button type="primary" size="middle" danger icon={<DownloadOutlined />}>
+            Finish School Year
+          </Button>
+        </div>
+      }
+    >
       <div
         style={{
           marginBottom: 10,

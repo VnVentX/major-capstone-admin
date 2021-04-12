@@ -18,7 +18,20 @@ const EditSchool = (props) => {
 
   useEffect(() => {
     getSchoolByID(props.schoolID);
-  }, []);
+    form.setFieldsValue({
+      schoolName: data.schoolName,
+      schoolStreet: data.schoolStreet,
+      schoolDistrict: data.schoolDistrict,
+      type: data.schoolLevel,
+    });
+  }, [
+    data.schoolDistrict,
+    data.schoolLevel,
+    data.schoolName,
+    data.schoolStreet,
+    form,
+    props.schoolID,
+  ]);
 
   const getSchoolByID = async (id) => {
     await axios
@@ -55,12 +68,6 @@ const EditSchool = (props) => {
 
   const showModal = () => {
     setVisible(true);
-    form.setFieldsValue({
-      schoolName: data.schoolName,
-      schoolStreet: data.schoolStreet,
-      schoolDistrict: data.schoolDistrict,
-      type: data.schoolLevel,
-    });
   };
 
   const handleCancel = () => {

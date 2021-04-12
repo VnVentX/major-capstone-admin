@@ -118,7 +118,9 @@ const ChoosingQuestion = (props) => {
     formData.append("questionTitle", values.questionTitle);
     formData.append("questionType", props.type);
     formData.append("score", values.score);
-    formData.append("description", values.description);
+    if (values.description) {
+      formData.append("description", values.description);
+    }
     formData.append("optionTextList", optionTextList);
 
     createChoosingQuestion(formData);
@@ -135,6 +137,7 @@ const ChoosingQuestion = (props) => {
         console.log(res);
         setLoading(false);
         message.success("Create Choosing Question successfully");
+        form.resetFields();
       })
       .catch((e) => {
         console.log(e);

@@ -12,6 +12,7 @@ export const AccountTableComponent = () => {
   const [record, setRecord] = useState([]);
   const [searchRecord, setSearchRecord] = useState([]);
   const [searchData, setSearchData] = useState();
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (location.state === undefined) {
@@ -40,6 +41,7 @@ export const AccountTableComponent = () => {
     if (classID === undefined) {
       classID = 0;
     }
+    setLoading(true);
     await axios
       .post("https://mathscienceeducation.herokuapp.com/student/all", [
         schoolID,
@@ -50,9 +52,11 @@ export const AccountTableComponent = () => {
         console.log("get", res.data);
         setRecord(res.data.length === 0 ? [] : res.data);
         setSearchRecord(res.data.length === 0 ? [] : res.data);
+        setLoading(false);
       })
       .catch((e) => {
         console.log(e);
+        setLoading(false);
       });
   };
 
@@ -75,7 +79,11 @@ export const AccountTableComponent = () => {
   return (
     <Tabs defaultActiveKey="1">
       <TabPane tab="Student's Account" key="1">
-        <SearchFilter searchData={searchData} handleSearch={handleSearch} />
+        <SearchFilter
+          searchData={searchData}
+          handleSearch={handleSearch}
+          loading={loading}
+        />
         <StudentAccountComponent
           handleSearch={handleSearch}
           handleNameSearch={handleNameSearch}

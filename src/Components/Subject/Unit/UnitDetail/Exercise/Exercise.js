@@ -115,6 +115,7 @@ const Exercise = (props) => {
                         </Popconfirm>
                       </Tooltip>
                       <EditExercise
+                        lessonID={props.lessonID}
                         data={item}
                         getExerciseByLessonID={getExerciseByLessonID}
                       />

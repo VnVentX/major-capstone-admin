@@ -95,7 +95,9 @@ const FillingQuestion = (props) => {
     formData.append("questionTitle", values.questionTitle);
     formData.append("questionType", props.type);
     formData.append("score", values.score);
-    formData.append("description", values.description);
+    if (values.description) {
+      formData.append("description", values.description);
+    }
     if (values.q_img !== undefined && values.q_img.length !== 0) {
       formData.append("imageFile", values.q_img[0].originFileObj);
     }
@@ -121,6 +123,7 @@ const FillingQuestion = (props) => {
         message.success("Create Filling Question successfully");
         setImgFile([]);
         setAudioFile([]);
+        form.resetFields();
       })
       .catch((e) => {
         console.log(e);

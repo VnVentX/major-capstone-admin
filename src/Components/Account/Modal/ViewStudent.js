@@ -1,9 +1,27 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import { Modal, Button, Card, Descriptions } from "antd";
 import { Link } from "react-router-dom";
 
 const ViewStudent = (props) => {
   const [visible, setVisible] = useState(false);
+  const [data, setData] = useState({});
+
+  useEffect(() => {
+    const getStudentByID = async () => {
+      await axios
+        .get(
+          `https://mathscienceeducation.herokuapp.com/student/${props.data.id}`
+        )
+        .then((res) => {
+          setData(res.data.length === 0 ? [] : res.data);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    };
+    getStudentByID();
+  }, []);
 
   const showModal = () => {
     setVisible(true);
@@ -36,13 +54,13 @@ const ViewStudent = (props) => {
               label="Full Name"
               labelStyle={{ fontWeight: "bold" }}
             >
-              Trần Thiên Anh
+              {data?.firstName} {data?.lastName}
             </Descriptions.Item>
             <Descriptions.Item
               label="Account"
               labelStyle={{ fontWeight: "bold" }}
             >
-              DMC_G1_04
+              {props.data.username}
             </Descriptions.Item>
             <Descriptions.Item label="DOB" labelStyle={{ fontWeight: "bold" }}>
               1998/06/11
@@ -63,11 +81,7 @@ const ViewStudent = (props) => {
               label="Action"
               labelStyle={{ fontWeight: "bold" }}
             >
-              <Button
-                type="ghost"
-                size="small"
-                onClick={showModal}
-              >
+              <Button type="ghost" size="small" onClick={showModal}>
                 Reset Password
               </Button>
             </Descriptions.Item>

@@ -38,7 +38,9 @@ const AddNewSubject = (props) => {
   const onFinish = (event) => {
     setLoading(true);
     let formData = new FormData();
-    formData.append("description", event.description);
+    if (event.description) {
+      formData.append("description", event.description);
+    }
     formData.append("gradeId", props.gradeID);
     formData.append("subjectName", event.subject);
     formData.append("multipartFile", event.subjectImg[0].originFileObj);

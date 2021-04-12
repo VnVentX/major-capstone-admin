@@ -28,7 +28,7 @@ const EditExercise = (props) => {
         {
           description: values.description,
           exerciseName: values.name,
-          lessonId: props.data.lessonId,
+          lessonId: props.lessonID,
           id: props.data.id,
         }
       )

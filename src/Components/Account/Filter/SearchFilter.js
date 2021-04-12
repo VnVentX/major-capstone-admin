@@ -75,9 +75,15 @@ const SearchFilter = (props) => {
 
   const handleChangeSchool = (value) => {
     setSelectedSchool(value);
+    form.setFieldsValue({
+      class: null,
+    });
   };
   const handleChangeGrade = (value) => {
     setSelectedGrade(value);
+    form.setFieldsValue({
+      class: null,
+    });
   };
 
   const onFinish = (values) => {
@@ -140,7 +146,7 @@ const SearchFilter = (props) => {
           >
             Clear
           </Button>
-          <Button type="primary" htmlType="submit">
+          <Button type="primary" htmlType="submit" loading={props.loading}>
             Search
           </Button>
         </Col>

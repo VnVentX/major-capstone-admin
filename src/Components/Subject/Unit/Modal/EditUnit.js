@@ -28,6 +28,7 @@ const EditUnit = (props) => {
       .put(`https://mathscienceeducation.herokuapp.com/unit/${props.data.id}`, {
         description: values.description,
         unitName: values.unit,
+        subjectId: window.location.pathname.split("/")[2],
       })
       .then((res) => {
         console.log(res);

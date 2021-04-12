@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import axios from "axios";
 import {
   Table,
   Card,
@@ -16,6 +17,7 @@ import { DownloadOutlined } from "@ant-design/icons";
 import AddNewStudent from "./Modal/AddNewStudent";
 import EditStudent from "./Modal/EditStudent";
 import ViewStudent from "./Modal/ViewStudent";
+import { QuestionCircleOutlined, DeleteOutlined } from "@ant-design/icons";
 
 const options = [
   {
@@ -92,9 +94,37 @@ export default class StudentAccountComponent extends Component {
     this.setState({ selectedRowKeys });
   };
 
-  confirm = (e) => {
-    console.log(e);
-    message.success("Click on Yes");
+  handleDisableStudent = (e, status) => {
+    let message = "";
+    if (status === "DELETED") {
+      message = "DELETED";
+    } else if (status === "ACTIVE") {
+      message = "INACTIVE";
+    } else if (status === "INACTIVE") {
+      message = "ACTIVE";
+    }
+    this.disableStudent(e, message);
+  };
+
+  disableStudent = async (id, status) => {
+    let ids = [];
+    if (id.length === undefined) {
+      ids.push(id);
+    } else {
+      ids = id;
+    }
+    await axios
+      .put("https://mathscienceeducation.herokuapp.com/student", {
+        ids: ids,
+        status: status,
+      })
+      .then((res) => {
+        console.log(res);
+        this.props.handleSearch(this.props.searchData);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
   };
 
   confirmChangeSchoolClass = () => {
@@ -122,7 +152,8 @@ export default class StudentAccountComponent extends Component {
       },
       {
         title: "School",
-        dataIndex: "school",
+        dataIndex: "schoolName",
+        render: (record) => <span>TH {record}</span>,
       },
       {
         title: "Gender",
@@ -130,31 +161,31 @@ export default class StudentAccountComponent extends Component {
       },
       {
         title: "Grade",
-        dataIndex: "grade",
+        dataIndex: "gradeName",
       },
       {
         title: "Class",
-        dataIndex: "class",
+        dataIndex: "className",
       },
       {
         title: "Account",
-        dataIndex: "account",
+        dataIndex: "username",
       },
       {
         title: "Status",
-        dataIndex: "status",
         align: "center",
+        dataIndex: "status",
         render: (status) => (
           <span>
-            {status === "dropout" ? (
-              <Tag color={"volcano"} key={status}>
-                Dropout
-              </Tag>
-            ) : (
+            {status === "ACTIVE" ? (
               <Tag color={"green"} key={status}>
                 Active
               </Tag>
-            )}
+            ) : status === "INACTIVE" ? (
+              <Tag color={"volcano"} key={status}>
+                Disabled
+              </Tag>
+            ) : null}
           </span>
         ),
       },
@@ -163,6 +194,21 @@ export default class StudentAccountComponent extends Component {
         align: "center",
         render: (record) => (
           <Space size="small">
+            <Popconfirm
+              placement="topRight"
+              title={
+                record.status === "ACTIVE"
+                  ? "Are you sure to disable this Student?"
+                  : "Are you sure to active this Student?"
+              }
+              onConfirm={() =>
+                this.handleDisableStudent(record.id, record.status)
+              }
+              okText="Yes"
+              cancelText="No"
+            >
+              <Button type="primary">Change Status</Button>
+            </Popconfirm>
             <EditStudent data={record} />
           </Space>
         ),
@@ -207,7 +253,8 @@ export default class StudentAccountComponent extends Component {
             </div>
             {this.props.searchData?.school &&
               this.props.searchData?.grade &&
-              this.props.searchData?.class && (
+              this.props.searchData?.class &&
+              this.props.data.length > 0 && (
                 <div
                   style={{
                     display: "flex",
@@ -242,8 +289,13 @@ export default class StudentAccountComponent extends Component {
             <h1>With selected:</h1>
             {selectedRowKeys.length === 0 ? (
               <>
-                <Button type="danger" disabled style={{ marginRight: 10 }}>
-                  Disable
+                <Button
+                  type="danger"
+                  icon={<DeleteOutlined />}
+                  style={{ marginRight: 10 }}
+                  disabled
+                >
+                  Delete
                 </Button>
                 {this.props.searchData?.school &&
                   this.props.searchData?.grade &&
@@ -269,13 +321,20 @@ export default class StudentAccountComponent extends Component {
               <>
                 <Popconfirm
                   placement="topRight"
-                  title="Are you sure to disable selected Students?"
-                  onConfirm={this.confirm} //Handle disable logic here
+                  title="Are you sure to delete selected Students?"
+                  onConfirm={() =>
+                    this.handleDisableStudent(selectedRowKeys, "DELETED")
+                  }
                   okText="Yes"
                   cancelText="No"
+                  icon={<QuestionCircleOutlined style={{ color: "red" }} />}
                 >
-                  <Button type="danger" style={{ marginRight: 10 }}>
-                    Disable
+                  <Button
+                    type="danger"
+                    icon={<DeleteOutlined />}
+                    style={{ marginRight: 10 }}
+                  >
+                    Delete
                   </Button>
                 </Popconfirm>
                 {this.props.searchData?.school &&

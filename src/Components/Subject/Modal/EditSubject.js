@@ -49,7 +49,9 @@ const EditSubject = (props) => {
   const onFinish = (event) => {
     setLoading(true);
     let formData = new FormData();
-    formData.append("description", event.description.trim());
+    if (event.description) {
+      formData.append("description", event.description.trim());
+    }
     formData.append("gradeId", props.gradeID);
     formData.append("subjectName", event.subject.trim());
     if (event.subjectImg !== undefined && event.subjectImg.length !== 0) {

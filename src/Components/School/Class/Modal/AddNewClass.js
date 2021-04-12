@@ -27,7 +27,7 @@ const AddNewClass = (props) => {
     async function createClass() {
       await axios
         .post("https://mathscienceeducation.herokuapp.com/class", {
-          className: values.class,
+          className: values.className,
           gradeId: props.gradeID,
           schoolId: window.location.pathname.split("/")[2],
         })
@@ -78,9 +78,18 @@ const AddNewClass = (props) => {
       >
         <Form {...layout} form={form}>
           <Form.Item
-            name="class"
+            name="className"
             label="Class Name"
             rules={[
+              {
+                validator: async (_, className) => {
+                  if (className.toLowerCase() === "pending") {
+                    return Promise.reject(
+                      new Error("Class name can not be 'Pending'")
+                    );
+                  }
+                },
+              },
               { required: true, message: "Please input a class name" },
               { max: 20, message: "Can only input 20 characters!" },
             ]}

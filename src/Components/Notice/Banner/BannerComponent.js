@@ -8,7 +8,6 @@ import {
   Space,
   Tag,
   Popconfirm,
-  message,
 } from "antd";
 import Highlighter from "react-highlight-words";
 import { SearchOutlined } from "@ant-design/icons";
