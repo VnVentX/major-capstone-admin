@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { getJwt, getID } from "../../../../helper/jwt";
 import { Button, Modal, Form, Input, message } from "antd";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
-// import CustomEditor from "ckeditor5-build-classic";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { PlusOutlined } from "@ant-design/icons";
 
@@ -30,7 +30,7 @@ const AddNewAnnouncement = (props) => {
     async function createNews() {
       await axios
         .post("https://mathscienceeducation.herokuapp.com/news", {
-          accountId: 1,
+          accountId: getID(),
           newsContent: event.content,
           newsTitle: event.title,
           shortDescription: event.shortDes,

@@ -32,13 +32,13 @@ export const AccountTableComponent = () => {
   }, []);
 
   const searchStudent = async (schoolID, gradeID, classID) => {
-    if (schoolID === undefined) {
+    if (schoolID === undefined || schoolID === null) {
       schoolID = 0;
     }
-    if (gradeID === undefined) {
+    if (gradeID === undefined || gradeID === null) {
       gradeID = 0;
     }
-    if (classID === undefined) {
+    if (classID === undefined || classID === null) {
       classID = 0;
     }
     setLoading(true);
@@ -49,7 +49,6 @@ export const AccountTableComponent = () => {
         classID,
       ])
       .then((res) => {
-        console.log("get", res.data);
         setRecord(res.data.length === 0 ? [] : res.data);
         setSearchRecord(res.data.length === 0 ? [] : res.data);
         setLoading(false);

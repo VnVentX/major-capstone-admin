@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-// import axios from "axios";
+import axios from "axios";
 
 export default function Login(props) {
   const [username, setUsername] = useState("");
@@ -8,32 +8,30 @@ export default function Login(props) {
   if (localStorage.getItem("token")) {
     props.history.push("/");
   }
+
   const onSubmit = async (e) => {
-    if (username === "admin" && password === "12345678") {
-      localStorage.setItem("token", "token");
-      props.history.push("/");
-    }
-    // await axios
-    //   .post("https://mffood.herokuapp.com/api/users/login?isGmail=false", {
-    //     email,
-    //     password,
-    //   })
-    //   .then((res) => {
-    //     if (
-    //       res.data.userRoleDTO !== "ROLE_STOREADMIN" ||
-    //       res.data.userRoleDTO !== "ROLE_ADMIN"
-    //     ) {
-    //       props.history.push("/login");
-    //     }
-    //     localStorage.setItem("token", res.data.tokenJWT);
-    //     localStorage.setItem("id", res.data.idUser);
-    //     localStorage.setItem("role", res.data.userRoleDTO);
-    //     props.history.push("/order");
-    //   })
-    //   .catch((e) => {
-    //     console.log(e);
-    //   });
     e.preventDefault();
+    let formData = new FormData();
+    formData.append("username", username);
+    formData.append("password", password);
+    await axios
+      .post(
+        "https://mathscienceeducation.herokuapp.com/account/login",
+        formData
+      )
+      .then((res) => {
+        console.log(res.data);
+        if (res.data === 0) {
+          props.history.push("/login");
+        }
+        localStorage.setItem("token", "token");
+        localStorage.setItem("id", res.data);
+        // localStorage.setItem("role", res.data.userRoleDTO);
+        props.history.push("/");
+      })
+      .catch((e) => {
+        console.log(e);
+      });
   };
 
   return (

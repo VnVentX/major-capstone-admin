@@ -253,8 +253,7 @@ export default class StudentAccountComponent extends Component {
             </div>
             {this.props.searchData?.school &&
               this.props.searchData?.grade &&
-              this.props.searchData?.class &&
-              this.props.data.length > 0 && (
+              this.props.searchData?.class && (
                 <div
                   style={{
                     display: "flex",
@@ -262,13 +261,15 @@ export default class StudentAccountComponent extends Component {
                     alignItems: "center",
                   }}
                 >
-                  <Button
-                    type="primary"
-                    size="large"
-                    icon={<DownloadOutlined />}
-                  >
-                    Export Student List
-                  </Button>
+                  {this.props.data.length > 0 && (
+                    <Button
+                      type="primary"
+                      size="large"
+                      icon={<DownloadOutlined />}
+                    >
+                      Export Student List
+                    </Button>
+                  )}
                   <AddNewStudent
                     searchData={this.props.searchData}
                     handleSearch={this.props.handleSearch}

@@ -114,6 +114,8 @@ const AddNewStudent = (props) => {
         console.log(res);
         props.handleSearch(values);
         setLoading(false);
+        handleCancel();
+        form.resetFields();
       })
       .catch((e) => {
         console.log(e);

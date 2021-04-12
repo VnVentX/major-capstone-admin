@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { getJwt, getID } from "../../../../helper/jwt";
 import { Button, Modal, Form, Input, Upload, message } from "antd";
 import { UploadOutlined, PlusOutlined } from "@ant-design/icons";
 
@@ -40,7 +41,7 @@ const AddNewBanner = (props) => {
     let formData = new FormData();
     formData.append("description", event.description.trim());
     formData.append("file", event.bannerImg[0].originFileObj);
-    formData.append("accountId", 1);
+    formData.append("accountId", getID());
     async function createBanner() {
       await axios
         .post(

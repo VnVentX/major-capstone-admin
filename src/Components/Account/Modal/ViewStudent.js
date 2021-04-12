@@ -63,19 +63,19 @@ const ViewStudent = (props) => {
               {props.data.username}
             </Descriptions.Item>
             <Descriptions.Item label="DOB" labelStyle={{ fontWeight: "bold" }}>
-              1998/06/11
+              {data.doB}
             </Descriptions.Item>
             <Descriptions.Item
               label="Parent Name"
               labelStyle={{ fontWeight: "bold" }}
             >
-              Tran Minh Thanh
+              {data.parentName}
             </Descriptions.Item>
             <Descriptions.Item
               label="Telephone"
               labelStyle={{ fontWeight: "bold" }}
             >
-              1810000000
+              {data.parentPhone}
             </Descriptions.Item>
             <Descriptions.Item
               label="Action"
