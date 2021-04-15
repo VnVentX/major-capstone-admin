@@ -40,7 +40,7 @@ const ViewStudent = (props) => {
         onClick={showModal}
         style={{ padding: 0 }}
       >
-        <Link to="#">{`${props.data.firstName} ${props.data.lastName}`}</Link>
+        <Link to="#">{props.data.fullName}</Link>
       </Button>
       <Modal
         title="Student Profile"

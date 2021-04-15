@@ -1,6 +1,14 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { Button, Modal, Form, Input, Tooltip, message } from "antd";
+import {
+  Button,
+  Modal,
+  Form,
+  Input,
+  InputNumber,
+  Tooltip,
+  message,
+} from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 
 const layout = {
@@ -82,9 +90,9 @@ const AddNewLesson = (props) => {
           <Form.Item
             name="lesson"
             label="Lesson Name"
-            rules={[{ required: true, message: "Please input a subject name" }]}
+            rules={[{ required: true, message: "Please input a lesson" }]}
           >
-            <Input placeholder="Lesson Name" />
+            <InputNumber placeholder="Lesson" min={1} />
           </Form.Item>
           <Form.Item
             name="url"

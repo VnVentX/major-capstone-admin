@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { Button, Modal, Form, Input, message } from "antd";
+import { Button, Modal, Form, Input, InputNumber, message } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 
 const layout = {
@@ -82,12 +82,9 @@ const AddGame = (props) => {
           <Form.Item
             name="name"
             label="Game name"
-            rules={[
-              { required: true, message: "Please input game name!" },
-              { max: 20, message: "Can only input 20 characters" },
-            ]}
+            rules={[{ required: true, message: "Please input game name" }]}
           >
-            <Input placeholder="Exercise Name" maxLength={21} />
+            <InputNumber placeholder="Game" min={1} max={100} />
           </Form.Item>
           <Form.Item
             name="description"

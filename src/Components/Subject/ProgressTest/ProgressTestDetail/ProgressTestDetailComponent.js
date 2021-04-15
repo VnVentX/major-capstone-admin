@@ -29,21 +29,19 @@ const ProgressTestDetailComponent = () => {
   };
 
   const handleDelete = async (item) => {
-    let formData = new FormData();
-    formData.append("id", item);
     await axios
-      .put(
-        "https://mathscienceeducation.herokuapp.com/exercise/delete",
-        formData
-      )
+      .put("https://mathscienceeducation.herokuapp.com/exercise/delete", {
+        id: item,
+        status: "DELETED",
+      })
       .then((res) => {
         console.log(res);
         getProgressTestByID();
-        message.success("Delete Test successfully!");
+        message.success("Delete Test successfully");
       })
       .catch((e) => {
         console.log(e);
-        message.success("Fail to delete Test");
+        message.error("Fail to delete Test");
       });
   };
 
@@ -79,7 +77,7 @@ const ProgressTestDetailComponent = () => {
                   }}
                 >
                   <Link to={`${window.location.pathname}/test/${item.id}`}>
-                    {item.exerciseName}
+                    Test {item.exerciseName}
                   </Link>
                   <div
                     style={{
@@ -87,6 +85,10 @@ const ProgressTestDetailComponent = () => {
                       justifyContent: "flex-start",
                     }}
                   >
+                    <EditProgress
+                      data={item}
+                      getProgressTestByID={getProgressTestByID}
+                    />
                     <Tooltip title="Delete">
                       <Popconfirm
                         placement="left"
@@ -101,14 +103,10 @@ const ProgressTestDetailComponent = () => {
                         <Button
                           type="danger"
                           icon={<DeleteOutlined />}
-                          style={{ marginRight: 5 }}
+                          style={{ marginLeft: 5 }}
                         />
                       </Popconfirm>
                     </Tooltip>
-                    <EditProgress
-                      data={item}
-                      getProgressTestByID={getProgressTestByID}
-                    />
                   </div>
                 </div>
               }

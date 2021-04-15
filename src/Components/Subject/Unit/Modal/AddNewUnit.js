@@ -1,9 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { Button, Modal, Form, Input, Select, message } from "antd";
+import { Button, Modal, Form, Input, InputNumber, message } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
-
-const { Option } = Select;
 
 const layout = {
   labelCol: { span: 6 },
@@ -83,22 +81,9 @@ const AddNewUnit = (props) => {
           <Form.Item
             name="unit"
             label="Unit"
-            rules={[{ required: true, message: "Please select a unit" }]}
+            rules={[{ required: true, message: "Please input a unit name" }]}
           >
-            <Select placeholder="Choose a unit">
-              <Option value="1">Unit 1</Option>
-              <Option value="2">Unit 2</Option>
-              <Option value="3">Unit 3</Option>
-              <Option value="4">Unit 4</Option>
-              <Option value="5">Unit 5</Option>
-              <Option value="6">Unit 6</Option>
-              <Option value="7">Unit 7</Option>
-              <Option value="8">Unit 8</Option>
-              <Option value="9">Unit 9</Option>
-              <Option value="10">Unit 10</Option>
-              <Option value="11">Unit 11</Option>
-              <Option value="12">Unit 12</Option>
-            </Select>
+            <InputNumber placeholder="Unit" min={1} max={100} />
           </Form.Item>
           <Form.Item name="description" label="Description">
             <Input.TextArea

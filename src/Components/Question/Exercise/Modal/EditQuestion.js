@@ -145,7 +145,9 @@ const EditQuestion = (props) => {
     formData.append("id", props.data.id);
     formData.append("questionTitle", values.questionTitle);
     formData.append("score", values.score);
-    formData.append("description", values.description);
+    if (values.description) {
+      formData.append("description", values.description);
+    }
     if (values.imgFile !== undefined && values.imgFile.length !== 0) {
       formData.append("imageFile", values.imgFile[0].originFileObj);
     }

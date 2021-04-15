@@ -216,7 +216,6 @@ export default class SchoolComponent extends Component {
         align: "center",
         render: (record) => (
           <Space size="small">
-            <EditSchool getAllSchool={this.getAllSchool} schoolID={record.id} />
             <Popconfirm
               placement="topRight"
               title={
@@ -232,6 +231,7 @@ export default class SchoolComponent extends Component {
             >
               <Button type="primary">Change Status</Button>
             </Popconfirm>
+            <EditSchool getAllSchool={this.getAllSchool} schoolID={record.id} />
             <Popconfirm
               placement="topRight"
               title="Are you sure to delete this Schools?"

@@ -116,7 +116,7 @@ const TestQuestionComponent = () => {
   ];
 
   return (
-    <Card type="inner" title="Test 1">
+    <Card type="inner" title="Test Management">
       <div
         style={{
           marginBottom: 20,

@@ -142,7 +142,7 @@ const AddNewSchool = (props) => {
             name="schoolName"
             label="School Name"
             rules={[
-              { required: true, message: "Please input a school" },
+              { required: true, message: "Please input a school name" },
               {
                 max: 50,
                 message: "Can only input 50 characters!",
@@ -192,7 +192,7 @@ const AddNewSchool = (props) => {
             name="schoolStreet"
             label="Address"
             rules={[
-              { required: true, message: "Please input street" },
+              { required: true, message: "Please input address" },
               {
                 max: 100,
                 message: "Can only input 100 characters!",

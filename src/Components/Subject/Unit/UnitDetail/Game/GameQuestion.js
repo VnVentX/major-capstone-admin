@@ -121,7 +121,7 @@ const GameQuestion = () => {
   ];
 
   return (
-    <Card type="inner" title="Game 1">
+    <Card type="inner" title="Game Management">
       <div
         style={{
           marginBottom: 20,

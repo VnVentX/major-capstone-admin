@@ -115,6 +115,10 @@ const ProgressTestComponent = () => {
                     {item.progressTestName}
                   </Link>
                   <div style={{ display: "flex", justifyContent: "center" }}>
+                    <EditProgressTest
+                      data={item}
+                      getProgressTestBySubjectID={getProgressTestBySubjectID}
+                    />
                     <Tooltip title="Delete">
                       <Popconfirm
                         placement="left"
@@ -129,14 +133,10 @@ const ProgressTestComponent = () => {
                         <Button
                           type="danger"
                           icon={<DeleteOutlined />}
-                          style={{ marginRight: 5 }}
+                          style={{ marginLeft: 5 }}
                         />
                       </Popconfirm>
                     </Tooltip>
-                    <EditProgressTest
-                      data={item}
-                      getProgressTestBySubjectID={getProgressTestBySubjectID}
-                    />
                   </div>
                 </div>
               }

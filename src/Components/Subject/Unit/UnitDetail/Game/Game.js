@@ -37,18 +37,19 @@ const Game = (props) => {
   };
 
   const deleteGame = async (gameID) => {
-    let formData = new FormData();
-    formData.append("id", gameID);
     await axios
-      .put("https://mathscienceeducation.herokuapp.com/game", formData)
+      .put("https://mathscienceeducation.herokuapp.com/game", {
+        id: gameID,
+        status: "DELETED",
+      })
       .then((res) => {
         console.log(res);
         getGameByLessonID();
-        message.success("Delete Game successfully!");
+        message.success("Delete Game successfully");
       })
       .catch((e) => {
         console.log(e);
-        message.success("Fail to delete Game");
+        message.error("Fail to delete Game");
       });
   };
 
@@ -87,9 +88,14 @@ const Game = (props) => {
                   }}
                 >
                   <Link to={`${window.location.pathname}/game/${item.id}`}>
-                    {item.gameName}
+                    Game {item.gameName}
                   </Link>
                   <div style={{ display: "flex", justifyContent: "center" }}>
+                    <EditGame
+                      data={item}
+                      lessonID={props.lessonID}
+                      getGameByLessonID={getGameByLessonID}
+                    />
                     <Tooltip title="Delete">
                       <Popconfirm
                         placement="left"
@@ -104,15 +110,10 @@ const Game = (props) => {
                         <Button
                           type="danger"
                           icon={<DeleteOutlined />}
-                          style={{ marginRight: 5 }}
+                          style={{ marginLeft: 5 }}
                         />
                       </Popconfirm>
                     </Tooltip>
-                    <EditGame
-                      data={item}
-                      lessonID={props.lessonID}
-                      getGameByLessonID={getGameByLessonID}
-                    />
                   </div>
                 </div>
               }

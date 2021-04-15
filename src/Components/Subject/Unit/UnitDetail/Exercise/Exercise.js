@@ -37,21 +37,19 @@ const Exercise = (props) => {
   };
 
   const deleteExercise = async (exerciseID) => {
-    let formData = new FormData();
-    formData.append("id", exerciseID);
     await axios
-      .put(
-        "https://mathscienceeducation.herokuapp.com/exercise/delete",
-        formData
-      )
+      .put("https://mathscienceeducation.herokuapp.com/exercise/delete", {
+        id: exerciseID,
+        status: "DELETED",
+      })
       .then((res) => {
         console.log(res);
         getExerciseByLessonID();
-        message.success("Delete Exercise successfully!");
+        message.success("Delete Exercise successfully");
       })
       .catch((e) => {
         console.log(e);
-        message.success("Fail to delete Exercise");
+        message.error("Fail to delete Exercise");
       });
   };
 
@@ -93,9 +91,14 @@ const Exercise = (props) => {
                     <Link
                       to={`${window.location.pathname}/excecise/${item.id}`}
                     >
-                      {item.exerciseName}
+                      Exercise {item.exerciseName}
                     </Link>
                     <div style={{ display: "flex", justifyContent: "center" }}>
+                      <EditExercise
+                        lessonID={props.lessonID}
+                        data={item}
+                        getExerciseByLessonID={getExerciseByLessonID}
+                      />
                       <Tooltip title="Delete">
                         <Popconfirm
                           placement="left"
@@ -110,15 +113,10 @@ const Exercise = (props) => {
                           <Button
                             type="danger"
                             icon={<DeleteOutlined />}
-                            style={{ marginRight: 5 }}
+                            style={{ marginLeft: 5 }}
                           />
                         </Popconfirm>
                       </Tooltip>
-                      <EditExercise
-                        lessonID={props.lessonID}
-                        data={item}
-                        getExerciseByLessonID={getExerciseByLessonID}
-                      />
                     </div>
                   </div>
                 }

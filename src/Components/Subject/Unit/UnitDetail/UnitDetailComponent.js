@@ -47,7 +47,7 @@ const UnitComponent = () => {
       onChange={handleTabClick}
     >
       {lesson?.map((i) => (
-        <TabPane tab={i.lessonName} key={i.id}>
+        <TabPane tab={`Lesson ${i.lessonName}`} key={i.id}>
           <Lesson lesson={i} getLessonByUnitID={getLessonByUnitID} />
         </TabPane>
       ))}

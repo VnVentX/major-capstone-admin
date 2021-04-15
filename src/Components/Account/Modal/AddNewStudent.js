@@ -1,6 +1,15 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Modal, Button, Form, Input, Select, DatePicker, Spin } from "antd";
+import {
+  Modal,
+  Button,
+  Form,
+  Input,
+  Select,
+  DatePicker,
+  Spin,
+  message,
+} from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 
 const layout = {
@@ -100,15 +109,12 @@ const AddNewStudent = (props) => {
     setClassData([]);
     await axios
       .post("https://mathscienceeducation.herokuapp.com/student", {
-        schoolId: values.school,
-        gradeId: values.grade,
-        classId: values.class,
+        classesId: values.class,
         doB: values.age.format("DD-MM-YYYY"),
-        firtName: values.firstName,
-        lastName: values.lastName,
+        fullName: values.name,
         gender: values.gender,
         parentName: values.parentName,
-        parentPhone: values.parentPhone,
+        contact: values.contact,
       })
       .then((res) => {
         console.log(res);
@@ -116,10 +122,12 @@ const AddNewStudent = (props) => {
         setLoading(false);
         handleCancel();
         form.resetFields();
+        message.success("Create Student successfully!");
       })
       .catch((e) => {
         console.log(e);
         setLoading(false);
+        message.success("Fail to create Student!");
       });
   };
 
@@ -216,27 +224,17 @@ const AddNewStudent = (props) => {
             }}
           </Form.Item>
           <Form.Item
-            name="firstName"
-            label="First Name"
+            name="name"
+            label="Full Name"
             rules={[
               {
                 required: true,
-                message: "Please input First Name",
+                message: "Please input student's Name",
               },
               { max: 50, message: "Can only input 50 characters" },
             ]}
           >
-            <Input maxLength={51} placeholder="First Name" />
-          </Form.Item>
-          <Form.Item
-            name="lastName"
-            label="Last Name"
-            rules={[
-              { required: true, message: "Please input Last Name" },
-              { max: 50, message: "Can only input 50 characters" },
-            ]}
-          >
-            <Input maxLength={51} placeholder="Last Name" />
+            <Input maxLength={51} placeholder="Student's Name" />
           </Form.Item>
           <Form.Item
             name="age"
@@ -267,19 +265,16 @@ const AddNewStudent = (props) => {
             <Input maxLength={51} placeholder="Parent Name" />
           </Form.Item>
           <Form.Item
-            name="parentPhone"
-            label="Parent Phone"
+            name="contact"
+            label="Contact"
             rules={[
               {
-                pattern: new RegExp(
-                  /^(0|\+84)(\s|\.)?((3[2-9])|(5[689])|(7[06-9])|(8[1-689])|(9[0-46-9]))(\d)(\s|\.)?(\d{3})(\s|\.)?(\d{3})$/
-                ),
-                message: "Please input a valid phone number",
+                required: true,
+                message: "Please input a concat (Phone or Email)",
               },
-              { required: true, message: "Please input phone number" },
             ]}
           >
-            <Input placeholder="Phone Number" />
+            <Input placeholder="Contact (Phone / Email)" />
           </Form.Item>
         </Form>
       </Modal>

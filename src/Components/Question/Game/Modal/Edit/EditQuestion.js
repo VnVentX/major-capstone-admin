@@ -105,7 +105,9 @@ const EditQuestion = (props) => {
     formData.append("id", props.data.id);
     formData.append("questionTitle", values.questionTitle);
     formData.append("score", values.score);
-    formData.append("description", values.description);
+    if (values.description) {
+      formData.append("description", values.description);
+    }
     if (values.imgFile !== undefined && values.imgFile.length !== 0) {
       formData.append("imageFile", values.imgFile[0].originFileObj);
     }
@@ -197,7 +199,9 @@ const EditQuestion = (props) => {
       optionIdList.push(item.id);
     });
     formData.append("questionTitle", values.questionTitle);
-    formData.append("description", values.description);
+    if (values.description) {
+      formData.append("description", values.description);
+    }
     formData.append("score", values.score);
     formData.append("optionIdList", optionIdList);
     formData.append("optionTextList", optionTextList);
@@ -254,7 +258,9 @@ const EditQuestion = (props) => {
       optionIdList.push(item.id);
     });
     formData.append("questionTitle", values.questionTitle);
-    formData.append("description", values.description);
+    if (values.description) {
+      formData.append("description", values.description);
+    }
     formData.append("score", values.score);
     formData.append("optionIdList", optionIdList);
     formData.append("optionTextList", optionTextList);
@@ -327,7 +333,9 @@ const EditQuestion = (props) => {
       optionIdList.push(item.id);
     });
     formData.append("questionTitle", values.questionTitle);
-    formData.append("description", values.description);
+    if (values.description) {
+      formData.append("description", values.description);
+    }
     formData.append("score", values.score);
     formData.append("optionIdList", optionIdList);
     formData.append("optionTextList", optionTextList);

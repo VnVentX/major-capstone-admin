@@ -16,24 +16,22 @@ const AddNewProgress = (props) => {
   const [loading, setLoading] = useState(false);
   const [unit, setUnit] = useState([]);
 
-  useEffect(() => {
-    const getUnitBySubjectID = async () => {
-      let subjectID = window.location.pathname.split("/")[2];
-      await axios
-        .get(
-          `https://mathscienceeducation.herokuapp.com/subject/${subjectID}/units`
-        )
-        .then((res) => {
-          setUnit(res.data.length === 0 ? [] : res.data);
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-    };
-    getUnitBySubjectID();
-  }, []);
+  const getUnitBySubjectID = async () => {
+    let subjectID = window.location.pathname.split("/")[2];
+    await axios
+      .get(
+        `https://mathscienceeducation.herokuapp.com/subject/${subjectID}/unitAterIds`
+      )
+      .then((res) => {
+        setUnit(res.data.length === 0 ? [] : res.data);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
 
   const showModal = () => {
+    getUnitBySubjectID();
     setVisible(true);
   };
 
@@ -98,9 +96,12 @@ const AddNewProgress = (props) => {
           <Form.Item
             name="progressTest"
             label="Progress Test Name"
-            rules={[{ required: true, message: "Please input a name" }]}
+            rules={[
+              { required: true, message: "Please input Progress Test name" },
+              { max: 20, message: "Can only input 20 characters" },
+            ]}
           >
-            <Input placeholder="Progress Test Name" />
+            <Input placeholder="Progress Test Name" maxLength={21} />
           </Form.Item>
           <Form.Item name="description" label="Description">
             <Input.TextArea

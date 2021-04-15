@@ -88,7 +88,7 @@ const AddNewAnnouncement = (props) => {
           <Form.Item
             name="title"
             label="Title"
-            rules={[{ required: true, message: "Please input a title" }]}
+            rules={[{ required: true, message: "Please input title" }]}
           >
             <Input.TextArea
               placeholder="Title"
@@ -100,7 +100,7 @@ const AddNewAnnouncement = (props) => {
           <Form.Item
             name="shortDes"
             label="Short Description"
-            rules={[{ required: true, message: "Please input a title" }]}
+            rules={[{ required: true, message: "Please input short description" }]}
           >
             <Input.TextArea
               placeholder="Short Description"

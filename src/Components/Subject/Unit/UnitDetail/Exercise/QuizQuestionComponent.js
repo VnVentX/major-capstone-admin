@@ -115,7 +115,7 @@ const QuizQuestionComponent = () => {
   ];
 
   return (
-    <Card type="inner" title="Exercise 1">
+    <Card type="inner" title="Exercise Management">
       <div
         style={{
           marginBottom: 20,

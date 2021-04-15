@@ -110,6 +110,11 @@ const Subject = (props) => {
                       {item.subjectName}
                     </Link>
                     <div style={{ display: "flex", justifyContent: "center" }}>
+                      <EditSubject
+                        data={item}
+                        gradeID={props.gradeID}
+                        getSubjectByGrade={getSubjectByGrade}
+                      />
                       <Tooltip title="Delete">
                         <Popconfirm
                           placement="left"
@@ -124,15 +129,10 @@ const Subject = (props) => {
                           <Button
                             type="danger"
                             icon={<DeleteOutlined />}
-                            style={{ marginRight: 5 }}
+                            style={{ marginLeft: 5 }}
                           />
                         </Popconfirm>
                       </Tooltip>
-                      <EditSubject
-                        data={item}
-                        gradeID={props.gradeID}
-                        getSubjectByGrade={getSubjectByGrade}
-                      />
                     </div>
                   </div>
                 }

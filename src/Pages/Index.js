@@ -10,12 +10,13 @@ import {
   LogoutOutlined,
   BookOutlined,
 } from "@ant-design/icons";
+import { Breadcrumb } from "antd";
+import withBreadcrumbs from "react-router-breadcrumbs-hoc";
 import logo from "../Img/major-logo-2.jpg";
 import logobig from "../Img/major-logo-long.svg";
 import { BrowserRouter, Switch, Route, Link } from "react-router-dom";
 import Account from "./Account";
 import AccountDetail from "./AccountDetail";
-import BreadcrumbComponent from "../Components/BreadcrumbComponent";
 import Home from "./Home";
 import UnitDetail from "./UnitDetail";
 import ProcessTestDetail from "./ProgressTestDetail";
@@ -44,7 +45,14 @@ export default class Index extends React.Component {
     activeSub: [],
     grade: [],
     gradePath: "",
+    gradeNameByID: {},
+    schoolNameByID: {},
+    subjectNameByID: {},
+    unitNameByID: {},
+    exerciseNameByID: {},
+    gameNameByID: {},
   };
+
   toggle = () => {
     this.setState({
       collapsed: !this.state.collapsed,
@@ -53,6 +61,11 @@ export default class Index extends React.Component {
 
   componentDidMount() {
     this.getAllGrade();
+    this.getAllSchool();
+    this.getAllSubject();
+    this.getAllUnit();
+    this.getAllExercise();
+    this.getAllGame();
   }
 
   componentWillMount() {
@@ -89,8 +102,85 @@ export default class Index extends React.Component {
     await axios
       .get("https://mathscienceeducation.herokuapp.com/grade/all")
       .then((res) => {
+        res.data.forEach((item) => {
+          let key = item.id;
+          let value = "Grade " + item.gradeName;
+          this.setState({
+            gradeNameByID: {
+              ...this.state.gradeNameByID,
+              [key]: value,
+            },
+          });
+        });
         this.setState({
           grade: res.data.length === 0 ? [] : res.data,
+        });
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
+  getAllSchool = async () => {
+    await axios
+      .get("https://mathscienceeducation.herokuapp.com/school/all")
+      .then((res) => {
+        res.data.forEach((item) => {
+          let key = item.id;
+          let value = item.schoolName;
+          this.setState({
+            schoolNameByID: {
+              ...this.state.schoolNameByID,
+              [key]: value,
+            },
+          });
+        });
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
+  getAllSubject = async () => {
+    await axios
+      .get("https://mathscienceeducation.herokuapp.com/breadcrumb/subject")
+      .then((res) => {
+        this.setState({
+          subjectNameByID: res.data,
+        });
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
+  getAllUnit = async () => {
+    await axios
+      .get("https://mathscienceeducation.herokuapp.com/breadcrumb/unit")
+      .then((res) => {
+        this.setState({
+          unitNameByID: res.data,
+        });
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
+  getAllExercise = async () => {
+    await axios
+      .get("https://mathscienceeducation.herokuapp.com/breadcrumb/exercise")
+      .then((res) => {
+        this.setState({
+          exerciseNameByID: res.data,
+        });
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
+  getAllGame = async () => {
+    await axios
+      .get("https://mathscienceeducation.herokuapp.com/breadcrumb/game")
+      .then((res) => {
+        this.setState({
+          gameNameByID: res.data,
         });
       })
       .catch((e) => {
@@ -118,6 +208,73 @@ export default class Index extends React.Component {
   };
 
   render() {
+    const gradeNamesByID = this.state.gradeNameByID;
+    const schoolNameByID = this.state.schoolNameByID;
+    const subjectNameByID = this.state.subjectNameByID;
+    const unitNameByID = this.state.unitNameByID;
+    const exerciseNameByID = this.state.exerciseNameByID;
+    const gameNameByID = this.state.gameNameByID;
+    const DynamicGradeBreadcrumb = ({ match }) => (
+      <span>{gradeNamesByID[match.params.gradeID]}</span>
+    );
+    const DynamicSchoolBreadcrumb = ({ match }) => (
+      <span>{schoolNameByID[match.params.schoolID]}</span>
+    );
+    const DynamicSubjectBreadcrumb = ({ match }) => (
+      <span>{subjectNameByID[match.params.subjectID]}</span>
+    );
+    const DynamicUnitBreadcrumb = ({ match }) => (
+      <span>Unit {unitNameByID[match.params.subjectID]}</span>
+    );
+    const DynamicExerciseBreadcrumb = ({ match }) => (
+      <span>Exercise {exerciseNameByID[match.params.exceciseID]}</span>
+    );
+    const DynamicGameBreadcrumb = ({ match }) => (
+      <span>Game {gameNameByID[match.params.gameID]}</span>
+    );
+
+    const routes = [
+      { path: "/school/:schoolID", breadcrumb: DynamicSchoolBreadcrumb },
+      { path: "/subject/:subjectID", breadcrumb: DynamicSubjectBreadcrumb },
+      {
+        path: "/subject/:subjectID/unit/:unitID",
+        breadcrumb: DynamicUnitBreadcrumb,
+      },
+      {
+        path: "/subject/:subjectID/unit/:unitID/game/:gameID",
+        breadcrumb: DynamicGameBreadcrumb,
+      },
+      {
+        path: "/subject/:subjectID/unit/:unitID/excecise/:exceciseID",
+        breadcrumb: DynamicExerciseBreadcrumb,
+      },
+      {
+        path: "/grade/:gradeID",
+        breadcrumb: DynamicGradeBreadcrumb,
+      },
+      { path: "/exercise-question", breadcrumb: "Exercise Question" },
+      {
+        path: "/exercise-question/:gradeID",
+        breadcrumb: DynamicGradeBreadcrumb,
+      },
+      { path: "/game-question", breadcrumb: "Game Question" },
+      { path: "/game-question/:gradeID", breadcrumb: DynamicGradeBreadcrumb },
+      {
+        path: "/subject/:subjectID/progress-test",
+        breadcrumb: "Progress Test",
+      },
+    ];
+
+    const BreadcrumbComponent = withBreadcrumbs(routes)(({ breadcrumbs }) => (
+      <Breadcrumb separator=">" style={{ margin: "16px 0 0 25px" }}>
+        {breadcrumbs.map(({ match, breadcrumb }) => (
+          <Breadcrumb.Item key={match.url}>
+            <Link to={match.url}>{breadcrumb}</Link>
+          </Breadcrumb.Item>
+        ))}
+      </Breadcrumb>
+    ));
+
     return (
       <Layout>
         <BrowserRouter>

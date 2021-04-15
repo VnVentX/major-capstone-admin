@@ -67,10 +67,7 @@ export const AccountTableComponent = () => {
   const handleNameSearch = (name) => {
     setRecord(
       searchRecord?.filter((item) =>
-        (item.firstName + " " + item.lastName)
-          .toString()
-          .toLowerCase()
-          .includes(name.toLowerCase())
+        item.fullName.toString().toLowerCase().includes(name.toLowerCase())
       )
     );
   };

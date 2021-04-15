@@ -33,7 +33,6 @@ const SchoolDetailComponent = () => {
     await axios
       .get(`https://mathscienceeducation.herokuapp.com/grade/${schoolID}`)
       .then((res) => {
-        console.log(res.data);
         setGradeData(res.data.length === 0 ? [] : res.data);
       })
       .catch((e) => {

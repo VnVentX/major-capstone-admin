@@ -115,6 +115,10 @@ const UnitComponent = () => {
                       Unit {item.unitName}
                     </Link>
                     <div style={{ display: "flex", justifyContent: "center" }}>
+                      <EditUnit
+                        data={item}
+                        getUnitBySubjectID={getUnitBySubjectID}
+                      />
                       <Tooltip title="Delete">
                         <Popconfirm
                           placement="left"
@@ -129,14 +133,10 @@ const UnitComponent = () => {
                           <Button
                             type="danger"
                             icon={<DeleteOutlined />}
-                            style={{ marginRight: 5 }}
+                            style={{ marginLeft: 5 }}
                           />
                         </Popconfirm>
                       </Tooltip>
-                      <EditUnit
-                        data={item}
-                        getUnitBySubjectID={getUnitBySubjectID}
-                      />
                     </div>
                   </div>
                 }

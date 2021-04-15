@@ -131,10 +131,7 @@ const EditBanner = (props) => {
           <Form.Item
             name="description"
             label="Description"
-            rules={[
-              { required: true, message: "Please input description" },
-              { max: 50, message: "Can only input 100 characters" },
-            ]}
+            rules={[{ max: 50, message: "Can only input 100 characters" }]}
           >
             <Input.TextArea
               showCount

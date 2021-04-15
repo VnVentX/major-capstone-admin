@@ -235,11 +235,8 @@ export default class StudentAccountComponent extends Component {
             <div>
               <AutoComplete
                 dataSource={this.props.searchRecord.map((item, idx) => (
-                  <Select.Option
-                    key={idx}
-                    value={`${item.firstName} ${item.lastName}`}
-                  >
-                    {item.firstName} {item.lastName}
+                  <Select.Option key={idx} value={item.fullName}>
+                    {item.fullName}
                   </Select.Option>
                 ))}
               >

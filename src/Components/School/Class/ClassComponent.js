@@ -81,7 +81,6 @@ const ClassComponent = (props) => {
   const columns = [
     {
       title: "Class",
-      align: "center",
       width: "20%",
       render: (record) => (
         <Link

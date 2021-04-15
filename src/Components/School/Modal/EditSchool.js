@@ -164,7 +164,7 @@ const EditSchool = (props) => {
             name="schoolStreet"
             label="Address"
             rules={[
-              { required: true, message: "Please input street" },
+              { required: true, message: "Please input address" },
               {
                 max: 100,
                 message: "Can only input 100 characters!",
