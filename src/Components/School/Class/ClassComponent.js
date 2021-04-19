@@ -10,6 +10,7 @@ import {
 import AddNewClass from "./Modal/AddNewClass";
 import ImportClassExcel from "./Modal/ImportClassExcel";
 import EditClass from "./Modal/EditClass";
+import ExportClassExcel from "./Modal/ExportClassExcel";
 
 const ClassComponent = (props) => {
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
@@ -170,7 +171,12 @@ const ClassComponent = (props) => {
           }}
         >
           Class Management
-          <Button type="primary" size="middle" danger icon={<DownloadOutlined />}>
+          <Button
+            type="primary"
+            size="middle"
+            danger
+            icon={<DownloadOutlined />}
+          >
             Finish School Year
           </Button>
         </div>
@@ -183,7 +189,16 @@ const ClassComponent = (props) => {
           justifyContent: "space-between",
         }}
       >
-        <ImportClassExcel />
+        <div
+          style={{
+            marginBottom: 10,
+            display: "flex",
+            justifyContent: "space-between",
+          }}
+        >
+          <ImportClassExcel />
+          <ExportClassExcel gradeID={props.gradeID} />
+        </div>
         <AddNewClass
           gradeID={props.gradeID}
           getClassBySchoolGrade={getClassBySchoolGrade}
