@@ -8,11 +8,41 @@ import { QuestionCircleOutlined, DeleteOutlined } from "@ant-design/icons";
 
 const GameQuestion = () => {
   const [data, setData] = useState([]);
+  const [status, setStatus] = useState("");
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
 
   useEffect(() => {
     getQuestionByGameID();
+    getGameDetail();
   }, []);
+
+  const getGameDetail = async () => {
+    let gameID = window.location.pathname.split("/")[6];
+    await axios
+      .get(`https://mathscienceeducation.herokuapp.com/game/${gameID}`)
+      .then((res) => {
+        setStatus(res.data.status);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
+
+  const handleChangeStatus = async (status) => {
+    let gameID = window.location.pathname.split("/")[6];
+    await axios
+      .put("https://mathscienceeducation.herokuapp.com/game", {
+        id: gameID,
+        status: status,
+      })
+      .then((res) => {
+        console.log(res);
+        getGameDetail();
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
 
   const getQuestionByGameID = async () => {
     let exerciseID = window.location.pathname.split("/")[6];
@@ -121,7 +151,40 @@ const GameQuestion = () => {
   ];
 
   return (
-    <Card type="inner" title="Game Management">
+    <Card
+      type="inner"
+      title={
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+          }}
+        >
+          Game Management
+          {status && status === "ACTIVE" ? (
+            <Popconfirm
+              placement="topRight"
+              title="Are you sure to close this Game?"
+              onConfirm={() => handleChangeStatus("INACTIVE")}
+              okText="Yes"
+              cancelText="No"
+            >
+              <Button type="danger">Close Game</Button>
+            </Popconfirm>
+          ) : status === "INACTIVE" ? (
+            <Popconfirm
+              placement="topRight"
+              title="Are you sure to open this Game?"
+              onConfirm={() => handleChangeStatus("ACTIVE")}
+              okText="Yes"
+              cancelText="No"
+            >
+              <Button type="primary">Open Game</Button>
+            </Popconfirm>
+          ) : null}
+        </div>
+      }
+    >
       <div
         style={{
           marginBottom: 20,

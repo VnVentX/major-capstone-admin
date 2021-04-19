@@ -11,11 +11,7 @@ import {
   AutoComplete,
   Select,
 } from "antd";
-import {
-  SearchOutlined,
-  QuestionCircleOutlined,
-  DeleteOutlined,
-} from "@ant-design/icons";
+import { SearchOutlined, QuestionCircleOutlined } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
 import { Link } from "react-router-dom";
 import LinkNewSchool from "./Modal/LinkNewSchool";
@@ -219,6 +215,7 @@ export default class GradeDetailTable extends Component {
       {
         title: "Status",
         dataIndex: "status",
+        align: "center",
         render: (status) => (
           <span>
             {status === "ACTIVE" ? (
@@ -259,9 +256,7 @@ export default class GradeDetailTable extends Component {
               cancelText="No"
               icon={<QuestionCircleOutlined style={{ color: "red" }} />}
             >
-              <Button type="danger" icon={<DeleteOutlined />}>
-                Delete
-              </Button>
+              <Button type="danger">Unlink</Button>
             </Popconfirm>
           </Space>
         ),

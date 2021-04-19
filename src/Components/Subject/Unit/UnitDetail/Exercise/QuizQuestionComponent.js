@@ -8,11 +8,43 @@ import { QuestionCircleOutlined, DeleteOutlined } from "@ant-design/icons";
 
 const QuizQuestionComponent = () => {
   const [data, setData] = useState([]);
+  const [status, setStatus] = useState("");
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
 
   useEffect(() => {
     getQuestionByExerciseID();
+    getExerciseDetail();
   }, []);
+
+  const getExerciseDetail = async () => {
+    let exerciseID = window.location.pathname.split("/")[6];
+    await axios
+      .get(
+        `https://mathscienceeducation.herokuapp.com/exercise/${exerciseID}/status`
+      )
+      .then((res) => {
+        setStatus(res.data);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
+
+  const handleChangeStatus = async (status) => {
+    let exerciseID = window.location.pathname.split("/")[6];
+    await axios
+      .put("https://mathscienceeducation.herokuapp.com/exercise/delete", {
+        id: exerciseID,
+        status: status,
+      })
+      .then((res) => {
+        console.log(res);
+        getExerciseDetail();
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
 
   const getQuestionByExerciseID = async () => {
     let exerciseID = window.location.pathname.split("/")[6];
@@ -115,7 +147,40 @@ const QuizQuestionComponent = () => {
   ];
 
   return (
-    <Card type="inner" title="Exercise Management">
+    <Card
+      type="inner"
+      title={
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+          }}
+        >
+          Exercise Management
+          {status && status === "ACTIVE" ? (
+            <Popconfirm
+              placement="topRight"
+              title="Are you sure to close this Exercise?"
+              onConfirm={() => handleChangeStatus("INACTIVE")}
+              okText="Yes"
+              cancelText="No"
+            >
+              <Button type="danger">Close Exercise</Button>
+            </Popconfirm>
+          ) : status === "INACTIVE" ? (
+            <Popconfirm
+              placement="topRight"
+              title="Are you sure to open this Exercise?"
+              onConfirm={() => handleChangeStatus("ACTIVE")}
+              okText="Yes"
+              cancelText="No"
+            >
+              <Button type="primary">Open Exercise</Button>
+            </Popconfirm>
+          ) : null}
+        </div>
+      }
+    >
       <div
         style={{
           marginBottom: 20,

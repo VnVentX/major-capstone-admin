@@ -442,7 +442,7 @@ export default class Index extends React.Component {
                   component={AddGameQuestion}
                 />
                 <Route
-                  path="/subject/:subjectID/progress-test/:progressID/test/:testID"
+                  path="/subject/:subjectID/progress-test/:progressID/exercise/:testID"
                   exact
                   component={AddTestQuestion}
                 />

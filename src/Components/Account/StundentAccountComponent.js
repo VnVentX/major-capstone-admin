@@ -233,20 +233,20 @@ export default class StudentAccountComponent extends Component {
             }}
           >
             <div>
-              <AutoComplete
+              {/* <AutoComplete
                 dataSource={this.props.searchRecord.map((item, idx) => (
                   <Select.Option key={idx} value={item.fullName}>
                     {item.fullName}
                   </Select.Option>
                 ))}
-              >
-                <Input.Search
-                  placeholder="Search Student"
-                  allowClear
-                  onSearch={(name) => this.props.handleNameSearch(name)}
-                  enterButton
-                />
-              </AutoComplete>
+              > */}
+              <Input.Search
+                placeholder="Search Student"
+                allowClear
+                onSearch={(name) => this.props.handleNameSearch(name)}
+                enterButton
+              />
+              {/* </AutoComplete> */}
             </div>
             {this.props.searchData?.school &&
               this.props.searchData?.grade &&

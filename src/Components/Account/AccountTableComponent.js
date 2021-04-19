@@ -49,6 +49,7 @@ export const AccountTableComponent = () => {
         classID,
       ])
       .then((res) => {
+        console.log(res.data);
         setRecord(res.data.length === 0 ? [] : res.data);
         setSearchRecord(res.data.length === 0 ? [] : res.data);
         setLoading(false);
@@ -66,8 +67,10 @@ export const AccountTableComponent = () => {
 
   const handleNameSearch = (name) => {
     setRecord(
-      searchRecord?.filter((item) =>
-        item.fullName.toString().toLowerCase().includes(name.toLowerCase())
+      searchRecord?.filter(
+        (item) =>
+          item.fullName.toString().toLowerCase().includes(name.toLowerCase()) ||
+          item.username.toString().toLowerCase().includes(name.toLowerCase())
       )
     );
   };

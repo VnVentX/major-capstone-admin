@@ -46,6 +46,7 @@ const ViewStudent = (props) => {
         title="Student Profile"
         visible={visible}
         onCancel={handleCancel}
+        footer={null}
         width={900}
       >
         <Card>
@@ -54,7 +55,7 @@ const ViewStudent = (props) => {
               label="Full Name"
               labelStyle={{ fontWeight: "bold" }}
             >
-              {data?.firstName} {data?.lastName}
+              {data?.fullName}
             </Descriptions.Item>
             <Descriptions.Item
               label="Account"
@@ -72,10 +73,10 @@ const ViewStudent = (props) => {
               {data.parentName}
             </Descriptions.Item>
             <Descriptions.Item
-              label="Telephone"
+              label="Contact"
               labelStyle={{ fontWeight: "bold" }}
             >
-              {data.parentPhone}
+              {data.contact}
             </Descriptions.Item>
             <Descriptions.Item
               label="Action"

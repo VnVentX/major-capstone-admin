@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Card, List, Popconfirm, message, Tooltip, Button } from "antd";
+import { Card, List, Popconfirm, message, Tooltip, Button, Badge } from "antd";
 import { Link } from "react-router-dom";
 import { QuestionCircleOutlined, DeleteOutlined } from "@ant-design/icons";
 import AddProgress from "./Modal/AddProgress";
@@ -76,9 +76,23 @@ const ProgressTestDetailComponent = () => {
                     alignItems: "center",
                   }}
                 >
-                  <Link to={`${window.location.pathname}/test/${item.id}`}>
-                    Test {item.exerciseName}
-                  </Link>
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Link
+                      to={`${window.location.pathname}/exercise/${item.id}`}
+                    >
+                      Exercise {item.exerciseName}
+                    </Link>
+                    {item.status === "ACTIVE" ? (
+                      <Badge status="success" style={{ marginLeft: 5 }} />
+                    ) : (
+                      <Badge status="default" style={{ marginLeft: 5 }} />
+                    )}
+                  </div>
                   <div
                     style={{
                       display: "flex",

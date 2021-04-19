@@ -8,6 +8,7 @@ import {
   Tooltip,
   Button,
   Typography,
+  Badge,
 } from "antd";
 import { Link } from "react-router-dom";
 import { QuestionCircleOutlined, DeleteOutlined } from "@ant-design/icons";
@@ -29,6 +30,7 @@ const Exercise = (props) => {
         `https://mathscienceeducation.herokuapp.com/lesson/${props.lessonID}/exercises`
       )
       .then((res) => {
+        console.log(res.data);
         setExercise(res.data.length === 0 ? [] : res.data);
       })
       .catch((e) => {
@@ -88,11 +90,23 @@ const Exercise = (props) => {
                       alignItems: "center",
                     }}
                   >
-                    <Link
-                      to={`${window.location.pathname}/excecise/${item.id}`}
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                      }}
                     >
-                      Exercise {item.exerciseName}
-                    </Link>
+                      <Link
+                        to={`${window.location.pathname}/excecise/${item.id}`}
+                      >
+                        Exercise {item.exerciseName}
+                      </Link>
+                      {item.status === "ACTIVE" ? (
+                        <Badge status="success" style={{ marginLeft: 5 }} />
+                      ) : (
+                        <Badge status="default" style={{ marginLeft: 5 }} />
+                      )}
+                    </div>
                     <div style={{ display: "flex", justifyContent: "center" }}>
                       <EditExercise
                         lessonID={props.lessonID}

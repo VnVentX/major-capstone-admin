@@ -61,27 +61,17 @@ const EditStudent = (props) => {
       >
         <Form {...layout} form={form}>
           <Form.Item
-            name="firstName"
-            label="First Name"
+            name="name"
+            label="Full Name"
             rules={[
               {
                 required: true,
-                message: "Please input First Name",
+                message: "Please input student's Name",
               },
               { max: 50, message: "Can only input 50 characters" },
             ]}
           >
-            <Input maxLength={51} />
-          </Form.Item>
-          <Form.Item
-            name="lastName"
-            label="Last Name"
-            rules={[
-              { required: true, message: "Please input Last Name" },
-              { max: 50, message: "Can only input 50 characters" },
-            ]}
-          >
-            <Input maxLength={51} />
+            <Input maxLength={51} placeholder="Student's Name" />
           </Form.Item>
           <Form.Item
             name="age"
@@ -112,19 +102,11 @@ const EditStudent = (props) => {
             <Input maxLength={51} />
           </Form.Item>
           <Form.Item
-            name="parentPhone"
-            label="Parent Phone"
-            rules={[
-              {
-                pattern: new RegExp(
-                  /^(0|\+84)(\s|\.)?((3[2-9])|(5[689])|(7[06-9])|(8[1-689])|(9[0-46-9]))(\d)(\s|\.)?(\d{3})(\s|\.)?(\d{3})$/
-                ),
-                message: "Please input a valid phone number",
-              },
-              { required: true, message: "Please input phone number" },
-            ]}
+            name="contact"
+            label="Contact"
+            rules={[{ required: true, message: "Please input contact" }]}
           >
-            <Input maxLength={51} />
+            <Input maxLength={50} />
           </Form.Item>
         </Form>
       </Modal>

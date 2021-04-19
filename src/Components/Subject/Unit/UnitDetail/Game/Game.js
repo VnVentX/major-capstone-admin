@@ -8,6 +8,7 @@ import {
   Tooltip,
   Button,
   Typography,
+  Badge,
 } from "antd";
 import { Link } from "react-router-dom";
 import { QuestionCircleOutlined, DeleteOutlined } from "@ant-design/icons";
@@ -87,9 +88,22 @@ const Game = (props) => {
                     alignItems: "center",
                   }}
                 >
-                  <Link to={`${window.location.pathname}/game/${item.id}`}>
-                    Game {item.gameName}
-                  </Link>
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Link to={`${window.location.pathname}/game/${item.id}`}>
+                      Game {item.gameName}
+                    </Link>
+                    {item.status === "ACTIVE" ? (
+                      <Badge status="success" style={{ marginLeft: 5 }} />
+                    ) : (
+                      <Badge status="default" style={{ marginLeft: 5 }} />
+                    )}
+                  </div>
+
                   <div style={{ display: "flex", justifyContent: "center" }}>
                     <EditGame
                       data={item}
