@@ -82,7 +82,10 @@ const AddExercise = (props) => {
           <Form.Item
             name="name"
             label="Exercise name"
-            rules={[{ required: true, message: "Please input exercise name" }]}
+            rules={[
+              { required: true, message: "Please input a exercise name" },
+              { type: "number", message: "Please input a number" },
+            ]}
           >
             <InputNumber placeholder="Exercise" min={1} max={100} />
           </Form.Item>

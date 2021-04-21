@@ -82,7 +82,10 @@ const AddGame = (props) => {
           <Form.Item
             name="name"
             label="Game name"
-            rules={[{ required: true, message: "Please input game name" }]}
+            rules={[
+              { required: true, message: "Please input a game name" },
+              { type: "number", message: "Please input a number" },
+            ]}
           >
             <InputNumber placeholder="Game" min={1} max={100} />
           </Form.Item>

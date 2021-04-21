@@ -155,9 +155,12 @@ const EditChoosingQuestion = (props) => {
       <Form.Item
         name="score"
         label="Score"
-        rules={[{ required: true, message: "Please input a score" }]}
+        rules={[
+          { required: true, message: "Please input a score" },
+          { type: "number", message: "Please input a number" },
+        ]}
       >
-        <InputNumber placeholder="Score" min={1} />
+        <InputNumber placeholder="Score" min={1} max={5} />
       </Form.Item>
       <h2>Options</h2>
       <Divider />

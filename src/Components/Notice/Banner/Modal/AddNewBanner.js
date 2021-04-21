@@ -39,7 +39,9 @@ const AddNewBanner = (props) => {
   const onFinish = (event) => {
     setLoading(true);
     let formData = new FormData();
-    formData.append("description", event.description.trim());
+    if (event.description) {
+      formData.append("description", event.description.trim());
+    }
     formData.append("file", event.bannerImg[0].originFileObj);
     formData.append("accountId", getID());
     async function createBanner() {

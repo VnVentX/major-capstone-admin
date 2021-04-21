@@ -50,7 +50,9 @@ const EditBanner = (props) => {
     if (event.bannerImg !== undefined && event.bannerImg.length !== 0) {
       formData.append("file", event.bannerImg[0].originFileObj);
     }
-    formData.append("description", event.description.trim());
+    if (event.description) {
+      formData.append("description", event.description.trim());
+    }
     formData.append("id", props.data.id);
     async function editBanner() {
       await axios

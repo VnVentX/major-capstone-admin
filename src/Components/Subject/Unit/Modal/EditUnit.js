@@ -91,7 +91,10 @@ const EditUnit = (props) => {
           <Form.Item
             name="unit"
             label="Unit"
-            rules={[{ required: true, message: "Please input a unit name" }]}
+            rules={[
+              { required: true, message: "Please input a unit name" },
+              { type: "number", message: "Please input a number" },
+            ]}
           >
             <InputNumber placeholder="Unit" min={1} max={100} />
           </Form.Item>

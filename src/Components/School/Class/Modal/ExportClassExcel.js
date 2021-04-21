@@ -10,6 +10,7 @@ const layout = {
 
 const ExportClassExcel = (props) => {
   const [visible, setVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [subject, setSubject] = useState([]);
   const [form] = Form.useForm();
 
@@ -31,26 +32,31 @@ const ExportClassExcel = (props) => {
   };
 
   const exportGradeScore = async (values) => {
+    setLoading(true);
     let gradeID = props.gradeID;
     let schoolID = window.location.pathname.split("/")[2];
     let subjectID = values.subject;
     await axios
       .get(
         `https://mathscienceeducation.herokuapp.com/student/export?gradeId=${gradeID}&schoolId=${schoolID}&subjectId=${subjectID}`,
-        {
-          responseType: "arraybuffer",
-        }
+        { responseType: "blob" }
       )
       .then((res) => {
-        const url = window.URL.createObjectURL(new Blob([res.data]));
-        const link = document.createElement("a");
-        link.href = url;
-        link.setAttribute("download", "test.xlsx");
-        document.body.appendChild(link);
-        link.click();
+        console.log(res.headers);
+        // const url = window.URL.createObjectURL(new Blob([res.data]));
+        // const link = document.createElement("a");
+        // link.href = url;
+        // link.setAttribute("download", "test.xlsx");
+        // document.body.appendChild(link);
+        // link.click();
+        setLoading(false);
+        handleCancel();
+        message.success("Export report successfully");
       })
       .catch((e) => {
         console.log(e);
+        setLoading(false);
+        message.error("Fail to export report");
       });
   };
 
@@ -75,24 +81,36 @@ const ExportClassExcel = (props) => {
         icon={<DownloadOutlined />}
         onClick={showModal}
       >
-        Import Class from Excel
+        Export Classes Report
       </Button>
       <Modal
         title="Import Class from Excel"
         visible={visible}
         onCancel={handleCancel}
         destroyOnClose
-        onOk={() => {
-          form
-            .validateFields()
-            .then((values) => {
-              onFinish(values);
-              form.resetFields();
-            })
-            .catch((info) => {
-              console.log("Validate Failed:", info);
-            });
-        }}
+        footer={[
+          <Button key="back" onClick={handleCancel}>
+            Return
+          </Button>,
+          <Button
+            id="export-class-report"
+            key="link"
+            type="primary"
+            loading={loading}
+            onClick={() => {
+              form
+                .validateFields()
+                .then((values) => {
+                  onFinish(values);
+                })
+                .catch((info) => {
+                  console.log("Validate Failed:", info);
+                });
+            }}
+          >
+            Export
+          </Button>,
+        ]}
       >
         <Form {...layout} form={form}>
           <Form.Item
@@ -101,7 +119,7 @@ const ExportClassExcel = (props) => {
             rules={[
               {
                 required: true,
-                message: "Please select an excel file to upload!",
+                message: "Please select a Subject",
               },
             ]}
           >

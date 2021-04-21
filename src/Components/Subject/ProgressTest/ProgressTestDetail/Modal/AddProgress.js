@@ -81,7 +81,10 @@ const AddProgress = (props) => {
           <Form.Item
             name="name"
             label="Test name"
-            rules={[{ required: true, message: "Please input test name" }]}
+            rules={[
+              { required: true, message: "Please input a test name" },
+              { type: "number", message: "Please input a number" },
+            ]}
           >
             <InputNumber placeholder="Test" min={1} max={100} />
           </Form.Item>
