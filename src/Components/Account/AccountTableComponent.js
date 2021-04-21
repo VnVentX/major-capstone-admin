@@ -70,7 +70,7 @@ export const AccountTableComponent = () => {
       searchRecord?.filter(
         (item) =>
           item.fullName.toString().toLowerCase().includes(name.toLowerCase()) ||
-          item.username.toString().toLowerCase().includes(name.toLowerCase())
+          item.studentId.toString().toLowerCase().includes(name.toLowerCase())
       )
     );
   };

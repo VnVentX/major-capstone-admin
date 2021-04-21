@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import axios from "axios";
 import { Modal, Button, Form, Upload, message } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 
@@ -13,7 +14,7 @@ const layout = {
   wrapperCol: { span: 14 },
 };
 
-const ImportClassExcel = () => {
+const ImportClassExcel = (props) => {
   const [visible, setVisible] = useState(false);
   const [fileList, setFileList] = useState([]);
   const [form] = Form.useForm();
@@ -27,9 +28,24 @@ const ImportClassExcel = () => {
     setVisible(false);
   };
 
-  const onFinish = (event) => {
-    console.log(event);
-    setFileList([]);
+  const onFinish = (file) => {
+    checkValidFile(file);
+  };
+
+  const checkValidFile = async (file) => {
+    let formData = new FormData();
+    formData.append("gradeId", props.gradeID);
+    formData.append("schoolId", window.location.pathname.split("/")[2]);
+    formData.append("file", file.excelFile[0].originFileObj);
+    await axios
+      .post("https://mathscienceeducation.herokuapp.com/student/validate")
+      .then((res) => {
+        console.log(res);
+        setFileList([]);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
   };
 
   const handleChange = ({ fileList }) => {
@@ -57,7 +73,6 @@ const ImportClassExcel = () => {
             .validateFields()
             .then((values) => {
               onFinish(values);
-              form.resetFields();
             })
             .catch((info) => {
               console.log("Validate Failed:", info);
@@ -81,6 +96,7 @@ const ImportClassExcel = () => {
               fileList={fileList}
               beforeUpload={() => false}
               onChange={(info) => {
+                console.log(info.file.type);
                 if (
                   info.file.type !==
                   "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"

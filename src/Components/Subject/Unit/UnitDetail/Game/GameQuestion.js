@@ -4,7 +4,11 @@ import { Card, Table, Space, Button, Popconfirm, message, Tooltip } from "antd";
 import EditQuestion from "../../../../Question/Game/Modal/Edit/EditQuestion";
 import ViewQuestion from "../../../../Question/Game/Modal/View/ViewQuestion";
 import AddQuestion from "./Modal/AddQuestion";
-import { QuestionCircleOutlined, DeleteOutlined } from "@ant-design/icons";
+import {
+  QuestionCircleOutlined,
+  DeleteOutlined,
+  PlusOutlined,
+} from "@ant-design/icons";
 
 const GameQuestion = () => {
   const [data, setData] = useState([]);
@@ -129,22 +133,26 @@ const GameQuestion = () => {
       render: (record) => (
         <Space size="small">
           <ViewQuestion data={record} />
-          <EditQuestion
-            data={record}
-            getQuestionByGameID={getQuestionByGameID}
-          />
-          <Tooltip title="Delete Question">
-            <Popconfirm
-              placement="topRight"
-              title="Are you sure to delete this question?"
-              onConfirm={() => handleDelete(record.id)}
-              okText="Yes"
-              cancelText="No"
-              icon={<QuestionCircleOutlined style={{ color: "red" }} />}
-            >
-              <Button type="danger" icon={<DeleteOutlined />} />
-            </Popconfirm>
-          </Tooltip>
+          {status === "INACTIVE" && (
+            <>
+              <EditQuestion
+                data={record}
+                getQuestionByGameID={getQuestionByGameID}
+              />
+              <Tooltip title="Delete Question">
+                <Popconfirm
+                  placement="topRight"
+                  title="Are you sure to delete this question?"
+                  onConfirm={() => handleDelete(record.id)}
+                  okText="Yes"
+                  cancelText="No"
+                  icon={<QuestionCircleOutlined style={{ color: "red" }} />}
+                >
+                  <Button type="danger" icon={<DeleteOutlined />} />
+                </Popconfirm>
+              </Tooltip>
+            </>
+          )}
         </Space>
       ),
     },
@@ -192,7 +200,13 @@ const GameQuestion = () => {
           justifyContent: "flex-end",
         }}
       >
-        <AddQuestion getQuestionByGameID={getQuestionByGameID} data={data} />
+        {status === "INACTIVE" ? (
+          <AddQuestion getQuestionByGameID={getQuestionByGameID} data={data} />
+        ) : status === "ACTIVE" ? (
+          <Button type="primary" icon={<PlusOutlined />} disabled>
+            Add Question from Question Bank
+          </Button>
+        ) : null}
       </div>
       <Table
         rowSelection={rowSelection}
@@ -202,7 +216,7 @@ const GameQuestion = () => {
       />
       <div>
         <h1>With selected:</h1>
-        {selectedRowKeys.length === 0 ? (
+        {selectedRowKeys.length === 0 || status === "ACTIVE" ? (
           <>
             <Button type="danger" disabled icon={<DeleteOutlined />}>
               Delete

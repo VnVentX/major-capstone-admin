@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import { Modal, Button, Form, Input, Select, DatePicker } from "antd";
 import { EditOutlined } from "@ant-design/icons";
 
@@ -11,15 +12,47 @@ const EditStudent = (props) => {
   const [visible, setVisible] = useState(false);
   const [form] = Form.useForm();
 
-  useEffect(() => {
-    form.setFieldsValue({
-      firstName: props.data.firstName,
-      lastName: props.data.lastName,
-      gender: props.data.gender,
-    });
-  }, []);
+  const getStudentDetail = async () => {
+    await axios
+      .get(
+        `https://mathscienceeducation.herokuapp.com/student/${props.data.id}`
+      )
+      .then((res) => {
+        form.setFieldsValue({
+          name: res.data.fullName,
+          // age: res.data.doB,
+          gender: res.data.gender,
+          parentName: res.data.parentName,
+          contact: res.data.contact,
+        });
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
+
+  const updateStundent = async (values) => {
+    await axios
+      .put(
+        `https://mathscienceeducation.herokuapp.com/student/${props.data.id}`,
+        {
+          doB: values.age.format("DD-MM-YYYY"),
+          fullName: values.name,
+          gender: values.gender,
+          parentName: values.parentName,
+          contact: values.contact,
+        }
+      )
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
 
   const showModal = () => {
+    getStudentDetail();
     setVisible(true);
   };
 
@@ -28,8 +61,8 @@ const EditStudent = (props) => {
     setVisible(false);
   };
 
-  const onFinish = (event) => {
-    console.log(event);
+  const onFinish = (values) => {
+    updateStundent(values);
   };
 
   return (
@@ -78,7 +111,7 @@ const EditStudent = (props) => {
             label="DoB"
             rules={[{ required: true, message: "Please choose DoB" }]}
           >
-            <DatePicker format="DD/MM/YYYY" />
+            <DatePicker format="DD-MM-YYYY" />
           </Form.Item>
           <Form.Item
             name="gender"

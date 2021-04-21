@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import { Modal, Button, Form, Select, message } from "antd";
 import { DownloadOutlined } from "@ant-design/icons";
@@ -13,10 +13,6 @@ const ExportClassExcel = (props) => {
   const [loading, setLoading] = useState(false);
   const [subject, setSubject] = useState([]);
   const [form] = Form.useForm();
-
-  useEffect(() => {
-    getSubjectByGrade();
-  }, []);
 
   const getSubjectByGrade = async () => {
     await axios
@@ -42,13 +38,14 @@ const ExportClassExcel = (props) => {
         { responseType: "blob" }
       )
       .then((res) => {
-        console.log(res.headers);
-        // const url = window.URL.createObjectURL(new Blob([res.data]));
-        // const link = document.createElement("a");
-        // link.href = url;
-        // link.setAttribute("download", "test.xlsx");
-        // document.body.appendChild(link);
-        // link.click();
+        let headerLine = res.headers["content-disposition"];
+        let fileName = headerLine.split("filename=")[1];
+        const url = window.URL.createObjectURL(new Blob([res.data]));
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", fileName);
+        document.body.appendChild(link);
+        link.click();
         setLoading(false);
         handleCancel();
         message.success("Export report successfully");
@@ -61,6 +58,7 @@ const ExportClassExcel = (props) => {
   };
 
   const showModal = () => {
+    getSubjectByGrade();
     setVisible(true);
   };
 
@@ -75,16 +73,11 @@ const ExportClassExcel = (props) => {
 
   return (
     <>
-      <Button
-        type="primary"
-        size="large"
-        icon={<DownloadOutlined />}
-        onClick={showModal}
-      >
+      <Button size="large" icon={<DownloadOutlined />} onClick={showModal}>
         Export Classes Report
       </Button>
       <Modal
-        title="Import Class from Excel"
+        title="Export Class Report"
         visible={visible}
         onCancel={handleCancel}
         destroyOnClose

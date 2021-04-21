@@ -44,8 +44,11 @@ const AddNewLesson = (props) => {
         form.resetFields();
       })
       .catch((e) => {
-        console.log(e);
-        message.error("Fail to add Lesson");
+        if (e.response.data === "EXISTED") {
+          message.error("This Lesson name is already existed");
+        } else {
+          message.error("Fail to create Lesson");
+        }
         setLoading(false);
       });
   };

@@ -56,8 +56,11 @@ const AddNewProgress = (props) => {
         form.resetFields();
       })
       .catch((e) => {
-        console.log(e);
-        message.error("Fail to create Progress Test");
+        if (e.response.data === "EXISTED") {
+          message.error("This Progress Test name is already existed");
+        } else {
+          message.error("Fail to create Progress Test");
+        }
         setLoading(false);
       });
   };

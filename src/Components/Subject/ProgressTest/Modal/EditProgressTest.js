@@ -34,7 +34,14 @@ const EditProgressTest = (props) => {
         `https://mathscienceeducation.herokuapp.com/subject/${subjectID}/unitAterIds`
       )
       .then((res) => {
-        setUnit(res.data.length === 0 ? [] : res.data);
+        console.log(res.data);
+        let unit = [];
+        unit = res.data;
+        unit.push({
+          id: props.data.unitAfterId,
+          unitName: props.data.unitAfterName,
+        });
+        setUnit(unit);
       })
       .catch((e) => {
         console.log(e);
@@ -73,8 +80,11 @@ const EditProgressTest = (props) => {
         form.resetFields();
       })
       .catch((e) => {
-        console.log(e);
-        message.error("Fail to edit Progress Test");
+        if (e.response.data === "EXISTED") {
+          message.error("This Progress Test name is already existed");
+        } else {
+          message.error("Fail to create Progress Test");
+        }
         setLoading(false);
       });
   };

@@ -30,7 +30,6 @@ const Exercise = (props) => {
         `https://mathscienceeducation.herokuapp.com/lesson/${props.lessonID}/exercises`
       )
       .then((res) => {
-        console.log(res.data);
         setExercise(res.data.length === 0 ? [] : res.data);
       })
       .catch((e) => {

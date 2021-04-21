@@ -25,9 +25,10 @@ const normFile = (e) => {
   return e && e.fileList;
 };
 
+var correctCount = 0;
+
 const AddNewQuestion = () => {
   const [counter, setCounter] = useState(0);
-  const [correctCount, setCorrectCount] = useState(0);
   const [form] = Form.useForm();
   const [audioFile, setAudioFile] = useState([]);
   const [imgFile, setImgFile] = useState([]);
@@ -89,16 +90,14 @@ const AddNewQuestion = () => {
   };
 
   const handleCorrectCount = () => {
-    console.log(form.getFieldsValue().options);
-    let count = 0;
+    correctCount = 0;
     form.getFieldsValue().options.forEach((item) => {
       if (item !== undefined) {
         if (item.correct === "true") {
-          count = count + 1;
+          correctCount = correctCount + 1;
         }
       }
     });
-    setCorrectCount(count);
   };
 
   const onFinish = (values) => {
@@ -313,6 +312,11 @@ const AddNewQuestion = () => {
                 if (correctCount > 1) {
                   return Promise.reject(
                     new Error("Can only have one correct option")
+                  );
+                }
+                if (correctCount === 0) {
+                  return Promise.reject(
+                    new Error("Must have one correct answer")
                   );
                 }
               },

@@ -23,7 +23,7 @@ const EditUnit = (props) => {
 
   useEffect(() => {
     form.setFieldsValue({
-      unit: props.data.unitName + "",
+      unit: props.data.unitName,
       description: props.data.description,
     });
   }, [form, props.data.description, props.data.unitName]);
@@ -45,8 +45,11 @@ const EditUnit = (props) => {
         form.resetFields();
       })
       .catch((e) => {
-        console.log(e);
-        message.error("Fail to edit Unit");
+        if (e.response.data === "EXISTED") {
+          message.error("This Unit name is already existed");
+        } else {
+          message.error("Fail to edit Unit");
+        }
         setLoading(false);
       });
   };

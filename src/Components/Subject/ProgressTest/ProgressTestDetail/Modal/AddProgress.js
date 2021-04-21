@@ -31,8 +31,11 @@ const AddProgress = (props) => {
         form.resetFields();
       })
       .catch((e) => {
-        console.log(e);
-        message.error("Fail to create Test");
+        if (e.response.data === "EXISTED") {
+          message.error("This Exercise name is already existed");
+        } else {
+          message.error("Fail to create Exercise");
+        }
         setLoading(false);
       });
   };
@@ -57,10 +60,10 @@ const AddProgress = (props) => {
         onClick={showModal}
         icon={<PlusOutlined />}
       >
-        Add Test
+        Add Exercise
       </Button>
       <Modal
-        title="Add Test"
+        title="Add Exercise"
         visible={visible}
         confirmLoading={loading}
         onCancel={handleCancel}
@@ -80,19 +83,19 @@ const AddProgress = (props) => {
         <Form {...layout} form={form}>
           <Form.Item
             name="name"
-            label="Test name"
+            label="Exercise name"
             rules={[
-              { required: true, message: "Please input a test name" },
+              { required: true, message: "Please input exercise name" },
               { type: "number", message: "Please input a number" },
             ]}
           >
-            <InputNumber placeholder="Test" min={1} max={100} />
+            <InputNumber placeholder="Exercise" min={1} max={100} />
           </Form.Item>
           <Form.Item name="description" label="Description">
             <Input.TextArea
               showCount
               maxLength={50}
-              placeholder="Unit Description"
+              placeholder="Description"
             />
           </Form.Item>
         </Form>

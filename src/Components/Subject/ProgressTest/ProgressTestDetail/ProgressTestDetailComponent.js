@@ -37,11 +37,11 @@ const ProgressTestDetailComponent = () => {
       .then((res) => {
         console.log(res);
         getProgressTestByID();
-        message.success("Delete Test successfully");
+        message.success("Delete exercise successfully");
       })
       .catch((e) => {
         console.log(e);
-        message.error("Fail to delete Test");
+        message.error("Fail to delete exercise");
       });
   };
 
@@ -106,7 +106,7 @@ const ProgressTestDetailComponent = () => {
                     <Tooltip title="Delete">
                       <Popconfirm
                         placement="left"
-                        title="Are you sure to delete this Test?"
+                        title="Are you sure to delete this exercise?"
                         onConfirm={() => handleDelete(item.id)}
                         okText="Yes"
                         cancelText="No"

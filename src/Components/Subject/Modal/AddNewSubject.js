@@ -53,14 +53,17 @@ const AddNewSubject = (props) => {
           props.getSubjectByGrade(props.gradeID);
           setLoading(false);
           handleCancel();
-          message.success("Create Subject successfully!");
+          message.success("Create Subject successfully");
           form.resetFields();
           setFileList([]);
         })
         .catch((e) => {
-          console.log(e);
+          if (e.response.data === "EXISTED") {
+            message.error("This Subject name is already existed");
+          } else {
+            message.error("Fail to create Subject");
+          }
           setLoading(false);
-          message.error("Fail to create Subject!");
         });
     }
     createSubject();

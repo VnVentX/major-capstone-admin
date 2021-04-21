@@ -9,8 +9,6 @@ import {
   Popconfirm,
   message,
   Cascader,
-  AutoComplete,
-  Select,
   Input,
 } from "antd";
 import { DownloadOutlined } from "@ant-design/icons";
@@ -22,57 +20,45 @@ import { QuestionCircleOutlined, DeleteOutlined } from "@ant-design/icons";
 const options = [
   {
     id: 1,
-    name: "Dương Minh Châu",
+    name: "Grade 1",
     items: [
       {
         id: 1,
-        name: "Grade 1",
-        items: [
-          {
-            id: 1,
-            name: "Class 1-1",
-          },
-          {
-            id: 2,
-            name: "Class 1-2",
-          },
-          {
-            id: 3,
-            name: "Class 1-4",
-          },
-          {
-            id: 4,
-            name: "Class 1-5",
-          },
-        ],
+        name: "Class 1-1",
+      },
+      {
+        id: 2,
+        name: "Class 1-2",
+      },
+      {
+        id: 3,
+        name: "Class 1-4",
+      },
+      {
+        id: 4,
+        name: "Class 1-5",
       },
     ],
   },
   {
     id: 2,
-    name: "Nguyễn Chí Thanh",
+    name: "Grade 2",
     items: [
       {
+        id: 1,
+        name: "Class 2-1",
+      },
+      {
         id: 2,
-        name: "Grade 1",
-        items: [
-          {
-            id: 1,
-            name: "Class 1-1",
-          },
-          {
-            id: 2,
-            name: "Class 1-2",
-          },
-          {
-            id: 3,
-            name: "Class 1-4",
-          },
-          {
-            id: 4,
-            name: "Class 1-5",
-          },
-        ],
+        name: "Class 2-2",
+      },
+      {
+        id: 3,
+        name: "Class 3-4",
+      },
+      {
+        id: 4,
+        name: "Class 5-5",
       },
     ],
   },
@@ -210,6 +196,22 @@ export default class StudentAccountComponent extends Component {
               <Button type="primary">Change Status</Button>
             </Popconfirm>
             <EditStudent data={record} />
+            <Popconfirm
+              placement="topRight"
+              title="Are you sure to delete this Students?"
+              onConfirm={() => this.handleDisableStudent(record.id, "DELETED")}
+              okText="Yes"
+              cancelText="No"
+              icon={<QuestionCircleOutlined style={{ color: "red" }} />}
+            >
+              <Button
+                type="danger"
+                icon={<DeleteOutlined />}
+                style={{ marginRight: 10 }}
+              >
+                Delete
+              </Button>
+            </Popconfirm>
           </Space>
         ),
       },
@@ -233,20 +235,12 @@ export default class StudentAccountComponent extends Component {
             }}
           >
             <div>
-              {/* <AutoComplete
-                dataSource={this.props.searchRecord.map((item, idx) => (
-                  <Select.Option key={idx} value={item.fullName}>
-                    {item.fullName}
-                  </Select.Option>
-                ))}
-              > */}
               <Input.Search
                 placeholder="Search Student"
                 allowClear
                 onSearch={(name) => this.props.handleNameSearch(name)}
                 enterButton
               />
-              {/* </AutoComplete> */}
             </div>
             {this.props.searchData?.school &&
               this.props.searchData?.grade &&

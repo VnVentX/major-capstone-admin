@@ -30,8 +30,11 @@ const AddNewUnit = (props) => {
         form.resetFields();
       })
       .catch((e) => {
-        console.log(e);
-        message.error("Fail to create Unit");
+        if (e.response.data === "EXISTED") {
+          message.error("This Unit name is already existed");
+        } else {
+          message.error("Fail to create Unit");
+        }
         setLoading(false);
       });
   };

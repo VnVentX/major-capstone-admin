@@ -73,8 +73,11 @@ const EditLesson = (props) => {
         form.resetFields();
       })
       .catch((e) => {
-        console.log(e);
-        message.error("Fail to edit Lesson");
+        if (e.response.data === "EXISTED") {
+          message.error("This Lesson name is already existed");
+        } else {
+          message.error("Fail to edit Lesson");
+        }
         setLoading(false);
       });
   };

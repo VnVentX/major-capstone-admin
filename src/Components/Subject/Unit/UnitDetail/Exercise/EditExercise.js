@@ -23,7 +23,7 @@ const EditExercise = (props) => {
 
   useEffect(() => {
     form.setFieldsValue({
-      name: props.data.exerciseName,
+      name: parseInt(props.data.exerciseName),
       description: props.data.description,
     });
   }, [form, props.data.description, props.data.exerciseName]);
@@ -49,8 +49,11 @@ const EditExercise = (props) => {
         form.resetFields();
       })
       .catch((e) => {
-        console.log(e);
-        message.error("Fail to edit Exercise");
+        if (e.response.data === "EXISTED") {
+          message.error("This Exercise name is already existed");
+        } else {
+          message.error("Fail to edit Exercise");
+        }
         setLoading(false);
       });
   };

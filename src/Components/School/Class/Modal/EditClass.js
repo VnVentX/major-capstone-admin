@@ -15,7 +15,7 @@ const EditClass = (props) => {
 
   useEffect(() => {
     form.setFieldsValue({
-      class: props.data.className,
+      className: props.data.className,
     });
   }, [form, props.data.className]);
 
@@ -30,13 +30,14 @@ const EditClass = (props) => {
 
   const onFinish = (values) => {
     setLoading(true);
-    async function createClass() {
+    async function updateClass() {
       await axios
-        .post("https://mathscienceeducation.herokuapp.com/class", {
-          className: values.className,
-          gradeId: props.gradeID,
-          schoolId: window.location.pathname.split("/")[2],
-        })
+        .put(
+          `https://mathscienceeducation.herokuapp.com/class/${props.data.id}`,
+          {
+            className: values.className,
+          }
+        )
         .then((res) => {
           console.log(res);
           props.getClassBySchoolGrade();
@@ -51,7 +52,7 @@ const EditClass = (props) => {
           message.error("Fail to create Class!");
         });
     }
-    // createClass();
+    updateClass();
   };
 
   return (

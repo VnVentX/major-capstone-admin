@@ -154,6 +154,18 @@ const ClassComponent = (props) => {
             data={record}
             getClassBySchoolGrade={getClassBySchoolGrade}
           />
+          <Popconfirm
+            placement="topRight"
+            title="Are you sure to delete this Class?"
+            onConfirm={() => handleDisableClass(record.id, "DELETED")} //Handle disable logic here
+            okText="Yes"
+            cancelText="No"
+            icon={<QuestionCircleOutlined style={{ color: "red" }} />}
+          >
+            <Button type="danger" icon={<DeleteOutlined />}>
+              Delete
+            </Button>
+          </Popconfirm>
         </Space>
       ),
     },
@@ -196,7 +208,7 @@ const ClassComponent = (props) => {
             justifyContent: "space-between",
           }}
         >
-          <ImportClassExcel />
+          <ImportClassExcel gradeID={props.gradeID} />
           <ExportClassExcel gradeID={props.gradeID} />
         </div>
         <AddNewClass

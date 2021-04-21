@@ -45,8 +45,11 @@ const EditGame = (props) => {
         form.resetFields();
       })
       .catch((e) => {
-        console.log(e);
-        message.error("Fail to edit Game");
+        if (e.response.data === "EXISTED") {
+          message.error("This Game name is already existed");
+        } else {
+          message.error("Fail to edit Game");
+        }
         setLoading(false);
       });
   };

@@ -31,8 +31,11 @@ const AddExercise = (props) => {
         form.resetFields();
       })
       .catch((e) => {
-        console.log(e);
-        message.error("Fail to create Exercise");
+        if (e.response.data === "EXISTED") {
+          message.error("This Exercise name is already existed");
+        } else {
+          message.error("Fail to create Exercise");
+        }
         setLoading(false);
       });
   };

@@ -241,7 +241,7 @@ const AddNewStudent = (props) => {
             label="DoB"
             rules={[{ required: true, message: "Please choose DoB" }]}
           >
-            <DatePicker format="DD/MM/YYYY" />
+            <DatePicker format="DD-MM-YYYY" />
           </Form.Item>
           <Form.Item
             name="gender"

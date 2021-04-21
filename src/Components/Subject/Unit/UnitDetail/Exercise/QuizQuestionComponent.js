@@ -4,7 +4,11 @@ import { Card, Table, Space, Button, Popconfirm, message, Tooltip } from "antd";
 import EditQuestion from "../../../../Question/Exercise/Modal/EditQuestion";
 import ViewQuestion from "../../../../Question/Exercise/Modal/ViewQuestion";
 import AddQuestion from "./AddQuestion";
-import { QuestionCircleOutlined, DeleteOutlined } from "@ant-design/icons";
+import {
+  QuestionCircleOutlined,
+  DeleteOutlined,
+  PlusOutlined,
+} from "@ant-design/icons";
 
 const QuizQuestionComponent = () => {
   const [data, setData] = useState([]);
@@ -125,22 +129,26 @@ const QuizQuestionComponent = () => {
       render: (record) => (
         <Space size="small">
           <ViewQuestion data={record} />
-          <EditQuestion
-            data={record}
-            getQuestionByExerciseID={getQuestionByExerciseID}
-          />
-          <Tooltip title="Delete Question">
-            <Popconfirm
-              placement="topRight"
-              title="Are you sure to delete this question?"
-              onConfirm={() => handleDelete(record.id)}
-              okText="Yes"
-              cancelText="No"
-              icon={<QuestionCircleOutlined style={{ color: "red" }} />}
-            >
-              <Button type="danger" icon={<DeleteOutlined />} />
-            </Popconfirm>
-          </Tooltip>
+          {status === "INACTIVE" && (
+            <>
+              <EditQuestion
+                data={record}
+                getQuestionByExerciseID={getQuestionByExerciseID}
+              />
+              <Tooltip title="Delete Question">
+                <Popconfirm
+                  placement="topRight"
+                  title="Are you sure to delete this question?"
+                  onConfirm={() => handleDelete(record.id)}
+                  okText="Yes"
+                  cancelText="No"
+                  icon={<QuestionCircleOutlined style={{ color: "red" }} />}
+                >
+                  <Button type="danger" icon={<DeleteOutlined />} />
+                </Popconfirm>
+              </Tooltip>
+            </>
+          )}
         </Space>
       ),
     },
@@ -188,10 +196,16 @@ const QuizQuestionComponent = () => {
           justifyContent: "flex-end",
         }}
       >
-        <AddQuestion
-          getQuestionByExerciseID={getQuestionByExerciseID}
-          data={data}
-        />
+        {status === "INACTIVE" ? (
+          <AddQuestion
+            getQuestionByExerciseID={getQuestionByExerciseID}
+            data={data}
+          />
+        ) : status === "ACTIVE" ? (
+          <Button type="primary" icon={<PlusOutlined />} disabled>
+            Add Question from Question Bank
+          </Button>
+        ) : null}
       </div>
       <Table
         rowSelection={rowSelection}
@@ -201,7 +215,7 @@ const QuizQuestionComponent = () => {
       />
       <div>
         <h1>With selected:</h1>
-        {selectedRowKeys.length === 0 ? (
+        {selectedRowKeys.length === 0 || status === "ACTIVE" ? (
           <>
             <Button type="danger" disabled icon={<DeleteOutlined />}>
               Delete

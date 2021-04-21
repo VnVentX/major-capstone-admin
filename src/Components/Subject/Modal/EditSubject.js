@@ -74,8 +74,11 @@ const EditSubject = (props) => {
           setFileList([]);
         })
         .catch((e) => {
-          console.log(e);
-          message.error("Fail to edit Subject");
+          if (e.response.data === "EXISTED") {
+            message.error("This Subject name is already existed");
+          } else {
+            message.error("Fail to edit Subject");
+          }
           setLoading(false);
         });
     }

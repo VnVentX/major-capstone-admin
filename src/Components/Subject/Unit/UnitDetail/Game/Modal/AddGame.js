@@ -31,8 +31,11 @@ const AddGame = (props) => {
         form.resetFields();
       })
       .catch((e) => {
-        console.log(e);
-        message.error("Fail to create Game");
+        if (e.response.data === "EXISTED") {
+          message.error("This Game name is already existed");
+        } else {
+          message.error("Fail to create Game");
+        }
         setLoading(false);
       });
   };
