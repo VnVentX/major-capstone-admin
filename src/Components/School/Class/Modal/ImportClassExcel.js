@@ -16,6 +16,7 @@ const layout = {
 
 const ImportClassExcel = (props) => {
   const [visible, setVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [fileList, setFileList] = useState([]);
   const [form] = Form.useForm();
 
@@ -33,15 +34,76 @@ const ImportClassExcel = (props) => {
   };
 
   const checkValidFile = async (file) => {
+    setLoading(true);
     let formData = new FormData();
     formData.append("gradeId", props.gradeID);
     formData.append("schoolId", window.location.pathname.split("/")[2]);
     formData.append("file", file.excelFile[0].originFileObj);
     await axios
-      .post("https://mathscienceeducation.herokuapp.com/student/validate")
+      .post(
+        "https://mathscienceeducation.herokuapp.com/student/validate",
+        formData,
+        {
+          responseType: "blob",
+        }
+      )
       .then((res) => {
-        console.log(res);
-        setFileList([]);
+        if (res.data.size === 0) {
+          //import
+          console.log("continue to import");
+          importFile(file);
+        } else {
+          let headerLine = res.headers["content-disposition"];
+          let fileName = headerLine.split("filename=")[1];
+          const url = window.URL.createObjectURL(new Blob([res.data]));
+          const link = document.createElement("a");
+          link.href = url;
+          link.setAttribute("download", fileName);
+          document.body.appendChild(link);
+          link.click();
+          message.error(
+            "Imported file may have not follow the right format, Please check again!"
+          );
+          setLoading(false);
+          setFileList([]);
+        }
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
+
+  const importFile = async (file) => {
+    let formData = new FormData();
+    formData.append("gradeId", props.gradeID);
+    formData.append("schoolId", window.location.pathname.split("/")[2]);
+    formData.append("file", file.excelFile[0].originFileObj);
+    await axios
+      .post(
+        "https://mathscienceeducation.herokuapp.com/student/import",
+        formData,
+        {
+          responseType: "blob",
+        }
+      )
+      .then((res) => {
+        if (res.data.size === 0) {
+          setLoading(false);
+          handleCancel();
+          message.success("Import successfully!");
+        } else {
+          let headerLine = res.headers["content-disposition"];
+          let fileName = headerLine.split("filename=")[1];
+          const url = window.URL.createObjectURL(new Blob([res.data]));
+          const link = document.createElement("a");
+          link.href = url;
+          link.setAttribute("download", fileName);
+          document.body.appendChild(link);
+          link.click();
+          message.error("ID is not existed!");
+          setLoading(false);
+          setFileList([]);
+        }
       })
       .catch((e) => {
         console.log(e);
@@ -67,6 +129,8 @@ const ImportClassExcel = (props) => {
         title="Import Class from Excel"
         visible={visible}
         onCancel={handleCancel}
+        okText="Import"
+        confirmLoading={loading}
         destroyOnClose
         onOk={() => {
           form
