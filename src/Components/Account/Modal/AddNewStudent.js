@@ -167,9 +167,15 @@ const AddNewStudent = (props) => {
             rules={[{ required: true, message: "Please choose a School" }]}
           >
             <Select placeholder="Choose a School" onChange={handleChangeSchool}>
-              {schoolData?.map((item, idx) => (
-                <Select.Option key={idx} value={item?.id}>
-                  Trường Tiểu Học {item?.schoolName}
+              {schoolData?.map((i, idx) => (
+                <Select.Option key={idx} value={i?.id}>
+                  {i.schoolLevel === "PRIMARY" ? (
+                    <>TH {i.schoolName}</>
+                  ) : i.schoolLevel === "JUNIOR" ? (
+                    <>THCS {i.schoolName}</>
+                  ) : (
+                    <>THPT {i.schoolName}</>
+                  )}
                 </Select.Option>
               ))}
             </Select>

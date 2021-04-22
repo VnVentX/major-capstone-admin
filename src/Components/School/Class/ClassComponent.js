@@ -189,7 +189,7 @@ const ClassComponent = (props) => {
             danger
             icon={<DownloadOutlined />}
           >
-            Finish School Year
+            Graduate
           </Button>
         </div>
       }

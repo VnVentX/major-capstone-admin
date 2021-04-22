@@ -11,15 +11,12 @@ import {
   AutoComplete,
   Select,
 } from "antd";
-import { SearchOutlined, QuestionCircleOutlined } from "@ant-design/icons";
-import Highlighter from "react-highlight-words";
+import { QuestionCircleOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import LinkNewSchool from "./Modal/LinkNewSchool";
 
 export default class GradeDetailTable extends Component {
   state = {
-    searchText: "",
-    searchedColumn: "",
     dataSource: [],
     dataSearch: [],
     schoolSearch: "",
@@ -36,6 +33,7 @@ export default class GradeDetailTable extends Component {
     await axios
       .get(`${process.env.REACT_APP_BASE_URL}/school/all`)
       .then((res) => {
+        console.log(res.data);
         this.setState({
           allSchool: res.data.length === 0 ? [] : res.data,
         });
@@ -84,89 +82,6 @@ export default class GradeDetailTable extends Component {
       });
   };
 
-  getColumnSearchProps = (dataIndex) => ({
-    filterDropdown: ({
-      setSelectedKeys,
-      selectedKeys,
-      confirm,
-      clearFilters,
-    }) => (
-      <div style={{ padding: 8 }}>
-        <Input
-          ref={(node) => {
-            this.searchInput = node;
-          }}
-          placeholder={`Search ${dataIndex}`}
-          value={selectedKeys[0]}
-          onChange={(e) =>
-            setSelectedKeys(e.target.value ? [e.target.value] : [])
-          }
-          onPressEnter={() =>
-            this.handleSearch(selectedKeys, confirm, dataIndex)
-          }
-          style={{ width: 188, marginBottom: 8, display: "block" }}
-        />
-        <Space>
-          <Button
-            type="primary"
-            onClick={() => this.handleSearch(selectedKeys, confirm, dataIndex)}
-            icon={<SearchOutlined />}
-            size="small"
-            style={{ width: 90 }}
-          >
-            Search
-          </Button>
-          <Button
-            onClick={() => this.handleReset(clearFilters)}
-            size="small"
-            style={{ width: 90 }}
-          >
-            Reset
-          </Button>
-        </Space>
-      </div>
-    ),
-    filterIcon: (filtered) => (
-      <SearchOutlined style={{ color: filtered ? "#1890ff" : undefined }} />
-    ),
-    onFilter: (value, record) =>
-      record[dataIndex]
-        ? record[dataIndex]
-            .toString()
-            .toLowerCase()
-            .includes(value.toLowerCase())
-        : "",
-    onFilterDropdownVisibleChange: (visible) => {
-      if (visible) {
-        setTimeout(() => this.searchInput.select(), 100);
-      }
-    },
-    render: (text) =>
-      this.state.searchedColumn === dataIndex ? (
-        <Highlighter
-          highlightStyle={{ backgroundColor: "#ffc069", padding: 0 }}
-          searchWords={[this.state.searchText]}
-          autoEscape
-          textToHighlight={text ? text.toString() : ""}
-        />
-      ) : (
-        text
-      ),
-  });
-
-  handleSearch = (selectedKeys, confirm, dataIndex) => {
-    confirm();
-    this.setState({
-      searchText: selectedKeys[0],
-      searchedColumn: dataIndex,
-    });
-  };
-
-  handleReset = (clearFilters) => {
-    clearFilters();
-    this.setState({ searchText: "" });
-  };
-
   handleDisableLink = (schoolID, status) => {
     let message = "";
     if (status === "DELETED") {
@@ -184,33 +99,36 @@ export default class GradeDetailTable extends Component {
       {
         title: "School",
         render: (record) => (
-          <Link to={`/school/${record.id}`}>TH {record.schoolName}</Link>
+          <Link to={`/school/${record.id}`}>
+            {record.schoolLevel === "PRIMARY" ? (
+              <>TH {record.schoolName}</>
+            ) : record.schoolLevel === "JUNIOR" ? (
+              <>THCS {record.schoolName}</>
+            ) : (
+              <>THPT {record.schoolName}</>
+            )}
+          </Link>
         ),
       },
       {
         title: "School Code",
         dataIndex: "schoolCode",
-        ...this.getColumnSearchProps("schoolCode"),
       },
       {
         title: "Created By",
         dataIndex: "createdBy",
-        ...this.getColumnSearchProps("createdBy"),
       },
       {
         title: "Created Date",
         dataIndex: "createdDate",
-        ...this.getColumnSearchProps("createdDate"),
       },
       {
         title: "Modified By",
         dataIndex: "modifiedBy",
-        ...this.getColumnSearchProps("modifiedBy"),
       },
       {
         title: "Modified Date",
         dataIndex: "modifiedDate",
-        ...this.getColumnSearchProps("modifiedDate"),
       },
       {
         title: "Status",

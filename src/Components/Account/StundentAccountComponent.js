@@ -17,53 +17,6 @@ import EditStudent from "./Modal/EditStudent";
 import ViewStudent from "./Modal/ViewStudent";
 import { QuestionCircleOutlined, DeleteOutlined } from "@ant-design/icons";
 
-const options = [
-  {
-    id: 1,
-    name: "Grade 1",
-    items: [
-      {
-        id: 1,
-        name: "Class 1-1",
-      },
-      {
-        id: 2,
-        name: "Class 1-2",
-      },
-      {
-        id: 3,
-        name: "Class 1-4",
-      },
-      {
-        id: 4,
-        name: "Class 1-5",
-      },
-    ],
-  },
-  {
-    id: 2,
-    name: "Grade 2",
-    items: [
-      {
-        id: 1,
-        name: "Class 2-1",
-      },
-      {
-        id: 2,
-        name: "Class 2-2",
-      },
-      {
-        id: 3,
-        name: "Class 3-4",
-      },
-      {
-        id: 4,
-        name: "Class 5-5",
-      },
-    ],
-  },
-];
-
 export default class StudentAccountComponent extends Component {
   state = {
     selectedRowKeys: [],
@@ -72,7 +25,7 @@ export default class StudentAccountComponent extends Component {
       pageSize: 10,
     },
     loading: false,
-    changeSchoolClass: "",
+    changeClassID: "",
   };
 
   onSelectChange = (selectedRowKeys) => {
@@ -113,21 +66,32 @@ export default class StudentAccountComponent extends Component {
       });
   };
 
+  changeClass = async () => {
+    let formData = new FormData();
+    formData.append("classesId", this.state.changeClassID);
+    formData.append("studentIdList", this.state.selectedRowKeys);
+    await axios
+      .put(`${process.env.REACT_APP_BASE_URL}/student/changeClass`, formData)
+      .then((res) => {
+        console.log(res.data);
+        this.props.handleSearch(this.props.searchData);
+        this.setState({ selectedRowKeys: [] });
+        message.success("Move students successfully");
+      })
+      .catch((e) => {
+        console.log(e);
+        message.error("Fail to move students");
+      });
+  };
+
   confirmChangeSchoolClass = () => {
-    message.success("Click on Yes");
-    console.log(this.state.changeSchoolClass);
+    this.changeClass();
   };
 
   onChangeCascader = (value) => {
-    console.log("selected destination");
     this.setState({
-      changeSchoolClass: {
-        schoolID: value[0],
-        gradeID: value[1],
-        classID: value[2],
-      },
+      changeClassID: value[1],
     });
-    console.log(this.state.changeSchoolClass);
   };
 
   render() {
@@ -139,7 +103,6 @@ export default class StudentAccountComponent extends Component {
       {
         title: "School",
         dataIndex: "schoolName",
-        render: (record) => <span>TH {record}</span>,
       },
       {
         title: "Gender",
@@ -298,11 +261,16 @@ export default class StudentAccountComponent extends Component {
                         disabled
                         style={{ marginRight: 10 }}
                       >
-                        Move students to other Class &gt;&gt;
+                        Move students to selected Class &gt;&gt;
                       </Button>
                       <Cascader
-                        options={options}
-                        placeholder="Please select"
+                        options={this.props.gradeClassList}
+                        fieldNames={{
+                          label: "name",
+                          value: "id",
+                          children: "classesList",
+                        }}
+                        placeholder="Please select destination"
                         disabled
                         style={{ width: 300 }}
                       />
@@ -329,45 +297,37 @@ export default class StudentAccountComponent extends Component {
                     Delete
                   </Button>
                 </Popconfirm>
-                {this.props.searchData?.school &&
-                  this.props.searchData?.grade &&
-                  this.props.searchData?.class && (
-                    <>
-                      {this.state.changeSchoolClass?.schoolID === undefined ? (
-                        <Button
-                          type="primary"
-                          style={{ marginRight: 10 }}
-                          disabled
-                        >
-                          Move students to other Class &gt;&gt;
-                        </Button>
-                      ) : (
-                        <Popconfirm
-                          placement="topRight"
-                          title="Are you sure to move selected Students?"
-                          onConfirm={this.confirmChangeSchoolClass} //Handle disable logic here
-                          okText="Yes"
-                          cancelText="No"
-                        >
-                          <Button type="primary" style={{ marginRight: 10 }}>
-                            Move students to other Class &gt;&gt;
-                          </Button>
-                        </Popconfirm>
-                      )}
-                      <Cascader
-                        options={options}
-                        fieldNames={{
-                          label: "name",
-                          value: "id",
-                          children: "items",
-                        }}
-                        placeholder="Please select destination"
-                        onChange={this.onChangeCascader}
-                        matchInputWidth={true}
-                        style={{ width: 300 }}
-                      />
-                    </>
+                <>
+                  {this.state.changeClassID === "" ? (
+                    <Button type="primary" style={{ marginRight: 10 }} disabled>
+                      Move students to other Class &gt;&gt;
+                    </Button>
+                  ) : (
+                    <Popconfirm
+                      placement="topRight"
+                      title="Are you sure to move selected Students?"
+                      onConfirm={this.confirmChangeSchoolClass} //Handle disable logic here
+                      okText="Yes"
+                      cancelText="No"
+                    >
+                      <Button type="primary" style={{ marginRight: 10 }}>
+                        Move students to other Class &gt;&gt;
+                      </Button>
+                    </Popconfirm>
                   )}
+                  <Cascader
+                    options={this.props.gradeClassList}
+                    fieldNames={{
+                      label: "name",
+                      value: "id",
+                      children: "classesList",
+                    }}
+                    placeholder="Please select destination"
+                    onChange={this.onChangeCascader}
+                    matchInputWidth={true}
+                    style={{ width: 300 }}
+                  />
+                </>
               </>
             )}
           </div>

@@ -96,7 +96,13 @@ const LinkNewSchool = (props) => {
               {resArr?.map((i) =>
                 i.status === "ACTIVE" ? (
                   <Option key={i.id} value={i.id}>
-                    Trường Tiểu Học {i.schoolName}
+                    {i.schoolLevel === "PRIMARY" ? (
+                      <>TH {i.schoolName}</>
+                    ) : i.schoolLevel === "JUNIOR" ? (
+                      <>THCS {i.schoolName}</>
+                    ) : (
+                      <>THPT {i.schoolName}</>
+                    )}
                   </Option>
                 ) : null
               )}

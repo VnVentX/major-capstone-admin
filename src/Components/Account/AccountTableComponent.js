@@ -11,6 +11,7 @@ export const AccountTableComponent = () => {
   const location = useLocation();
   const [record, setRecord] = useState([]);
   const [searchRecord, setSearchRecord] = useState([]);
+  const [gradeClassList, setGradeClassList] = useState([]);
   const [searchData, setSearchData] = useState();
   const [loading, setLoading] = useState(false);
 
@@ -49,7 +50,6 @@ export const AccountTableComponent = () => {
         classID,
       ])
       .then((res) => {
-        console.log(res.data);
         setRecord(res.data.length === 0 ? [] : res.data);
         setSearchRecord(res.data.length === 0 ? [] : res.data);
         setLoading(false);
@@ -60,9 +60,21 @@ export const AccountTableComponent = () => {
       });
   };
 
+  const getGradeClassList = async (schoolID) => {
+    await axios
+      .get(`${process.env.REACT_APP_BASE_URL}/class/${schoolID}`)
+      .then((res) => {
+        setGradeClassList(res.data.length === 0 ? [] : res.data);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
+
   const handleSearch = (data) => {
     setSearchData(data);
     searchStudent(data.school, data.grade, data.class);
+    getGradeClassList(data.school);
   };
 
   const handleNameSearch = (name) => {
@@ -87,6 +99,7 @@ export const AccountTableComponent = () => {
           handleSearch={handleSearch}
           handleNameSearch={handleNameSearch}
           data={record}
+          gradeClassList={gradeClassList}
           searchRecord={searchRecord}
           searchData={searchData}
         />

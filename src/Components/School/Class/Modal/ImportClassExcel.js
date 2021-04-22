@@ -46,7 +46,6 @@ const ImportClassExcel = (props) => {
       .then((res) => {
         if (res.data.size === 0) {
           //import
-          console.log("continue to import");
           importFile(file);
         } else {
           let headerLine = res.headers["content-disposition"];
@@ -92,7 +91,7 @@ const ImportClassExcel = (props) => {
           link.setAttribute("download", fileName);
           document.body.appendChild(link);
           link.click();
-          message.error("ID is not existed!");
+          message.error("Some student's ID are not exist");
           setLoading(false);
           setFileList([]);
         }

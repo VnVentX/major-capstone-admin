@@ -50,7 +50,13 @@ const SchoolDetailComponent = () => {
                 label="School"
                 labelStyle={{ fontWeight: "bold" }}
               >
-                TH {schoolData.schoolName}
+                {schoolData.schoolLevel === "PRIMARY" ? (
+                  <>TH {schoolData.schoolName}</>
+                ) : schoolData.schoolLevel === "JUNIOR" ? (
+                  <>THCS {schoolData.schoolName}</>
+                ) : (
+                  <>THPT {schoolData.schoolName}</>
+                )}
               </Descriptions.Item>
               <Descriptions.Item
                 label="Education Level"

@@ -36,13 +36,17 @@ const AddNewClass = (props) => {
           props.getClassBySchoolGrade();
           setLoading(false);
           handleCancel();
-          message.success("Create Class successfully!");
+          message.success("Create Class successfully");
           form.resetFields();
         })
         .catch((e) => {
-          console.log(e);
+          if (e.response.data === "EXISTED") {
+            message.error("This Class name is already existed");
+          } else {
+            message.error("Fail to create Class");
+          }
           setLoading(false);
-          message.error("Fail to create Class!");
+          message.error("Fail to create Class");
         });
     }
     createClass();

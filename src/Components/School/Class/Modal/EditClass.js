@@ -32,12 +32,9 @@ const EditClass = (props) => {
     setLoading(true);
     async function updateClass() {
       await axios
-        .put(
-          `${process.env.REACT_APP_BASE_URL}/class/${props.data.id}`,
-          {
-            className: values.className,
-          }
-        )
+        .put(`${process.env.REACT_APP_BASE_URL}/class/${props.data.id}`, {
+          className: values.className,
+        })
         .then((res) => {
           console.log(res);
           props.getClassBySchoolGrade();
@@ -47,7 +44,11 @@ const EditClass = (props) => {
           form.resetFields();
         })
         .catch((e) => {
-          console.log(e);
+          if (e.response.data === "EXISTED") {
+            message.error("This Class name is already existed");
+          } else {
+            message.error("Fail to create Class");
+          }
           setLoading(false);
           message.error("Fail to create Class!");
         });

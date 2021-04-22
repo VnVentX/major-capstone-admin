@@ -249,6 +249,11 @@ export default class Index extends React.Component {
         breadcrumb: DynamicExerciseBreadcrumb,
       },
       {
+        path:
+          "/subject/:subjectID/progress-test/:progressID/exercise/:exceciseID",
+        breadcrumb: DynamicExerciseBreadcrumb,
+      },
+      {
         path: "/grade/:gradeID",
         breadcrumb: DynamicGradeBreadcrumb,
       },
