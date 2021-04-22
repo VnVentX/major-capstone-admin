@@ -40,13 +40,9 @@ const ImportClassExcel = (props) => {
     formData.append("schoolId", window.location.pathname.split("/")[2]);
     formData.append("file", file.excelFile[0].originFileObj);
     await axios
-      .post(
-        "https://mathscienceeducation.herokuapp.com/student/validate",
-        formData,
-        {
-          responseType: "blob",
-        }
-      )
+      .post(`${process.env.REACT_APP_BASE_URL}/student/validate`, formData, {
+        responseType: "blob",
+      })
       .then((res) => {
         if (res.data.size === 0) {
           //import
@@ -79,13 +75,9 @@ const ImportClassExcel = (props) => {
     formData.append("schoolId", window.location.pathname.split("/")[2]);
     formData.append("file", file.excelFile[0].originFileObj);
     await axios
-      .post(
-        "https://mathscienceeducation.herokuapp.com/student/import",
-        formData,
-        {
-          responseType: "blob",
-        }
-      )
+      .post(`${process.env.REACT_APP_BASE_URL}/student/import`, formData, {
+        responseType: "blob",
+      })
       .then((res) => {
         if (res.data.size === 0) {
           setLoading(false);

@@ -31,16 +31,13 @@ const EditProgress = (props) => {
   const editExercise = async (values) => {
     setLoading(true);
     await axios
-      .put(
-        `https://mathscienceeducation.herokuapp.com/exercise/${props.data.id}`,
-        {
-          description: values.description,
-          exerciseName: values.name,
-          progressTestId: window.location.pathname.split("/")[4],
-          progressTest: true,
-          id: props.data.id,
-        }
-      )
+      .put(`${process.env.REACT_APP_BASE_URL}/exercise/${props.data.id}`, {
+        description: values.description,
+        exerciseName: values.name,
+        progressTestId: window.location.pathname.split("/")[4],
+        progressTest: true,
+        id: props.data.id,
+      })
       .then((res) => {
         console.log(res);
         props.getProgressTestByID();

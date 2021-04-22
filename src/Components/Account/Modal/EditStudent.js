@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import { Modal, Button, Form, Input, Select, DatePicker } from "antd";
 import { EditOutlined } from "@ant-design/icons";
@@ -14,9 +14,7 @@ const EditStudent = (props) => {
 
   const getStudentDetail = async () => {
     await axios
-      .get(
-        `https://mathscienceeducation.herokuapp.com/student/${props.data.id}`
-      )
+      .get(`${process.env.REACT_APP_BASE_URL}/student/${props.data.id}`)
       .then((res) => {
         form.setFieldsValue({
           name: res.data.fullName,
@@ -33,16 +31,13 @@ const EditStudent = (props) => {
 
   const updateStundent = async (values) => {
     await axios
-      .put(
-        `https://mathscienceeducation.herokuapp.com/student/${props.data.id}`,
-        {
-          doB: values.age.format("DD-MM-YYYY"),
-          fullName: values.name,
-          gender: values.gender,
-          parentName: values.parentName,
-          contact: values.contact,
-        }
-      )
+      .put(`${process.env.REACT_APP_BASE_URL}/student/${props.data.id}`, {
+        doB: values.age.format("DD-MM-YYYY"),
+        fullName: values.name,
+        gender: values.gender,
+        parentName: values.parentName,
+        contact: values.contact,
+      })
       .then((res) => {
         console.log(res);
       })

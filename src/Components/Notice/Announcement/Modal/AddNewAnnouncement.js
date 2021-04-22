@@ -29,7 +29,7 @@ const AddNewAnnouncement = (props) => {
     setLoading(true);
     async function createNews() {
       await axios
-        .post("https://mathscienceeducation.herokuapp.com/news", {
+        .post(`${process.env.REACT_APP_BASE_URL}/news`, {
           accountId: getID(),
           newsContent: event.content,
           newsTitle: event.title,
@@ -100,7 +100,9 @@ const AddNewAnnouncement = (props) => {
           <Form.Item
             name="shortDes"
             label="Short Description"
-            rules={[{ required: true, message: "Please input short description" }]}
+            rules={[
+              { required: true, message: "Please input short description" },
+            ]}
           >
             <Input.TextArea
               placeholder="Short Description"
@@ -136,8 +138,6 @@ class MyUploadAdapter {
   constructor(props) {
     // CKEditor 5's FileLoader instance.
     this.loader = props;
-    // URL where to send files.
-    this.url = "https://mathscienceeducation.herokuapp.com/api/v1/test";
   }
 
   // Starts the upload process.
@@ -160,7 +160,7 @@ class MyUploadAdapter {
   _initRequest() {
     const xhr = (this.xhr = new XMLHttpRequest());
 
-    xhr.open("POST", "https://mathscienceeducation.herokuapp.com/file", true);
+    xhr.open("POST", `${process.env.REACT_APP_BASE_URL}/file`, true);
     xhr.responseType = "text";
     // xhr.setRequestHeader("Access-Control-Allow-Origin", "*");
     // xhr.setRequestHeader("Authorization", getToken());

@@ -10,9 +10,7 @@ const ViewStudent = (props) => {
   useEffect(() => {
     const getStudentByID = async () => {
       await axios
-        .get(
-          `https://mathscienceeducation.herokuapp.com/student/${props.data.id}`
-        )
+        .get(`${process.env.REACT_APP_BASE_URL}/student/${props.data.id}`)
         .then((res) => {
           setData(res.data.length === 0 ? [] : res.data);
         })

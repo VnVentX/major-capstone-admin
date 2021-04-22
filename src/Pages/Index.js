@@ -100,7 +100,7 @@ export default class Index extends React.Component {
 
   getAllGrade = async () => {
     await axios
-      .get("https://mathscienceeducation.herokuapp.com/grade/all")
+      .get(`${process.env.REACT_APP_BASE_URL}/grade/all`)
       .then((res) => {
         res.data.forEach((item) => {
           let key = item.id;
@@ -122,7 +122,7 @@ export default class Index extends React.Component {
   };
   getAllSchool = async () => {
     await axios
-      .get("https://mathscienceeducation.herokuapp.com/school/all")
+      .get(`${process.env.REACT_APP_BASE_URL}/school/all`)
       .then((res) => {
         res.data.forEach((item) => {
           let key = item.id;
@@ -141,7 +141,7 @@ export default class Index extends React.Component {
   };
   getAllSubject = async () => {
     await axios
-      .get("https://mathscienceeducation.herokuapp.com/breadcrumb/subject")
+      .get(`${process.env.REACT_APP_BASE_URL}/breadcrumb/subject`)
       .then((res) => {
         this.setState({
           subjectNameByID: res.data,
@@ -153,7 +153,7 @@ export default class Index extends React.Component {
   };
   getAllUnit = async () => {
     await axios
-      .get("https://mathscienceeducation.herokuapp.com/breadcrumb/unit")
+      .get(`${process.env.REACT_APP_BASE_URL}/breadcrumb/unit`)
       .then((res) => {
         this.setState({
           unitNameByID: res.data,
@@ -165,7 +165,7 @@ export default class Index extends React.Component {
   };
   getAllExercise = async () => {
     await axios
-      .get("https://mathscienceeducation.herokuapp.com/breadcrumb/exercise")
+      .get(`${process.env.REACT_APP_BASE_URL}/breadcrumb/exercise`)
       .then((res) => {
         this.setState({
           exerciseNameByID: res.data,
@@ -177,7 +177,7 @@ export default class Index extends React.Component {
   };
   getAllGame = async () => {
     await axios
-      .get("https://mathscienceeducation.herokuapp.com/breadcrumb/game")
+      .get(`${process.env.REACT_APP_BASE_URL}/breadcrumb/game`)
       .then((res) => {
         this.setState({
           gameNameByID: res.data,

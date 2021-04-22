@@ -16,7 +16,7 @@ const EditQuestion = (props) => {
     setLoading(true);
     await axios
       .put(
-        `https://mathscienceeducation.herokuapp.com/question/${props.data.id}/game/others`,
+        `${process.env.REACT_APP_BASE_URL}/question/${props.data.id}/game/others`,
         formData
       )
       .then((res) => {
@@ -43,7 +43,7 @@ const EditQuestion = (props) => {
     setLoading(true);
     await axios
       .put(
-        `https://mathscienceeducation.herokuapp.com/question/${props.data.id}/game/fillInBlank`,
+        `${process.env.REACT_APP_BASE_URL}/question/${props.data.id}/game/fillInBlank`,
         formData
       )
       .then((res) => {

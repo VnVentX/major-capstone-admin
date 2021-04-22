@@ -26,7 +26,7 @@ const AddNewClass = (props) => {
     setLoading(true);
     async function createClass() {
       await axios
-        .post("https://mathscienceeducation.herokuapp.com/class", {
+        .post(`${process.env.REACT_APP_BASE_URL}/class`, {
           className: values.className,
           gradeId: props.gradeID,
           schoolId: window.location.pathname.split("/")[2],

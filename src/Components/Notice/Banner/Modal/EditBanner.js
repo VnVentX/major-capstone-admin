@@ -57,7 +57,7 @@ const EditBanner = (props) => {
     async function editBanner() {
       await axios
         .put(
-          `https://mathscienceeducation.herokuapp.com/bannerImage/${props.data.id}`,
+          `${process.env.REACT_APP_BASE_URL}/bannerImage/${props.data.id}`,
           formData
         )
         .then((res) => {

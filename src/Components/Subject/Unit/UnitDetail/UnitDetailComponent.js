@@ -18,7 +18,7 @@ const UnitComponent = () => {
   const getLessonByUnitID = async () => {
     let unitID = window.location.pathname.split("/")[4];
     await axios
-      .get(`https://mathscienceeducation.herokuapp.com/unit/${unitID}/lessons`)
+      .get(`${process.env.REACT_APP_BASE_URL}/unit/${unitID}/lessons`)
       .then((res) => {
         setLesson(res.data.length === 0 ? [] : res.data);
         setSelectedLessonID(res.data.length === 0 ? [] : res.data[0].id);

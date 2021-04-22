@@ -30,7 +30,7 @@ const AddNewLesson = (props) => {
     }
     setLoading(true);
     await axios
-      .post("https://mathscienceeducation.herokuapp.com/lesson", {
+      .post(`${process.env.REACT_APP_BASE_URL}/lesson`, {
         lessonName: values.lesson,
         lessonUrl: url,
         unitId: window.location.pathname.split("/")[4],

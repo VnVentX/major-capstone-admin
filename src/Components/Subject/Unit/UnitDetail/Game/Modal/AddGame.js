@@ -17,7 +17,7 @@ const AddGame = (props) => {
     setLoading(true);
     console.log(values, props.lessonID);
     await axios
-      .post("https://mathscienceeducation.herokuapp.com/game", {
+      .post(`${process.env.REACT_APP_BASE_URL}/game`, {
         description: values.description,
         lessonId: props.lessonID,
         gameName: values.name,

@@ -16,7 +16,7 @@ const AddProgress = (props) => {
   const createExercise = async (values) => {
     setLoading(true);
     await axios
-      .post("https://mathscienceeducation.herokuapp.com/exercise", {
+      .post(`${process.env.REACT_APP_BASE_URL}/exercise`, {
         description: values.description,
         exerciseName: values.name,
         progressTest: true,

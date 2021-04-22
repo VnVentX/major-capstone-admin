@@ -1,14 +1,6 @@
 import React from "react";
 import axios from "axios";
-import {
-  Table,
-  Image,
-  Button,
-  Input,
-  Space,
-  Tag,
-  Popconfirm,
-} from "antd";
+import { Table, Image, Button, Input, Space, Tag, Popconfirm } from "antd";
 import Highlighter from "react-highlight-words";
 import { SearchOutlined } from "@ant-design/icons";
 import AddNewBanner from "./Modal/AddNewBanner";
@@ -29,7 +21,7 @@ export default class BannerComponent extends React.Component {
 
   getAllBanner = async () => {
     await axios
-      .get("https://mathscienceeducation.herokuapp.com/bannerImage/all")
+      .get(`${process.env.REACT_APP_BASE_URL}/bannerImage/all`)
       .then((res) => {
         this.setState({
           dataSource: res.data.length === 0 ? [] : res.data,
@@ -48,7 +40,7 @@ export default class BannerComponent extends React.Component {
       ids = id;
     }
     await axios
-      .put("https://mathscienceeducation.herokuapp.com/bannerImage", {
+      .put(`${process.env.REACT_APP_BASE_URL}/bannerImage`, {
         ids: ids,
         status: status,
       })

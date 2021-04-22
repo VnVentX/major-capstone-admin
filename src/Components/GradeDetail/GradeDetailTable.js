@@ -34,7 +34,7 @@ export default class GradeDetailTable extends Component {
 
   getAllSchool = async () => {
     await axios
-      .get("https://mathscienceeducation.herokuapp.com/school/all")
+      .get(`${process.env.REACT_APP_BASE_URL}/school/all`)
       .then((res) => {
         this.setState({
           allSchool: res.data.length === 0 ? [] : res.data,
@@ -51,7 +51,7 @@ export default class GradeDetailTable extends Component {
       gradeID = window.location.pathname.split("/")[2];
     }
     await axios
-      .get(`https://mathscienceeducation.herokuapp.com/grade/${gradeID}/school`)
+      .get(`${process.env.REACT_APP_BASE_URL}/grade/${gradeID}/school`)
       .then((res) => {
         this.setState({
           tableLoading: false,
@@ -71,7 +71,7 @@ export default class GradeDetailTable extends Component {
     ids.push(gradeID);
     ids.push(schoolID);
     await axios
-      .put("https://mathscienceeducation.herokuapp.com/schoolGrade", {
+      .put(`${process.env.REACT_APP_BASE_URL}/schoolGrade`, {
         ids: ids,
         status: status,
       })

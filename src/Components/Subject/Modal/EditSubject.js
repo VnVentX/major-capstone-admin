@@ -61,7 +61,7 @@ const EditSubject = (props) => {
     async function editSubject() {
       await axios
         .put(
-          `https://mathscienceeducation.herokuapp.com/subject/${props.data.id}`,
+          `${process.env.REACT_APP_BASE_URL}/subject/${props.data.id}`,
           formData
         )
         .then((res) => {

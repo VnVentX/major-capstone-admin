@@ -25,9 +25,7 @@ const EditLesson = (props) => {
     if (props.lessonID) {
       const getLessonByID = async () => {
         await axios
-          .get(
-            `https://mathscienceeducation.herokuapp.com//lesson/${props.lessonID}`
-          )
+          .get(`${process.env.REACT_APP_BASE_URL}//lesson/${props.lessonID}`)
           .then((res) => {
             form.setFieldsValue({
               lesson: res.data.lessonName,
@@ -56,14 +54,11 @@ const EditLesson = (props) => {
 
     setLoading(true);
     await axios
-      .put(
-        `https://mathscienceeducation.herokuapp.com/lesson/${props.lessonID}`,
-        {
-          lessonName: values.lesson,
-          lessonUrl: url,
-          unitId: window.location.pathname.split("/")[4],
-        }
-      )
+      .put(`${process.env.REACT_APP_BASE_URL}/lesson/${props.lessonID}`, {
+        lessonName: values.lesson,
+        lessonUrl: url,
+        unitId: window.location.pathname.split("/")[4],
+      })
       .then((res) => {
         console.log(res);
         props.getLessonByUnitID();

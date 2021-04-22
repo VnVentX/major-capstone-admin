@@ -33,7 +33,7 @@ const EditClass = (props) => {
     async function updateClass() {
       await axios
         .put(
-          `https://mathscienceeducation.herokuapp.com/class/${props.data.id}`,
+          `${process.env.REACT_APP_BASE_URL}/class/${props.data.id}`,
           {
             className: values.className,
           }

@@ -24,7 +24,7 @@ const ClassComponent = (props) => {
     let schoolID = window.location.pathname.split("/")[2];
     let gradeID = props.gradeID;
     await axios
-      .post("https://mathscienceeducation.herokuapp.com/class/schoolGradeId", {
+      .post(`${process.env.REACT_APP_BASE_URL}/class/schoolGradeId`, {
         gradeId: gradeID,
         schoolId: schoolID,
       })
@@ -44,7 +44,7 @@ const ClassComponent = (props) => {
       ids = id;
     }
     await axios
-      .put("https://mathscienceeducation.herokuapp.com/class/changeStatus", {
+      .put(`${process.env.REACT_APP_BASE_URL}/class/changeStatus`, {
         ids: ids,
         status: status,
       })

@@ -23,7 +23,7 @@ const GameQuestion = () => {
   const getGameDetail = async () => {
     let gameID = window.location.pathname.split("/")[6];
     await axios
-      .get(`https://mathscienceeducation.herokuapp.com/game/${gameID}`)
+      .get(`${process.env.REACT_APP_BASE_URL}/game/${gameID}`)
       .then((res) => {
         setStatus(res.data.status);
       })
@@ -35,7 +35,7 @@ const GameQuestion = () => {
   const handleChangeStatus = async (status) => {
     let gameID = window.location.pathname.split("/")[6];
     await axios
-      .put("https://mathscienceeducation.herokuapp.com/game", {
+      .put(`${process.env.REACT_APP_BASE_URL}/game`, {
         id: gameID,
         status: status,
       })
@@ -52,7 +52,7 @@ const GameQuestion = () => {
     let exerciseID = window.location.pathname.split("/")[6];
     await axios
       .get(
-        `https://mathscienceeducation.herokuapp.com/exerciseOrGame/${exerciseID}/questions?isExericse=false`
+        `${process.env.REACT_APP_BASE_URL}/exerciseOrGame/${exerciseID}/questions?isExericse=false`
       )
       .then((res) => {
         setData(res.data);
@@ -71,14 +71,11 @@ const GameQuestion = () => {
       ids = id;
     }
     await axios
-      .put(
-        "https://mathscienceeducation.herokuapp.com/exerciseGameQuestion/delete",
-        {
-          exercise: false,
-          gameId: gameID,
-          questionIds: ids,
-        }
-      )
+      .put(`${process.env.REACT_APP_BASE_URL}/exerciseGameQuestion/delete`, {
+        exercise: false,
+        gameId: gameID,
+        questionIds: ids,
+      })
       .then((res) => {
         console.log(res);
         getQuestionByGameID();

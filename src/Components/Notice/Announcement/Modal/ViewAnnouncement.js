@@ -21,7 +21,7 @@ const ViewAnnouncement = (props) => {
 
   const getNewsDetail = async (id) => {
     await axios
-      .get(`https://mathscienceeducation.herokuapp.com/news/${id}`)
+      .get(`${process.env.REACT_APP_BASE_URL}/news/${id}`)
       .then((res) => {
         form.setFieldsValue({
           title: res.data.newsTitle,

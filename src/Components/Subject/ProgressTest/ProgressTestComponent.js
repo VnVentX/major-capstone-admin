@@ -29,7 +29,7 @@ const ProgressTestComponent = () => {
     let subjectID = window.location.pathname.split("/")[2];
     await axios
       .get(
-        `https://mathscienceeducation.herokuapp.com/subject/${subjectID}/progressTest`
+        `${process.env.REACT_APP_BASE_URL}/subject/${subjectID}/progressTest`
       )
       .then((res) => {
         setProgress(res.data.length === 0 ? [] : res.data);
@@ -44,10 +44,7 @@ const ProgressTestComponent = () => {
     let formData = new FormData();
     formData.append("id", id);
     await axios
-      .put(
-        "https://mathscienceeducation.herokuapp.com/progressTest/delete",
-        formData
-      )
+      .put(`${process.env.REACT_APP_BASE_URL}/progressTest/delete`, formData)
       .then((res) => {
         console.log(res);
         getProgressTestBySubjectID();

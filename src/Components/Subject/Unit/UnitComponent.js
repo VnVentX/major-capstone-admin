@@ -29,9 +29,7 @@ const UnitComponent = () => {
   const getUnitBySubjectID = async () => {
     let subjectID = window.location.pathname.split("/")[2];
     await axios
-      .get(
-        `https://mathscienceeducation.herokuapp.com/subject/${subjectID}/units`
-      )
+      .get(`${process.env.REACT_APP_BASE_URL}/subject/${subjectID}/units`)
       .then((res) => {
         setUnit(res.data.length === 0 ? [] : res.data);
         setSearchData(res.data.length === 0 ? [] : res.data);
@@ -45,7 +43,7 @@ const UnitComponent = () => {
     let formData = new FormData();
     formData.append("id", unitID);
     await axios
-      .put("https://mathscienceeducation.herokuapp.com/unit/delete", formData)
+      .put(`${process.env.REACT_APP_BASE_URL}/unit/delete`, formData)
       .then((res) => {
         console.log(res);
         getUnitBySubjectID();

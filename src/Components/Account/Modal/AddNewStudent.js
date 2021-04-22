@@ -48,7 +48,7 @@ const AddNewStudent = (props) => {
     setClassLoading(true);
     setClassData([]);
     await axios
-      .post("https://mathscienceeducation.herokuapp.com/class/schoolGradeId", {
+      .post(`${process.env.REACT_APP_BASE_URL}/class/schoolGradeId`, {
         gradeId: gradeID,
         schoolId: schoolID,
       })
@@ -64,7 +64,7 @@ const AddNewStudent = (props) => {
 
   const getAllSchool = async () => {
     await axios
-      .get("https://mathscienceeducation.herokuapp.com/school/all")
+      .get(`${process.env.REACT_APP_BASE_URL}/school/all`)
       .then((res) => {
         setSchoolData(res.data.length === 0 ? [] : res.data);
       })
@@ -75,7 +75,7 @@ const AddNewStudent = (props) => {
 
   const getAllGrade = async () => {
     await axios
-      .get("https://mathscienceeducation.herokuapp.com/grade/all")
+      .get(`${process.env.REACT_APP_BASE_URL}/grade/all`)
       .then((res) => {
         setGradeData(res.data.length === 0 ? [] : res.data);
       })
@@ -108,7 +108,7 @@ const AddNewStudent = (props) => {
     setLoading(true);
     setClassData([]);
     await axios
-      .post("https://mathscienceeducation.herokuapp.com/student", {
+      .post(`${process.env.REACT_APP_BASE_URL}/student`, {
         classesId: values.class,
         doB: values.age.format("DD-MM-YYYY"),
         fullName: values.name,

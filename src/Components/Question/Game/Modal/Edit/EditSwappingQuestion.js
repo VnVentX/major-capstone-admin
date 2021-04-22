@@ -33,7 +33,7 @@ const EditSwappingQuestion = (props) => {
   const getQuestionByID = async () => {
     await axios
       .get(
-        `https://mathscienceeducation.herokuapp.com/question/${props.data.id}?questionType=SWAP`
+        `${process.env.REACT_APP_BASE_URL}/question/${props.data.id}?questionType=SWAP`
       )
       .then((res) => {
         props.form.setFieldsValue({

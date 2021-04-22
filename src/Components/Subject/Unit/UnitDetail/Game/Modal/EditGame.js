@@ -31,7 +31,7 @@ const EditGame = (props) => {
   const editGame = async (values) => {
     setLoading(true);
     await axios
-      .put(`https://mathscienceeducation.herokuapp.com/game/${props.data.id}`, {
+      .put(`${process.env.REACT_APP_BASE_URL}/game/${props.data.id}`, {
         gameName: values.name,
         lessonId: props.lessonID,
         description: values.description,

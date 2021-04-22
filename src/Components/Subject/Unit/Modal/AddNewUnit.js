@@ -16,7 +16,7 @@ const AddNewUnit = (props) => {
   const createUnit = async (values) => {
     setLoading(true);
     await axios
-      .post("https://mathscienceeducation.herokuapp.com/unit", {
+      .post(`${process.env.REACT_APP_BASE_URL}/unit`, {
         description: values.description,
         subjectId: window.location.pathname.split("/")[2],
         unitName: values.unit,

@@ -21,7 +21,7 @@ const LinkNewSchool = (props) => {
     setLoading(true);
     let gradeID = window.location.pathname.split("/")[2];
     await axios
-      .post("https://mathscienceeducation.herokuapp.com/schoolGrade", {
+      .post(`${process.env.REACT_APP_BASE_URL}/schoolGrade`, {
         gradeId: gradeID,
         schoolId: schoolID,
       })

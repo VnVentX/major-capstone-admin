@@ -27,7 +27,7 @@ const Game = (props) => {
   const getGameByLessonID = async () => {
     await axios
       .get(
-        `https://mathscienceeducation.herokuapp.com/lesson/${props.lessonID}/game/all`
+        `${process.env.REACT_APP_BASE_URL}/lesson/${props.lessonID}/game/all`
       )
       .then((res) => {
         setGame(res.data.length === 0 ? [] : res.data);
@@ -39,7 +39,7 @@ const Game = (props) => {
 
   const deleteGame = async (gameID) => {
     await axios
-      .put("https://mathscienceeducation.herokuapp.com/game", {
+      .put(`${process.env.REACT_APP_BASE_URL}/game`, {
         id: gameID,
         status: "DELETED",
       })

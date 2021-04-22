@@ -35,7 +35,7 @@ const AddNewSchool = (props) => {
 
   const createNewSchool = async (values) => {
     await axios
-      .post("https://mathscienceeducation.herokuapp.com/school", {
+      .post(`${process.env.REACT_APP_BASE_URL}/school`, {
         schoolDistrict: values.schoolDistrict,
         schoolName: values.schoolName.trim(),
         schoolStreet: values.schoolStreet.trim(),
@@ -56,7 +56,7 @@ const AddNewSchool = (props) => {
     setLoading(true);
     async function checkExisted() {
       await axios
-        .post("https://mathscienceeducation.herokuapp.com/school/check", {
+        .post(`${process.env.REACT_APP_BASE_URL}/school/check`, {
           schoolDistrict: event.schoolDistrict,
           schoolName: event.schoolName.trim(),
           schoolStreet: event.schoolStreet.trim(),

@@ -27,7 +27,7 @@ const Exercise = (props) => {
   const getExerciseByLessonID = async () => {
     await axios
       .get(
-        `https://mathscienceeducation.herokuapp.com/lesson/${props.lessonID}/exercises`
+        `${process.env.REACT_APP_BASE_URL}/lesson/${props.lessonID}/exercises`
       )
       .then((res) => {
         setExercise(res.data.length === 0 ? [] : res.data);
@@ -39,7 +39,7 @@ const Exercise = (props) => {
 
   const deleteExercise = async (exerciseID) => {
     await axios
-      .put("https://mathscienceeducation.herokuapp.com/exercise/delete", {
+      .put(`${process.env.REACT_APP_BASE_URL}/exercise/delete`, {
         id: exerciseID,
         status: "DELETED",
       })

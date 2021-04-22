@@ -17,7 +17,7 @@ const SchoolDetailComponent = () => {
   const getSchoolByID = async () => {
     let schoolID = window.location.pathname.split("/")[2];
     await axios
-      .get(`https://mathscienceeducation.herokuapp.com/school/${schoolID}`)
+      .get(`${process.env.REACT_APP_BASE_URL}/school/${schoolID}`)
       .then((res) => {
         setSchoolData(res.data.length === 0 ? [] : res.data);
       })
@@ -31,7 +31,7 @@ const SchoolDetailComponent = () => {
     let formData = new FormData();
     formData.append("schoolId ", schoolID);
     await axios
-      .get(`https://mathscienceeducation.herokuapp.com/grade/${schoolID}`)
+      .get(`${process.env.REACT_APP_BASE_URL}/grade/${schoolID}`)
       .then((res) => {
         setGradeData(res.data.length === 0 ? [] : res.data);
       })

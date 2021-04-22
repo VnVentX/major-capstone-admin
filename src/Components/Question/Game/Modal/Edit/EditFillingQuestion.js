@@ -37,7 +37,7 @@ const EditFillingQuestion = (props) => {
   const getQuestionByID = async () => {
     await axios
       .get(
-        `https://mathscienceeducation.herokuapp.com/question/${props.data.id}?questionType=FILL`
+        `${process.env.REACT_APP_BASE_URL}/question/${props.data.id}?questionType=FILL`
       )
       .then((res) => {
         props.form.setFieldsValue({

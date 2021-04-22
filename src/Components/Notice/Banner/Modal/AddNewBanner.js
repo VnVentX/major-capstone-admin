@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { getJwt, getID } from "../../../../helper/jwt";
+import { getID } from "../../../../helper/jwt";
 import { Button, Modal, Form, Input, Upload, message } from "antd";
 import { UploadOutlined, PlusOutlined } from "@ant-design/icons";
 
@@ -32,7 +32,6 @@ const AddNewBanner = (props) => {
   };
 
   const handleChange = ({ fileList }) => {
-    console.log(fileList);
     setFileList(fileList);
   };
 
@@ -46,10 +45,7 @@ const AddNewBanner = (props) => {
     formData.append("accountId", getID());
     async function createBanner() {
       await axios
-        .post(
-          "https://mathscienceeducation.herokuapp.com/bannerImage",
-          formData
-        )
+        .post(`${process.env.REACT_APP_BASE_URL}/bannerImage`, formData)
         .then((res) => {
           console.log(res);
           props.getAllBanner();

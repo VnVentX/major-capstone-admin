@@ -32,7 +32,7 @@ const EditExercise = (props) => {
     setLoading(true);
     await axios
       .put(
-        `https://mathscienceeducation.herokuapp.com/exercise/${props.data.id}`,
+        `${process.env.REACT_APP_BASE_URL}/exercise/${props.data.id}`,
         {
           description: values.description,
           exerciseName: values.name,

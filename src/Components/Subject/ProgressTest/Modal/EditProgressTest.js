@@ -31,7 +31,7 @@ const EditProgressTest = (props) => {
     let subjectID = window.location.pathname.split("/")[2];
     await axios
       .get(
-        `https://mathscienceeducation.herokuapp.com/subject/${subjectID}/unitAterIds`
+        `${process.env.REACT_APP_BASE_URL}/subject/${subjectID}/unitAterIds`
       )
       .then((res) => {
         console.log(res.data);
@@ -62,7 +62,7 @@ const EditProgressTest = (props) => {
     setLoading(true);
     await axios
       .put(
-        `https://mathscienceeducation.herokuapp.com/progressTest/${props.data.id}`,
+        `${process.env.REACT_APP_BASE_URL}/progressTest/${props.data.id}`,
         {
           description: values.description,
           id: props.data.id,

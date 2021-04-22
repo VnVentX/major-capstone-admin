@@ -17,7 +17,7 @@ const ExportClassExcel = (props) => {
   const getSubjectByGrade = async () => {
     await axios
       .get(
-        `https://mathscienceeducation.herokuapp.com/grade/${props.gradeID}/subjects`
+        `${process.env.REACT_APP_BASE_URL}/grade/${props.gradeID}/subjects`
       )
       .then((res) => {
         setSubject(res.data.length === 0 ? [] : res.data);
@@ -34,7 +34,7 @@ const ExportClassExcel = (props) => {
     let subjectID = values.subject;
     await axios
       .get(
-        `https://mathscienceeducation.herokuapp.com/student/export?gradeId=${gradeID}&schoolId=${schoolID}&subjectId=${subjectID}`,
+        `${process.env.REACT_APP_BASE_URL}/student/export?gradeId=${gradeID}&schoolId=${schoolID}&subjectId=${subjectID}`,
         { responseType: "blob" }
       )
       .then((res) => {

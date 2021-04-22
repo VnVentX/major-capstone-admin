@@ -11,7 +11,7 @@ const SubjectComponent = () => {
 
   const getAllGrade = async () => {
     await axios
-      .get("https://mathscienceeducation.herokuapp.com/grade/all")
+      .get(`${process.env.REACT_APP_BASE_URL}/grade/all`)
       .then((res) => {
         setGrade(res.data.length === 0 ? [] : res.data);
         setLoading(false);

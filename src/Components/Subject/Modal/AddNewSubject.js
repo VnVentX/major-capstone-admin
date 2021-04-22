@@ -47,7 +47,7 @@ const AddNewSubject = (props) => {
 
     async function createSubject() {
       await axios
-        .post("https://mathscienceeducation.herokuapp.com/subject", formData)
+        .post(`${process.env.REACT_APP_BASE_URL}/subject`, formData)
         .then((res) => {
           console.log(res);
           props.getSubjectByGrade(props.gradeID);

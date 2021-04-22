@@ -100,7 +100,7 @@ export default class StudentAccountComponent extends Component {
       ids = id;
     }
     await axios
-      .put("https://mathscienceeducation.herokuapp.com/student", {
+      .put(`${process.env.REACT_APP_BASE_URL}/student`, {
         ids: ids,
         status: status,
       })

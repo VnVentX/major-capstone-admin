@@ -37,7 +37,7 @@ const AddTestQuestion = (props) => {
       setTableLoading(true);
       await axios
         .get(
-          `https://mathscienceeducation.herokuapp.com/unit/${unitID}/questions?isExercise=true`
+          `${process.env.REACT_APP_BASE_URL}/unit/${unitID}/questions?isExercise=true`
         )
         .then((res) => {
           resArr = Array.from(res.data);
@@ -57,9 +57,7 @@ const AddTestQuestion = (props) => {
   const getUnitBySubjectID = async () => {
     let subjectID = window.location.pathname.split("/")[2];
     await axios
-      .get(
-        `https://mathscienceeducation.herokuapp.com/subject/${subjectID}/units`
-      )
+      .get(`${process.env.REACT_APP_BASE_URL}/subject/${subjectID}/units`)
       .then((res) => {
         setUnit(res.data.length === 0 ? [] : res.data);
       })
@@ -72,7 +70,7 @@ const AddTestQuestion = (props) => {
     setLoading(true);
     let exerciseID = window.location.pathname.split("/")[6];
     await axios
-      .post("https://mathscienceeducation.herokuapp.com/exerciseGameQuestion", {
+      .post(`${process.env.REACT_APP_BASE_URL}/exerciseGameQuestion`, {
         exercise: true,
         exerciseId: exerciseID,
         questionIds: selectedRowKeys,

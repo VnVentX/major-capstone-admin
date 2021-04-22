@@ -31,7 +31,7 @@ const EditUnit = (props) => {
   const editUnit = async (values) => {
     setLoading(true);
     await axios
-      .put(`https://mathscienceeducation.herokuapp.com/unit/${props.data.id}`, {
+      .put(`${process.env.REACT_APP_BASE_URL}/unit/${props.data.id}`, {
         description: values.description,
         unitName: values.unit,
         subjectId: window.location.pathname.split("/")[2],

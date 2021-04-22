@@ -43,7 +43,7 @@ export const AccountTableComponent = () => {
     }
     setLoading(true);
     await axios
-      .post("https://mathscienceeducation.herokuapp.com/student/all", [
+      .post(`${process.env.REACT_APP_BASE_URL}/student/all`, [
         schoolID,
         gradeID,
         classID,

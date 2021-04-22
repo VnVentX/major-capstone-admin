@@ -9,7 +9,7 @@ import { DeleteOutlined, QuestionCircleOutlined } from "@ant-design/icons";
 const Lesson = (props) => {
   const handleDelete = async (item) => {
     await axios
-      .put(`https://mathscienceeducation.herokuapp.com/lesson?id=${item}`)
+      .put(`${process.env.REACT_APP_BASE_URL}/lesson?id=${item}`)
       .then((res) => {
         console.log(res);
         props.getLessonByUnitID();

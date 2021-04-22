@@ -50,7 +50,7 @@ const EditQuestion = (props) => {
   const getQuestionByID = async () => {
     await axios
       .get(
-        `https://mathscienceeducation.herokuapp.com/question/${props.data.id}?questionType=EXERCISE`
+        `${process.env.REACT_APP_BASE_URL}/question/${props.data.id}?questionType=EXERCISE`
       )
       .then((res) => {
         form.setFieldsValue({
@@ -70,7 +70,7 @@ const EditQuestion = (props) => {
     setLoading(true);
     await axios
       .put(
-        `https://mathscienceeducation.herokuapp.com/question/${props.data.id}/exercise`,
+        `${process.env.REACT_APP_BASE_URL}/question/${props.data.id}/exercise`,
         formData
       )
       .then((res) => {

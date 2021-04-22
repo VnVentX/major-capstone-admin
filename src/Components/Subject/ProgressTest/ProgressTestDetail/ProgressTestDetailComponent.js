@@ -18,7 +18,7 @@ const ProgressTestDetailComponent = () => {
     console.log(progressTestID);
     await axios
       .get(
-        `https://mathscienceeducation.herokuapp.com/progressTest/${progressTestID}/exercises`
+        `${process.env.REACT_APP_BASE_URL}/progressTest/${progressTestID}/exercises`
       )
       .then((res) => {
         setData(res.data.length === 0 ? [] : res.data);
@@ -30,7 +30,7 @@ const ProgressTestDetailComponent = () => {
 
   const handleDelete = async (item) => {
     await axios
-      .put("https://mathscienceeducation.herokuapp.com/exercise/delete", {
+      .put(`${process.env.REACT_APP_BASE_URL}/exercise/delete`, {
         id: item,
         status: "DELETED",
       })

@@ -29,9 +29,7 @@ export default class AnnouncementComponent extends React.Component {
 
   getAllNews = async () => {
     await axios
-      .get(
-        "https://mathscienceeducation.herokuapp.com/news/all?isStudent=false"
-      )
+      .get(`${process.env.REACT_APP_BASE_URL}/news/all?isStudent=false`)
       .then((res) => {
         this.setState({
           dataSource: res.data.length === 0 ? [] : res.data,
@@ -51,7 +49,7 @@ export default class AnnouncementComponent extends React.Component {
       ids = id;
     }
     await axios
-      .put("https://mathscienceeducation.herokuapp.com/news", ids)
+      .put(`${process.env.REACT_APP_BASE_URL}/news`, ids)
       .then((res) => {
         console.log(res);
         this.getAllNews();

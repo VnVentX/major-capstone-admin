@@ -15,10 +15,7 @@ export default function Login(props) {
     formData.append("username", username);
     formData.append("password", password);
     await axios
-      .post(
-        "https://mathscienceeducation.herokuapp.com/account/login",
-        formData
-      )
+      .post(`${process.env.REACT_APP_BASE_URL}/account/login`, formData)
       .then((res) => {
         console.log(res.data);
         if (res.data === 0) {

@@ -35,7 +35,7 @@ const EditSchool = (props) => {
 
   const getSchoolByID = async (id) => {
     await axios
-      .get(`https://mathscienceeducation.herokuapp.com/school/${id}`)
+      .get(`${process.env.REACT_APP_BASE_URL}/school/${id}`)
       .then((res) => {
         setData(res.data.length === 0 ? [] : res.data);
       })
@@ -46,7 +46,7 @@ const EditSchool = (props) => {
 
   const updateSchool = async (id, values) => {
     await axios
-      .put(`https://mathscienceeducation.herokuapp.com/school/${id}`, {
+      .put(`${process.env.REACT_APP_BASE_URL}/school/${id}`, {
         schoolDistrict: values.schoolDistrict,
         schoolStreet: values.schoolStreet.trim(),
         schoolLevel: values.type,

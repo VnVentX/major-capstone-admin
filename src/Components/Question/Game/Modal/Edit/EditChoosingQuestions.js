@@ -37,7 +37,7 @@ const EditChoosingQuestion = (props) => {
   const getQuestionByID = async () => {
     await axios
       .get(
-        `https://mathscienceeducation.herokuapp.com/question/${props.data.id}?questionType=CHOOSE`
+        `${process.env.REACT_APP_BASE_URL}/question/${props.data.id}?questionType=CHOOSE`
       )
       .then((res) => {
         console.log(res.data);

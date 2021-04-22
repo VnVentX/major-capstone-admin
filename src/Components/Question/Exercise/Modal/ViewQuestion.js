@@ -47,7 +47,7 @@ const ViewQuestion = (props) => {
   const getQuestionByID = async () => {
     await axios
       .get(
-        `https://mathscienceeducation.herokuapp.com/question/${props.data.id}?questionType=EXERCISE`
+        `${process.env.REACT_APP_BASE_URL}/question/${props.data.id}?questionType=EXERCISE`
       )
       .then((res) => {
         form.setFieldsValue({

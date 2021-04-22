@@ -35,7 +35,7 @@ const EditMatchingQuestion = (props) => {
   const getQuestionByID = async () => {
     await axios
       .get(
-        `https://mathscienceeducation.herokuapp.com/question/${props.data.id}?questionType=MATCH`
+        `${process.env.REACT_APP_BASE_URL}/question/${props.data.id}?questionType=MATCH`
       )
       .then((res) => {
         props.form.setFieldsValue({

@@ -21,9 +21,7 @@ const Subject = (props) => {
 
   const getSubjectByGrade = async (gradeID) => {
     await axios
-      .get(
-        `https://mathscienceeducation.herokuapp.com/grade/${gradeID}/subjects`
-      )
+      .get(`${process.env.REACT_APP_BASE_URL}/grade/${gradeID}/subjects`)
       .then((res) => {
         setSubject(res.data.length === 0 ? [] : res.data);
         setSearchData(res.data.length === 0 ? [] : res.data);
@@ -38,7 +36,7 @@ const Subject = (props) => {
     formData.append("id", subjectID);
     await axios
       .put(
-        `https://mathscienceeducation.herokuapp.com/subject/delete/${subjectID}`,
+        `${process.env.REACT_APP_BASE_URL}/subject/delete/${subjectID}`,
         formData
       )
       .then((res) => {

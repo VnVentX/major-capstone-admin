@@ -39,7 +39,7 @@ export default class SchoolComponent extends Component {
 
   getAllSchool = async () => {
     await axios
-      .get("https://mathscienceeducation.herokuapp.com/school/all")
+      .get(`${process.env.REACT_APP_BASE_URL}/school/all`)
       .then((res) => {
         this.setState({
           dataSource: res.data.length === 0 ? [] : res.data,
@@ -53,7 +53,7 @@ export default class SchoolComponent extends Component {
 
   disableSchool = async (id, status) => {
     await axios
-      .put("https://mathscienceeducation.herokuapp.com/school/changeStatus", {
+      .put(`${process.env.REACT_APP_BASE_URL}/school/changeStatus`, {
         id: id,
         status: status,
       })

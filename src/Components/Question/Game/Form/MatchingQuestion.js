@@ -45,9 +45,7 @@ const MatchingQuestion = (props) => {
   const getSubjectByGrade = async () => {
     let gradeID = window.location.pathname.split("/")[2];
     await axios
-      .get(
-        `https://mathscienceeducation.herokuapp.com/grade/${gradeID}/subjects`
-      )
+      .get(`${process.env.REACT_APP_BASE_URL}/grade/${gradeID}/subjects`)
       .then((res) => {
         setSubject(res.data.length === 0 ? [] : res.data);
       })
@@ -58,9 +56,7 @@ const MatchingQuestion = (props) => {
 
   const getUnitBySubjectID = async (subjectID) => {
     await axios
-      .get(
-        `https://mathscienceeducation.herokuapp.com/subject/${subjectID}/units`
-      )
+      .get(`${process.env.REACT_APP_BASE_URL}/subject/${subjectID}/units`)
       .then((res) => {
         setUnit(res.data.length === 0 ? [] : res.data);
       })
@@ -119,10 +115,7 @@ const MatchingQuestion = (props) => {
   const createMatchQuestion = async (formData) => {
     setLoading(true);
     await axios
-      .post(
-        "https://mathscienceeducation.herokuapp.com/question/game/others",
-        formData
-      )
+      .post(`${process.env.REACT_APP_BASE_URL}/question/game/others`, formData)
       .then((res) => {
         console.log(res);
         setLoading(false);
