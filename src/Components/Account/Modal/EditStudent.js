@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { Modal, Button, Form, Input, Select, DatePicker } from "antd";
+import moment from "moment";
+import { Modal, Button, Form, Input, Select, DatePicker, message } from "antd";
 import { EditOutlined } from "@ant-design/icons";
 
 const layout = {
@@ -10,6 +11,7 @@ const layout = {
 
 const EditStudent = (props) => {
   const [visible, setVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [form] = Form.useForm();
 
   const getStudentDetail = async () => {
@@ -18,7 +20,7 @@ const EditStudent = (props) => {
       .then((res) => {
         form.setFieldsValue({
           name: res.data.fullName,
-          // age: res.data.doB,
+          age: moment(res.data.doB, "DD-MM-YYYY"),
           gender: res.data.gender,
           parentName: res.data.parentName,
           contact: res.data.contact,
@@ -30,6 +32,7 @@ const EditStudent = (props) => {
   };
 
   const updateStundent = async (values) => {
+    setLoading(true);
     await axios
       .put(`${process.env.REACT_APP_BASE_URL}/student/${props.data.id}`, {
         doB: values.age.format("DD-MM-YYYY"),
@@ -40,9 +43,16 @@ const EditStudent = (props) => {
       })
       .then((res) => {
         console.log(res);
+        props.handleSearch(props.searchData);
+        setLoading(false);
+        handleCancel();
+        message.success("Update Student successfully");
       })
       .catch((e) => {
         console.log(e);
+        setLoading(false);
+        handleCancel();
+        message.error("Fail to update Student");
       });
   };
 
@@ -74,13 +84,14 @@ const EditStudent = (props) => {
         title="Edit Student"
         visible={visible}
         onCancel={handleCancel}
+        okText="Update"
+        confirmLoading={loading}
         destroyOnClose
         onOk={() => {
           form
             .validateFields()
             .then((values) => {
               onFinish(values);
-              form.resetFields();
             })
             .catch((info) => {
               console.log("Validate Failed:", info);

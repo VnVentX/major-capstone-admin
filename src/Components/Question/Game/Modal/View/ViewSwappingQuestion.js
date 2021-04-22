@@ -6,30 +6,29 @@ const ViewSwappingQuestion = (props) => {
   const [option, setOption] = useState([]);
 
   useEffect(() => {
-    getQuestionByID();
-  }, []);
-
-  const getQuestionByID = async () => {
-    await axios
-      .get(
-        `${process.env.REACT_APP_BASE_URL}/question/${props.data.id}?questionType=SWAP`
-      )
-      .then((res) => {
-        props.form.setFieldsValue({
-          questionTitle: res.data.questionTitle,
-          description: res.data.description,
-          score: res.data.score,
-          value1: res.data.optionQuestionDTOList[0].optionText,
-          value2: res.data.optionQuestionDTOList[1].optionText,
-          value3: res.data.optionQuestionDTOList[2].optionText,
-          value4: res.data.optionQuestionDTOList[3].optionText,
+    const getQuestionByID = async () => {
+      await axios
+        .get(
+          `${process.env.REACT_APP_BASE_URL}/question/${props.data.id}?questionType=SWAP`
+        )
+        .then((res) => {
+          props.form.setFieldsValue({
+            questionTitle: res.data.questionTitle,
+            description: res.data.description,
+            score: res.data.score,
+            value1: res.data.optionQuestionDTOList[0].optionText,
+            value2: res.data.optionQuestionDTOList[1].optionText,
+            value3: res.data.optionQuestionDTOList[2].optionText,
+            value4: res.data.optionQuestionDTOList[3].optionText,
+          });
+          setOption(res.data.optionQuestionDTOList);
+        })
+        .catch((e) => {
+          console.log(e);
         });
-        setOption(res.data.optionQuestionDTOList);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-  };
+    };
+    getQuestionByID();
+  }, [props.data.id, props.form]);
 
   return (
     <Form form={props.form} layout="vertical" style={{ marginTop: 10 }}>

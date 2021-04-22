@@ -40,17 +40,16 @@ const EditClass = (props) => {
           props.getClassBySchoolGrade();
           setLoading(false);
           handleCancel();
-          message.success("Create Class successfully!");
+          message.success("Update Class successfully");
           form.resetFields();
         })
         .catch((e) => {
           if (e.response.data === "EXISTED") {
             message.error("This Class name is already existed");
           } else {
-            message.error("Fail to create Class");
+            message.error("Fail to update Class");
           }
           setLoading(false);
-          message.error("Fail to create Class!");
         });
     }
     updateClass();

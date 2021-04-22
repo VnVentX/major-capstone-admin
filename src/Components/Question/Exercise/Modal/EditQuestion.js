@@ -29,23 +29,15 @@ const normFile = (e) => {
   return e && e.fileList;
 };
 
+let correctCount = 0;
+
 const EditQuestion = (props) => {
   const [form] = Form.useForm();
   const [counter, setCounter] = useState(0);
-  const [correctCount, setCorrectCount] = useState(0);
   const [visible, setVisible] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [audioFile, setAudioFile] = useState([
-    {
-      thumbUrl: getAudioThumbUrl(),
-      url: props.data.questionAudioUrl,
-    },
-  ]);
-  const [imgFile, setImgFile] = useState([
-    {
-      thumbUrl: props.data.questionImageUrl,
-    },
-  ]);
+  const [audioFile, setAudioFile] = useState([]);
+  const [imgFile, setImgFile] = useState([]);
 
   const getQuestionByID = async () => {
     await axios
@@ -59,7 +51,24 @@ const EditQuestion = (props) => {
           score: res.data.score,
           options: res.data.optionQuestionDTOList,
         });
+        setAudioFile([
+          {
+            thumbUrl: getAudioThumbUrl(),
+            url: props.data.questionAudioUrl,
+          },
+        ]);
+        setImgFile([
+          {
+            thumbUrl: props.data.questionImageUrl,
+          },
+        ]);
         setCounter(res.data.optionQuestionDTOList.length);
+        res.data.optionQuestionDTOList.forEach((item) => {
+          if (item.correct === true) {
+            correctCount = correctCount + 1;
+          }
+        });
+        console.log(correctCount);
       })
       .catch((e) => {
         console.log(e);
@@ -93,6 +102,7 @@ const EditQuestion = (props) => {
         setAudioFile([]);
         setImgFile([]);
         setCounter(0);
+        correctCount = 0;
       })
       .catch((e) => {
         console.log(e);
@@ -119,23 +129,21 @@ const EditQuestion = (props) => {
   };
 
   const handleCorrectCount = () => {
-    console.log(form.getFieldsValue().options);
-    let count = 0;
+    correctCount = 0;
     form.getFieldsValue().options.forEach((item) => {
       if (item !== undefined) {
         if (item.correct === true) {
-          count = count + 1;
+          correctCount = correctCount + 1;
         }
       }
     });
-    setCorrectCount(count);
-    console.log(count);
   };
 
   const onFinish = (values) => {
     let optionIdList = [];
     let optionTextList = [];
     let isCorrectList = [];
+    console.log(values.imgFile);
     values.options.forEach((item) => {
       optionIdList.push(item.id);
       optionTextList.push(item.optionText);
@@ -169,6 +177,7 @@ const EditQuestion = (props) => {
   const handleCancel = () => {
     console.log("Clicked cancel button");
     setVisible(false);
+    correctCount = 0;
   };
 
   return (
@@ -300,6 +309,11 @@ const EditQuestion = (props) => {
                   if (correctCount > 1) {
                     return Promise.reject(
                       new Error("Can only have one correct option")
+                    );
+                  }
+                  if (correctCount === 0) {
+                    return Promise.reject(
+                      new Error("Must have one correct option")
                     );
                   }
                 },

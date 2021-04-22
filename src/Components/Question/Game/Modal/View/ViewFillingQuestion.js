@@ -15,26 +15,25 @@ const { Option } = Select;
 
 const ViewFillingQuestion = (props) => {
   useEffect(() => {
-    getQuestionByID();
-  }, []);
-
-  const getQuestionByID = async () => {
-    await axios
-      .get(
-        `${process.env.REACT_APP_BASE_URL}/question/${props.data.id}?questionType=FILL`
-      )
-      .then((res) => {
-        props.form.setFieldsValue({
-          questionTitle: res.data.questionTitle,
-          description: res.data.description,
-          score: res.data.score,
-          options: res.data.optionQuestionDTOList,
+    const getQuestionByID = async () => {
+      await axios
+        .get(
+          `${process.env.REACT_APP_BASE_URL}/question/${props.data.id}?questionType=FILL`
+        )
+        .then((res) => {
+          props.form.setFieldsValue({
+            questionTitle: res.data.questionTitle,
+            description: res.data.description,
+            score: res.data.score,
+            options: res.data.optionQuestionDTOList,
+          });
+        })
+        .catch((e) => {
+          console.log(e);
         });
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-  };
+    };
+    getQuestionByID();
+  }, [props.data.id, props.form]);
 
   return (
     <Form form={props.form} layout="vertical" style={{ marginTop: 10 }}>

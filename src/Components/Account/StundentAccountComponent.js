@@ -158,7 +158,11 @@ export default class StudentAccountComponent extends Component {
             >
               <Button type="primary">Change Status</Button>
             </Popconfirm>
-            <EditStudent data={record} />
+            <EditStudent
+              data={record}
+              handleSearch={this.props.handleSearch}
+              searchData={this.props.searchData}
+            />
             <Popconfirm
               placement="topRight"
               title="Are you sure to delete this Students?"
@@ -215,7 +219,7 @@ export default class StudentAccountComponent extends Component {
                     alignItems: "center",
                   }}
                 >
-                  {this.props.data.length > 0 && (
+                  {/* {this.props.data.length > 0 && (
                     <Button
                       type="primary"
                       size="large"
@@ -223,7 +227,7 @@ export default class StudentAccountComponent extends Component {
                     >
                       Export Student List
                     </Button>
-                  )}
+                  )} */}
                   <AddNewStudent
                     searchData={this.props.searchData}
                     handleSearch={this.props.handleSearch}
@@ -252,30 +256,22 @@ export default class StudentAccountComponent extends Component {
                 >
                   Delete
                 </Button>
-                {this.props.searchData?.school &&
-                  this.props.searchData?.grade &&
-                  this.props.searchData?.class && (
-                    <>
-                      <Button
-                        type="primary"
-                        disabled
-                        style={{ marginRight: 10 }}
-                      >
-                        Move students to selected Class &gt;&gt;
-                      </Button>
-                      <Cascader
-                        options={this.props.gradeClassList}
-                        fieldNames={{
-                          label: "name",
-                          value: "id",
-                          children: "classesList",
-                        }}
-                        placeholder="Please select destination"
-                        disabled
-                        style={{ width: 300 }}
-                      />
-                    </>
-                  )}
+                <>
+                  <Button type="primary" disabled style={{ marginRight: 10 }}>
+                    Move students to selected Class &gt;&gt;
+                  </Button>
+                  <Cascader
+                    options={this.props.gradeClassList}
+                    fieldNames={{
+                      label: "name",
+                      value: "id",
+                      children: "classesList",
+                    }}
+                    placeholder="Please select destination"
+                    disabled
+                    style={{ width: 300 }}
+                  />
+                </>
               </>
             ) : (
               <>
@@ -300,7 +296,7 @@ export default class StudentAccountComponent extends Component {
                 <>
                   {this.state.changeClassID === "" ? (
                     <Button type="primary" style={{ marginRight: 10 }} disabled>
-                      Move students to other Class &gt;&gt;
+                      Move students to selected Class &gt;&gt;
                     </Button>
                   ) : (
                     <Popconfirm
@@ -311,7 +307,7 @@ export default class StudentAccountComponent extends Component {
                       cancelText="No"
                     >
                       <Button type="primary" style={{ marginRight: 10 }}>
-                        Move students to other Class &gt;&gt;
+                        Move students to selected Class &gt;&gt;
                       </Button>
                     </Popconfirm>
                   )}

@@ -29,7 +29,6 @@ const normFile = (e) => {
 
 const FillingQuestion = (props) => {
   const [form] = Form.useForm();
-  const [audioFile, setAudioFile] = useState([]);
   const [imgFile, setImgFile] = useState([]);
   const [subject, setSubject] = useState([]);
   const [unit, setUnit] = useState([]);
@@ -70,9 +69,6 @@ const FillingQuestion = (props) => {
   const handleChangeImg = ({ fileList }) => {
     setImgFile(fileList);
   };
-  const handleChangeAudio = ({ fileList }) => {
-    setAudioFile(fileList);
-  };
 
   const onFinish = (values) => {
     let optionTextList = [];
@@ -97,9 +93,6 @@ const FillingQuestion = (props) => {
     if (values.q_img !== undefined && values.q_img.length !== 0) {
       formData.append("imageFile", values.q_img[0].originFileObj);
     }
-    if (values.q_audio !== undefined && values.q_audio.length !== 0) {
-      formData.append("audioFile", values.q_audio[0].originFileObj);
-    }
     formData.append("optionInputTypeList", optionInputTypeList);
     formData.append("optionTextList", optionTextList);
 
@@ -118,7 +111,6 @@ const FillingQuestion = (props) => {
         setLoading(false);
         message.success("Create Filling Question successfully");
         setImgFile([]);
-        setAudioFile([]);
         form.resetFields();
       })
       .catch((e) => {
@@ -238,29 +230,6 @@ const FillingQuestion = (props) => {
           }}
         >
           {imgFile.length === 1 ? null : (
-            <Button icon={<UploadOutlined />}>Upload</Button>
-          )}
-        </Upload>
-      </Form.Item>
-      <Form.Item
-        name="q_audio"
-        label="Question Audio"
-        getValueFromEvent={normFile}
-      >
-        <Upload
-          listType="picture"
-          fileList={audioFile}
-          beforeUpload={() => false}
-          onChange={(info) => {
-            if (info.file.type.split("/")[0] !== "audio") {
-              message.error(`${info.file.name} is not an audio file`);
-              setAudioFile([]);
-            } else {
-              handleChangeAudio(info);
-            }
-          }}
-        >
-          {audioFile.length === 1 ? null : (
             <Button icon={<UploadOutlined />}>Upload</Button>
           )}
         </Upload>

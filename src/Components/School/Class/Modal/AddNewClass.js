@@ -46,7 +46,6 @@ const AddNewClass = (props) => {
             message.error("Fail to create Class");
           }
           setLoading(false);
-          message.error("Fail to create Class");
         });
     }
     createClass();

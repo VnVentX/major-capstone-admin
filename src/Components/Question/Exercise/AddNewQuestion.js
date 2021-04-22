@@ -309,7 +309,7 @@ const AddNewQuestion = () => {
                 }
                 if (correctCount === 0) {
                   return Promise.reject(
-                    new Error("Must have one correct answer")
+                    new Error("Must have one correct option")
                   );
                 }
               },
