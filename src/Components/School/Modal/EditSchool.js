@@ -48,7 +48,7 @@ const EditSchool = (props) => {
     await axios
       .put(`${process.env.REACT_APP_BASE_URL}/school/${id}`, {
         schoolDistrict: values.schoolDistrict,
-        schoolStreet: values.schoolStreet.trim(),
+        schoolStreet: values.schoolStreet.replace(/\s+/g, " "),
         schoolLevel: values.type,
       })
       .then((res) => {

@@ -32,7 +32,7 @@ const EditUnit = (props) => {
     setLoading(true);
     await axios
       .put(`${process.env.REACT_APP_BASE_URL}/unit/${props.data.id}`, {
-        description: values.description,
+        description: values.description.replace(/\s+/g, " "),
         unitName: values.unit,
         subjectId: window.location.pathname.split("/")[2],
       })

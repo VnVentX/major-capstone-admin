@@ -17,9 +17,7 @@ const AddNewProgress = (props) => {
   const getUnitBySubjectID = async () => {
     let subjectID = window.location.pathname.split("/")[2];
     await axios
-      .get(
-        `${process.env.REACT_APP_BASE_URL}/subject/${subjectID}/unitAterIds`
-      )
+      .get(`${process.env.REACT_APP_BASE_URL}/subject/${subjectID}/unitAterIds`)
       .then((res) => {
         setUnit(res.data.length === 0 ? [] : res.data);
       })
@@ -42,9 +40,9 @@ const AddNewProgress = (props) => {
     setLoading(true);
     await axios
       .post(`${process.env.REACT_APP_BASE_URL}/progressTest`, {
-        description: values.description,
+        description: values.description.replace(/\s+/g, " "),
         subjectId: window.location.pathname.split("/")[2],
-        progressTestName: values.progressTest,
+        progressTestName: values.progressTest.replace(/\s+/g, " "),
         unitAfterId: values.unitAfter,
       })
       .then((res) => {

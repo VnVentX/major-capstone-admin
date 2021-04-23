@@ -50,10 +50,10 @@ const EditSubject = (props) => {
     setLoading(true);
     let formData = new FormData();
     if (event.description) {
-      formData.append("description", event.description.trim());
+      formData.append("description", event.description.replace(/\s+/g, " "));
     }
     formData.append("gradeId", props.gradeID);
-    formData.append("subjectName", event.subject.trim());
+    formData.append("subjectName", event.subject.replace(/\s+/g, " "));
     if (event.subjectImg !== undefined && event.subjectImg.length !== 0) {
       formData.append("multipartFile", event.subjectImg[0].originFileObj);
     }

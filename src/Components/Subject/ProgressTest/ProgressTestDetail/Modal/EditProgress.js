@@ -32,7 +32,7 @@ const EditProgress = (props) => {
     setLoading(true);
     await axios
       .put(`${process.env.REACT_APP_BASE_URL}/exercise/${props.data.id}`, {
-        description: values.description,
+        description: values.description.replace(/\s+/g, " "),
         exerciseName: values.name,
         progressTestId: window.location.pathname.split("/")[4],
         progressTest: true,

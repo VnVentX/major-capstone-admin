@@ -178,7 +178,13 @@ export default class SchoolComponent extends Component {
           <AutoComplete
             dataSource={this.state.dataSearch?.map((item, idx) => (
               <Select.Option key={idx} value={item.schoolName}>
-                Trường Tiểu Học {item.schoolName}
+                {item.schoolLevel === "PRIMARY" ? (
+                  <>TH {item.schoolName}</>
+                ) : item.schoolLevel === "JUNIOR" ? (
+                  <>THCS {item.schoolName}</>
+                ) : (
+                  <>THPT {item.schoolName}</>
+                )}
               </Select.Option>
             ))}
           >

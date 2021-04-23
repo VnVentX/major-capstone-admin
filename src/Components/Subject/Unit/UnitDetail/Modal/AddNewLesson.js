@@ -100,7 +100,20 @@ const AddNewLesson = (props) => {
           <Form.Item
             name="url"
             label="PowerPoint URL"
-            rules={[{ required: true, message: "Please input an URL!" }]}
+            rules={[
+              {
+                validator: async (_, url) => {
+                  if (
+                    url.split("/")[0] !== "https:" &&
+                    url.split(" ")[0] !== "<iframe"
+                  ) {
+                    return Promise.reject(
+                      new Error("Please input a valid URL!")
+                    );
+                  }
+                },
+              },
+            ]}
           >
             <Input.TextArea autoSize placeholder="PowerPoint URL" />
           </Form.Item>

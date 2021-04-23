@@ -39,12 +39,11 @@ const AddNewSubject = (props) => {
     setLoading(true);
     let formData = new FormData();
     if (event.description) {
-      formData.append("description", event.description);
+      formData.append("description", event.description.replace(/\s+/g, " "));
     }
     formData.append("gradeId", props.gradeID);
-    formData.append("subjectName", event.subject);
+    formData.append("subjectName", event.subject.replace(/\s+/g, " "));
     formData.append("multipartFile", event.subjectImg[0].originFileObj);
-
     async function createSubject() {
       await axios
         .post(`${process.env.REACT_APP_BASE_URL}/subject`, formData)

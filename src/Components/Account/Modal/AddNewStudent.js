@@ -111,10 +111,10 @@ const AddNewStudent = (props) => {
       .post(`${process.env.REACT_APP_BASE_URL}/student`, {
         classesId: values.class,
         doB: values.age.format("DD-MM-YYYY"),
-        fullName: values.name,
+        fullName: values.name.replace(/\s+/g, " "),
         gender: values.gender,
-        parentName: values.parentName,
-        contact: values.contact,
+        parentName: values.parentName.replace(/\s+/g, " "),
+        contact: values.contact.replace(/\s+/g, " "),
       })
       .then((res) => {
         console.log(res);

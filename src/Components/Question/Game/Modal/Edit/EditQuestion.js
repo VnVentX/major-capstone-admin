@@ -108,13 +108,12 @@ const EditQuestion = (props) => {
     if (values.description) {
       formData.append("description", values.description);
     }
-    if (values.imgFile !== undefined && values.imgFile.length !== 0) {
-      formData.append("imageFile", values.imgFile[0].originFileObj);
+    if (values.questionImg !== undefined && values.questionImg.length !== 0) {
+      formData.append("imageFile", values.questionImg[0].originFileObj);
     }
     formData.append("optionInputTypeList", optionInputTypeList);
     formData.append("optionTextList", optionTextList);
     formData.append("optionIdList", optionIdList);
-
     editFillQuestion(formData);
   };
 

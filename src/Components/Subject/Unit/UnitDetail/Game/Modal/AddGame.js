@@ -18,7 +18,7 @@ const AddGame = (props) => {
     console.log(values, props.lessonID);
     await axios
       .post(`${process.env.REACT_APP_BASE_URL}/game`, {
-        description: values.description,
+        description: values.description.replace(/\s+/g, " "),
         lessonId: props.lessonID,
         gameName: values.name,
       })

@@ -38,6 +38,7 @@ const EditQuestion = (props) => {
   const [loading, setLoading] = useState(false);
   const [audioFile, setAudioFile] = useState([]);
   const [imgFile, setImgFile] = useState([]);
+  const [listOptionID, setListOptionID] = useState([]);
 
   const getQuestionByID = async () => {
     await axios
@@ -45,6 +46,7 @@ const EditQuestion = (props) => {
         `${process.env.REACT_APP_BASE_URL}/question/${props.data.id}?questionType=EXERCISE`
       )
       .then((res) => {
+        let listID = [];
         form.setFieldsValue({
           questionTitle: res.data.questionTitle,
           description: res.data.description,
@@ -64,11 +66,12 @@ const EditQuestion = (props) => {
         ]);
         setCounter(res.data.optionQuestionDTOList.length);
         res.data.optionQuestionDTOList.forEach((item) => {
+          listID.push(item.id);
           if (item.correct === true) {
             correctCount = correctCount + 1;
           }
         });
-        console.log(correctCount);
+        setListOptionID([...listID]);
       })
       .catch((e) => {
         console.log(e);
@@ -143,12 +146,20 @@ const EditQuestion = (props) => {
     let optionIdList = [];
     let optionTextList = [];
     let isCorrectList = [];
-    console.log(values.imgFile);
+    let optionIdDeleteList = [];
     values.options.forEach((item) => {
-      optionIdList.push(item.id);
+      if (item.id === undefined) {
+        optionIdList.push(0);
+      } else {
+        optionIdList.push(item.id);
+      }
       optionTextList.push(item.optionText);
       isCorrectList.push(item.correct);
     });
+    //List Option ID want to delete
+    optionIdDeleteList = listOptionID.filter(
+      (val) => !optionIdList.includes(val)
+    );
     let formData = new FormData();
     formData.append("id", props.data.id);
     formData.append("questionTitle", values.questionTitle);
@@ -158,14 +169,27 @@ const EditQuestion = (props) => {
     }
     if (values.imgFile !== undefined && values.imgFile.length !== 0) {
       formData.append("imageFile", values.imgFile[0].originFileObj);
+    } else if (values.imgFile !== undefined && values.imgFile.length === 0) {
+      let fakeFile = new File([""], "fakeFile", { type: "image/png" });
+      formData.append("imageFile", fakeFile);
     }
     if (values.audioFile !== undefined && values.audioFile.length !== 0) {
       formData.append("audioFile", values.audioFile[0].originFileObj);
+    } else if (
+      values.audioFile !== undefined &&
+      values.audioFile.length === 0
+    ) {
+      let fakeFile = new File([""], "fakeFile", { type: "audio/mpeg" });
+      formData.append("audioFile", fakeFile);
     }
     formData.append("isCorrectList", [isCorrectList]);
     formData.append("optionTextList", optionTextList);
     formData.append("optionIdList", optionIdList);
-
+    if (optionIdDeleteList.length === 0) {
+      formData.append("optionIdDeleteList", null);
+    } else {
+      formData.append("optionIdDeleteList", optionIdDeleteList);
+    }
     editQuestion(formData);
   };
 
