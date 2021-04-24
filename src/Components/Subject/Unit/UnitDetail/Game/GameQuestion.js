@@ -79,11 +79,11 @@ const GameQuestion = () => {
       .then((res) => {
         console.log(res);
         getQuestionByGameID();
+        setSelectedRowKeys([]);
         message.success("Delete Question successfully");
       })
       .catch((e) => {
         console.log(e);
-
         message.error("Fail to delete Question");
       });
   };

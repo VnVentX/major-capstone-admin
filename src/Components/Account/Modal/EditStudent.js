@@ -20,7 +20,7 @@ const EditStudent = (props) => {
       .then((res) => {
         form.setFieldsValue({
           name: res.data.fullName,
-          age: moment(res.data.doB, "DD-MM-YYYY"),
+          age: moment(res.data.doB, "DD/MM/YYYY"),
           gender: res.data.gender,
           parentName: res.data.parentName,
           contact: res.data.contact,
@@ -35,7 +35,7 @@ const EditStudent = (props) => {
     setLoading(true);
     await axios
       .put(`${process.env.REACT_APP_BASE_URL}/student/${props.data.id}`, {
-        doB: values.age.format("DD-MM-YYYY"),
+        doB: values.age.format("DD/MM/YYYY"),
         fullName: values.name?.replace(/\s+/g, " "),
         gender: values.gender,
         parentName: values.parentName?.replace(/\s+/g, " "),
@@ -117,7 +117,7 @@ const EditStudent = (props) => {
             label="DoB"
             rules={[{ required: true, message: "Please choose DoB" }]}
           >
-            <DatePicker format="DD-MM-YYYY" />
+            <DatePicker format="DD/MM/YYYY" />
           </Form.Item>
           <Form.Item
             name="gender"

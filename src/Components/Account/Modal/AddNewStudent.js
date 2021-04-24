@@ -110,7 +110,7 @@ const AddNewStudent = (props) => {
     await axios
       .post(`${process.env.REACT_APP_BASE_URL}/student`, {
         classesId: values.class,
-        doB: values.age.format("DD-MM-YYYY"),
+        doB: values.age.format("DD/MM/YYYY"),
         fullName: values.name?.replace(/\s+/g, " "),
         gender: values.gender,
         parentName: values.parentName?.replace(/\s+/g, " "),
@@ -247,7 +247,7 @@ const AddNewStudent = (props) => {
             label="DoB"
             rules={[{ required: true, message: "Please choose DoB" }]}
           >
-            <DatePicker format="DD-MM-YYYY" />
+            <DatePicker format="DD/MM/YYYY" />
           </Form.Item>
           <Form.Item
             name="gender"

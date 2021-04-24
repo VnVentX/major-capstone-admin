@@ -65,6 +65,8 @@ const ImportClassExcel = (props) => {
       })
       .catch((e) => {
         console.log(e);
+        message.error("Fail to import file!");
+        setLoading(false);
       });
   };
 
@@ -98,6 +100,8 @@ const ImportClassExcel = (props) => {
       })
       .catch((e) => {
         console.log(e);
+        message.error("Fail to import file!");
+        setLoading(false);
       });
   };
 

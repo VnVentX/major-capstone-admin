@@ -64,6 +64,7 @@ const AddQuestion = (props) => {
         setSelectedRowKeys([]);
         setLoading(false);
         handleCancel();
+        setSelectedRowKeys([]);
         message.success("Add Question successfully");
       })
       .catch((e) => {

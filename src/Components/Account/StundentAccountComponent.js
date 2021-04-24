@@ -201,14 +201,16 @@ export default class StudentAccountComponent extends Component {
               justifyContent: "space-between",
             }}
           >
-            <div>
-              <Input.Search
-                placeholder="Search Student"
-                allowClear
-                onSearch={(name) => this.props.handleNameSearch(name)}
-                enterButton
-              />
-            </div>
+            {this.props.data?.length > 0 && (
+              <div>
+                <Input.Search
+                  placeholder="Search Student"
+                  allowClear
+                  onSearch={(name) => this.props.handleNameSearch(name)}
+                  enterButton
+                />
+              </div>
+            )}
             {this.props.searchData?.school &&
               this.props.searchData?.grade &&
               this.props.searchData?.class && (
@@ -219,15 +221,6 @@ export default class StudentAccountComponent extends Component {
                     alignItems: "center",
                   }}
                 >
-                  {/* {this.props.data.length > 0 && (
-                    <Button
-                      type="primary"
-                      size="large"
-                      icon={<DownloadOutlined />}
-                    >
-                      Export Student List
-                    </Button>
-                  )} */}
                   <AddNewStudent
                     searchData={this.props.searchData}
                     handleSearch={this.props.handleSearch}

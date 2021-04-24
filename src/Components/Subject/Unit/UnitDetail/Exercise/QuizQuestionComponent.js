@@ -79,6 +79,7 @@ const QuizQuestionComponent = () => {
       .then((res) => {
         console.log(res);
         getQuestionByExerciseID();
+        setSelectedRowKeys([]);
         message.success("Delete Question successfully");
       })
       .catch((e) => {

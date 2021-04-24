@@ -186,7 +186,7 @@ const EditQuestion = (props) => {
     formData.append("optionTextList", optionTextList);
     formData.append("optionIdList", optionIdList);
     if (optionIdDeleteList.length === 0) {
-      formData.append("optionIdDeleteList", null);
+      formData.append("optionIdDeleteList", []);
     } else {
       formData.append("optionIdDeleteList", optionIdDeleteList);
     }

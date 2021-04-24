@@ -93,9 +93,12 @@ const AddNewLesson = (props) => {
           <Form.Item
             name="lesson"
             label="Lesson Name"
-            rules={[{ required: true, message: "Please input a lesson" }]}
+            rules={[
+              { required: true, message: "Please input a lesson name" },
+              { type: "number", message: "Please input a number" },
+            ]}
           >
-            <InputNumber placeholder="Lesson" min={1} />
+            <InputNumber placeholder="Lesson" min={1} max={100} />
           </Form.Item>
           <Form.Item
             name="url"
