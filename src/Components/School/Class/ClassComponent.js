@@ -128,6 +128,10 @@ const ClassComponent = (props) => {
             <Tag color={"volcano"} key={status}>
               Disabled
             </Tag>
+          ) : status === "PENDING" ? (
+            <Tag color={"gold"} key={status}>
+              Pending
+            </Tag>
           ) : null}
         </span>
       ),
@@ -137,35 +141,39 @@ const ClassComponent = (props) => {
       align: "center",
       render: (record) => (
         <Space size="small">
-          <Popconfirm
-            placement="topRight"
-            title={
-              record.status === "ACTIVE"
-                ? "Are you sure to disable this Class?"
-                : "Are you sure to active this Class?"
-            }
-            onConfirm={() => handleDisableClass(record.id, record.status)}
-            okText="Yes"
-            cancelText="No"
-          >
-            <Button type="primary">Change Status</Button>
-          </Popconfirm>
-          <EditClass
-            data={record}
-            getClassBySchoolGrade={getClassBySchoolGrade}
-          />
-          <Popconfirm
-            placement="topRight"
-            title="Are you sure to delete this Class?"
-            onConfirm={() => handleDisableClass(record.id, "DELETED")} //Handle disable logic here
-            okText="Yes"
-            cancelText="No"
-            icon={<QuestionCircleOutlined style={{ color: "red" }} />}
-          >
-            <Button type="danger" icon={<DeleteOutlined />}>
-              Delete
-            </Button>
-          </Popconfirm>
+          {record.className.toUpperCase() !== "PENDING" && (
+            <>
+              <Popconfirm
+                placement="topRight"
+                title={
+                  record.status === "ACTIVE"
+                    ? "Are you sure to disable this Class?"
+                    : "Are you sure to active this Class?"
+                }
+                onConfirm={() => handleDisableClass(record.id, record.status)}
+                okText="Yes"
+                cancelText="No"
+              >
+                <Button type="primary">Change Status</Button>
+              </Popconfirm>
+              <EditClass
+                data={record}
+                getClassBySchoolGrade={getClassBySchoolGrade}
+              />
+              <Popconfirm
+                placement="topRight"
+                title="Are you sure to delete this Class?"
+                onConfirm={() => handleDisableClass(record.id, "DELETED")} //Handle disable logic here
+                okText="Yes"
+                cancelText="No"
+                icon={<QuestionCircleOutlined style={{ color: "red" }} />}
+              >
+                <Button type="danger" icon={<DeleteOutlined />}>
+                  Delete
+                </Button>
+              </Popconfirm>
+            </>
+          )}
         </Space>
       ),
     },
@@ -217,6 +225,7 @@ const ClassComponent = (props) => {
         />
       </div>
       <Table
+        className="class-table"
         rowKey={(record) => record.id}
         rowSelection={rowSelection}
         columns={columns}
