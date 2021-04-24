@@ -105,11 +105,11 @@ const AddNewQuestion = () => {
     });
     let formData = new FormData();
     formData.append("unitId", values.unit);
-    formData.append("questionTitle", values.questionTitle);
+    formData.append("questionTitle", values.questionTitle?.replace(/\s+/g, " "));
     formData.append("questionType", "EXERCISE");
     formData.append("score", values.score);
     if (values.description) {
-      formData.append("description", values.description);
+      formData.append("description", values.description?.replace(/\s+/g, " "));
     }
     if (values.imgFile !== undefined && values.imgFile.length !== 0) {
       formData.append("imageFile", values.imgFile[0].originFileObj);

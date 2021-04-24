@@ -60,10 +60,10 @@ const EditProgressTest = (props) => {
     setLoading(true);
     await axios
       .put(`${process.env.REACT_APP_BASE_URL}/progressTest/${props.data.id}`, {
-        description: values.description.replace(/\s+/g, " "),
+        description: values.description?.replace(/\s+/g, " "),
         id: props.data.id,
         subjectId: window.location.pathname.split("/")[2],
-        progressTestName: values.progressTest.replace(/\s+/g, " "),
+        progressTestName: values.progressTest?.replace(/\s+/g, " "),
         unitAfterId: values.unitAfter,
       })
       .then((res) => {

@@ -34,7 +34,7 @@ const EditExercise = (props) => {
       .put(
         `${process.env.REACT_APP_BASE_URL}/exercise/${props.data.id}`,
         {
-          description: values.description.replace(/\s+/g, " "),
+          description: values.description?.replace(/\s+/g, " "),
           exerciseName: values.name,
           lessonId: props.lessonID,
           id: props.data.id,

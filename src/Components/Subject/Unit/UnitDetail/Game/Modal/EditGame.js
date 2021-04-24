@@ -34,7 +34,7 @@ const EditGame = (props) => {
       .put(`${process.env.REACT_APP_BASE_URL}/game/${props.data.id}`, {
         gameName: values.name,
         lessonId: props.lessonID,
-        description: values.description.replace(/\s+/g, " "),
+        description: values.description?.replace(/\s+/g, " "),
       })
       .then((res) => {
         console.log(res);

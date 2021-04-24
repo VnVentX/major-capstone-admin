@@ -17,7 +17,7 @@ const AddProgress = (props) => {
     setLoading(true);
     await axios
       .post(`${process.env.REACT_APP_BASE_URL}/exercise`, {
-        description: values.description.replace(/\s+/g, " "),
+        description: values.description?.replace(/\s+/g, " "),
         exerciseName: values.name,
         progressTest: true,
         progressTestId: window.location.pathname.split("/")[4],

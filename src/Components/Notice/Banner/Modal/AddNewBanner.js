@@ -39,7 +39,7 @@ const AddNewBanner = (props) => {
     setLoading(true);
     let formData = new FormData();
     if (event.description) {
-      formData.append("description", event.description.trim());
+      formData.append("description", event.description?.replace(/\s+/g, " "));
     }
     formData.append("file", event.bannerImg[0].originFileObj);
     formData.append("accountId", getID());

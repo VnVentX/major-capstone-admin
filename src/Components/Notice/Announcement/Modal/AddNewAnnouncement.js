@@ -92,7 +92,7 @@ const AddNewAnnouncement = (props) => {
           >
             <Input.TextArea
               placeholder="Title"
-              maxLength={250}
+              maxLength={70}
               showCount
               autoSize
             />

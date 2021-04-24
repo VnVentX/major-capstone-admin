@@ -51,7 +51,7 @@ const EditBanner = (props) => {
       formData.append("file", event.bannerImg[0].originFileObj);
     }
     if (event.description) {
-      formData.append("description", event.description.trim());
+      formData.append("description", event.description?.replace(/\s+/g, " "));
     }
     formData.append("id", props.data.id);
     async function editBanner() {

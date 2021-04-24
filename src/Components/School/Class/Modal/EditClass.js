@@ -33,7 +33,7 @@ const EditClass = (props) => {
     async function updateClass() {
       await axios
         .put(`${process.env.REACT_APP_BASE_URL}/class/${props.data.id}`, {
-          className: values.className.replace(/\s+/g, " "),
+          className: values.className?.replace(/\s+/g, " "),
         })
         .then((res) => {
           console.log(res);

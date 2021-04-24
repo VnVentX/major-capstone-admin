@@ -17,7 +17,7 @@ const AddNewUnit = (props) => {
     setLoading(true);
     await axios
       .post(`${process.env.REACT_APP_BASE_URL}/unit`, {
-        description: values.description.replace(/\s+/g, " "),
+        description: values.description?.replace(/\s+/g, " "),
         subjectId: window.location.pathname.split("/")[2],
         unitName: values.unit,
       })
