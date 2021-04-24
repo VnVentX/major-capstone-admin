@@ -10,6 +10,7 @@ import {
   Popconfirm,
   AutoComplete,
   Select,
+  message,
 } from "antd";
 import { QuestionCircleOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
@@ -64,6 +65,7 @@ export default class GradeDetailTable extends Component {
   };
 
   disableLink = async (schoolID, status) => {
+    this.setState({ tableLoading: true });
     let ids = [];
     let gradeID = window.location.pathname.split("/")[2];
     ids.push(gradeID);
@@ -76,9 +78,21 @@ export default class GradeDetailTable extends Component {
       .then((res) => {
         console.log(res);
         this.getSchoolByGradeID(this.props.gradeID);
+        this.setState({ tableLoading: false });
+        if (status === "DELETED") {
+          message.success("Unlink successfully");
+        } else {
+          message.success("Change status successfully");
+        }
       })
       .catch((e) => {
         console.log(e);
+        this.setState({ tableLoading: false });
+        if (status === "DELETED") {
+          message.error("Fail to unlink");
+        } else {
+          message.error("Fail to change status");
+        }
       });
   };
 

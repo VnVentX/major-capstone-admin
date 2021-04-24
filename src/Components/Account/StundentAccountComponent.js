@@ -134,6 +134,10 @@ export default class StudentAccountComponent extends Component {
               <Tag color={"volcano"} key={status}>
                 Disabled
               </Tag>
+            ) : status === "PENDING" ? (
+              <Tag color={"gold"} key={status}>
+                Pending
+              </Tag>
             ) : null}
           </span>
         ),
@@ -143,21 +147,23 @@ export default class StudentAccountComponent extends Component {
         align: "center",
         render: (record) => (
           <Space size="small">
-            <Popconfirm
-              placement="topRight"
-              title={
-                record.status === "ACTIVE"
-                  ? "Are you sure to disable this Student?"
-                  : "Are you sure to active this Student?"
-              }
-              onConfirm={() =>
-                this.handleDisableStudent(record.id, record.status)
-              }
-              okText="Yes"
-              cancelText="No"
-            >
-              <Button type="primary">Change Status</Button>
-            </Popconfirm>
+            {record.status.toUpperCase() !== "PENDING" && (
+              <Popconfirm
+                placement="topRight"
+                title={
+                  record.status === "ACTIVE"
+                    ? "Are you sure to disable this Student?"
+                    : "Are you sure to active this Student?"
+                }
+                onConfirm={() =>
+                  this.handleDisableStudent(record.id, record.status)
+                }
+                okText="Yes"
+                cancelText="No"
+              >
+                <Button type="primary">Change Status</Button>
+              </Popconfirm>
+            )}
             <EditStudent
               data={record}
               handleSearch={this.props.handleSearch}

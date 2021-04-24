@@ -49,7 +49,7 @@ const EditQuestion = (props) => {
         let listID = [];
         form.setFieldsValue({
           questionTitle: res.data.questionTitle,
-          description: res.data.description?.replace(/\s+/g, " "),
+          description: res.data.description?.replace(/\s+/g, " ").trim(),
           score: res.data.score,
           options: res.data.optionQuestionDTOList,
         });
@@ -165,7 +165,7 @@ const EditQuestion = (props) => {
     formData.append("questionTitle", values.questionTitle);
     formData.append("score", values.score);
     if (values.description) {
-      formData.append("description", values.description?.replace(/\s+/g, " "));
+      formData.append("description", values.description?.replace(/\s+/g, " ").trim());
     }
     if (values.imgFile !== undefined && values.imgFile.length !== 0) {
       formData.append("imageFile", values.imgFile[0].originFileObj);

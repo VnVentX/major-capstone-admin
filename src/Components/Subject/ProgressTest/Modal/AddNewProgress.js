@@ -40,9 +40,9 @@ const AddNewProgress = (props) => {
     setLoading(true);
     await axios
       .post(`${process.env.REACT_APP_BASE_URL}/progressTest`, {
-        description: values.description?.replace(/\s+/g, " "),
+        description: values.description?.replace(/\s+/g, " ").trim(),
         subjectId: window.location.pathname.split("/")[2],
-        progressTestName: values.progressTest?.replace(/\s+/g, " "),
+        progressTestName: values.progressTest?.replace(/\s+/g, " ").trim(),
         unitAfterId: values.unitAfter,
       })
       .then((res) => {

@@ -54,9 +54,9 @@ const SchoolDetailComponent = () => {
                   <>TH {schoolData.schoolName}</>
                 ) : schoolData.schoolLevel === "JUNIOR" ? (
                   <>THCS {schoolData.schoolName}</>
-                ) : (
+                ) : schoolData.schoolLevel === "HIGH" ? (
                   <>THPT {schoolData.schoolName}</>
-                )}
+                ) : null}
               </Descriptions.Item>
               <Descriptions.Item
                 label="Education Level"

@@ -37,8 +37,8 @@ const AddNewSchool = (props) => {
     await axios
       .post(`${process.env.REACT_APP_BASE_URL}/school`, {
         schoolDistrict: values.schoolDistrict,
-        schoolName: values.schoolName?.replace(/\s+/g, " "),
-        schoolStreet: values.schoolStreet?.replace(/\s+/g, " "),
+        schoolName: values.schoolName?.replace(/\s+/g, " ").trim(),
+        schoolStreet: values.schoolStreet?.replace(/\s+/g, " ").trim(),
         schoolLevel: values.type,
       })
       .then((res) => {
@@ -58,8 +58,8 @@ const AddNewSchool = (props) => {
       await axios
         .post(`${process.env.REACT_APP_BASE_URL}/school/check`, {
           schoolDistrict: event.schoolDistrict,
-          schoolName: event.schoolName?.replace(/\s+/g, " "),
-          schoolStreet: event.schoolStreet?.replace(/\s+/g, " "),
+          schoolName: event.schoolName?.replace(/\s+/g, " ").trim(),
+          schoolStreet: event.schoolStreet?.replace(/\s+/g, " ").trim(),
           schoolLevel: event.type,
         })
         .then((res) => {

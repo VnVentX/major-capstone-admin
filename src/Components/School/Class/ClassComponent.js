@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import { Card, Button, Tag, Space, Table, Popconfirm } from "antd";
+import { Card, Button, Tag, Space, Table, Popconfirm, message } from "antd";
 import {
   QuestionCircleOutlined,
   DeleteOutlined,
@@ -15,6 +15,7 @@ import ExportClassExcel from "./Modal/ExportClassExcel";
 const ClassComponent = (props) => {
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [classData, setClassData] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     getClassBySchoolGrade();
@@ -30,13 +31,16 @@ const ClassComponent = (props) => {
       })
       .then((res) => {
         setClassData(res.data.length === 0 ? [] : res.data);
+        setLoading(false);
       })
       .catch((e) => {
         console.log(e);
+        setLoading(false);
       });
   };
 
   const disableClass = async (id, status) => {
+    setLoading(true);
     let ids = [];
     if (id.length === undefined) {
       ids.push(id);
@@ -51,9 +55,21 @@ const ClassComponent = (props) => {
       .then((res) => {
         console.log(res);
         getClassBySchoolGrade();
+        setLoading(true);
+        if (status === "DELETED") {
+          message.success("Delete class successfully");
+        } else {
+          message.success("Change status successfully");
+        }
       })
       .catch((e) => {
         console.log(e);
+        setLoading(true);
+        if (status === "DELETED") {
+          message.error("Fail to delete class");
+        } else {
+          message.error("Fail to change status");
+        }
       });
   };
 
@@ -231,6 +247,7 @@ const ClassComponent = (props) => {
         columns={columns}
         dataSource={classData}
         scroll={{ x: true }}
+        loading={loading}
       />
       <div>
         <h1>With selected:</h1>

@@ -17,7 +17,7 @@ const AddExercise = (props) => {
     setLoading(true);
     await axios
       .post(`${process.env.REACT_APP_BASE_URL}/exercise`, {
-        description: values.description?.replace(/\s+/g, " "),
+        description: values.description?.replace(/\s+/g, " ").trim(),
         exerciseName: values.name,
         lessonId: props.lessonID,
         progressTestId: 0,

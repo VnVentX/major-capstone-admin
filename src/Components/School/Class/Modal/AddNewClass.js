@@ -27,7 +27,7 @@ const AddNewClass = (props) => {
     async function createClass() {
       await axios
         .post(`${process.env.REACT_APP_BASE_URL}/class`, {
-          className: values.className?.replace(/\s+/g, " "),
+          className: values.className?.replace(/\s+/g, " ").trim(),
           gradeId: props.gradeID,
           schoolId: window.location.pathname.split("/")[2],
         })

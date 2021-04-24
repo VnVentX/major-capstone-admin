@@ -10,6 +10,7 @@ import {
   Popconfirm,
   AutoComplete,
   Select,
+  message,
 } from "antd";
 import { QuestionCircleOutlined, DeleteOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
@@ -26,7 +27,6 @@ export default class SchoolComponent extends Component {
 
   componentDidMount() {
     this.getAllSchool();
-    this.setState({ isLoading: false });
   }
 
   getAllSchool = async () => {
@@ -37,6 +37,7 @@ export default class SchoolComponent extends Component {
           dataSource: res.data.length === 0 ? [] : res.data,
           dataSearch: res.data.length === 0 ? [] : res.data,
         });
+        this.setState({ isLoading: false });
       })
       .catch((e) => {
         console.log(e);
@@ -44,6 +45,7 @@ export default class SchoolComponent extends Component {
   };
 
   disableSchool = async (id, status) => {
+    this.setState({ isLoading: true });
     await axios
       .put(`${process.env.REACT_APP_BASE_URL}/school/changeStatus`, {
         id: id,
@@ -52,9 +54,21 @@ export default class SchoolComponent extends Component {
       .then((res) => {
         console.log(res);
         this.getAllSchool();
+        this.setState({ isLoading: false });
+        if (status === "DELETED") {
+          message.success("Delete school successfully");
+        } else {
+          message.success("Change status successfully");
+        }
       })
       .catch((e) => {
         console.log(e);
+        this.setState({ isLoading: false });
+        if (status === "DELETED") {
+          message.error("Fail to delete school");
+        } else {
+          message.error("Fail to change status");
+        }
       });
   };
 
