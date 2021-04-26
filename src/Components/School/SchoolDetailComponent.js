@@ -73,7 +73,6 @@ const SchoolDetailComponent = () => {
               <Descriptions.Item
                 label="Address"
                 labelStyle={{ fontWeight: "bold" }}
-                span={2}
               >
                 {schoolData.schoolStreet}
               </Descriptions.Item>

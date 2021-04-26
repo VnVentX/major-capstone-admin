@@ -210,6 +210,7 @@ const GameQuestion = () => {
         columns={selectedQuestionCol}
         dataSource={data}
         rowKey={(record) => record.id}
+        scroll={{ x: true }}
       />
       <div>
         <h1>With selected:</h1>

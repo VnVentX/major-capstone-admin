@@ -11,7 +11,6 @@ import {
   Cascader,
   Input,
 } from "antd";
-import { DownloadOutlined } from "@ant-design/icons";
 import AddNewStudent from "./Modal/AddNewStudent";
 import EditStudent from "./Modal/EditStudent";
 import ViewStudent from "./Modal/ViewStudent";
@@ -29,7 +28,6 @@ export default class StudentAccountComponent extends Component {
   };
 
   onSelectChange = (selectedRowKeys) => {
-    console.log("selectedRowKeys changed: ", selectedRowKeys);
     this.setState({ selectedRowKeys });
   };
 
@@ -46,6 +44,7 @@ export default class StudentAccountComponent extends Component {
   };
 
   disableStudent = async (id, status) => {
+    this.setState({ loading: true });
     let ids = [];
     if (id.length === undefined) {
       ids.push(id);
@@ -59,10 +58,17 @@ export default class StudentAccountComponent extends Component {
       })
       .then((res) => {
         console.log(res);
+        this.setState({
+          selectedRowKeys: [],
+          loading: false,
+        });
         this.props.handleSearch(this.props.searchData);
       })
       .catch((e) => {
         console.log(e);
+        this.setState({
+          loading: false,
+        });
       });
   };
 
@@ -171,7 +177,7 @@ export default class StudentAccountComponent extends Component {
             />
             <Popconfirm
               placement="topRight"
-              title="Are you sure to delete this Students?"
+              title="Are you sure to delete this Student?"
               onConfirm={() => this.handleDisableStudent(record.id, "DELETED")}
               okText="Yes"
               cancelText="No"

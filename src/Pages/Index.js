@@ -69,6 +69,10 @@ export default class Index extends React.Component {
   }
 
   componentWillMount() {
+    this.activeMenu();
+  }
+
+  activeMenu = () => {
     var path = window.location.pathname.split("/")[1];
     var gradePath = window.location.pathname.split("/")[2];
     if (path === "") {
@@ -96,7 +100,7 @@ export default class Index extends React.Component {
     } else if (path === "game-question") {
       this.setState({ activePath: "game-question", activeSub: ["sub2"] });
     }
-  }
+  };
 
   getAllGrade = async () => {
     await axios
@@ -155,6 +159,7 @@ export default class Index extends React.Component {
     await axios
       .get(`${process.env.REACT_APP_BASE_URL}/breadcrumb/unit`)
       .then((res) => {
+        console.log(res.data);
         this.setState({
           unitNameByID: res.data,
         });
@@ -189,6 +194,9 @@ export default class Index extends React.Component {
   };
 
   handleClickMenuItem = (e) => {
+    //remove active before change
+    const school = document.getElementById("school");
+    school?.classList?.remove("ant-menu-item-selected");
     var gradePath = window.location.pathname.split("/")[2];
     this.setState({ activePath: e.key, gradePath: gradePath });
   };
@@ -224,7 +232,7 @@ export default class Index extends React.Component {
       <span>{subjectNameByID[match.params.subjectID]}</span>
     );
     const DynamicUnitBreadcrumb = ({ match }) => (
-      <span>Unit {unitNameByID[match.params.subjectID]}</span>
+      <span>Unit {unitNameByID[match.params.unitID]}</span>
     );
     const DynamicExerciseBreadcrumb = ({ match }) => (
       <span>Exercise {exerciseNameByID[match.params.exceciseID]}</span>
@@ -323,11 +331,10 @@ export default class Index extends React.Component {
                   onTitleClick={this.handleClickSubMenu}
                 >
                   {this.state.grade?.map((i, idx) => (
-                    <Menu.Item key={idx + 20}>
+                    <Menu.Item key={idx + 20} id={`grade${idx + 1}`}>
                       <Link
                         to={{
                           pathname: `/grade/${i.id}`,
-                          key: idx,
                         }}
                       >
                         <span>Grade {i.gradeName}</span>
@@ -335,12 +342,12 @@ export default class Index extends React.Component {
                     </Menu.Item>
                   ))}
                 </SubMenu>
-                <Menu.Item key="school">
+                <Menu.Item key="school" id="school">
                   <Link to="/school">
                     <span>School</span>
                   </Link>
                 </Menu.Item>
-                <Menu.Item key="student">
+                <Menu.Item key="student" id="student">
                   <Link to="/student">
                     <span>Student</span>
                   </Link>
@@ -413,6 +420,9 @@ export default class Index extends React.Component {
                   path="/school/:schoolID"
                   exact
                   component={SchoolDetail}
+                  // component={() => (
+                  //   <SchoolDetail activeMenu={this.activeMenu} />
+                  // )}
                 />
                 <Route path="/student" exact component={Account} />
                 <Route

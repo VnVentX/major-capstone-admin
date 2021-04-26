@@ -182,7 +182,13 @@ export default class GradeDetailTable extends Component {
             </Popconfirm>
             <Popconfirm
               placement="topRight"
-              title="Are you sure to delete this School?"
+              title={
+                <span>
+                  Are you sure to unlink this Schools?
+                  <br />
+                  (This action will remove all class and student.)
+                </span>
+              }
               onConfirm={() => this.handleDisableLink(record.id, "DELETED")}
               okText="Yes"
               cancelText="No"

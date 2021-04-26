@@ -117,7 +117,12 @@ const EditStudent = (props) => {
             label="DoB"
             rules={[{ required: true, message: "Please choose DoB" }]}
           >
-            <DatePicker format="DD/MM/YYYY" />
+            <DatePicker
+              format="DD/MM/YYYY"
+              disabledDate={(current) => {
+                return current && current > moment().endOf("day");
+              }}
+            />
           </Form.Item>
           <Form.Item
             name="gender"

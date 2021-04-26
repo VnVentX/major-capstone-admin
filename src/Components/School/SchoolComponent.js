@@ -160,7 +160,13 @@ export default class SchoolComponent extends Component {
             <EditSchool getAllSchool={this.getAllSchool} schoolID={record.id} />
             <Popconfirm
               placement="topRight"
-              title="Are you sure to delete this Schools?"
+              title={
+                <span>
+                  Are you sure to delete this Schools?
+                  <br />
+                  (This action will remove all linked grade, class and student.)
+                </span>
+              }
               onConfirm={() => this.handleDisableSchool(record.id, "DELETED")}
               okText="Yes"
               cancelText="No"
@@ -207,11 +213,16 @@ export default class SchoolComponent extends Component {
               allowClear
               onSearch={(schoolSearch) =>
                 this.setState({
-                  dataSource: this.state.dataSearch?.filter((item) =>
-                    item.schoolName
-                      .toString()
-                      .toLowerCase()
-                      .includes(schoolSearch.toLowerCase())
+                  dataSource: this.state.dataSearch?.filter(
+                    (item) =>
+                      item.schoolName
+                        .toString()
+                        .toLowerCase()
+                        .includes(schoolSearch.toLowerCase()) ||
+                      item.schoolCode
+                        .toString()
+                        .toLowerCase()
+                        .includes(schoolSearch.toLowerCase())
                   ),
                 })
               }

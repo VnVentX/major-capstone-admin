@@ -81,6 +81,9 @@ const ClassComponent = (props) => {
   const rowSelection = {
     selectedRowKeys,
     onChange: onSelectChange,
+    getCheckboxProps: (record) => ({
+      disabled: record.className === "PENDING",
+    }),
   };
 
   const handleDisableClass = (e, status) => {
@@ -178,7 +181,13 @@ const ClassComponent = (props) => {
               />
               <Popconfirm
                 placement="topRight"
-                title="Are you sure to delete this Class?"
+                title={
+                  <span>
+                    Are you sure to delete this class?
+                    <br />
+                    (This action will remove all students.)
+                  </span>
+                }
                 onConfirm={() => handleDisableClass(record.id, "DELETED")} //Handle disable logic here
                 okText="Yes"
                 cancelText="No"
@@ -261,7 +270,13 @@ const ClassComponent = (props) => {
           <>
             <Popconfirm
               placement="topRight"
-              title="Are you sure to delete selected Class?"
+              title={
+                <span>
+                  Are you sure to delete selected classes?
+                  <br />
+                  (This action will remove all students.)
+                </span>
+              }
               onConfirm={() => handleDisableClass(selectedRowKeys, "DELETED")} //Handle disable logic here
               okText="Yes"
               cancelText="No"
