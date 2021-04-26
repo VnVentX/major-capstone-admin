@@ -32,7 +32,7 @@ export default class GradeDetailTable extends Component {
 
   getAllSchool = async () => {
     await axios
-      .get(`${process.env.REACT_APP_BASE_URL}/school/all`)
+      .get(`${process.env.REACT_APP_BASE_URL}/school/all/active`)
       .then((res) => {
         console.log(res.data);
         this.setState({

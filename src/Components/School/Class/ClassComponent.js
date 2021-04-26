@@ -1,21 +1,28 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import { Card, Button, Tag, Space, Table, Popconfirm, message } from "antd";
 import {
-  QuestionCircleOutlined,
-  DeleteOutlined,
-  DownloadOutlined,
-} from "@ant-design/icons";
+  Card,
+  Button,
+  Tag,
+  Space,
+  Table,
+  Spin,
+  Popconfirm,
+  message,
+} from "antd";
+import { QuestionCircleOutlined, DeleteOutlined } from "@ant-design/icons";
 import AddNewClass from "./Modal/AddNewClass";
 import ImportClassExcel from "./Modal/ImportClassExcel";
 import EditClass from "./Modal/EditClass";
 import ExportClassExcel from "./Modal/ExportClassExcel";
+import ExportFinalScore from "./Modal/ExportFinalScore";
 
 const ClassComponent = (props) => {
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [classData, setClassData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [graduateLoading, setGraduateLoading] = useState(false);
 
   useEffect(() => {
     getClassBySchoolGrade();
@@ -76,6 +83,10 @@ const ClassComponent = (props) => {
   const onSelectChange = (selectedRowKeys) => {
     console.log("selectedRowKeys changed: ", selectedRowKeys);
     setSelectedRowKeys(selectedRowKeys);
+  };
+
+  const handleGraduateLoading = (event) => {
+    setGraduateLoading(event);
   };
 
   const rowSelection = {
@@ -216,79 +227,88 @@ const ClassComponent = (props) => {
           }}
         >
           Class Management
-          <Button
-            type="primary"
-            size="middle"
-            danger
-            icon={<DownloadOutlined />}
-          >
-            Graduate
-          </Button>
+          <ExportFinalScore
+            gradeID={props.gradeID}
+            handleGraduateLoading={handleGraduateLoading}
+          />
         </div>
       }
     >
-      <div
-        style={{
-          marginBottom: 10,
-          display: "flex",
-          justifyContent: "space-between",
-        }}
-      >
-        <div
-          style={{
-            marginBottom: 10,
-            display: "flex",
-            justifyContent: "space-between",
-          }}
-        >
-          <ImportClassExcel gradeID={props.gradeID} />
-          <ExportClassExcel gradeID={props.gradeID} />
+      {graduateLoading ? (
+        <div style={{ textAlign: "center" }}>
+          <Spin size="large" />
         </div>
-        <AddNewClass
-          gradeID={props.gradeID}
-          getClassBySchoolGrade={getClassBySchoolGrade}
-        />
-      </div>
-      <Table
-        className="class-table"
-        rowKey={(record) => record.id}
-        rowSelection={rowSelection}
-        columns={columns}
-        dataSource={classData}
-        scroll={{ x: true }}
-        loading={loading}
-      />
-      <div>
-        <h1>With selected:</h1>
-        {selectedRowKeys.length === 0 ? (
-          <>
-            <Button type="danger" disabled icon={<DeleteOutlined />}>
-              Delete
-            </Button>
-          </>
-        ) : (
-          <>
-            <Popconfirm
-              placement="topRight"
-              title={
-                <span>
-                  Are you sure to delete selected classes?
-                  <br />
-                  (This action will remove all students.)
-                </span>
-              }
-              onConfirm={() => handleDisableClass(selectedRowKeys, "DELETED")} //Handle disable logic here
-              okText="Yes"
-              cancelText="No"
-              icon={<QuestionCircleOutlined style={{ color: "red" }} />}
+      ) : (
+        <>
+          <div
+            style={{
+              marginBottom: 10,
+              display: "flex",
+              justifyContent: "space-between",
+            }}
+          >
+            <div
+              style={{
+                marginBottom: 10,
+                display: "flex",
+                justifyContent: "space-between",
+              }}
             >
-              <Button type="danger" icon={<DeleteOutlined />}>
-                Delete
-              </Button>
-            </Popconfirm>
-          </>
-        )}
-      </div>
+              <ImportClassExcel gradeID={props.gradeID} />
+              <ExportClassExcel
+                gradeID={props.gradeID}
+                handleGraduateLoading={handleGraduateLoading}
+              />
+            </div>
+            <AddNewClass
+              gradeID={props.gradeID}
+              getClassBySchoolGrade={getClassBySchoolGrade}
+            />
+          </div>
+          <Table
+            className="class-table"
+            rowKey={(record) => record.id}
+            rowSelection={rowSelection}
+            columns={columns}
+            dataSource={classData}
+            scroll={{ x: true }}
+            loading={loading}
+          />
+          <div>
+            <h1>With selected:</h1>
+            {selectedRowKeys.length === 0 ? (
+              <>
+                <Button type="danger" disabled icon={<DeleteOutlined />}>
+                  Delete
+                </Button>
+              </>
+            ) : (
+              <>
+                <Popconfirm
+                  placement="topRight"
+                  title={
+                    <span>
+                      Are you sure to delete selected classes?
+                      <br />
+                      (This action will remove all students.)
+                    </span>
+                  }
+                  onConfirm={() =>
+                    handleDisableClass(selectedRowKeys, "DELETED")
+                  } //Handle disable logic here
+                  okText="Yes"
+                  cancelText="No"
+                  icon={<QuestionCircleOutlined style={{ color: "red" }} />}
+                >
+                  <Button type="danger" icon={<DeleteOutlined />}>
+                    Delete
+                  </Button>
+                </Popconfirm>
+              </>
+            )}
+          </div>
+        </>
+      )}
     </Card>
   );
 };

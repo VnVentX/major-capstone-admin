@@ -73,6 +73,7 @@ export default class StudentAccountComponent extends Component {
   };
 
   changeClass = async () => {
+    this.setState({ loading: true });
     let formData = new FormData();
     formData.append("classesId", this.state.changeClassID);
     formData.append("studentIdList", this.state.selectedRowKeys);
@@ -83,10 +84,12 @@ export default class StudentAccountComponent extends Component {
         this.props.handleSearch(this.props.searchData);
         this.setState({ selectedRowKeys: [] });
         message.success("Move students successfully");
+        this.setState({ loading: false });
       })
       .catch((e) => {
         console.log(e);
         message.error("Fail to move students");
+        this.setState({ loading: false });
       });
   };
 
@@ -213,16 +216,14 @@ export default class StudentAccountComponent extends Component {
               justifyContent: "space-between",
             }}
           >
-            {this.props.data?.length > 0 && (
-              <div>
-                <Input.Search
-                  placeholder="Search Student"
-                  allowClear
-                  onSearch={(name) => this.props.handleNameSearch(name)}
-                  enterButton
-                />
-              </div>
-            )}
+            <div>
+              <Input.Search
+                placeholder="Search Student"
+                allowClear
+                onSearch={(name) => this.props.handleNameSearch(name)}
+                enterButton
+              />
+            </div>
             {this.props.searchData?.school &&
               this.props.searchData?.grade &&
               this.props.searchData?.class && (

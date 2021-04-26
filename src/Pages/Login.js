@@ -20,11 +20,12 @@ export default function Login(props) {
         console.log(res.data);
         if (res.data === 0) {
           props.history.push("/login");
+        } else {
+          localStorage.setItem("token", "token");
+          localStorage.setItem("id", res.data);
+          // localStorage.setItem("role", res.data.userRoleDTO);
+          props.history.push("/");
         }
-        localStorage.setItem("token", "token");
-        localStorage.setItem("id", res.data);
-        // localStorage.setItem("role", res.data.userRoleDTO);
-        props.history.push("/");
       })
       .catch((e) => {
         console.log(e);

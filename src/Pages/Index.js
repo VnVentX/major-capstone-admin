@@ -159,7 +159,6 @@ export default class Index extends React.Component {
     await axios
       .get(`${process.env.REACT_APP_BASE_URL}/breadcrumb/unit`)
       .then((res) => {
-        console.log(res.data);
         this.setState({
           unitNameByID: res.data,
         });

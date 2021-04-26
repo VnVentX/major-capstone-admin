@@ -47,6 +47,7 @@ const EditSchool = (props) => {
   const updateSchool = async (id, values) => {
     await axios
       .put(`${process.env.REACT_APP_BASE_URL}/school/${id}`, {
+        schoolName: values.schoolName,
         schoolDistrict: values.schoolDistrict,
         schoolStreet: values.schoolStreet?.replace(/\s+/g, " ").trim(),
         schoolLevel: values.type,
@@ -61,8 +62,12 @@ const EditSchool = (props) => {
       })
       .catch((e) => {
         console.log(e);
+        if (e.response.data === "EXISTED") {
+          message.error("This School name has already existed");
+        } else {
+          message.error("Fail to create School");
+        }
         setLoading(false);
-        message.error("Fail to edit school!");
       });
   };
 

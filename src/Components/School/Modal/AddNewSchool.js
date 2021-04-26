@@ -10,15 +10,6 @@ const layout = {
   wrapperCol: { span: 16 },
 };
 
-const existedContent = `This school name in this district is already existed. Do you want to
-create this school?
-\n
-This action can not be reversed.`;
-const okContent = `School name is very important. Do you want to
-create this school?
-\n
-This action can not be reversed.`;
-
 const AddNewSchool = (props) => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
@@ -45,50 +36,39 @@ const AddNewSchool = (props) => {
         console.log(res);
         props.getAllSchool();
         message.success("Create new school successfully!");
+        handleCancel();
+        form.resetFields();
       })
       .catch((e) => {
-        console.log(e);
-        message.error("Fail to create new school!");
+        if (e.response.data === "EXISTED") {
+          message.error("This School name has already existed");
+        } else {
+          message.error("Fail to create School");
+        }
+        setLoading(false);
       });
   };
 
   const onFinish = (event) => {
-    setLoading(true);
-    async function checkExisted() {
-      await axios
-        .post(`${process.env.REACT_APP_BASE_URL}/school/check`, {
-          schoolDistrict: event.schoolDistrict,
-          schoolName: event.schoolName?.replace(/\s+/g, " ").trim(),
-          schoolStreet: event.schoolStreet?.replace(/\s+/g, " ").trim(),
-          schoolLevel: event.type,
-        })
-        .then((res) => {
-          console.log(res);
-          setLoading(false);
-          if (res.data === "EXISTED") {
-            warning(event, form, existedContent);
-          } else if (res.data === "OK") {
-            warning(event, form, okContent);
-          }
-        })
-        .catch((e) => {
-          console.log(e);
-          setLoading(false);
-        });
-    }
-    checkExisted();
+    warning(event);
   };
 
-  const warning = (values, form, content) => {
+  const warning = (values) => {
     Modal.confirm({
       title: "Waring",
       closable: true,
-      content: content,
+      content: (
+        <span>
+          School name is very important.
+          <br />
+          Do you want to create this school?
+          <br />
+          (This action can not be reversed.)
+        </span>
+      ),
       okText: "Continue",
       onOk: async () => {
         await createNewSchool(values);
-        handleCancel();
-        form.resetFields();
       },
     });
   };

@@ -16,9 +16,7 @@ const ExportClassExcel = (props) => {
 
   const getSubjectByGrade = async () => {
     await axios
-      .get(
-        `${process.env.REACT_APP_BASE_URL}/grade/${props.gradeID}/subjects`
-      )
+      .get(`${process.env.REACT_APP_BASE_URL}/grade/${props.gradeID}/subjects`)
       .then((res) => {
         setSubject(res.data.length === 0 ? [] : res.data);
       })
