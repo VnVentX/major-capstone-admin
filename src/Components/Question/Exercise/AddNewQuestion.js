@@ -105,11 +105,17 @@ const AddNewQuestion = () => {
     });
     let formData = new FormData();
     formData.append("unitId", values.unit);
-    formData.append("questionTitle", values.questionTitle?.replace(/\s+/g, " ").trim());
+    formData.append(
+      "questionTitle",
+      values.questionTitle?.replace(/\s+/g, " ").trim()
+    );
     formData.append("questionType", "EXERCISE");
     formData.append("score", values.score);
     if (values.description) {
-      formData.append("description", values.description?.replace(/\s+/g, " ").trim());
+      formData.append(
+        "description",
+        values.description?.replace(/\s+/g, " ").trim()
+      );
     }
     if (values.imgFile !== undefined && values.imgFile.length !== 0) {
       formData.append("imageFile", values.imgFile[0].originFileObj);
@@ -218,7 +224,13 @@ const AddNewQuestion = () => {
         <Form.Item
           name="questionTitle"
           label="Question Title"
-          rules={[{ required: true, message: "Please input a question title" }]}
+          rules={[
+            { required: true, message: "Please input a question title" },
+            {
+              pattern: /^[a-zA-Z0-9_ '`?,.*<>!@#%^&*()_+-~"]*$/,
+              message: "Can only input English characters",
+            },
+          ]}
         >
           <Input.TextArea
             autoSize

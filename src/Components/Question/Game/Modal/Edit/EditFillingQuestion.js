@@ -29,6 +29,7 @@ const normFile = (e) => {
 
 const EditFillingQuestion = (props) => {
   const [imgFile, setImgFile] = useState([]);
+  const [listOptionID, setListOptionID] = useState([]);
 
   useEffect(() => {
     getQuestionByID();
@@ -40,6 +41,7 @@ const EditFillingQuestion = (props) => {
         `${process.env.REACT_APP_BASE_URL}/question/${props.data.id}?questionType=FILL`
       )
       .then((res) => {
+        let listID = [];
         props.form.setFieldsValue({
           questionTitle: res.data.questionTitle,
           description: res.data.description,
@@ -51,6 +53,10 @@ const EditFillingQuestion = (props) => {
             thumbUrl: res.data.questionImageUrl,
           },
         ]);
+        res.data.optionQuestionDTOList.forEach((item) => {
+          listID.push(item.id);
+        });
+        props.handleFillingDeleteID(listID);
       })
       .catch((e) => {
         console.log(e);

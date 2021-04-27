@@ -24,7 +24,7 @@ export default class StudentAccountComponent extends Component {
       pageSize: 10,
     },
     loading: false,
-    changeClassID: "",
+    changeClassID: undefined,
   };
 
   onSelectChange = (selectedRowKeys) => {
@@ -300,7 +300,7 @@ export default class StudentAccountComponent extends Component {
                   </Button>
                 </Popconfirm>
                 <>
-                  {this.state.changeClassID === "" ? (
+                  {this.state.changeClassID === undefined ? (
                     <Button type="primary" style={{ marginRight: 10 }} disabled>
                       Move students to selected Class &gt;&gt;
                     </Button>
@@ -312,7 +312,11 @@ export default class StudentAccountComponent extends Component {
                       okText="Yes"
                       cancelText="No"
                     >
-                      <Button type="primary" style={{ marginRight: 10 }}>
+                      <Button
+                        type="primary"
+                        style={{ marginRight: 10 }}
+                        loading={this.state.loading}
+                      >
                         Move students to selected Class &gt;&gt;
                       </Button>
                     </Popconfirm>

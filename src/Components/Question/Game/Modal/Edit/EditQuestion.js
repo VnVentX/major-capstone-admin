@@ -11,6 +11,11 @@ const EditQuestion = (props) => {
   const [form] = Form.useForm();
   const [visible, setVisible] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [listOptionID, setListOptionID] = useState([]);
+
+  const handleFillingDeleteID = (values) => {
+    setListOptionID([...values]);
+  };
 
   const editQuestion = async (formData) => {
     setLoading(true);
@@ -91,8 +96,13 @@ const EditQuestion = (props) => {
     let optionIdList = [];
     let optionInputTypeList = [];
     let optionTextList = [];
+    let optionIdDeleteList = [];
     values.options.forEach((item) => {
-      optionIdList.push(item.id);
+      if (item.id === undefined) {
+        optionIdList.push(0);
+      } else {
+        optionIdList.push(item.id);
+      }
       optionInputTypeList.push(item.optionInputType.toLowerCase());
       if (item.text) {
         optionTextList.push(item.text.toLowerCase());
@@ -101,6 +111,12 @@ const EditQuestion = (props) => {
         optionTextList.push(item.operator.toLowerCase());
       }
     });
+    //List Option ID want to delete
+    optionIdDeleteList = listOptionID.filter(
+      (val) => !optionIdList.includes(val)
+    );
+    console.log("Deleted id: ", optionIdDeleteList);
+    console.log("New id: ", optionIdList);
     let formData = new FormData();
     formData.append("id", props.data.id);
     formData.append("questionTitle", values.questionTitle);
@@ -114,7 +130,12 @@ const EditQuestion = (props) => {
     formData.append("optionInputTypeList", optionInputTypeList);
     formData.append("optionTextList", optionTextList);
     formData.append("optionIdList", optionIdList);
-    editFillQuestion(formData);
+    if (optionIdDeleteList.length === 0) {
+      formData.append("optionIdDeleteList", []);
+    } else {
+      formData.append("optionIdDeleteList", optionIdDeleteList);
+    }
+    // editFillQuestion(formData);
   };
 
   const choosingQuestionSubmit = (values) => {
@@ -369,7 +390,11 @@ const EditQuestion = (props) => {
         {props.data?.questionType === "MATCH" ? (
           <EditMatchingQuestion form={form} data={props.data} />
         ) : props.data?.questionType === "FILL" ? (
-          <EditFillingQuestion form={form} data={props.data} />
+          <EditFillingQuestion
+            form={form}
+            data={props.data}
+            handleFillingDeleteID={handleFillingDeleteID}
+          />
         ) : props.data?.questionType === "SWAP" ? (
           <EditSwappingQuestion form={form} data={props.data} />
         ) : props.data?.questionType === "CHOOSE" ? (
