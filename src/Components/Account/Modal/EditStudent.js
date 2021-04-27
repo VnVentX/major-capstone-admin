@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import moment from "moment";
+import { reunicode } from "../../../helper/regex";
 import { Modal, Button, Form, Input, Select, DatePicker, message } from "antd";
 import { EditOutlined } from "@ant-design/icons";
 
@@ -108,6 +109,10 @@ const EditStudent = (props) => {
                 message: "Please input student's Name",
               },
               { max: 50, message: "Can only input 50 characters" },
+              {
+                pattern: reunicode,
+                message: "Can only input characters",
+              },
             ]}
           >
             <Input maxLength={51} placeholder="Student's Name" />
@@ -141,6 +146,10 @@ const EditStudent = (props) => {
             rules={[
               { max: 50, message: "Can only input 50 characters" },
               { required: true, message: "Please input parent name" },
+              {
+                pattern: reunicode,
+                message: "Can only input characters",
+              },
             ]}
           >
             <Input maxLength={51} />
@@ -148,9 +157,15 @@ const EditStudent = (props) => {
           <Form.Item
             name="contact"
             label="Contact"
-            rules={[{ required: true, message: "Please input contact" }]}
+            rules={[
+              {
+                required: true,
+                message: "Please input a concat (Phone or Email)",
+              },
+              { max: 51, message: "Can only input 100 characters" },
+            ]}
           >
-            <Input maxLength={50} />
+            <Input maxLength={50} placeholder="Contact (Phone / Email)" />
           </Form.Item>
         </Form>
       </Modal>

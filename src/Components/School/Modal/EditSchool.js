@@ -121,8 +121,12 @@ const EditSchool = (props) => {
           >
             <Select placeholder="Select a level">
               <Option value="PRIMARY">Primary School</Option>
-              <Option value="JUNIOR">Junior High School</Option>
-              <Option value="HIGH">High School</Option>
+              <Option value="JUNIOR" disabled>
+                Junior High School
+              </Option>
+              <Option value="HIGH" disabled>
+                High School
+              </Option>
             </Select>
           </Form.Item>
           <Form.Item name="schoolName" label="School Name">

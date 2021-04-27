@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import moment from "moment";
+import { reunicode } from "../../../helper/regex";
 import {
   Modal,
   Button,
@@ -239,6 +240,10 @@ const AddNewStudent = (props) => {
                 message: "Please input student's Name",
               },
               { max: 50, message: "Can only input 50 characters" },
+              {
+                pattern: reunicode,
+                message: "Can only input characters",
+              },
             ]}
           >
             <Input maxLength={51} placeholder="Student's Name" />
@@ -272,6 +277,10 @@ const AddNewStudent = (props) => {
             rules={[
               { max: 50, message: "Can only input 50 characters" },
               { required: true, message: "Please input parent name" },
+              {
+                pattern: reunicode,
+                message: "Can only input characters",
+              },
             ]}
           >
             <Input maxLength={51} placeholder="Parent Name" />
@@ -284,9 +293,10 @@ const AddNewStudent = (props) => {
                 required: true,
                 message: "Please input a concat (Phone or Email)",
               },
+              { max: 51, message: "Can only input 100 characters" },
             ]}
           >
-            <Input placeholder="Contact (Phone / Email)" />
+            <Input maxLength={50} placeholder="Contact (Phone / Email)" />
           </Form.Item>
         </Form>
       </Modal>

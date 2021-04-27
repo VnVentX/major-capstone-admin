@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { Button, Modal, Form, Input, Select, message } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
+import { reunicode } from "../../../helper/regex";
 
 const { Option } = Select;
 
@@ -114,8 +115,12 @@ const AddNewSchool = (props) => {
           >
             <Select placeholder="Select a level">
               <Option value="PRIMARY">Primary School</Option>
-              <Option value="JUNIOR">Junior High School</Option>
-              <Option value="HIGH">High School</Option>
+              <Option value="JUNIOR" disabled>
+                Junior High School
+              </Option>
+              <Option value="HIGH" disabled>
+                High School
+              </Option>
             </Select>
           </Form.Item>
           <Form.Item
@@ -126,6 +131,10 @@ const AddNewSchool = (props) => {
               {
                 max: 50,
                 message: "Can only input 50 characters!",
+              },
+              {
+                pattern: reunicode,
+                message: "Can only input characters",
               },
             ]}
           >
@@ -175,23 +184,12 @@ const AddNewSchool = (props) => {
               { required: true, message: "Please input address" },
               {
                 max: 100,
-                message: "Can only input 100 characters!",
+                message: "Can only input 100 characters",
               },
             ]}
           >
-            <Input.TextArea placeholder="Address" autoSize maxLength={101} />
+            <Input.TextArea placeholder="Address" maxLength={101} />
           </Form.Item>
-          {/* <Form.Item
-            name="distrisct"
-            label="Distrisct"
-            rules={[{ required: true, message: "Please choose a distrisct" }]}
-          >
-            <Select placeholder="Select a level">
-              <Option value="PRIMARY">Primary School</Option>
-              <Option value="JUNIOR">Junior High School</Option>
-              <Option value="HIGH">High School</Option>
-            </Select>
-          </Form.Item> */}
         </Form>
       </Modal>
     </div>
