@@ -20,7 +20,6 @@ export default class StudentAccountComponent extends Component {
   state = {
     selectedRowKeys: [],
     pagination: {
-      current: 1,
       pageSize: 10,
     },
     loading: false,
