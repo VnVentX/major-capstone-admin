@@ -44,7 +44,6 @@ const EditChoosingQuestion = (props) => {
         props.form.setFieldsValue({
           questionTitle: res.data.questionTitle,
           description: res.data.description,
-          score: res.data.score,
           id1: res.data.optionQuestionDTOList[0].id,
           id2: res.data.optionQuestionDTOList[1].id,
           id3: res.data.optionQuestionDTOList[2].id,
@@ -140,7 +139,13 @@ const EditChoosingQuestion = (props) => {
       <Form.Item
         name="questionTitle"
         label="Question Title"
-        rules={[{ required: true, message: "Please input a question title" }]}
+        rules={[
+          { required: true, message: "Please input a question title" },
+          {
+            pattern: /^[a-zA-Z0-9_ '`?,.*<>!@#%^&*()_+-~"]*$/,
+            message: "Can only input English characters",
+          },
+        ]}
       >
         <Input.TextArea
           autoSize
@@ -149,18 +154,17 @@ const EditChoosingQuestion = (props) => {
           placeholder="Question Title"
         />
       </Form.Item>
-      <Form.Item name="description" label="Description">
-        <Input.TextArea maxLength="50" showCount placeholder="Description" />
-      </Form.Item>
       <Form.Item
-        name="score"
-        label="Score"
+        name="description"
+        label="Description"
         rules={[
-          { required: true, message: "Please input a score" },
-          { type: "number", message: "Please input a number" },
+          {
+            pattern: /^[a-zA-Z0-9_ '`?,.*<>!@#%^&*()_+-~"]*$/,
+            message: "Can only input English characters",
+          },
         ]}
       >
-        <InputNumber placeholder="Score" min={1} max={5} />
+        <Input.TextArea maxLength="50" showCount placeholder="Description" />
       </Form.Item>
       <h2>Options</h2>
       <Divider />
@@ -207,6 +211,10 @@ const EditChoosingQuestion = (props) => {
               {
                 required: true,
                 message: "Please input an answer for the picture",
+              },
+              {
+                pattern: /^[a-zA-Z0-9_ '`?,.*<>!@#%^&*()_+-~"]*$/,
+                message: "Can only input English characters",
               },
             ]}
           >
@@ -262,6 +270,10 @@ const EditChoosingQuestion = (props) => {
               {
                 required: true,
                 message: "Please input an answer for the picture",
+              },
+              {
+                pattern: /^[a-zA-Z0-9_ '`?,.*<>!@#%^&*()_+-~"]*$/,
+                message: "Can only input English characters",
               },
             ]}
           >
@@ -319,6 +331,10 @@ const EditChoosingQuestion = (props) => {
                 required: true,
                 message: "Please input an answer for the picture",
               },
+              {
+                pattern: /^[a-zA-Z0-9_ '`?,.*<>!@#%^&*()_+-~"]*$/,
+                message: "Can only input English characters",
+              },
             ]}
           >
             <Input.TextArea
@@ -374,6 +390,10 @@ const EditChoosingQuestion = (props) => {
               {
                 required: true,
                 message: "Please input an answer for the picture",
+              },
+              {
+                pattern: /^[a-zA-Z0-9_ '`?,.*<>!@#%^&*()_+-~"]*$/,
+                message: "Can only input English characters",
               },
             ]}
           >
@@ -431,6 +451,10 @@ const EditChoosingQuestion = (props) => {
                 required: true,
                 message: "Please input an answer for the picture",
               },
+              {
+                pattern: /^[a-zA-Z0-9_ '`?,.*<>!@#%^&*()_+-~"]*$/,
+                message: "Can only input English characters",
+              },
             ]}
           >
             <Input.TextArea
@@ -486,6 +510,10 @@ const EditChoosingQuestion = (props) => {
               {
                 required: true,
                 message: "Please input an answer for the picture",
+              },
+              {
+                pattern: /^[a-zA-Z0-9_ '`?,.*<>!@#%^&*()_+-~"]*$/,
+                message: "Can only input English characters",
               },
             ]}
           >
@@ -543,6 +571,10 @@ const EditChoosingQuestion = (props) => {
                 required: true,
                 message: "Please input an answer for the picture",
               },
+              {
+                pattern: /^[a-zA-Z0-9_ '`?,.*<>!@#%^&*()_+-~"]*$/,
+                message: "Can only input English characters",
+              },
             ]}
           >
             <Input.TextArea
@@ -598,6 +630,10 @@ const EditChoosingQuestion = (props) => {
               {
                 required: true,
                 message: "Please input an answer for the picture",
+              },
+              {
+                pattern: /^[a-zA-Z0-9_ '`?,.*<>!@#%^&*()_+-~"]*$/,
+                message: "Can only input English characters",
               },
             ]}
           >

@@ -17,7 +17,7 @@ const Home = () => {
         >
           <Image src={banner} alt="major-banner" />
           <Button type="primary" size="large">
-            <a href="https://major-edu-student.herokuapp.com/">
+            <a href="https://major-edu-student.herokuapp.com/" target="_blank">
               Go to Math & Science
             </a>
           </Button>

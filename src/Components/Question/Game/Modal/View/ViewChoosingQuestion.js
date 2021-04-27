@@ -14,7 +14,6 @@ const ViewChoosingQuestion = (props) => {
           props.form.setFieldsValue({
             questionTitle: res.data.questionTitle,
             description: res.data.description,
-            score: res.data.score,
             value1: res.data.optionQuestionDTOList[0].optionText,
             value2: res.data.optionQuestionDTOList[1].optionText,
             value3: res.data.optionQuestionDTOList[2].optionText,
@@ -54,9 +53,6 @@ const ViewChoosingQuestion = (props) => {
           placeholder="Description"
           disabled
         />
-      </Form.Item>
-      <Form.Item name="score" label="Score">
-        <InputNumber placeholder="Score" disabled />
       </Form.Item>
       <h2>Options</h2>
       <Divider />

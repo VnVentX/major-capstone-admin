@@ -24,7 +24,6 @@ const ViewFillingQuestion = (props) => {
           props.form.setFieldsValue({
             questionTitle: res.data.questionTitle,
             description: res.data.description,
-            score: res.data.score,
             options: res.data.optionQuestionDTOList,
           });
         })
@@ -59,9 +58,6 @@ const ViewFillingQuestion = (props) => {
       </Form.Item>
       <Form.Item name="q_img" label="Question Image">
         <Image src={props.data.questionImageUrl} />
-      </Form.Item>
-      <Form.Item name="score" label="Score">
-        <InputNumber placeholder="Score" disabled />
       </Form.Item>
       <h2>Options</h2>
       <Form.List name="options">

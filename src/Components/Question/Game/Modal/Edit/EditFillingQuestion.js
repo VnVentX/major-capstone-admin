@@ -45,7 +45,6 @@ const EditFillingQuestion = (props) => {
         props.form.setFieldsValue({
           questionTitle: res.data.questionTitle,
           description: res.data.description,
-          score: res.data.score,
           options: res.data.optionQuestionDTOList,
         });
         setImgFile([
@@ -74,7 +73,13 @@ const EditFillingQuestion = (props) => {
       <Form.Item
         name="questionTitle"
         label="Question Title"
-        rules={[{ required: true, message: "Please input a question title" }]}
+        rules={[
+          { required: true, message: "Please input a question title" },
+          {
+            pattern: /^[a-zA-Z0-9_ '`?,.*<>!@#%^&*()_+-~"]*$/,
+            message: "Can only input English characters",
+          },
+        ]}
       >
         <Input.TextArea
           autoSize
@@ -83,18 +88,17 @@ const EditFillingQuestion = (props) => {
           placeholder="Question Title"
         />
       </Form.Item>
-      <Form.Item name="description" label="Description">
-        <Input.TextArea maxLength="50" showCount placeholder="Description" />
-      </Form.Item>
       <Form.Item
-        name="score"
-        label="Score"
+        name="description"
+        label="Description"
         rules={[
-          { required: true, message: "Please input a score" },
-          { type: "number", message: "Please input a number" },
+          {
+            pattern: /^[a-zA-Z0-9_ '`?,.*<>!@#%^&*()_+-~"]*$/,
+            message: "Can only input English characters",
+          },
         ]}
       >
-        <InputNumber placeholder="Score" min={1} max={5} />
+        <Input.TextArea maxLength="50" showCount placeholder="Description" />
       </Form.Item>
       <Form.Item
         name="questionImg"
@@ -209,6 +213,10 @@ const EditFillingQuestion = (props) => {
                           label="Text"
                           rules={[
                             { required: true, message: "Please input text" },
+                            {
+                              pattern: /^[a-zA-Z0-9_ '`?,.*<>!@#%^&*()_+-~"]*$/,
+                              message: "Can only input English characters",
+                            },
                           ]}
                         >
                           <Input.TextArea

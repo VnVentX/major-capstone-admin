@@ -120,7 +120,7 @@ const EditQuestion = (props) => {
     let formData = new FormData();
     formData.append("id", props.data.id);
     formData.append("questionTitle", values.questionTitle);
-    formData.append("score", values.score);
+    formData.append("score", 1);
     if (values.description) {
       formData.append("description", values.description);
     }
@@ -222,7 +222,7 @@ const EditQuestion = (props) => {
     if (values.description) {
       formData.append("description", values.description);
     }
-    formData.append("score", values.score);
+    formData.append("score", 1);
     formData.append("optionIdList", optionIdList);
     formData.append("optionTextList", optionTextList);
 
@@ -281,7 +281,7 @@ const EditQuestion = (props) => {
     if (values.description) {
       formData.append("description", values.description);
     }
-    formData.append("score", values.score);
+    formData.append("score", 1);
     formData.append("optionIdList", optionIdList);
     formData.append("optionTextList", optionTextList);
 
@@ -356,7 +356,7 @@ const EditQuestion = (props) => {
     if (values.description) {
       formData.append("description", values.description);
     }
-    formData.append("score", values.score);
+    formData.append("score", 1);
     formData.append("optionIdList", optionIdList);
     formData.append("optionTextList", optionTextList);
 

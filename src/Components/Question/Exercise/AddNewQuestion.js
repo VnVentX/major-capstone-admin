@@ -239,7 +239,16 @@ const AddNewQuestion = () => {
             placeholder="Question Title"
           />
         </Form.Item>
-        <Form.Item name="description" label="Description">
+        <Form.Item
+          name="description"
+          label="Description"
+          rules={[
+            {
+              pattern: /^[a-zA-Z0-9_ '`?,.*<>!@#%^&*()_+-~"]*$/,
+              message: "Can only input English characters",
+            },
+          ]}
+        >
           <Input.TextArea
             autoSize
             maxLength="50"
@@ -255,7 +264,14 @@ const AddNewQuestion = () => {
             { type: "number", message: "Please input a number" },
           ]}
         >
-          <InputNumber placeholder="Score" min={1} max={5} />
+          <InputNumber
+            placeholder="Score"
+            min={1}
+            max={5}
+            parser={(value) => {
+              return value.substring(0, 1);
+            }}
+          />
         </Form.Item>
         <Form.Item
           name="audioFile"
@@ -341,7 +357,11 @@ const AddNewQuestion = () => {
                       fieldKey={[field.fieldKey, "option"]}
                       dependencies={["question"]}
                       rules={[
-                        { required: true, message: "Please input option!" },
+                        { required: true, message: "Please input option" },
+                        {
+                          pattern: /^[a-zA-Z0-9_ '`?,.*<>!@#%^&*()_+-~"]*$/,
+                          message: "Can only input English characters",
+                        },
                       ]}
                     >
                       <Input.TextArea

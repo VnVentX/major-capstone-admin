@@ -165,7 +165,10 @@ const EditQuestion = (props) => {
     formData.append("questionTitle", values.questionTitle);
     formData.append("score", values.score);
     if (values.description) {
-      formData.append("description", values.description?.replace(/\s+/g, " ").trim());
+      formData.append(
+        "description",
+        values.description?.replace(/\s+/g, " ").trim()
+      );
     }
     if (values.imgFile !== undefined && values.imgFile.length !== 0) {
       formData.append("imageFile", values.imgFile[0].originFileObj);
@@ -236,6 +239,10 @@ const EditQuestion = (props) => {
             label="Question Title"
             rules={[
               { required: true, message: "Please input a question title" },
+              {
+                pattern: /^[a-zA-Z0-9_ '`?,.*<>!@#%^&*()_+-~"]*$/,
+                message: "Can only input English characters",
+              },
             ]}
           >
             <Input.TextArea
@@ -245,7 +252,16 @@ const EditQuestion = (props) => {
               placeholder="Question Title"
             />
           </Form.Item>
-          <Form.Item name="description" label="Description">
+          <Form.Item
+            name="description"
+            label="Description"
+            rules={[
+              {
+                pattern: /^[a-zA-Z0-9_ '`?,.*<>!@#%^&*()_+-~"]*$/,
+                message: "Can only input English characters",
+              },
+            ]}
+          >
             <Input.TextArea
               autoSize
               maxLength="50"
@@ -261,7 +277,14 @@ const EditQuestion = (props) => {
               { type: "number", message: "Please input a number" },
             ]}
           >
-            <InputNumber placeholder="Score" min={1} max={5} />
+            <InputNumber
+              placeholder="Score"
+              min={1}
+              max={5}
+              parser={(value) => {
+                return value.substring(0, 1);
+              }}
+            />
           </Form.Item>
           <Form.Item
             name="audioFile"
@@ -366,6 +389,10 @@ const EditQuestion = (props) => {
                           fieldKey={[field.fieldKey, "optionText"]}
                           rules={[
                             { required: true, message: "Please input option!" },
+                            {
+                              pattern: /^[a-zA-Z0-9_ '`?,.*<>!@#%^&*()_+-~"]*$/,
+                              message: "Can only input English characters",
+                            },
                           ]}
                         >
                           <Input.TextArea
