@@ -31,15 +31,12 @@ const EditExercise = (props) => {
   const editExercise = async (values) => {
     setLoading(true);
     await axios
-      .put(
-        `${process.env.REACT_APP_BASE_URL}/exercise/${props.data.id}`,
-        {
-          description: values.description?.replace(/\s+/g, " ").trim(),
-          exerciseName: values.name,
-          lessonId: props.lessonID,
-          id: props.data.id,
-        }
-      )
+      .put(`${process.env.REACT_APP_BASE_URL}/exercise/${props.data.id}`, {
+        description: values.description?.replace(/\s+/g, " ").trim(),
+        exerciseName: values.name,
+        lessonId: props.lessonID,
+        id: props.data.id,
+      })
       .then((res) => {
         console.log(res);
         props.getExerciseByLessonID();
@@ -103,12 +100,24 @@ const EditExercise = (props) => {
               { type: "number", message: "Please input a number" },
             ]}
           >
-            <InputNumber placeholder="Exercise" min={1} max={100} />
+            <InputNumber
+              placeholder="Exercise"
+              min={1}
+              max={100}
+              parser={(value) => {
+                return value.substring(0, 3);
+              }}
+            />
           </Form.Item>
           <Form.Item
             name="description"
             label="Description"
-            rules={[{ max: 50, message: "Can only input 50 characters" }]}
+            rules={[
+              {
+                pattern: /^[a-zA-Z0-9_ '`?,.*<>!@#%^&*()_+-~"]*$/,
+                message: "Can only input English characters",
+              },
+            ]}
           >
             <Input.TextArea
               showCount

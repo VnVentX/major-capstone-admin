@@ -50,7 +50,10 @@ const EditSubject = (props) => {
     setLoading(true);
     let formData = new FormData();
     if (event.description) {
-      formData.append("description", event.description?.replace(/\s+/g, " ").trim());
+      formData.append(
+        "description",
+        event.description?.replace(/\s+/g, " ").trim()
+      );
     }
     formData.append("gradeId", props.gradeID);
     formData.append("subjectName", event.subject?.replace(/\s+/g, " ").trim());
@@ -115,6 +118,10 @@ const EditSubject = (props) => {
             rules={[
               { required: true, message: "Please input a subject name" },
               { max: 20, message: "Can only input 20 characters" },
+              {
+                pattern: /^[a-zA-Z0-9_ '`?,.*<>!@#%^&*()_+-~"]*$/,
+                message: "Can only input English characters",
+              },
             ]}
           >
             <Input placeholder="Subject Name" maxLength={21} />
@@ -150,7 +157,13 @@ const EditSubject = (props) => {
           <Form.Item
             name="description"
             label="Description"
-            rules={[{ max: 50, message: "Can only input 50 characters" }]}
+            rules={[
+              { max: 50, message: "Can only input 50 characters" },
+              {
+                pattern: /^[a-zA-Z0-9_ '`?,.*<>!@#%^&*()_+-~"]*$/,
+                message: "Can only input English characters",
+              },
+            ]}
           >
             <Input.TextArea
               placeholder="Subject Description"

@@ -98,11 +98,24 @@ const AddNewProgress = (props) => {
             rules={[
               { required: true, message: "Please input Progress Test name" },
               { max: 20, message: "Can only input 20 characters" },
+              {
+                pattern: /^[a-zA-Z0-9_ '`?,.*<>!@#%^&*()_+-~"]*$/,
+                message: "Can only input English characters",
+              },
             ]}
           >
             <Input placeholder="Progress Test Name" maxLength={21} />
           </Form.Item>
-          <Form.Item name="description" label="Description">
+          <Form.Item
+            name="description"
+            label="Description"
+            rules={[
+              {
+                pattern: /^[a-zA-Z0-9_ '`?,.*<>!@#%^&*()_+-~"]*$/,
+                message: "Can only input English characters",
+              },
+            ]}
+          >
             <Input.TextArea
               placeholder="Progress Test Description"
               maxLength={50}

@@ -98,7 +98,14 @@ const AddNewLesson = (props) => {
               { type: "number", message: "Please input a number" },
             ]}
           >
-            <InputNumber placeholder="Lesson" min={1} max={100} />
+            <InputNumber
+              placeholder="Lesson"
+              min={1}
+              max={100}
+              parser={(value) => {
+                return value.substring(0, 3);
+              }}
+            />
           </Form.Item>
           <Form.Item
             name="url"

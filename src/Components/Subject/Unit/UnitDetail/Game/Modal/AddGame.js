@@ -90,12 +90,24 @@ const AddGame = (props) => {
               { type: "number", message: "Please input a number" },
             ]}
           >
-            <InputNumber placeholder="Game" min={1} max={100} />
+            <InputNumber
+              placeholder="Game"
+              min={1}
+              max={100}
+              parser={(value) => {
+                return value.substring(0, 3);
+              }}
+            />
           </Form.Item>
           <Form.Item
             name="description"
             label="Description"
-            rules={[{ max: 50, message: "Can only input 50 characters" }]}
+            rules={[
+              {
+                pattern: /^[a-zA-Z0-9_ '`?,.*<>!@#%^&*()_+-~"]*$/,
+                message: "Can only input English characters",
+              },
+            ]}
           >
             <Input.TextArea
               showCount

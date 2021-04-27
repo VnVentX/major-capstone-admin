@@ -114,6 +114,10 @@ const EditProgressTest = (props) => {
             rules={[
               { max: 20, message: "Can only input 20 characters" },
               { required: true, message: "Please input Progress Test name" },
+              {
+                pattern: /^[a-zA-Z0-9_ '`?,.*<>!@#%^&*()_+-~"]*$/,
+                message: "Can only input English characters",
+              },
             ]}
           >
             <Input placeholder="Progress Test Name" maxLength={21} />
@@ -121,7 +125,13 @@ const EditProgressTest = (props) => {
           <Form.Item
             name="description"
             label="Description"
-            rules={[{ max: 50, message: "Can only input 50 characters" }]}
+            rules={[
+              { max: 50, message: "Can only input 50 characters" },
+              {
+                pattern: /^[a-zA-Z0-9_ '`?,.*<>!@#%^&*()_+-~"]*$/,
+                message: "Can only input English characters",
+              },
+            ]}
           >
             <Input.TextArea
               placeholder="Progress Test Description"
