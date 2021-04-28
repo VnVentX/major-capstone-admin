@@ -344,12 +344,3 @@ input[type="checkbox"] + *::before {
   top: 45%;
   width: 75%;
 }
-
-a {
-  text-decoration: none;
-  color: white;
-}
-
-a:hover {
-  text-decoration: underline;
-}
