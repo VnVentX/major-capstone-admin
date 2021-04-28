@@ -25,6 +25,7 @@ const AddExercise = (props) => {
       .then((res) => {
         console.log(res);
         props.getExerciseByLessonID();
+        props.getAllExercise();
         setLoading(false);
         handleCancel();
         message.success("Create Exercise successfully!");

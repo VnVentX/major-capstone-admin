@@ -7,7 +7,7 @@ import EditLesson from "./Modal/EditLesson";
 
 const { TabPane } = Tabs;
 
-const UnitComponent = () => {
+const UnitComponent = (props) => {
   const [lesson, setLesson] = useState([]);
   const [selectedLessonID, setSelectedLessonID] = useState("");
 
@@ -48,7 +48,12 @@ const UnitComponent = () => {
     >
       {lesson?.map((i) => (
         <TabPane tab={`Lesson ${i.lessonName}`} key={i.id}>
-          <Lesson lesson={i} getLessonByUnitID={getLessonByUnitID} />
+          <Lesson
+            lesson={i}
+            getLessonByUnitID={getLessonByUnitID}
+            getAllExercise={props.getAllExercise}
+            getAllGame={props.getAllGame}
+          />
         </TabPane>
       ))}
     </Tabs>

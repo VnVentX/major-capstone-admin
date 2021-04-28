@@ -33,6 +33,7 @@ import AddGameQuestion from "./AddGameQuestion";
 import ExerciseQuestionBank from "./ExerciseQuestionBank";
 import GameQuestionBank from "./GameQuestionBank";
 import AddTestQuestion from "./AddTestQuestion";
+import Page404 from "./Page404";
 
 const { Header, Sider } = Layout;
 
@@ -53,13 +54,11 @@ export default class Index extends React.Component {
     exerciseNameByID: {},
     gameNameByID: {},
   };
-
   toggle = () => {
     this.setState({
       collapsed: !this.state.collapsed,
     });
   };
-
   componentDidMount() {
     this.getAllGrade();
     this.getAllSchool();
@@ -69,11 +68,9 @@ export default class Index extends React.Component {
     this.getAllExercise();
     this.getAllGame();
   }
-
   componentWillMount() {
     this.activeMenu();
   }
-
   activeMenu = () => {
     var path = window.location.pathname.split("/")[1];
     var gradePath = window.location.pathname.split("/")[2];
@@ -103,7 +100,6 @@ export default class Index extends React.Component {
       this.setState({ activePath: "game-question", activeSub: ["sub2"] });
     }
   };
-
   getAllGrade = async () => {
     await axios
       .get(`${process.env.REACT_APP_BASE_URL}/grade/all`)
@@ -205,15 +201,10 @@ export default class Index extends React.Component {
         console.log(e);
       });
   };
-
   handleClickMenuItem = (e) => {
-    //remove active before change
-    const school = document.getElementById("school");
-    school?.classList?.remove("ant-menu-item-selected");
     var gradePath = window.location.pathname.split("/")[2];
     this.setState({ activePath: e.key, gradePath: gradePath });
   };
-
   handleClickSubMenu = (e) => {
     if (this.state.activeSub.length > 0) {
       var arr = Array.from(this.state.activeSub);
@@ -445,36 +436,57 @@ export default class Index extends React.Component {
                     <GradeDetail gradeID={this.state.gradePath} />
                   )}
                 />
-                <Route path="/school" exact component={School} />
+                <Route
+                  path="/school"
+                  exact
+                  render={() => <School getAllSchool={this.getAllSchool} />}
+                />
                 <Route
                   path="/school/:schoolID"
                   exact
-                  component={SchoolDetail}
-                  // component={() => (
-                  //   <SchoolDetail activeMenu={this.activeMenu} />
-                  // )}
+                  render={() => <SchoolDetail activeMenu={this.activeMenu} />}
                 />
-                <Route path="/student" exact component={Account} />
+                <Route
+                  path="/student"
+                  exact
+                  render={() => <Account activeMenu={this.activeMenu} />}
+                />
                 <Route
                   path="/student/:studentID"
                   exact
                   component={AccountDetail}
                 />
-                <Route path="/subject" exact component={Subject} />
+                <Route
+                  path="/subject"
+                  exact
+                  render={() => <Subject getAllSubject={this.getAllSubject} />}
+                />
                 <Route
                   path="/subject/:subjectID"
                   exact
-                  component={SubjectDetail}
+                  render={() => (
+                    <SubjectDetail
+                      getAllUnit={this.getAllUnit}
+                      getAllProgressTest={this.getAllProgressTest}
+                    />
+                  )}
                 />
                 <Route
                   path="/subject/:subjectID/unit/:unitID"
                   exact
-                  component={UnitDetail}
+                  render={() => (
+                    <UnitDetail
+                      getAllExercise={this.getAllExercise}
+                      getAllGame={this.getAllGame}
+                    />
+                  )}
                 />
                 <Route
                   path="/subject/:subjectID/progress-test/:progressID"
                   exact
-                  component={ProcessTestDetail}
+                  render={() => (
+                    <ProcessTestDetail getAllExercise={this.getAllExercise} />
+                  )}
                 />
                 <Route
                   path="/subject/:subjectID/unit/:unitID/exercise/:exerciseID"
@@ -511,6 +523,7 @@ export default class Index extends React.Component {
                   exact
                   component={GameQuestionBank}
                 />
+                <Route exact component={Page404} />
               </Switch>
             </Row>
           </Layout>

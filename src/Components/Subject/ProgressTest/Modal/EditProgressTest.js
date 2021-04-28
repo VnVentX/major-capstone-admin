@@ -69,6 +69,7 @@ const EditProgressTest = (props) => {
       .then((res) => {
         console.log(res);
         props.getProgressTestBySubjectID();
+        props.getAllProgressTest();
         setLoading(false);
         handleCancel();
         message.success("Edit Progress Test successfully!");

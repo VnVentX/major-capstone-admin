@@ -25,6 +25,7 @@ const AddGame = (props) => {
       .then((res) => {
         console.log(res);
         props.getGameByLessonID();
+        props.getAllGame();
         setLoading(false);
         handleCancel();
         message.success("Create Game successfully!");

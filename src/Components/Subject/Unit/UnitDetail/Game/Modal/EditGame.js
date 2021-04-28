@@ -39,6 +39,7 @@ const EditGame = (props) => {
       .then((res) => {
         console.log(res);
         props.getGameByLessonID();
+        props.getAllGame();
         setLoading(false);
         handleCancel();
         message.success("Edit Game successfully!");

@@ -102,6 +102,7 @@ const Subject = (props) => {
             <AddNewSubject
               gradeID={props.gradeID}
               getSubjectByGrade={getSubjectByGrade}
+              getAllSubject={props.getAllSubject}
             />
           </div>
           {subject && (
@@ -129,6 +130,7 @@ const Subject = (props) => {
                             data={item}
                             gradeID={props.gradeID}
                             getSubjectByGrade={getSubjectByGrade}
+                            getAllSubject={props.getAllSubject}
                           />
                           <Tooltip title="Delete">
                             <Popconfirm

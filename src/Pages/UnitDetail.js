@@ -3,11 +3,14 @@ import { Col, Layout } from "antd";
 import UnitDetailComponent from "../Components/Subject/Unit/UnitDetail/UnitDetailComponent";
 const { Content } = Layout;
 
-const UnitDetail = () => {
+const UnitDetail = (props) => {
   return (
     <Col span={24}>
       <Content className="main-layout site-layout-background">
-        <UnitDetailComponent />
+        <UnitDetailComponent
+          getAllExercise={props.getAllExercise}
+          getAllGame={props.getAllGame}
+        />
       </Content>
     </Col>
   );

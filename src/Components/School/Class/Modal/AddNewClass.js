@@ -23,7 +23,7 @@ const AddNewClass = (props) => {
   };
 
   const onFinish = (values) => {
-    // setLoading(true);
+    setLoading(true);
     console.log(values.className?.replace(/\s+/g, " ").trim());
     async function createClass() {
       await axios

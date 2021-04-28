@@ -72,7 +72,7 @@ const ExportClassExcel = (props) => {
   return (
     <>
       <Button size="large" icon={<DownloadOutlined />} onClick={showModal}>
-        Export Classes Report
+        Export Score
       </Button>
       <Modal
         title="Export Class Report"

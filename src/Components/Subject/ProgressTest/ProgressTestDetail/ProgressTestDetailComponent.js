@@ -6,7 +6,7 @@ import { QuestionCircleOutlined, DeleteOutlined } from "@ant-design/icons";
 import AddProgress from "./Modal/AddProgress";
 import EditProgress from "./Modal/EditProgress";
 
-const ProgressTestDetailComponent = () => {
+const ProgressTestDetailComponent = (props) => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
@@ -55,7 +55,10 @@ const ProgressTestDetailComponent = () => {
           }}
         >
           Review 1
-          <AddProgress getProgressTestByID={getProgressTestByID} />
+          <AddProgress
+            getProgressTestByID={getProgressTestByID}
+            getAllExercise={props.getAllExercise}
+          />
         </div>
       }
       type="inner"
@@ -101,6 +104,7 @@ const ProgressTestDetailComponent = () => {
                     <EditProgress
                       data={item}
                       getProgressTestByID={getProgressTestByID}
+                      getAllExercise={props.getAllExercise}
                     />
                     <Tooltip title="Delete">
                       <Popconfirm

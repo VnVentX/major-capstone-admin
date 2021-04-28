@@ -5,7 +5,7 @@ import { Tabs, Spin } from "antd";
 
 const { TabPane } = Tabs;
 
-const SubjectComponent = () => {
+const SubjectComponent = (props) => {
   const [grade, setGrade] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -33,7 +33,7 @@ const SubjectComponent = () => {
         <Tabs type="line">
           {grade?.map((i, idx) => (
             <TabPane tab={`Grade ${i.gradeName}`} key={idx + 1}>
-              <Subject gradeID={i.id} />
+              <Subject gradeID={i.id} getAllSubject={props.getAllSubject} />
             </TabPane>
           ))}
         </Tabs>

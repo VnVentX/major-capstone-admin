@@ -70,6 +70,7 @@ const EditSubject = (props) => {
         .then((res) => {
           console.log(res);
           props.getSubjectByGrade(props.gradeID);
+          props.getAllSubject();
           setLoading(false);
           handleCancel();
           message.success("Edit Subject successfully!");

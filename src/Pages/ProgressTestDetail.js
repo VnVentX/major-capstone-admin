@@ -4,11 +4,11 @@ import ProgressTestDetailComponent from "../Components/Subject/ProgressTest/Prog
 
 const { Content } = Layout;
 
-const ProgressTestDetail = () => {
+const ProgressTestDetail = (props) => {
   return (
     <Col span={24}>
       <Content className="main-layout site-layout-background">
-        <ProgressTestDetailComponent />
+        <ProgressTestDetailComponent getAllExercise={props.getAllExercise} />
       </Content>
     </Col>
   );

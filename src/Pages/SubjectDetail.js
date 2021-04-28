@@ -6,16 +6,18 @@ import ProgressTestComponent from "../Components/Subject/ProgressTest/ProgressTe
 const { TabPane } = Tabs;
 const { Content } = Layout;
 
-const SubjectDetail = () => {
+const SubjectDetail = (props) => {
   return (
     <Col span={24}>
       <Content className="main-layout site-layout-background">
         <Tabs type="line">
           <TabPane tab="List Unit" key={1}>
-            <UnitComponent />
+            <UnitComponent getAllUnit={props.getAllUnit} />
           </TabPane>
           <TabPane tab="Progress Test" key={2}>
-            <ProgressTestComponent />
+            <ProgressTestComponent
+              getAllProgressTest={props.getAllProgressTest}
+            />
           </TabPane>
         </Tabs>
       </Content>

@@ -36,6 +36,7 @@ const AddNewSchool = (props) => {
       .then((res) => {
         console.log(res);
         props.getAllSchool();
+        props.getAllSchoolBC();
         message.success("Create new school successfully!");
         handleCancel();
         form.resetFields();

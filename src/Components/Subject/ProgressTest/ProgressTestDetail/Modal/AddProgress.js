@@ -25,6 +25,7 @@ const AddProgress = (props) => {
       .then((res) => {
         console.log(res);
         props.getProgressTestByID();
+        props.getAllExercise();
         setLoading(false);
         handleCancel();
         message.success("Create Test successfully!");

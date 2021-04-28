@@ -53,6 +53,7 @@ const AddNewSubject = (props) => {
         .then((res) => {
           console.log(res);
           props.getSubjectByGrade(props.gradeID);
+          props.getAllSubject();
           setLoading(false);
           handleCancel();
           message.success("Create Subject successfully");

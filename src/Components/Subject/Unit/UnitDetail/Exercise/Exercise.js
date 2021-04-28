@@ -71,6 +71,7 @@ const Exercise = (props) => {
         <AddExercise
           lessonID={props.lessonID}
           getExerciseByLessonID={getExerciseByLessonID}
+          getAllExercise={props.getAllExercise}
         />
       </div>
       {exercise && (
@@ -111,6 +112,7 @@ const Exercise = (props) => {
                         lessonID={props.lessonID}
                         data={item}
                         getExerciseByLessonID={getExerciseByLessonID}
+                        getAllExercise={props.getAllExercise}
                       />
                       <Tooltip title="Delete">
                         <Popconfirm

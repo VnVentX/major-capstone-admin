@@ -80,8 +80,12 @@ const SchoolDetailComponent = () => {
                 label="Address"
                 labelStyle={{ fontWeight: "bold" }}
               >
-                {schoolData.schoolStreet}, {schoolData.schoolDistrict}, TP. Hồ
-                Chí Minh
+                {schoolData.schoolStreet && (
+                  <>
+                    {schoolData.schoolStreet}, {schoolData.schoolDistrict}, TP.
+                    Hồ Chí Minh
+                  </>
+                )}
               </Descriptions.Item>
             </>
           )}

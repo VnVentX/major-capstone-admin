@@ -41,6 +41,7 @@ const EditProgress = (props) => {
       .then((res) => {
         console.log(res);
         props.getProgressTestByID();
+        props.getAllExercise();
         setLoading(false);
         handleCancel();
         message.success("Edit Test successfully!");

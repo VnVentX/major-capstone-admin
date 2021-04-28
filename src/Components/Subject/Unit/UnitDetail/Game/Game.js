@@ -71,6 +71,7 @@ const Game = (props) => {
         <AddGame
           lessonID={props.lessonID}
           getGameByLessonID={getGameByLessonID}
+          getAllGame={props.getAllGame}
         />
       </div>
       <List
@@ -109,6 +110,7 @@ const Game = (props) => {
                       data={item}
                       lessonID={props.lessonID}
                       getGameByLessonID={getGameByLessonID}
+                      getAllGame={props.getAllGame}
                     />
                     <Tooltip title="Delete">
                       <Popconfirm

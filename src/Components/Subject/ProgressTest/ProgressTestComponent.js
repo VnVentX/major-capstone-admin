@@ -17,7 +17,7 @@ import EditProgressTest from "./Modal/EditProgressTest";
 
 const { Search } = Input;
 
-const ProgressTestComponent = () => {
+const ProgressTestComponent = (props) => {
   const [progress, setProgress] = useState([]);
   const [searchData, setSearchData] = useState([]);
 
@@ -90,6 +90,7 @@ const ProgressTestComponent = () => {
         </AutoComplete>
         <AddNewProgress
           getProgressTestBySubjectID={getProgressTestBySubjectID}
+          getAllProgressTest={props.getAllProgressTest}
         />
       </div>
       <List
@@ -115,6 +116,7 @@ const ProgressTestComponent = () => {
                     <EditProgressTest
                       data={item}
                       getProgressTestBySubjectID={getProgressTestBySubjectID}
+                      getAllProgressTest={props.getAllProgressTest}
                     />
                     <Tooltip title="Delete">
                       <Popconfirm

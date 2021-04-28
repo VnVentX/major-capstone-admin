@@ -3,11 +3,11 @@ import { Layout, Col } from "antd";
 import SchoolComponent from "../Components/School/SchoolComponent";
 const { Content } = Layout;
 
-const School = () => {
+const School = (props) => {
   return (
     <Col span={24}>
       <Content className="main-layout site-layout-background">
-        <SchoolComponent />
+        <SchoolComponent getAllSchool={props.getAllSchool} />
       </Content>
     </Col>
   );

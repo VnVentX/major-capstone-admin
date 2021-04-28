@@ -125,14 +125,6 @@ const QuestionBankComponent = () => {
       dataIndex: "description",
     },
     {
-      title: "Created By",
-      dataIndex: "createdBy",
-    },
-    {
-      title: "Created Date",
-      dataIndex: "createdDate",
-    },
-    {
       title: "Modified By",
       dataIndex: "modifiedBy",
     },

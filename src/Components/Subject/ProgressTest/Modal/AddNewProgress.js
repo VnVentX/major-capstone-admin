@@ -48,6 +48,7 @@ const AddNewProgress = (props) => {
       .then((res) => {
         console.log(res);
         props.getProgressTestBySubjectID();
+        props.getAllProgressTest();
         setLoading(false);
         handleCancel();
         message.success("Create Progress Test successfully!");

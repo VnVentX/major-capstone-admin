@@ -230,7 +230,11 @@ export default class SchoolComponent extends Component {
               alignItems: "center",
             }}
           >
-            <AddNewSchool getAllSchool={this.getAllSchool} />
+            <AddNewSchool
+              getAllSchool={this.getAllSchool}
+              //!BreadCrumbs
+              getAllSchoolBC={this.props.getAllSchool}
+            />
           </div>
         </div>
         <Table

@@ -18,7 +18,7 @@ import EditUnit from "./Modal/EditUnit";
 
 const { Search } = Input;
 
-const UnitComponent = () => {
+const UnitComponent = (props) => {
   const [unit, setUnit] = useState([]);
   const [searchData, setSearchData] = useState([]);
 
@@ -91,7 +91,10 @@ const UnitComponent = () => {
             enterButton
           />
         </AutoComplete>
-        <AddNewUnit getUnitBySubjectID={getUnitBySubjectID} />
+        <AddNewUnit
+          getUnitBySubjectID={getUnitBySubjectID}
+          getAllUnit={props.getAllUnit}
+        />
       </div>
 
       {unit && (
@@ -116,6 +119,7 @@ const UnitComponent = () => {
                       <EditUnit
                         data={item}
                         getUnitBySubjectID={getUnitBySubjectID}
+                        getAllUnit={props.getAllUnit}
                       />
                       <Tooltip title="Delete">
                         <Popconfirm

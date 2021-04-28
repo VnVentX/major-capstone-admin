@@ -39,6 +39,7 @@ const EditUnit = (props) => {
       .then((res) => {
         console.log(res);
         props.getUnitBySubjectID();
+        props.getAllUnit();
         setLoading(false);
         handleCancel();
         message.success("Edit Unit successfully!");

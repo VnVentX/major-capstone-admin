@@ -25,11 +25,14 @@ const Lesson = (props) => {
     <Typography>
       <PowerPoint url={props.lesson.lessonUrl} />
       <Divider />
-
-      <Exercise lessonID={props.lesson.id} />
+      {/* //! Exercise */}
+      <Exercise
+        lessonID={props.lesson.id}
+        getAllExercise={props.getAllExercise}
+      />
       <Divider />
-
-      <Game lessonID={props.lesson.id} />
+      {/* //! Game */}
+      <Game lessonID={props.lesson.id} getAllGame={props.getAllGame} />
       <Divider />
       <Popconfirm
         placement="top"

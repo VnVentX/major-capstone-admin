@@ -24,13 +24,14 @@ const AddNewUnit = (props) => {
       .then((res) => {
         console.log(res);
         props.getUnitBySubjectID();
+        props.getAllUnit();
         setLoading(false);
         handleCancel();
         message.success("Create Unit successfully!");
         form.resetFields();
       })
       .catch((e) => {
-        if (e.response.data === "EXISTED") {
+        if (e.response?.data === "EXISTED") {
           message.error("This Unit name is already existed");
         } else {
           message.error("Fail to create Unit");
