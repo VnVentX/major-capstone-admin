@@ -127,7 +127,6 @@ const EditProgressTest = (props) => {
             name="description"
             label="Description"
             rules={[
-              { max: 50, message: "Can only input 50 characters" },
               {
                 pattern: /^[a-zA-Z0-9_ '`?,.*<>!@#%^&*()_+-~"]*$/,
                 message: "Can only input English characters",

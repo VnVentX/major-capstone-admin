@@ -95,7 +95,7 @@ const EditClass = (props) => {
                 },
               },
               { required: true, message: "Please input a class name" },
-              { max: 20, message: "Can only input 20 characters!" },
+              { max: 20, message: "Can only input 20 characters" },
             ]}
           >
             <Input placeholder="Class Name" maxLength={21} />

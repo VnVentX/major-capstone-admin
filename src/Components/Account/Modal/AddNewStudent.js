@@ -113,10 +113,10 @@ const AddNewStudent = (props) => {
       .post(`${process.env.REACT_APP_BASE_URL}/student`, {
         classesId: values.class,
         doB: values.age.format("DD/MM/YYYY"),
-        fullName: values.name?.replace(/\s+/g, " "),
+        fullName: values.name?.replace(/\s+/g, " ").trim(),
         gender: values.gender,
-        parentName: values.parentName?.replace(/\s+/g, " "),
-        contact: values.contact?.replace(/\s+/g, " "),
+        parentName: values.parentName?.replace(/\s+/g, " ").trim(),
+        contact: values.contact?.replace(/\s+/g, " ").trim(),
       })
       .then((res) => {
         console.log(res);
@@ -129,7 +129,7 @@ const AddNewStudent = (props) => {
       .catch((e) => {
         console.log(e);
         setLoading(false);
-        message.success("Fail to create Student!");
+        message.error("Fail to create Student!");
       });
   };
 
@@ -242,7 +242,7 @@ const AddNewStudent = (props) => {
               { max: 50, message: "Can only input 50 characters" },
               {
                 pattern: reunicode,
-                message: "Can only input characters",
+                message: "Can only input letters",
               },
             ]}
           >
@@ -279,7 +279,7 @@ const AddNewStudent = (props) => {
               { required: true, message: "Please input parent name" },
               {
                 pattern: reunicode,
-                message: "Can only input characters",
+                message: "Can only input letters",
               },
             ]}
           >

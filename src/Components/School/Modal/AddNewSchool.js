@@ -133,11 +133,11 @@ const AddNewSchool = (props) => {
               { required: true, message: "Please input a school name" },
               {
                 max: 50,
-                message: "Can only input 50 characters!",
+                message: "Can only input 50 characters",
               },
               {
                 pattern: reunicode,
-                message: "Can only input characters",
+                message: "Can only input letters",
               },
             ]}
           >

@@ -52,7 +52,7 @@ const ProgressTestComponent = (props) => {
       })
       .catch((e) => {
         console.log(e);
-        message.success("Fail to delete Progress Test");
+        message.error("Fail to delete Progress Test");
       });
   };
 

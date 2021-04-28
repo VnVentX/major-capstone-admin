@@ -86,7 +86,7 @@ const AddTestQuestion = (props) => {
       .catch((e) => {
         console.log(e);
         setLoading(false);
-        message.success("Fail to add Question");
+        message.error("Fail to add Question");
       });
   };
 

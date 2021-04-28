@@ -24,7 +24,6 @@ const AddNewClass = (props) => {
 
   const onFinish = (values) => {
     setLoading(true);
-    console.log(values.className?.replace(/\s+/g, " ").trim());
     async function createClass() {
       await axios
         .post(`${process.env.REACT_APP_BASE_URL}/class`, {
@@ -97,7 +96,7 @@ const AddNewClass = (props) => {
                 },
               },
               { required: true, message: "Please input a class name" },
-              { max: 20, message: "Can only input 20 characters!" },
+              { max: 20, message: "Can only input 20 characters" },
             ]}
           >
             <Input placeholder="Class Name" maxLength={21} />

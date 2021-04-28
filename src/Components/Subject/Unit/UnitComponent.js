@@ -47,11 +47,11 @@ const UnitComponent = (props) => {
       .then((res) => {
         console.log(res);
         getUnitBySubjectID();
-        message.success("Delete Unit successfully!");
+        message.success("Delete Unit successfully");
       })
       .catch((e) => {
         console.log(e);
-        message.success("Fail to delete Unit");
+        message.error("Fail to delete Unit");
       });
   };
 
