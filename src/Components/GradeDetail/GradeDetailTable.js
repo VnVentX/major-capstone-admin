@@ -128,14 +128,14 @@ export default class GradeDetailTable extends Component {
         title: "School Code",
         dataIndex: "schoolCode",
       },
-      {
-        title: "Created By",
-        dataIndex: "createdBy",
-      },
-      {
-        title: "Created Date",
-        dataIndex: "createdDate",
-      },
+      // {
+      //   title: "Created By",
+      //   dataIndex: "createdBy",
+      // },
+      // {
+      //   title: "Created Date",
+      //   dataIndex: "createdDate",
+      // },
       {
         title: "Modified By",
         dataIndex: "modifiedBy",
@@ -237,6 +237,7 @@ export default class GradeDetailTable extends Component {
           <div>
             <LinkNewSchool
               data={this.state.dataSource}
+              getAllSchool={this.getAllSchool}
               getSchoolByGradeID={this.getSchoolByGradeID}
               allSchool={this.state.allSchool}
             />

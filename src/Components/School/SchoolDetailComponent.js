@@ -59,6 +59,12 @@ const SchoolDetailComponent = () => {
                 ) : null}
               </Descriptions.Item>
               <Descriptions.Item
+                label="School Code"
+                labelStyle={{ fontWeight: "bold" }}
+              >
+                {schoolData.schoolCode}
+              </Descriptions.Item>
+              <Descriptions.Item
                 label="Education Level"
                 labelStyle={{ fontWeight: "bold" }}
               >
@@ -74,7 +80,8 @@ const SchoolDetailComponent = () => {
                 label="Address"
                 labelStyle={{ fontWeight: "bold" }}
               >
-                {schoolData.schoolStreet}
+                {schoolData.schoolStreet}, {schoolData.schoolDistrict}, TP. Hồ
+                Chí Minh
               </Descriptions.Item>
             </>
           )}

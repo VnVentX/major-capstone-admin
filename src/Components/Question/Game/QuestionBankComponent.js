@@ -86,6 +86,7 @@ const QuestionBankComponent = () => {
         console.log(res);
         getQuestionByUnitID(selectedUnit);
         message.success("Delete Question successfully");
+        setSelectedRowKeys([]);
       })
       .catch((e) => {
         console.log(e);

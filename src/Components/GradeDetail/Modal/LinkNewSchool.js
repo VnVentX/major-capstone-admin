@@ -1,21 +1,26 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import { Button, Modal, Form, Select, message } from "antd";
 import { LinkOutlined } from "@ant-design/icons";
 const { Option } = Select;
 
-var resArr = [];
-
 const LinkNewSchool = (props) => {
   const [form] = Form.useForm();
+  const [schoolList, setSchoolList] = useState([]);
   const [visible, setVisible] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    resArr = Array.from(props.allSchool);
-    var ids = new Set(props.data.map(({ id }) => id));
-    resArr = resArr.filter(({ id }) => !ids.has(id));
-  }, [props.allSchool, props.data]);
+  const getSchoolList = async () => {
+    let gradeID = window.location.pathname.split("/")[2];
+    await axios
+      .get(`${process.env.REACT_APP_BASE_URL}/school/all/${gradeID}`)
+      .then((res) => {
+        setSchoolList(res.data.length === 0 ? [] : res.data);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
 
   const linkSchool = async (schoolID) => {
     setLoading(true);
@@ -32,16 +37,24 @@ const LinkNewSchool = (props) => {
         handleCancel();
         message.success("Link School successfully!");
         form.resetFields();
+        handleCancel();
       })
       .catch((e) => {
         console.log(e);
+        if (e.response.data === "CANNOT LINK INACTIVE SCHOOL") {
+          message.error("This school has been disabled, please try again!");
+          getSchoolList();
+          form.resetFields();
+        } else {
+          message.error("Fail to link this school");
+        }
         setLoading(false);
-        message.success("Fail to link School");
       });
   };
 
   const showModal = () => {
     setVisible(true);
+    getSchoolList();
   };
 
   const handleCancel = () => {
@@ -51,7 +64,6 @@ const LinkNewSchool = (props) => {
 
   const onFinish = async (values) => {
     await linkSchool(values.school);
-    handleCancel();
   };
   return (
     <>
@@ -93,7 +105,7 @@ const LinkNewSchool = (props) => {
             ]}
           >
             <Select showSearch placeholder="Select a School">
-              {resArr?.map((i) =>
+              {schoolList?.map((i) =>
                 i.status === "ACTIVE" ? (
                   <Option key={i.id} value={i.id}>
                     {i.schoolLevel === "PRIMARY" ? (

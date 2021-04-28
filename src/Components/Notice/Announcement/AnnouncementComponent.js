@@ -21,6 +21,7 @@ export default class AnnouncementComponent extends React.Component {
     selectedRowKeys: [],
     dataSource: [],
     dataSearch: [],
+    loading: true,
   };
 
   componentDidMount() {
@@ -34,6 +35,7 @@ export default class AnnouncementComponent extends React.Component {
         this.setState({
           dataSource: res.data.length === 0 ? [] : res.data,
           dataSearch: res.data.length === 0 ? [] : res.data,
+          loading: false,
         });
       })
       .catch((e) => {
@@ -42,6 +44,7 @@ export default class AnnouncementComponent extends React.Component {
   };
 
   deleteNews = async (id) => {
+    this.setState({ loading: true });
     let ids = [];
     if (id.length === undefined) {
       ids.push(id);
@@ -54,6 +57,7 @@ export default class AnnouncementComponent extends React.Component {
         console.log(res);
         this.getAllNews();
         message.success("Delete News successfully!");
+        this.setState({ selectedRowKeys: [] });
       })
       .catch((e) => {
         console.log(e);
@@ -156,6 +160,7 @@ export default class AnnouncementComponent extends React.Component {
           columns={columns}
           dataSource={this.state.dataSource}
           scroll={{ x: true }}
+          loading={this.state.loading}
         />
         <div>
           <h1>With selected:</h1>

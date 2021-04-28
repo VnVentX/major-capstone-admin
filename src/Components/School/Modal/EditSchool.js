@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import { Button, Modal, Form, Input, Select, message } from "antd";
 import { EditOutlined } from "@ant-design/icons";
@@ -12,32 +12,19 @@ const layout = {
 
 const EditSchool = (props) => {
   const [form] = Form.useForm();
-  const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [visible, setVisible] = useState(false);
-
-  useEffect(() => {
-    getSchoolByID(props.schoolID);
-    form.setFieldsValue({
-      schoolName: data.schoolName,
-      schoolStreet: data.schoolStreet,
-      schoolDistrict: data.schoolDistrict,
-      type: data.schoolLevel,
-    });
-  }, [
-    data.schoolDistrict,
-    data.schoolLevel,
-    data.schoolName,
-    data.schoolStreet,
-    form,
-    props.schoolID,
-  ]);
 
   const getSchoolByID = async (id) => {
     await axios
       .get(`${process.env.REACT_APP_BASE_URL}/school/${id}`)
       .then((res) => {
-        setData(res.data.length === 0 ? [] : res.data);
+        form.setFieldsValue({
+          schoolName: res.data.schoolName,
+          schoolStreet: res.data.schoolStreet,
+          schoolDistrict: res.data.schoolDistrict,
+          type: res.data.schoolLevel,
+        });
       })
       .catch((e) => {
         console.log(e);
@@ -63,7 +50,11 @@ const EditSchool = (props) => {
       .catch((e) => {
         console.log(e);
         if (e.response.data === "EXISTED") {
-          message.error("This School name has already existed");
+          message.error(
+            "This School name in the chosen district has already existed"
+          );
+        } else if (e.response.data === "Input can not blank!") {
+          message.error("Input can not be blank");
         } else {
           message.error("Fail to create School");
         }
@@ -73,6 +64,7 @@ const EditSchool = (props) => {
 
   const showModal = () => {
     setVisible(true);
+    getSchoolByID(props.schoolID);
   };
 
   const handleCancel = () => {
@@ -143,30 +135,30 @@ const EditSchool = (props) => {
             ]}
           >
             <Select placeholder="Select a district">
-              <Option value="District 1">District 1</Option>
-              <Option value="District 2">District 2</Option>
-              <Option value="District 3">District 3</Option>
-              <Option value="District 4">District 4</Option>
-              <Option value="District 5">District 5</Option>
-              <Option value="District 6">District 6</Option>
-              <Option value="District 7">District 7</Option>
-              <Option value="District 8">District 8</Option>
-              <Option value="District 9">District 9</Option>
-              <Option value="District 10">District 10</Option>
-              <Option value="District 11">District 11</Option>
-              <Option value="District 12">District 12</Option>
-              <Option value="Binh Thanh District">Binh Thanh District</Option>
-              <Option value="Thu Đuc District">Thu Đuc District</Option>
-              <Option value="Go Vap District">Go Vap District</Option>
-              <Option value="Phu Nhuan District">Phu Nhuan District</Option>
-              <Option value="Tan Binh District">Tan Binh District</Option>
-              <Option value="Tan Phu District">Tan Phu District</Option>
-              <Option value="Binh Tan District">Binh Tan District</Option>
-              <Option value="Nha Be District">Nha Be District</Option>
-              <Option value="Hoc Mon District">Hoc Mon District</Option>
-              <Option value="Binh Chanh District">Binh Chanh District</Option>
-              <Option value="Cu Chi District">Cu Chi District</Option>
-              <Option value="Can Gio District">Can Gio District</Option>
+              <Option value="Quận 1">Quận 1</Option>
+              <Option value="Quận 2">Quận 2</Option>
+              <Option value="Quận 3">Quận 3</Option>
+              <Option value="Quận 4">Quận 4</Option>
+              <Option value="Quận 5">Quận 5</Option>
+              <Option value="Quận 6">Quận 6</Option>
+              <Option value="Quận 7">Quận 7</Option>
+              <Option value="Quận 8">Quận 8</Option>
+              <Option value="Quận 9">Quận 9</Option>
+              <Option value="Quận 10">Quận 10</Option>
+              <Option value="Quận 11">Quận 11</Option>
+              <Option value="Quận 12">Quận 12</Option>
+              <Option value="Quận Bình Chánh">Quận Bình Chánh</Option>
+              <Option value="Quận Bình Tân">Quận Bình Tân</Option>
+              <Option value="Quận Bình Thạnh">Quận Bình Thạnh</Option>
+              <Option value="Quận Gò Vấp">Quận Gò Vấp</Option>
+              <Option value="Quận Phú Nhuận">Quận Phú Nhuận</Option>
+              <Option value="Quận Tân Bình">Quận Tân Bình</Option>
+              <Option value="Quận Tân Phú">Quận Tân Phú</Option>
+              <Option value="Quận Thủ Đức">Quận Thủ Đức</Option>
+              <Option value="Huyện Cần Giờ">Huyện Cần Giờ</Option>
+              <Option value="Huyện Củ Chi">Huyện Củ Chi</Option>
+              <Option value="Huyện Hóc Môn">Huyện Hóc Môn</Option>
+              <Option value="Huyện Nhà Bè">Huyện Nhà Bè</Option>
             </Select>
           </Form.Item>
           <Form.Item

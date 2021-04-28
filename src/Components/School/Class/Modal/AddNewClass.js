@@ -23,7 +23,8 @@ const AddNewClass = (props) => {
   };
 
   const onFinish = (values) => {
-    setLoading(true);
+    // setLoading(true);
+    console.log(values.className?.replace(/\s+/g, " ").trim());
     async function createClass() {
       await axios
         .post(`${process.env.REACT_APP_BASE_URL}/class`, {
@@ -42,6 +43,8 @@ const AddNewClass = (props) => {
         .catch((e) => {
           if (e.response.data === "EXISTED") {
             message.error("This Class name is already existed");
+          } else if (e.response.data === "Input can not blank!") {
+            message.error("Input can not be blank");
           } else {
             message.error("Fail to create Class");
           }

@@ -81,9 +81,8 @@ export default class StudentAccountComponent extends Component {
       .then((res) => {
         console.log(res.data);
         this.props.handleSearch(this.props.searchData);
-        this.setState({ selectedRowKeys: [] });
         message.success("Move students successfully");
-        this.setState({ loading: false });
+        this.setState({ selectedRowKeys: [], loading: false });
       })
       .catch((e) => {
         console.log(e);

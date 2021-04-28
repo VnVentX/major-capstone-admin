@@ -1,6 +1,6 @@
 import React from "react";
 import axios from "axios";
-import { Table, Image, Button, Space, Tag, Popconfirm } from "antd";
+import { Table, Image, Button, Space, Tag, Popconfirm, message } from "antd";
 import AddNewBanner from "./Modal/AddNewBanner";
 import EditBanner from "./Modal/EditBanner";
 import { QuestionCircleOutlined, DeleteOutlined } from "@ant-design/icons";
@@ -9,6 +9,7 @@ export default class BannerComponent extends React.Component {
   state = {
     selectedRowKeys: [],
     dataSource: [],
+    loading: true,
   };
 
   componentDidMount() {
@@ -21,6 +22,7 @@ export default class BannerComponent extends React.Component {
       .then((res) => {
         this.setState({
           dataSource: res.data.length === 0 ? [] : res.data,
+          loading: false,
         });
       })
       .catch((e) => {
@@ -29,6 +31,7 @@ export default class BannerComponent extends React.Component {
   };
 
   disableBanner = async (id, status) => {
+    this.setState({ loading: true });
     let ids = [];
     if (id.length === undefined) {
       ids.push(id);
@@ -43,9 +46,20 @@ export default class BannerComponent extends React.Component {
       .then((res) => {
         console.log(res);
         this.getAllBanner();
+        this.setState({ selectedRowKeys: [] });
+        if (status === "DELETED") {
+          message.success("Delete banner successfully");
+        } else {
+          message.success("Change status successfully");
+        }
       })
       .catch((e) => {
         console.log(e);
+        if (status === "DELETED") {
+          message.error("Fail to delete banner");
+        } else {
+          message.error("Fail to change status");
+        }
       });
   };
 
@@ -85,14 +99,6 @@ export default class BannerComponent extends React.Component {
         dataIndex: "description",
       },
       {
-        title: "Uploaded By",
-        dataIndex: "createdBy",
-      },
-      {
-        title: "Uploaded Date",
-        dataIndex: "createdDate",
-      },
-      {
         title: "Modified By",
         dataIndex: "modifiedBy",
       },
@@ -103,6 +109,7 @@ export default class BannerComponent extends React.Component {
       {
         title: "Status",
         align: "center",
+        width: "10%",
         dataIndex: "status",
         render: (status) => (
           <span>
@@ -168,6 +175,7 @@ export default class BannerComponent extends React.Component {
           columns={columns}
           dataSource={this.state.dataSource}
           scroll={{ x: true }}
+          loading={this.state.loading}
         />
         <div>
           <h1>With selected:</h1>

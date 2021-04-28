@@ -129,14 +129,6 @@ const ClassComponent = (props) => {
       ),
     },
     {
-      title: "Create By",
-      dataIndex: "createdBy",
-    },
-    {
-      title: "Create Date",
-      dataIndex: "createdDate",
-    },
-    {
       title: "Modified By",
       dataIndex: "modifiedBy",
     },

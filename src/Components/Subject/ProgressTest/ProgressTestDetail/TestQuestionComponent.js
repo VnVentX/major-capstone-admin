@@ -55,7 +55,6 @@ const TestQuestionComponent = () => {
         `${process.env.REACT_APP_BASE_URL}/exerciseOrGame/${exerciseID}/questions?isExericse=true`
       )
       .then((res) => {
-        console.log(res.data);
         setData(res.data);
       })
       .catch((e) => {
@@ -81,6 +80,7 @@ const TestQuestionComponent = () => {
         console.log(res);
         getQuestionByExerciseID();
         message.success("Delete Question successfully");
+        setSelectedRowKeys([]);
       })
       .catch((e) => {
         console.log(e);

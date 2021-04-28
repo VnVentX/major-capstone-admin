@@ -105,14 +105,6 @@ export default class SchoolComponent extends Component {
         dataIndex: "schoolCode",
       },
       {
-        title: "Created By",
-        dataIndex: "createdBy",
-      },
-      {
-        title: "Created Date",
-        dataIndex: "createdDate",
-      },
-      {
         title: "Modified By",
         dataIndex: "modifiedBy",
       },
@@ -122,6 +114,8 @@ export default class SchoolComponent extends Component {
       },
       {
         title: "Status",
+        align: "center",
+        width: "10%",
         dataIndex: "status",
         render: (status) => (
           <span>

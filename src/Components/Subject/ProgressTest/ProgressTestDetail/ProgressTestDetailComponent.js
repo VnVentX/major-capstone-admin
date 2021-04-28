@@ -15,7 +15,6 @@ const ProgressTestDetailComponent = () => {
 
   const getProgressTestByID = async () => {
     let progressTestID = window.location.pathname.split("/")[4];
-    console.log(progressTestID);
     await axios
       .get(
         `${process.env.REACT_APP_BASE_URL}/progressTest/${progressTestID}/exercises`

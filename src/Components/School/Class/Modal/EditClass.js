@@ -46,6 +46,8 @@ const EditClass = (props) => {
         .catch((e) => {
           if (e.response.data === "EXISTED") {
             message.error("This Class name is already existed");
+          } else if (e.response.data === "Input can not blank!") {
+            message.error("Input can not be blank");
           } else {
             message.error("Fail to update Class");
           }

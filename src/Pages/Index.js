@@ -49,6 +49,7 @@ export default class Index extends React.Component {
     schoolNameByID: {},
     subjectNameByID: {},
     unitNameByID: {},
+    progressTestNameByID: {},
     exerciseNameByID: {},
     gameNameByID: {},
   };
@@ -64,6 +65,7 @@ export default class Index extends React.Component {
     this.getAllSchool();
     this.getAllSubject();
     this.getAllUnit();
+    this.getAllProgressTest();
     this.getAllExercise();
     this.getAllGame();
   }
@@ -167,6 +169,18 @@ export default class Index extends React.Component {
         console.log(e);
       });
   };
+  getAllProgressTest = async () => {
+    await axios
+      .get(`${process.env.REACT_APP_BASE_URL}/breadcrumb/progressTest`)
+      .then((res) => {
+        this.setState({
+          progressTestNameByID: res.data,
+        });
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
   getAllExercise = async () => {
     await axios
       .get(`${process.env.REACT_APP_BASE_URL}/breadcrumb/exercise`)
@@ -219,8 +233,10 @@ export default class Index extends React.Component {
     const schoolNameByID = this.state.schoolNameByID;
     const subjectNameByID = this.state.subjectNameByID;
     const unitNameByID = this.state.unitNameByID;
+    const progressTestNameByID = this.state.progressTestNameByID;
     const exerciseNameByID = this.state.exerciseNameByID;
     const gameNameByID = this.state.gameNameByID;
+
     const DynamicGradeBreadcrumb = ({ match }) => (
       <span>{gradeNamesByID[match.params.gradeID]}</span>
     );
@@ -233,8 +249,11 @@ export default class Index extends React.Component {
     const DynamicUnitBreadcrumb = ({ match }) => (
       <span>Unit {unitNameByID[match.params.unitID]}</span>
     );
+    const DynamicProgressTestBreadcrumb = ({ match }) => (
+      <span>{progressTestNameByID[match.params.progressID]}</span>
+    );
     const DynamicExerciseBreadcrumb = ({ match }) => (
-      <span>Exercise {exerciseNameByID[match.params.exceciseID]}</span>
+      <span>Exercise {exerciseNameByID[match.params.exerciseID]}</span>
     );
     const DynamicGameBreadcrumb = ({ match }) => (
       <span>Game {gameNameByID[match.params.gameID]}</span>
@@ -243,21 +262,33 @@ export default class Index extends React.Component {
     const routes = [
       { path: "/school/:schoolID", breadcrumb: DynamicSchoolBreadcrumb },
       { path: "/subject/:subjectID", breadcrumb: DynamicSubjectBreadcrumb },
+      { path: "/subject/:subjectID/unit", breadcrumb: null },
       {
         path: "/subject/:subjectID/unit/:unitID",
         breadcrumb: DynamicUnitBreadcrumb,
       },
+      { path: "/subject/:subjectID/unit/:unitID/game", breadcrumb: null },
+      { path: "/subject/:subjectID/unit/:unitID/exercise", breadcrumb: null },
       {
         path: "/subject/:subjectID/unit/:unitID/game/:gameID",
         breadcrumb: DynamicGameBreadcrumb,
       },
       {
-        path: "/subject/:subjectID/unit/:unitID/excecise/:exceciseID",
+        path: "/subject/:subjectID/unit/:unitID/exercise/:exerciseID",
         breadcrumb: DynamicExerciseBreadcrumb,
+      },
+      { path: "/subject/:subjectID/progress-test", breadcrumb: null },
+      {
+        path: "/subject/:subjectID/progress-test/:progressID",
+        breadcrumb: DynamicProgressTestBreadcrumb,
+      },
+      {
+        path: "/subject/:subjectID/progress-test/:progressID/exercise",
+        breadcrumb: null,
       },
       {
         path:
-          "/subject/:subjectID/progress-test/:progressID/exercise/:exceciseID",
+          "/subject/:subjectID/progress-test/:progressID/exercise/:exerciseID",
         breadcrumb: DynamicExerciseBreadcrumb,
       },
       {
@@ -446,7 +477,7 @@ export default class Index extends React.Component {
                   component={ProcessTestDetail}
                 />
                 <Route
-                  path="/subject/:subjectID/unit/:unitID/excecise/:exceciseID"
+                  path="/subject/:subjectID/unit/:unitID/exercise/:exerciseID"
                   exact
                   component={AddQuizQuestion}
                 />

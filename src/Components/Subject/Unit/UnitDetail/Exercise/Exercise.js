@@ -96,7 +96,7 @@ const Exercise = (props) => {
                       }}
                     >
                       <Link
-                        to={`${window.location.pathname}/excecise/${item.id}`}
+                        to={`${window.location.pathname}/exercise/${item.id}`}
                       >
                         Exercise {item.exerciseName}
                       </Link>

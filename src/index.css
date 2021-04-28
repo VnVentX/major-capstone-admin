@@ -168,6 +168,10 @@ body {
   background-image: linear-gradient(120deg, #001529, #001529);
 }
 
+span {
+  font-size: 15px;
+}
+
 .main-layout {
   padding: 15px;
   margin: 15px;
