@@ -81,6 +81,7 @@ const ImportClassExcel = (props) => {
       })
       .then((res) => {
         if (res.data.size === 0) {
+          props.getClassBySchoolGrade();
           setLoading(false);
           handleCancel();
           message.success("Import successfully!");

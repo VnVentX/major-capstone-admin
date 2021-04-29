@@ -4,11 +4,12 @@ import { Form, Row, Col, Button, Select, Spin } from "antd";
 
 const SearchFilter = (props) => {
   const [form] = Form.useForm();
-  const [schoolData, setSchoolData] = useState([]);
-  const [gradeData, setGradeData] = useState([]);
-  const [classData, setClassData] = useState([]);
+  const [schoolData, setSchoolData] = useState(null);
+  const [gradeData, setGradeData] = useState(null);
+  const [classData, setClassData] = useState(null);
   const [selectedSchool, setSelectedSchool] = useState("");
   const [selectedGrade, setSelectedGrade] = useState("");
+  const [selectedClass, setSelectedClass] = useState(null);
   const [classLoading, setClassLoading] = useState(false);
 
   useEffect(() => {
@@ -20,14 +21,10 @@ const SearchFilter = (props) => {
         props.searchData?.grade
       );
     }
-    form.setFieldsValue({
-      school: props.searchData?.school,
-      grade: props.searchData?.grade,
-      class: props.searchData?.class,
-    });
+    setSelectedClass(props.searchData?.class);
     setSelectedSchool(props.searchData?.school);
     setSelectedGrade(props.searchData?.grade);
-  }, [form, props.searchData]);
+  }, [props.searchData]);
 
   useEffect(() => {
     getClassByGradeSchoolID(selectedSchool, selectedGrade);
@@ -43,6 +40,9 @@ const SearchFilter = (props) => {
       .then((res) => {
         setClassData(res.data.length === 0 ? null : res.data);
         setClassLoading(false);
+        form.setFieldsValue({
+          class: selectedClass,
+        });
       })
       .catch((e) => {
         console.log(e);
@@ -55,6 +55,9 @@ const SearchFilter = (props) => {
       .get(`${process.env.REACT_APP_BASE_URL}/school/all`)
       .then((res) => {
         setSchoolData(res.data.length === 0 ? [] : res.data);
+        form.setFieldsValue({
+          school: props.searchData?.school,
+        });
       })
       .catch((e) => {
         console.log(e);
@@ -66,6 +69,9 @@ const SearchFilter = (props) => {
       .get(`${process.env.REACT_APP_BASE_URL}/grade/all`)
       .then((res) => {
         setGradeData(res.data.length === 0 ? [] : res.data);
+        form.setFieldsValue({
+          grade: props.searchData?.grade,
+        });
       })
       .catch((e) => {
         console.log(e);
@@ -74,15 +80,22 @@ const SearchFilter = (props) => {
 
   const handleChangeSchool = (value) => {
     setSelectedSchool(value);
+    setClassData([]);
+    setSelectedClass(null);
     form.setFieldsValue({
       class: null,
     });
   };
   const handleChangeGrade = (value) => {
     setSelectedGrade(value);
+    setClassData([]);
+    setSelectedClass(null);
     form.setFieldsValue({
       class: null,
     });
+  };
+  const handleChangeClass = (value) => {
+    setSelectedClass(value);
   };
 
   const onFinish = (values) => {
@@ -100,59 +113,54 @@ const SearchFilter = (props) => {
       <Row gutter={24}>
         <Col span={8}>
           <Form.Item name="school" label="Search School">
-            {schoolData?.length !== 0 && (
-              <Select
-                placeholder="Choose a School"
-                onChange={handleChangeSchool}
-                allowClear
-              >
-                {schoolData?.map((i, idx) => (
-                  <Select.Option key={idx} value={i?.id}>
-                    {i.schoolLevel === "PRIMARY" ? (
-                      <>TH {i.schoolName}</>
-                    ) : i.schoolLevel === "JUNIOR" ? (
-                      <>THCS {i.schoolName}</>
-                    ) : (
-                      <>THPT {i.schoolName}</>
-                    )}
-                  </Select.Option>
-                ))}
-              </Select>
-            )}
+            <Select
+              placeholder="Choose a School"
+              onChange={handleChangeSchool}
+              allowClear
+            >
+              {schoolData?.map((i, idx) => (
+                <Select.Option key={idx} value={i?.id}>
+                  {i.schoolLevel === "PRIMARY" ? (
+                    <>TH {i.schoolName}</>
+                  ) : i.schoolLevel === "JUNIOR" ? (
+                    <>THCS {i.schoolName}</>
+                  ) : (
+                    <>THPT {i.schoolName}</>
+                  )}
+                </Select.Option>
+              ))}
+            </Select>
           </Form.Item>
         </Col>
         <Col span={8}>
           <Form.Item name="grade" label="Search Grade">
-            {gradeData?.length !== 0 && (
-              <Select
-                placeholder="Choose a Grade"
-                onChange={handleChangeGrade}
-                allowClear
-              >
-                {gradeData?.map((item, idx) => (
-                  <Select.Option key={idx} value={item?.id}>
-                    Grade {item?.gradeName}
-                  </Select.Option>
-                ))}
-              </Select>
-            )}
+            <Select
+              placeholder="Choose a Grade"
+              onChange={handleChangeGrade}
+              allowClear
+            >
+              {gradeData?.map((item, idx) => (
+                <Select.Option key={idx} value={item?.id}>
+                  Grade {item?.gradeName}
+                </Select.Option>
+              ))}
+            </Select>
           </Form.Item>
         </Col>
         <Col span={8}>
           <Form.Item name="class" label="Search Class">
-            {classData?.length !== 0 && (
-              <Select
-                placeholder="Choose a Class"
-                notFoundContent={classLoading ? <Spin size="default" /> : null}
-                allowClear
-              >
-                {classData?.map((item, idx) => (
-                  <Select.Option key={idx} value={item?.id}>
-                    {item?.className}
-                  </Select.Option>
-                ))}
-              </Select>
-            )}
+            <Select
+              placeholder="Choose a Class"
+              onChange={handleChangeClass}
+              notFoundContent={classLoading ? <Spin size="default" /> : null}
+              allowClear
+            >
+              {classData?.map((item, idx) => (
+                <Select.Option key={idx} value={item?.id}>
+                  {item?.className}
+                </Select.Option>
+              ))}
+            </Select>
           </Form.Item>
         </Col>
       </Row>
@@ -164,7 +172,8 @@ const SearchFilter = (props) => {
               form.resetFields();
               setSelectedSchool("");
               setSelectedGrade("");
-              setClassData(null);
+              setSelectedClass(null);
+              setClassData([]);
             }}
           >
             Clear

@@ -246,7 +246,10 @@ const ClassComponent = (props) => {
                 justifyContent: "space-between",
               }}
             >
-              <ImportClassExcel gradeID={props.gradeID} />
+              <ImportClassExcel
+                gradeID={props.gradeID}
+                getClassBySchoolGrade={getClassBySchoolGrade}
+              />
               <ExportClassExcel
                 gradeID={props.gradeID}
                 handleGraduateLoading={handleGraduateLoading}

@@ -260,22 +260,24 @@ export default class StudentAccountComponent extends Component {
                 >
                   Delete
                 </Button>
-                <>
-                  <Cascader
-                    options={this.props.gradeClassList}
-                    fieldNames={{
-                      label: "name",
-                      value: "id",
-                      children: "classesList",
-                    }}
-                    placeholder="Please select destination"
-                    disabled
-                    style={{ width: 300, marginRight: 10 }}
-                  />
-                  <Button type="primary" disabled>
-                    Move students to selected Class
-                  </Button>
-                </>
+                {this.props.searchData?.school && this.props.searchData?.grade && (
+                  <>
+                    <Cascader
+                      options={this.props.gradeClassList}
+                      fieldNames={{
+                        label: "name",
+                        value: "id",
+                        children: "classesList",
+                      }}
+                      placeholder="Please select destination"
+                      disabled
+                      style={{ width: 300, marginRight: 10 }}
+                    />
+                    <Button type="primary" disabled>
+                      Move students to selected Class
+                    </Button>
+                  </>
+                )}
               </>
             ) : (
               <>
@@ -297,37 +299,43 @@ export default class StudentAccountComponent extends Component {
                     Delete
                   </Button>
                 </Popconfirm>
-                <>
-                  <Cascader
-                    options={this.props.gradeClassList}
-                    fieldNames={{
-                      label: "name",
-                      value: "id",
-                      children: "classesList",
-                    }}
-                    placeholder="Please select destination"
-                    onChange={this.onChangeCascader}
-                    matchInputWidth={true}
-                    style={{ width: 300, marginRight: 10 }}
-                  />
-                  {this.state.changeClassID === undefined ? (
-                    <Button type="primary" style={{ marginRight: 10 }} disabled>
-                      Move students to selected Class &gt;&gt;
-                    </Button>
-                  ) : (
-                    <Popconfirm
-                      placement="topRight"
-                      title="Are you sure to move selected Students?"
-                      onConfirm={this.confirmChangeSchoolClass} //Handle disable logic here
-                      okText="Yes"
-                      cancelText="No"
-                    >
-                      <Button type="primary" loading={this.state.loading}>
-                        Move students to selected Class
+                {this.props.searchData?.school && this.props.searchData?.grade && (
+                  <>
+                    <Cascader
+                      options={this.props.gradeClassList}
+                      fieldNames={{
+                        label: "name",
+                        value: "id",
+                        children: "classesList",
+                      }}
+                      placeholder="Please select destination"
+                      onChange={this.onChangeCascader}
+                      matchInputWidth={true}
+                      style={{ width: 300, marginRight: 10 }}
+                    />
+                    {this.state.changeClassID === undefined ? (
+                      <Button
+                        type="primary"
+                        style={{ marginRight: 10 }}
+                        disabled
+                      >
+                        Move students to selected Class &gt;&gt;
                       </Button>
-                    </Popconfirm>
-                  )}
-                </>
+                    ) : (
+                      <Popconfirm
+                        placement="topRight"
+                        title="Are you sure to move selected Students?"
+                        onConfirm={this.confirmChangeSchoolClass} //Handle disable logic here
+                        okText="Yes"
+                        cancelText="No"
+                      >
+                        <Button type="primary" loading={this.state.loading}>
+                          Move students to selected Class
+                        </Button>
+                      </Popconfirm>
+                    )}
+                  </>
+                )}
               </>
             )}
           </div>
