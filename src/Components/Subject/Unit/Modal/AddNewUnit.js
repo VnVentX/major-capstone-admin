@@ -92,6 +92,7 @@ const AddNewUnit = (props) => {
           >
             <InputNumber
               placeholder="Unit"
+              step={1}
               min={1}
               max={100}
               parser={(value) => {

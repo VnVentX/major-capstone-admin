@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import { Button, Modal, Form, Input, Upload, message, Tooltip } from "antd";
 import { EditOutlined } from "@ant-design/icons";
@@ -20,21 +20,30 @@ const EditSubject = (props) => {
   const [form] = Form.useForm();
   const [visible, setVisible] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [fileList, setFileList] = useState([
-    {
-      thumbUrl: props.data.imageUrl,
-    },
-  ]);
+  const [fileList, setFileList] = useState([]);
 
-  useEffect(() => {
-    form.setFieldsValue({
-      subject: props.data.subjectName,
-      description: props.data.description,
-    });
-  }, [form, props.data.description, props.data.subjectName]);
+  const getSubjectByGrade = async () => {
+    await axios
+      .get(`${process.env.REACT_APP_BASE_URL}/subject/${props.subjectID}`)
+      .then((res) => {
+        form.setFieldsValue({
+          subject: res.data.subjectName,
+          description: res.data.description,
+        });
+        setFileList([
+          {
+            thumbUrl: res.data.imageUrl,
+          },
+        ]);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
 
   const showModal = () => {
     setVisible(true);
+    getSubjectByGrade();
   };
 
   const handleCancel = () => {
@@ -97,7 +106,11 @@ const EditSubject = (props) => {
       <Modal
         title="Edit Subject"
         visible={visible}
-        onCancel={handleCancel}
+        onCancel={() => {
+          handleCancel();
+          form.resetFields();
+          setFileList([]);
+        }}
         okText="Update"
         confirmLoading={loading}
         destroyOnClose

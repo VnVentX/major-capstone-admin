@@ -127,8 +127,8 @@ const Subject = (props) => {
                           style={{ display: "flex", justifyContent: "center" }}
                         >
                           <EditSubject
-                            data={item}
                             gradeID={props.gradeID}
+                            subjectID={item.id}
                             getSubjectByGrade={getSubjectByGrade}
                             getAllSubject={props.getAllSubject}
                           />

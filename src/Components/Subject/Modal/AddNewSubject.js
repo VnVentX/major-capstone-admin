@@ -85,7 +85,11 @@ const AddNewSubject = (props) => {
       <Modal
         title="Create Subject"
         visible={visible}
-        onCancel={handleCancel}
+        onCancel={() => {
+          handleCancel();
+          form.resetFields();
+          setFileList([]);
+        }}
         okText="Create"
         confirmLoading={loading}
         destroyOnClose
