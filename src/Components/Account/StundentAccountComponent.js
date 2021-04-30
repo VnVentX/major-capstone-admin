@@ -19,9 +19,6 @@ import { QuestionCircleOutlined, DeleteOutlined } from "@ant-design/icons";
 export default class StudentAccountComponent extends Component {
   state = {
     selectedRowKeys: [],
-    pagination: {
-      pageSize: 10,
-    },
     loading: false,
     changeClassID: undefined,
   };
@@ -80,9 +77,20 @@ export default class StudentAccountComponent extends Component {
       .put(`${process.env.REACT_APP_BASE_URL}/student/changeClass`, formData)
       .then((res) => {
         console.log(res.data);
-        this.props.handleSearch(this.props.searchData);
-        message.success("Move students successfully");
-        this.setState({ selectedRowKeys: [], loading: false });
+        if (Object.keys(res.data)[0] === "HAVE PROBLEM") {
+          this.props.handleSearch(this.props.searchData);
+          message.error(
+            "Some selected students have already existed in chosen class"
+          );
+          this.setState({
+            selectedRowKeys: Object.values(res.data)[0],
+            loading: false,
+          });
+        } else {
+          this.props.handleSearch(this.props.searchData);
+          message.success("Move students successfully");
+          this.setState({ selectedRowKeys: [], loading: false });
+        }
       })
       .catch((e) => {
         console.log(e);
@@ -196,8 +204,11 @@ export default class StudentAccountComponent extends Component {
         ),
       },
     ];
-
-    const { selectedRowKeys, pagination, loading } = this.state;
+    const paginationProps = {
+      showSizeChanger: true,
+      showQuickJumper: true,
+    };
+    const { selectedRowKeys, loading } = this.state;
 
     const rowSelection = {
       selectedRowKeys,
@@ -245,7 +256,7 @@ export default class StudentAccountComponent extends Component {
             columns={columns}
             dataSource={this.props.data}
             scroll={{ x: true }}
-            pagination={pagination}
+            pagination={paginationProps}
             loading={loading}
           />
           <div>
@@ -319,7 +330,7 @@ export default class StudentAccountComponent extends Component {
                         style={{ marginRight: 10 }}
                         disabled
                       >
-                        Move students to selected Class &gt;&gt;
+                        Move students to selected Class
                       </Button>
                     ) : (
                       <Popconfirm

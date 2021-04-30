@@ -14,18 +14,21 @@ const EditProgressTest = (props) => {
   const [loading, setLoading] = useState(false);
   const [unit, setUnit] = useState([]);
 
-  useEffect(() => {
-    form.setFieldsValue({
-      progressTest: props.data.progressTestName,
-      description: props.data.description,
-      unitAfter: props.data.unitAfterId,
-    });
-  }, [
-    form,
-    props.data.description,
-    props.data.progressTestName,
-    props.data.unitAfterId,
-  ]);
+  const getProgressTestByID = async () => {
+    await axios
+      .get(`${process.env.REACT_APP_BASE_URL}/progressTest/${props.data.id}`)
+      .then((res) => {
+        form.setFieldsValue({
+          progressTest: res.data.progressTestName,
+          description: res.data.description,
+          unitAfter: res.data.unitAfterId,
+        });
+      })
+      .catch((e) => {
+        console.log(e);
+        message.error("Fail to load this Progress Test");
+      });
+  };
 
   const getUnitBySubjectID = async () => {
     let subjectID = window.location.pathname.split("/")[2];
@@ -48,6 +51,7 @@ const EditProgressTest = (props) => {
 
   const showModal = () => {
     getUnitBySubjectID();
+    getProgressTestByID();
     setVisible(true);
   };
 
@@ -94,7 +98,10 @@ const EditProgressTest = (props) => {
         title="Edit Progress Test"
         visible={visible}
         okText="Update"
-        onCancel={handleCancel}
+        onCancel={() => {
+          handleCancel();
+          form.resetFields();
+        }}
         confirmLoading={loading}
         destroyOnClose
         onOk={() => {

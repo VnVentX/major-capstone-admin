@@ -68,7 +68,10 @@ const AddNewUnit = (props) => {
         visible={visible}
         okText="Create"
         confirmLoading={loading}
-        onCancel={handleCancel}
+        onCancel={() => {
+          handleCancel();
+          form.resetFields();
+        }}
         destroyOnClose
         onOk={() => {
           form

@@ -1,33 +1,25 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
-import { Form, Input, Divider, Row, Col, Image, InputNumber } from "antd";
+import { Form, Input, Divider, Row, Col, Image } from "antd";
 
 const ViewSwappingQuestion = (props) => {
   const [option, setOption] = useState([]);
 
   useEffect(() => {
-    const getQuestionByID = async () => {
-      await axios
-        .get(
-          `${process.env.REACT_APP_BASE_URL}/question/${props.data.id}?questionType=SWAP`
-        )
-        .then((res) => {
-          props.form.setFieldsValue({
-            questionTitle: res.data.questionTitle,
-            description: res.data.description,
-            value1: res.data.optionQuestionDTOList[0].optionText,
-            value2: res.data.optionQuestionDTOList[1].optionText,
-            value3: res.data.optionQuestionDTOList[2].optionText,
-            value4: res.data.optionQuestionDTOList[3].optionText,
-          });
-          setOption(res.data.optionQuestionDTOList);
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-    };
-    getQuestionByID();
-  }, [props.data.id, props.form]);
+    props.form.setFieldsValue({
+      questionTitle: props.data.questionTitle,
+      description: props.data.description,
+      value1: props.data.optionQuestionDTOList[0].optionText,
+      value2: props.data.optionQuestionDTOList[1].optionText,
+      value3: props.data.optionQuestionDTOList[2].optionText,
+      value4: props.data.optionQuestionDTOList[3].optionText,
+    });
+    setOption(props.data.optionQuestionDTOList);
+  }, [
+    props.data.description,
+    props.data.optionQuestionDTOList,
+    props.data.questionTitle,
+    props.form,
+  ]);
 
   return (
     <Form form={props.form} layout="vertical" style={{ marginTop: 10 }}>

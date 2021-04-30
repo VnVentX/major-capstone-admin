@@ -67,7 +67,10 @@ const AddProgress = (props) => {
         title="Add Exercise"
         visible={visible}
         confirmLoading={loading}
-        onCancel={handleCancel}
+        onCancel={() => {
+          handleCancel();
+          form.resetFields();
+        }}
         destroyOnClose
         okText="Create"
         onOk={() => {

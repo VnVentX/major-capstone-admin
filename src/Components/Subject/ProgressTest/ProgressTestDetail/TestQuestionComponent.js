@@ -19,7 +19,11 @@ const TestQuestionComponent = () => {
     getQuestionByExerciseID();
     getExerciseDetail();
   }, []);
-
+  const paginationProps = {
+    showTotal: (total) => {
+      return `Total Questions: ${total}`;
+    },
+  };
   const getExerciseDetail = async () => {
     let exerciseID = window.location.pathname.split("/")[6];
     await axios
@@ -104,14 +108,6 @@ const TestQuestionComponent = () => {
       dataIndex: "questionTitle",
     },
     {
-      title: "Created By",
-      dataIndex: "createdBy",
-    },
-    {
-      title: "Created Date",
-      dataIndex: "createdDate",
-    },
-    {
       title: "Modified By",
       dataIndex: "modifiedBy",
     },
@@ -171,6 +167,10 @@ const TestQuestionComponent = () => {
             >
               <Button type="danger">Close Exercise</Button>
             </Popconfirm>
+          ) : status === "INACTIVE" && data?.length < 2 ? (
+            <Button type="primary" disabled>
+              Open Exercise
+            </Button>
           ) : status === "INACTIVE" ? (
             <Popconfirm
               placement="topRight"
@@ -192,7 +192,11 @@ const TestQuestionComponent = () => {
           justifyContent: "flex-end",
         }}
       >
-        {status === "INACTIVE" ? (
+        {status === "INACTIVE" && data?.length >= 10 ? (
+          <Button type="primary" disabled>
+            Add Question from Question Bank
+          </Button>
+        ) : status === "INACTIVE" ? (
           <AddQuestion
             getQuestionByExerciseID={getQuestionByExerciseID}
             data={data}
@@ -208,6 +212,7 @@ const TestQuestionComponent = () => {
         columns={selectedQuestionCol}
         dataSource={data}
         rowKey={(record) => record.id}
+        pagination={paginationProps}
       />
       <div>
         <h1>With selected:</h1>

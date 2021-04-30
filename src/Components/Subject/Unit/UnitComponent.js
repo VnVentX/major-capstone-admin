@@ -68,13 +68,7 @@ const UnitComponent = (props) => {
           justifyContent: "space-between",
         }}
       >
-        <AutoComplete
-          dataSource={searchData?.map((item, idx) => (
-            <Select.Option key={idx} value={`Unit ${item.unitName}`}>
-              Unit {item.unitName}
-            </Select.Option>
-          ))}
-        >
+        <AutoComplete>
           <Search
             allowClear
             placeholder="Search Unit"

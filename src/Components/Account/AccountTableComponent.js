@@ -60,9 +60,20 @@ export const AccountTableComponent = () => {
       });
   };
 
-  const getGradeClassList = async (schoolID) => {
+  const getGradeClassList = async (schoolID, gradeID, classID) => {
+    if (schoolID === undefined || schoolID === null) {
+      schoolID = 0;
+    }
+    if (gradeID === undefined || gradeID === null) {
+      gradeID = 0;
+    }
+    if (classID === undefined || classID === null) {
+      classID = 0;
+    }
     await axios
-      .get(`${process.env.REACT_APP_BASE_URL}/class/${schoolID}`)
+      .get(
+        `${process.env.REACT_APP_BASE_URL}/class/${schoolID}?classesId=${classID}&gradeId=${gradeID}&schoolId=${schoolID}`
+      )
       .then((res) => {
         setGradeClassList(res.data.length === 0 ? [] : res.data);
       })
@@ -74,7 +85,7 @@ export const AccountTableComponent = () => {
   const handleSearch = (data) => {
     setSearchData(data);
     searchStudent(data.school, data.grade, data.class);
-    getGradeClassList(data.school);
+    getGradeClassList(data.school, data.grade, data.class);
   };
 
   const handleNameSearch = (name) => {

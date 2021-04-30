@@ -6,7 +6,6 @@ import {
   Modal,
   Button,
   Input,
-  InputNumber,
   Divider,
   Row,
   Col,
@@ -103,9 +102,6 @@ const ViewQuestion = (props) => {
               placeholder="Description"
               disabled
             />
-          </Form.Item>
-          <Form.Item name="score" label="Score">
-            <InputNumber placeholder="Score" disabled />
           </Form.Item>
           <Form.Item name="q_audio" label="Question Audio">
             <div onClick={toggle}>

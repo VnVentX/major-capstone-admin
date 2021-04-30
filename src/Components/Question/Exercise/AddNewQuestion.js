@@ -3,7 +3,6 @@ import axios from "axios";
 import {
   Form,
   Input,
-  InputNumber,
   Button,
   Select,
   Divider,
@@ -110,7 +109,7 @@ const AddNewQuestion = () => {
       values.questionTitle?.replace(/\s+/g, " ").trim()
     );
     formData.append("questionType", "EXERCISE");
-    formData.append("score", values.score);
+    formData.append("score", 1);
     if (values.description) {
       formData.append(
         "description",
@@ -254,23 +253,6 @@ const AddNewQuestion = () => {
             maxLength="50"
             showCount
             placeholder="Question Description"
-          />
-        </Form.Item>
-        <Form.Item
-          name="score"
-          label="Score"
-          rules={[
-            { required: true, message: "Please input a score" },
-            { type: "number", message: "Please input a number" },
-          ]}
-        >
-          <InputNumber
-            placeholder="Score"
-            min={1}
-            max={5}
-            parser={(value) => {
-              return value.substring(0, 1);
-            }}
           />
         </Form.Item>
         <Form.Item

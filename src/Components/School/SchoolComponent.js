@@ -9,7 +9,6 @@ import {
   Tag,
   Popconfirm,
   AutoComplete,
-  Select,
   message,
 } from "antd";
 import { QuestionCircleOutlined, DeleteOutlined } from "@ant-design/icons";
@@ -189,19 +188,7 @@ export default class SchoolComponent extends Component {
             marginBottom: 20,
           }}
         >
-          <AutoComplete
-            dataSource={this.state.dataSearch?.map((item, idx) => (
-              <Select.Option key={idx} value={item.schoolName}>
-                {item.schoolLevel === "PRIMARY" ? (
-                  <>TH {item.schoolName}</>
-                ) : item.schoolLevel === "JUNIOR" ? (
-                  <>THCS {item.schoolName}</>
-                ) : (
-                  <>THPT {item.schoolName}</>
-                )}
-              </Select.Option>
-            ))}
-          >
+          <AutoComplete>
             <Input.Search
               placeholder="Search a School"
               allowClear

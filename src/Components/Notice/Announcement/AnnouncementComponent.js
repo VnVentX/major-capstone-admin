@@ -129,13 +129,7 @@ export default class AnnouncementComponent extends React.Component {
             marginBottom: 20,
           }}
         >
-          <AutoComplete
-            dataSource={this.state.dataSearch?.map((item, idx) => (
-              <Select.Option key={idx} value={item.newsTitle}>
-                {item.newsTitle}
-              </Select.Option>
-            ))}
-          >
+          <AutoComplete>
             <Input.Search
               placeholder="Search News"
               allowClear

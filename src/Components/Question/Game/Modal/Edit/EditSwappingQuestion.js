@@ -1,16 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
-import {
-  Form,
-  Input,
-  Button,
-  Divider,
-  Row,
-  Col,
-  Upload,
-  message,
-  InputNumber,
-} from "antd";
+import { Form, Input, Button, Divider, Row, Col, Upload, message } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 
 const normFile = (e) => {
@@ -27,52 +16,44 @@ const EditSwappingQuestion = (props) => {
   const [imgFile4, setImgFile4] = useState([]);
 
   useEffect(() => {
-    getQuestionByID();
-  }, []);
-
-  const getQuestionByID = async () => {
-    await axios
-      .get(
-        `${process.env.REACT_APP_BASE_URL}/question/${props.data.id}?questionType=SWAP`
-      )
-      .then((res) => {
-        props.form.setFieldsValue({
-          questionTitle: res.data.questionTitle,
-          description: res.data.description,
-          id1: res.data.optionQuestionDTOList[0].id,
-          id2: res.data.optionQuestionDTOList[1].id,
-          id3: res.data.optionQuestionDTOList[2].id,
-          id4: res.data.optionQuestionDTOList[3].id,
-          value1: res.data.optionQuestionDTOList[0].optionText,
-          value2: res.data.optionQuestionDTOList[1].optionText,
-          value3: res.data.optionQuestionDTOList[2].optionText,
-          value4: res.data.optionQuestionDTOList[3].optionText,
-        });
-        setImgFile1([
-          {
-            thumbUrl: res.data.optionQuestionDTOList[0].optionImageUrl,
-          },
-        ]);
-        setImgFile2([
-          {
-            thumbUrl: res.data.optionQuestionDTOList[1].optionImageUrl,
-          },
-        ]);
-        setImgFile3([
-          {
-            thumbUrl: res.data.optionQuestionDTOList[2].optionImageUrl,
-          },
-        ]);
-        setImgFile4([
-          {
-            thumbUrl: res.data.optionQuestionDTOList[3].optionImageUrl,
-          },
-        ]);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-  };
+    props.form.setFieldsValue({
+      questionTitle: props.data.questionTitle,
+      description: props.data.description,
+      id1: props.data.optionQuestionDTOList[0].id,
+      id2: props.data.optionQuestionDTOList[1].id,
+      id3: props.data.optionQuestionDTOList[2].id,
+      id4: props.data.optionQuestionDTOList[3].id,
+      value1: props.data.optionQuestionDTOList[0].optionText,
+      value2: props.data.optionQuestionDTOList[1].optionText,
+      value3: props.data.optionQuestionDTOList[2].optionText,
+      value4: props.data.optionQuestionDTOList[3].optionText,
+    });
+    setImgFile1([
+      {
+        thumbUrl: props.data.optionQuestionDTOList[0].optionImageUrl,
+      },
+    ]);
+    setImgFile2([
+      {
+        thumbUrl: props.data.optionQuestionDTOList[1].optionImageUrl,
+      },
+    ]);
+    setImgFile3([
+      {
+        thumbUrl: props.data.optionQuestionDTOList[2].optionImageUrl,
+      },
+    ]);
+    setImgFile4([
+      {
+        thumbUrl: props.data.optionQuestionDTOList[3].optionImageUrl,
+      },
+    ]);
+  }, [
+    props.data.description,
+    props.data.optionQuestionDTOList,
+    props.data.questionTitle,
+    props.form,
+  ]);
 
   const handleChangeImg1 = ({ fileList }) => {
     setImgFile1(fileList);

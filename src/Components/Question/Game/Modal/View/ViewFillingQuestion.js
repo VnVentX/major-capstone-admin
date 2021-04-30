@@ -1,38 +1,22 @@
 import React, { useEffect } from "react";
 import axios from "axios";
-import {
-  Form,
-  Input,
-  Select,
-  Divider,
-  Row,
-  Col,
-  Image,
-  InputNumber,
-} from "antd";
+import { Form, Input, Select, Divider, Row, Col, Image } from "antd";
 
 const { Option } = Select;
 
 const ViewFillingQuestion = (props) => {
   useEffect(() => {
-    const getQuestionByID = async () => {
-      await axios
-        .get(
-          `${process.env.REACT_APP_BASE_URL}/question/${props.data.id}?questionType=FILL`
-        )
-        .then((res) => {
-          props.form.setFieldsValue({
-            questionTitle: res.data.questionTitle,
-            description: res.data.description,
-            options: res.data.optionQuestionDTOList,
-          });
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-    };
-    getQuestionByID();
-  }, [props.data.id, props.form]);
+    props.form.setFieldsValue({
+      questionTitle: props.data.questionTitle,
+      description: props.data.description,
+      options: props.data.optionQuestionDTOList,
+    });
+  }, [
+    props.data.description,
+    props.data.optionQuestionDTOList,
+    props.data.questionTitle,
+    props.form,
+  ]);
 
   return (
     <Form form={props.form} layout="vertical" style={{ marginTop: 10 }}>

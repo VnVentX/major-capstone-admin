@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import {
   Form,
   Input,
@@ -10,7 +9,6 @@ import {
   Col,
   Upload,
   message,
-  InputNumber,
 } from "antd";
 import {
   MinusCircleOutlined,
@@ -29,38 +27,25 @@ const normFile = (e) => {
 
 const EditFillingQuestion = (props) => {
   const [imgFile, setImgFile] = useState([]);
-  const [listOptionID, setListOptionID] = useState([]);
 
   useEffect(() => {
-    getQuestionByID();
-  }, []);
-
-  const getQuestionByID = async () => {
-    await axios
-      .get(
-        `${process.env.REACT_APP_BASE_URL}/question/${props.data.id}?questionType=FILL`
-      )
-      .then((res) => {
-        let listID = [];
-        props.form.setFieldsValue({
-          questionTitle: res.data.questionTitle,
-          description: res.data.description,
-          options: res.data.optionQuestionDTOList,
-        });
-        setImgFile([
-          {
-            thumbUrl: res.data.questionImageUrl,
-          },
-        ]);
-        res.data.optionQuestionDTOList.forEach((item) => {
-          listID.push(item.id);
-        });
-        props.handleFillingDeleteID(listID);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-  };
+    props.form.setFieldsValue({
+      questionTitle: props.data.questionTitle,
+      description: props.data.description,
+      options: props.data.optionQuestionDTOList,
+    });
+    setImgFile([
+      {
+        thumbUrl: props.data.questionImageUrl,
+      },
+    ]);
+  }, [
+    props.data.description,
+    props.data.optionQuestionDTOList,
+    props.data.questionImageUrl,
+    props.data.questionTitle,
+    props.form,
+  ]);
 
   const handleChangeImg = ({ fileList }) => {
     setImgFile(fileList);

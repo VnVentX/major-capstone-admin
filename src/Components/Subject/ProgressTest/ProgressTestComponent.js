@@ -69,9 +69,7 @@ const ProgressTestComponent = (props) => {
           justifyContent: "space-between",
         }}
       >
-        <AutoComplete
-          dataSource={searchData?.map((item) => item.progressTestName)}
-        >
+        <AutoComplete>
           <Search
             allowClear
             placeholder="Search Progress Test"

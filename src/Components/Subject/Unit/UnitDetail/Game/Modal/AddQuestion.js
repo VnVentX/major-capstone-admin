@@ -33,25 +33,22 @@ const AddQuestion = (props) => {
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [data, setData] = useState([]);
 
-  useEffect(() => {
-    const getQuestionByUnitID = async () => {
-      let unitID = window.location.pathname.split("/")[4];
-      await axios
-        .get(
-          `${process.env.REACT_APP_BASE_URL}/unit/${unitID}/questions?isExercise=false`
-        )
-        .then((res) => {
-          resArr = Array.from(res.data);
-          var ids = new Set(props.data.map(({ id }) => id));
-          resArr = resArr.filter(({ id }) => !ids.has(id));
-          setData(resArr);
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-    };
-    getQuestionByUnitID();
-  }, [props.data]);
+  const getQuestionByUnitID = async () => {
+    let unitID = window.location.pathname.split("/")[4];
+    await axios
+      .get(
+        `${process.env.REACT_APP_BASE_URL}/unit/${unitID}/questions?isExercise=false`
+      )
+      .then((res) => {
+        resArr = Array.from(res.data);
+        var ids = new Set(props.data.map(({ id }) => id));
+        resArr = resArr.filter(({ id }) => !ids.has(id));
+        setData(resArr);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
 
   const addQuestion = async () => {
     setLoading(true);
@@ -70,6 +67,7 @@ const AddQuestion = (props) => {
         handleCancel();
         setSelectedRowKeys([]);
         message.success("Add Question successfully");
+        setSelectedRowKeys([]);
       })
       .catch((e) => {
         setLoading(false);
@@ -88,6 +86,7 @@ const AddQuestion = (props) => {
   };
 
   const showModal = () => {
+    getQuestionByUnitID();
     setVisible(true);
   };
 

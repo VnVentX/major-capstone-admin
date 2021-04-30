@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import { Button, Modal, Form, Table, Space, message } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
@@ -29,25 +29,22 @@ const AddQuestion = (props) => {
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [data, setData] = useState([]);
 
-  useEffect(() => {
-    const getQuestionByUnitID = async () => {
-      let unitID = window.location.pathname.split("/")[4];
-      await axios
-        .get(
-          `${process.env.REACT_APP_BASE_URL}/unit/${unitID}/questions?isExercise=true`
-        )
-        .then((res) => {
-          resArr = Array.from(res.data);
-          var ids = new Set(props.data.map(({ id }) => id));
-          resArr = resArr.filter(({ id }) => !ids.has(id));
-          setData(resArr);
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-    };
-    getQuestionByUnitID();
-  }, [props.data]);
+  const getQuestionByUnitID = async () => {
+    let unitID = window.location.pathname.split("/")[4];
+    await axios
+      .get(
+        `${process.env.REACT_APP_BASE_URL}/unit/${unitID}/questions?isExercise=true`
+      )
+      .then((res) => {
+        resArr = Array.from(res.data);
+        var ids = new Set(props.data.map(({ id }) => id));
+        resArr = resArr.filter(({ id }) => !ids.has(id));
+        setData(resArr);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
 
   const addQuestion = async () => {
     setLoading(true);
@@ -66,11 +63,18 @@ const AddQuestion = (props) => {
         handleCancel();
         setSelectedRowKeys([]);
         message.success("Add Question successfully");
+        setSelectedRowKeys([]);
       })
       .catch((e) => {
+        if (e.response.data === "EXCEED LIMIT") {
+          message.error(
+            "One exercise can only have 10 questions, Please check your input!"
+          );
+        } else {
+          message.error("Fail to add Question");
+        }
         console.log(e);
         setLoading(false);
-        message.error("Fail to add Question");
       });
   };
 
@@ -84,6 +88,7 @@ const AddQuestion = (props) => {
   };
 
   const showModal = () => {
+    getQuestionByUnitID();
     setVisible(true);
   };
 

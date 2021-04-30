@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import {
   Button,
@@ -21,12 +21,20 @@ const EditUnit = (props) => {
   const [visible, setVisible] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    form.setFieldsValue({
-      unit: props.data.unitName,
-      description: props.data.description,
-    });
-  }, [form, props.data.description, props.data.unitName]);
+  const getUnitByID = async () => {
+    await axios
+      .get(`${process.env.REACT_APP_BASE_URL}/unit/${props.data.id}`)
+      .then((res) => {
+        form.setFieldsValue({
+          unit: res.data.unitName,
+          description: res.data.description,
+        });
+      })
+      .catch((e) => {
+        console.log(e);
+        message.error("Fail to load this Unit");
+      });
+  };
 
   const editUnit = async (values) => {
     setLoading(true);
@@ -56,6 +64,7 @@ const EditUnit = (props) => {
   };
 
   const showModal = () => {
+    getUnitByID();
     setVisible(true);
   };
 
@@ -77,7 +86,10 @@ const EditUnit = (props) => {
         title="Edit Unit"
         visible={visible}
         okText="Update"
-        onCancel={handleCancel}
+        onCancel={() => {
+          handleCancel();
+          form.resetFields();
+        }}
         confirmLoading={loading}
         destroyOnClose
         onOk={() => {

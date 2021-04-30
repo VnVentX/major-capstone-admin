@@ -12,11 +12,11 @@ const EditQuestion = (props) => {
   const [visible, setVisible] = useState(false);
   const [loading, setLoading] = useState(false);
   const [listOptionID, setListOptionID] = useState([]);
+  const [questionData, setQuestionData] = useState([]);
 
   const handleFillingDeleteID = (values) => {
     setListOptionID([...values]);
   };
-
   const editQuestion = async (formData) => {
     setLoading(true);
     await axios
@@ -43,7 +43,6 @@ const EditQuestion = (props) => {
         message.error("Fail to edit Question");
       });
   };
-
   const editFillQuestion = async (formData) => {
     setLoading(true);
     await axios
@@ -63,6 +62,7 @@ const EditQuestion = (props) => {
         handleCancel();
         message.success("Edit Question successfully");
         form.resetFields();
+        setListOptionID([]);
       })
       .catch((e) => {
         console.log(e);
@@ -70,9 +70,77 @@ const EditQuestion = (props) => {
         message.error("Fail to edit Question");
       });
   };
-
-  const showModal = () => {
-    setVisible(true);
+  const getQuestionChoosing = async () => {
+    await axios
+      .get(
+        `${process.env.REACT_APP_BASE_URL}/question/${props.data?.id}?questionType=CHOOSE`
+      )
+      .then((res) => {
+        setQuestionData(res.data);
+        setVisible(true);
+      })
+      .catch((e) => {
+        console.log(e);
+        message.error("Fail to view this question");
+      });
+  };
+  const getQuestionFilling = async () => {
+    await axios
+      .get(
+        `${process.env.REACT_APP_BASE_URL}/question/${props.data.id}?questionType=FILL`
+      )
+      .then((res) => {
+        let listID = [];
+        setQuestionData(res.data);
+        res.data.optionQuestionDTOList?.forEach((item) => {
+          listID.push(item.id);
+        });
+        handleFillingDeleteID(listID);
+        setVisible(true);
+      })
+      .catch((e) => {
+        console.log(e);
+        message.error("Fail to view this question");
+      });
+  };
+  const getQuestionMatching = async () => {
+    await axios
+      .get(
+        `${process.env.REACT_APP_BASE_URL}/question/${props.data.id}?questionType=MATCH`
+      )
+      .then((res) => {
+        setQuestionData(res.data);
+        setVisible(true);
+      })
+      .catch((e) => {
+        console.log(e);
+        message.error("Fail to view this question");
+      });
+  };
+  const getQuestionSwapping = async () => {
+    await axios
+      .get(
+        `${process.env.REACT_APP_BASE_URL}/question/${props.data.id}?questionType=SWAP`
+      )
+      .then((res) => {
+        setQuestionData(res.data);
+        setVisible(true);
+      })
+      .catch((e) => {
+        console.log(e);
+        message.error("Fail to view this question");
+      });
+  };
+  const showModal = async () => {
+    if (props.data?.questionType === "CHOOSE") {
+      await getQuestionChoosing();
+    } else if (props.data?.questionType === "FILL") {
+      await getQuestionFilling();
+    } else if (props.data?.questionType === "MATCH") {
+      await getQuestionMatching();
+    } else if (props.data?.questionType === "SWAP") {
+      await getQuestionSwapping();
+    }
   };
 
   const handleCancel = () => {
@@ -115,8 +183,6 @@ const EditQuestion = (props) => {
     optionIdDeleteList = listOptionID.filter(
       (val) => !optionIdList.includes(val)
     );
-    console.log("Deleted id: ", optionIdDeleteList);
-    console.log("New id: ", optionIdList);
     let formData = new FormData();
     formData.append("id", props.data.id);
     formData.append("questionTitle", values.questionTitle);
@@ -135,7 +201,7 @@ const EditQuestion = (props) => {
     } else {
       formData.append("optionIdDeleteList", optionIdDeleteList);
     }
-    // editFillQuestion(formData);
+    editFillQuestion(formData);
   };
 
   const choosingQuestionSubmit = (values) => {
@@ -375,7 +441,10 @@ const EditQuestion = (props) => {
         confirmLoading={loading}
         okText="Update"
         cancelText="Cancel"
-        onCancel={handleCancel}
+        onCancel={() => {
+          handleCancel();
+          form.resetFields();
+        }}
         onOk={() => {
           form
             .validateFields()
@@ -388,17 +457,17 @@ const EditQuestion = (props) => {
         }}
       >
         {props.data?.questionType === "MATCH" ? (
-          <EditMatchingQuestion form={form} data={props.data} />
+          <EditMatchingQuestion form={form} data={questionData} />
         ) : props.data?.questionType === "FILL" ? (
           <EditFillingQuestion
             form={form}
-            data={props.data}
+            data={questionData}
             handleFillingDeleteID={handleFillingDeleteID}
           />
         ) : props.data?.questionType === "SWAP" ? (
-          <EditSwappingQuestion form={form} data={props.data} />
+          <EditSwappingQuestion form={form} data={questionData} />
         ) : props.data?.questionType === "CHOOSE" ? (
-          <EditChoosingQuestion form={form} data={props.data} />
+          <EditChoosingQuestion form={form} data={questionData} />
         ) : null}
       </Modal>
     </div>

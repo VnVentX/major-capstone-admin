@@ -82,11 +82,18 @@ const AddTestQuestion = (props) => {
         setLoading(false);
         handleCancel();
         message.success("Add Question successfully");
+        setSelectedRowKeys([]);
       })
       .catch((e) => {
+        if (e.response.data === "EXCEED LIMIT") {
+          message.error(
+            "One exercise can only have 10 questions, Please check your input!"
+          );
+        } else {
+          message.error("Fail to add Question");
+        }
         console.log(e);
         setLoading(false);
-        message.error("Fail to add Question");
       });
   };
 

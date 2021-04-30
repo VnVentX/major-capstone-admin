@@ -128,14 +128,6 @@ export default class GradeDetailTable extends Component {
         title: "School Code",
         dataIndex: "schoolCode",
       },
-      // {
-      //   title: "Created By",
-      //   dataIndex: "createdBy",
-      // },
-      // {
-      //   title: "Created Date",
-      //   dataIndex: "createdDate",
-      // },
       {
         title: "Modified By",
         dataIndex: "modifiedBy",
@@ -211,13 +203,7 @@ export default class GradeDetailTable extends Component {
             marginBottom: 20,
           }}
         >
-          <AutoComplete
-            dataSource={this.state.dataSearch.map((item, idx) => (
-              <Select.Option key={idx} value={item.schoolName}>
-                {item.schoolName}
-              </Select.Option>
-            ))}
-          >
+          <AutoComplete>
             <Input.Search
               placeholder="Search a School"
               allowClear

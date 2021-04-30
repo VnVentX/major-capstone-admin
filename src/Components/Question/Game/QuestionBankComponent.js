@@ -103,7 +103,6 @@ const QuestionBankComponent = () => {
   };
 
   const handleDeleteQuestion = (item) => {
-    console.log(item);
     deleteQuestion(item);
   };
 
@@ -249,6 +248,7 @@ const QuestionBankComponent = () => {
         columns={columns}
         dataSource={questionData}
         scroll={{ x: true }}
+        loading={loading}
       />
       <div>
         <h1>With selected:</h1>

@@ -14,17 +14,21 @@ const SearchFilter = (props) => {
 
   useEffect(() => {
     getAllSchool();
-    getAllGrade();
     if (props.searchData !== null) {
+      getGradeBySchool(props.searchData?.school);
       getClassByGradeSchoolID(
         props.searchData?.school,
         props.searchData?.grade
       );
     }
-    setSelectedClass(props.searchData?.class);
     setSelectedSchool(props.searchData?.school);
     setSelectedGrade(props.searchData?.grade);
+    setSelectedClass(props.searchData?.class);
   }, [props.searchData]);
+
+  useEffect(() => {
+    getGradeBySchool(selectedSchool);
+  }, [selectedSchool]);
 
   useEffect(() => {
     getClassByGradeSchoolID(selectedSchool, selectedGrade);
@@ -64,13 +68,13 @@ const SearchFilter = (props) => {
       });
   };
 
-  const getAllGrade = async () => {
+  const getGradeBySchool = async (schoolID) => {
     await axios
-      .get(`${process.env.REACT_APP_BASE_URL}/grade/all`)
+      .get(`${process.env.REACT_APP_BASE_URL}/grade/${schoolID}`)
       .then((res) => {
         setGradeData(res.data.length === 0 ? [] : res.data);
         form.setFieldsValue({
-          grade: props.searchData?.grade,
+          grade: selectedGrade,
         });
       })
       .catch((e) => {
@@ -80,9 +84,12 @@ const SearchFilter = (props) => {
 
   const handleChangeSchool = (value) => {
     setSelectedSchool(value);
+    setGradeData([]);
+    setSelectedGrade(null);
     setClassData([]);
     setSelectedClass(null);
     form.setFieldsValue({
+      grade: null,
       class: null,
     });
   };
@@ -171,7 +178,8 @@ const SearchFilter = (props) => {
             onClick={() => {
               form.resetFields();
               setSelectedSchool("");
-              setSelectedGrade("");
+              setSelectedGrade(null);
+              setGradeData([]);
               setSelectedClass(null);
               setClassData([]);
             }}

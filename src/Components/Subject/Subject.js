@@ -80,9 +80,7 @@ const Subject = (props) => {
               justifyContent: "space-between",
             }}
           >
-            <AutoComplete
-              dataSource={searchData?.map((item) => item.subjectName)}
-            >
+            <AutoComplete>
               <Input.Search
                 allowClear
                 placeholder="Search Subject"

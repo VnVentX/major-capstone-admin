@@ -92,7 +92,6 @@ const GameQuestion = () => {
     console.log("selectedRowKeys changed: ", selectedRowKeys);
     setSelectedRowKeys(selectedRowKeys);
   };
-
   const rowSelection = {
     selectedRowKeys,
     onChange: onSelectChange,

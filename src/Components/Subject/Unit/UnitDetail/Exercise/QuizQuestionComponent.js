@@ -97,19 +97,15 @@ const QuizQuestionComponent = () => {
     selectedRowKeys,
     onChange: onSelectChange,
   };
-
+  const paginationProps = {
+    showTotal: (total) => {
+      return `Total Questions: ${total}`;
+    },
+  };
   const selectedQuestionCol = [
     {
       title: "Question",
       dataIndex: "questionTitle",
-    },
-    {
-      title: "Created By",
-      dataIndex: "createdBy",
-    },
-    {
-      title: "Created Date",
-      dataIndex: "createdDate",
     },
     {
       title: "Modified By",
@@ -171,6 +167,10 @@ const QuizQuestionComponent = () => {
             >
               <Button type="danger">Close Exercise</Button>
             </Popconfirm>
+          ) : status === "INACTIVE" && data?.length < 2 ? (
+            <Button type="primary" disabled>
+              Open Exercise
+            </Button>
           ) : status === "INACTIVE" ? (
             <Popconfirm
               placement="topRight"
@@ -192,7 +192,11 @@ const QuizQuestionComponent = () => {
           justifyContent: "flex-end",
         }}
       >
-        {status === "INACTIVE" ? (
+        {status === "INACTIVE" && data?.length >= 10 ? (
+          <Button type="primary" disabled>
+            Add Question from Question Bank
+          </Button>
+        ) : status === "INACTIVE" ? (
           <AddQuestion
             getQuestionByExerciseID={getQuestionByExerciseID}
             data={data}
@@ -209,6 +213,7 @@ const QuizQuestionComponent = () => {
         dataSource={data}
         rowKey={(record) => record.id}
         scroll={{ x: true }}
+        pagination={paginationProps}
       />
       <div>
         <h1>With selected:</h1>

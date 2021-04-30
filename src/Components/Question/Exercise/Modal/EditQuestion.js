@@ -7,7 +7,6 @@ import {
   Modal,
   Button,
   Input,
-  InputNumber,
   Divider,
   Row,
   Col,
@@ -163,7 +162,7 @@ const EditQuestion = (props) => {
     let formData = new FormData();
     formData.append("id", props.data.id);
     formData.append("questionTitle", values.questionTitle);
-    formData.append("score", values.score);
+    formData.append("score", 1);
     if (values.description) {
       formData.append(
         "description",
@@ -267,23 +266,6 @@ const EditQuestion = (props) => {
               maxLength="50"
               showCount
               placeholder="Description"
-            />
-          </Form.Item>
-          <Form.Item
-            name="score"
-            label="Score"
-            rules={[
-              { required: true, message: "Please input a score" },
-              { type: "number", message: "Please input a number" },
-            ]}
-          >
-            <InputNumber
-              placeholder="Score"
-              min={1}
-              max={5}
-              parser={(value) => {
-                return value.substring(0, 1);
-              }}
             />
           </Form.Item>
           <Form.Item

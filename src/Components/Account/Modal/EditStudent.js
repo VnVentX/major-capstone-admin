@@ -124,6 +124,7 @@ const EditStudent = (props) => {
           >
             <DatePicker
               format="DD/MM/YYYY"
+              inputReadOnly={true}
               disabledDate={(current) => {
                 return current && current > moment().endOf("day");
               }}
