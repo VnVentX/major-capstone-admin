@@ -97,6 +97,10 @@ const AddNewClass = (props) => {
               },
               { required: true, message: "Please input a class name" },
               { max: 20, message: "Can only input 20 characters" },
+              {
+                pattern: /^[^-\s][\w\s-]+$/,
+                message: "Can only input letters",
+              },
             ]}
           >
             <Input placeholder="Class Name" maxLength={21} />

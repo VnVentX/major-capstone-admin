@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { Button, Modal, Form, Input, Select, message } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
-import { reunicode } from "../../../helper/regex";
+import { schoolreg } from "../../../helper/regex";
 
 const { Option } = Select;
 
@@ -136,7 +136,7 @@ const AddNewSchool = (props) => {
                 message: "Can only input 50 characters",
               },
               {
-                pattern: reunicode,
+                pattern: schoolreg,
                 message: "Can only input letters",
               },
             ]}

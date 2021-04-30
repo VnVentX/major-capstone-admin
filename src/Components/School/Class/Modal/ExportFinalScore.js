@@ -26,8 +26,9 @@ const ExportFinalScore = (props) => {
         document.body.appendChild(link);
         link.click();
         setLoading(false);
+        props.getClassBySchoolGrade();
         message.success("Export report successfully");
-        props.handleGraduateLoading();
+        props.handleGraduateLoading(false);
       })
       .catch((e) => {
         console.log(e);

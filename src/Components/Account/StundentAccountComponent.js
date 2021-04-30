@@ -18,13 +18,8 @@ import { QuestionCircleOutlined, DeleteOutlined } from "@ant-design/icons";
 
 export default class StudentAccountComponent extends Component {
   state = {
-    selectedRowKeys: [],
     loading: false,
     changeClassID: undefined,
-  };
-
-  onSelectChange = (selectedRowKeys) => {
-    this.setState({ selectedRowKeys });
   };
 
   handleDisableStudent = (e, status) => {
@@ -54,6 +49,11 @@ export default class StudentAccountComponent extends Component {
       })
       .then((res) => {
         console.log(res);
+        if (status === "ACTIVE" || status === "INACTIVE") {
+          message.success("Change status successfully!");
+        } else {
+          message.success("Delete student successfully!");
+        }
         this.setState({
           selectedRowKeys: [],
           loading: false,
@@ -62,6 +62,11 @@ export default class StudentAccountComponent extends Component {
       })
       .catch((e) => {
         console.log(e);
+        if (e.response.data === "CANNOT DELETE") {
+          message.error("Can not delete active student!");
+        } else {
+          message.error("Fail to delete student!");
+        }
         this.setState({
           loading: false,
         });
@@ -72,7 +77,7 @@ export default class StudentAccountComponent extends Component {
     this.setState({ loading: true });
     let formData = new FormData();
     formData.append("classesId", this.state.changeClassID);
-    formData.append("studentIdList", this.state.selectedRowKeys);
+    formData.append("studentIdList", this.props.selectedRowKeys);
     await axios
       .put(`${process.env.REACT_APP_BASE_URL}/student/changeClass`, formData)
       .then((res) => {
@@ -82,14 +87,14 @@ export default class StudentAccountComponent extends Component {
           message.error(
             "Some selected students have already existed in chosen class"
           );
+          this.props.handleSelectChange(Object.values(res.data)[0]);
           this.setState({
-            selectedRowKeys: Object.values(res.data)[0],
             loading: false,
           });
         } else {
           this.props.handleSearch(this.props.searchData);
           message.success("Move students successfully");
-          this.setState({ selectedRowKeys: [], loading: false });
+          this.setState({ loading: false });
         }
       })
       .catch((e) => {
@@ -207,12 +212,17 @@ export default class StudentAccountComponent extends Component {
     const paginationProps = {
       showSizeChanger: true,
       showQuickJumper: true,
+      showTotal: (total) => {
+        return `Total Students: ${total}`;
+      },
     };
-    const { selectedRowKeys, loading } = this.state;
+    const { loading } = this.state;
+
+    const selectedRowKeys = this.props.selectedRowKeys;
 
     const rowSelection = {
       selectedRowKeys,
-      onChange: this.onSelectChange,
+      onChange: this.props.handleSelectChange,
     };
 
     return (
@@ -243,10 +253,12 @@ export default class StudentAccountComponent extends Component {
                     alignItems: "center",
                   }}
                 >
-                  <AddNewStudent
-                    searchData={this.props.searchData}
-                    handleSearch={this.props.handleSearch}
-                  />
+                  {this.props.data.length < 60 && (
+                    <AddNewStudent
+                      searchData={this.props.searchData}
+                      handleSearch={this.props.handleSearch}
+                    />
+                  )}
                 </div>
               )}
           </div>
@@ -257,7 +269,7 @@ export default class StudentAccountComponent extends Component {
             dataSource={this.props.data}
             scroll={{ x: true }}
             pagination={paginationProps}
-            loading={loading}
+            loading={loading || this.props.loading}
           />
           <div>
             <h1>With selected:</h1>

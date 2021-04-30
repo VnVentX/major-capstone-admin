@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import { Modal, Button, Card, Descriptions } from "antd";
 import { Link } from "react-router-dom";
@@ -7,21 +7,19 @@ const ViewStudent = (props) => {
   const [visible, setVisible] = useState(false);
   const [data, setData] = useState({});
 
-  useEffect(() => {
-    const getStudentByID = async () => {
-      await axios
-        .get(`${process.env.REACT_APP_BASE_URL}/student/${props.data.id}`)
-        .then((res) => {
-          setData(res.data.length === 0 ? [] : res.data);
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-    };
-    getStudentByID();
-  }, []);
+  const getStudentByID = async () => {
+    await axios
+      .get(`${process.env.REACT_APP_BASE_URL}/student/${props.data.id}`)
+      .then((res) => {
+        setData(res.data.length === 0 ? [] : res.data);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
 
   const showModal = () => {
+    getStudentByID();
     setVisible(true);
   };
 

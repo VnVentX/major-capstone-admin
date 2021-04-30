@@ -80,17 +80,17 @@ export default class GradeDetailTable extends Component {
         this.getSchoolByGradeID(this.props.gradeID);
         this.setState({ tableLoading: false });
         if (status === "DELETED") {
-          message.success("Unlink successfully");
-        } else {
-          message.success("Change status successfully");
+          message.success("Unlink successfully!");
+        } else if (status === "ACTIVE" || status === "INACTIVE") {
+          message.success("Change status successfully!");
         }
       })
       .catch((e) => {
         console.log(e);
         this.setState({ tableLoading: false });
-        if (status === "DELETED") {
-          message.error("Fail to unlink");
-        } else {
+        if (e.response.data === "CANNOT DELETE") {
+          message.error("Can not unlink school with active student!");
+        } else if (status === "ACTIVE" || status === "INACTIVE") {
           message.error("Fail to change status");
         }
       });

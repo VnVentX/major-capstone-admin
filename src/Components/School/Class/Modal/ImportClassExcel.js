@@ -94,6 +94,7 @@ const ImportClassExcel = (props) => {
           link.setAttribute("download", fileName);
           document.body.appendChild(link);
           link.click();
+          props.getClassBySchoolGrade();
           message.error("Some student's ID are not exist");
           setLoading(false);
           setFileList([]);

@@ -14,6 +14,7 @@ export const AccountTableComponent = () => {
   const [gradeClassList, setGradeClassList] = useState([]);
   const [searchData, setSearchData] = useState();
   const [loading, setLoading] = useState(false);
+  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
 
   useEffect(() => {
     if (location.state === undefined) {
@@ -31,6 +32,10 @@ export const AccountTableComponent = () => {
       });
     }
   }, []);
+
+  const handleSelectChange = (values) => {
+    setSelectedRowKeys(values);
+  };
 
   const searchStudent = async (schoolID, gradeID, classID) => {
     if (schoolID === undefined || schoolID === null) {
@@ -83,6 +88,7 @@ export const AccountTableComponent = () => {
   };
 
   const handleSearch = (data) => {
+    setSelectedRowKeys([]);
     setSearchData(data);
     searchStudent(data.school, data.grade, data.class);
     getGradeClassList(data.school, data.grade, data.class);
@@ -100,7 +106,7 @@ export const AccountTableComponent = () => {
 
   return (
     <Tabs defaultActiveKey="1">
-      <TabPane tab="Student's Account" key="1">
+      <TabPane tab="Student" key="1">
         <SearchFilter
           searchData={searchData}
           handleSearch={handleSearch}
@@ -113,6 +119,9 @@ export const AccountTableComponent = () => {
           gradeClassList={gradeClassList}
           searchRecord={searchRecord}
           searchData={searchData}
+          handleSelectChange={handleSelectChange}
+          selectedRowKeys={selectedRowKeys}
+          loading={loading}
         />
       </TabPane>
     </Tabs>

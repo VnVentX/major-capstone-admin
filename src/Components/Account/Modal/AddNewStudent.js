@@ -70,8 +70,12 @@ const AddNewStudent = (props) => {
       })
       .catch((e) => {
         console.log(e);
+        if (e.response.data === "EXISTED") {
+          message.error("This student has already existed!");
+        } else {
+          message.error("Fail to create Student!");
+        }
         setLoading(false);
-        message.error("Fail to create Student!");
       });
   };
 

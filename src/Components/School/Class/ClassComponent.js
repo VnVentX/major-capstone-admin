@@ -64,19 +64,19 @@ const ClassComponent = (props) => {
         getClassBySchoolGrade();
         setLoading(true);
         if (status === "DELETED") {
-          message.success("Delete class successfully");
-        } else {
-          message.success("Change status successfully");
+          message.success("Delete class successfully!");
+        } else if (status === "ACTIVE" || status === "INACTIVE") {
+          message.success("Change status successfully!");
         }
       })
       .catch((e) => {
         console.log(e);
-        setLoading(true);
-        if (status === "DELETED") {
-          message.error("Fail to delete class");
-        } else {
+        if (e.response.data === "CANNOT DELETE") {
+          message.error("Can not delete class with active student!");
+        } else if (status === "ACTIVE" || status === "INACTIVE") {
           message.error("Fail to change status");
         }
+        setLoading(false);
       });
   };
 
@@ -222,6 +222,7 @@ const ClassComponent = (props) => {
           <ExportFinalScore
             gradeID={props.gradeID}
             handleGraduateLoading={handleGraduateLoading}
+            getClassBySchoolGrade={getClassBySchoolGrade}
           />
         </div>
       }
