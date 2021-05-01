@@ -48,6 +48,12 @@ const ViewStudent = (props) => {
         <Card>
           <Descriptions layout="vertical">
             <Descriptions.Item
+              label="Student ID"
+              labelStyle={{ fontWeight: "bold" }}
+            >
+              {data?.studentId}
+            </Descriptions.Item>
+            <Descriptions.Item
               label="Full Name"
               labelStyle={{ fontWeight: "bold" }}
             >

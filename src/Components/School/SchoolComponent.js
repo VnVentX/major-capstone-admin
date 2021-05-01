@@ -63,10 +63,10 @@ export default class SchoolComponent extends Component {
       .catch((e) => {
         console.log(e);
         this.setState({ isLoading: false });
-        if (status === "DELETED") {
-          message.error("Fail to delete school");
-        } else {
-          message.error("Fail to change status");
+        if (e.response.data === "CANNOT DELETE") {
+          message.error("Can not delete school with active student!");
+        } else if (status === "ACTIVE" || status === "INACTIVE") {
+          message.error("Fail to change status!");
         }
       });
   };

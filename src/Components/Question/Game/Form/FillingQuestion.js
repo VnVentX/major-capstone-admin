@@ -299,10 +299,6 @@ const FillingQuestion = (props) => {
                           <Select placeholder="Select Operator">
                             <Select.Option value="+">Plus (+)</Select.Option>
                             <Select.Option value="-">Minus (-)</Select.Option>
-                            <Select.Option value="x">
-                              Multiply (x)
-                            </Select.Option>
-                            <Select.Option value="/">Divide (/)</Select.Option>
                             <Select.Option value="=">Equals (=)</Select.Option>
                           </Select>
                         </Form.Item>
