@@ -142,8 +142,8 @@ const EditQuestion = (props) => {
   };
 
   const onFinish = (values) => {
+    let formData = new FormData();
     let optionIdList = [];
-    let optionTextList = [];
     let isCorrectList = [];
     let optionIdDeleteList = [];
     values.options.forEach((item) => {
@@ -152,14 +152,13 @@ const EditQuestion = (props) => {
       } else {
         optionIdList.push(item.id);
       }
-      optionTextList.push(item.optionText);
+      formData.append("optionTextList", item.optionText);
       isCorrectList.push(item.correct);
     });
     //List Option ID want to delete
     optionIdDeleteList = listOptionID.filter(
       (val) => !optionIdList.includes(val)
     );
-    let formData = new FormData();
     formData.append("id", props.data.id);
     formData.append("questionTitle", values.questionTitle);
     formData.append("score", 1);
@@ -185,7 +184,6 @@ const EditQuestion = (props) => {
       formData.append("audioFile", fakeFile);
     }
     formData.append("isCorrectList", [isCorrectList]);
-    formData.append("optionTextList", optionTextList);
     formData.append("optionIdList", optionIdList);
     if (optionIdDeleteList.length === 0) {
       formData.append("optionIdDeleteList", []);

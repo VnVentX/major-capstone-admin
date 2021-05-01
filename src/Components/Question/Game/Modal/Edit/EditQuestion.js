@@ -161,9 +161,9 @@ const EditQuestion = (props) => {
   };
 
   const fillingQuestionSubmit = (values) => {
+    let formData = new FormData();
     let optionIdList = [];
     let optionInputTypeList = [];
-    let optionTextList = [];
     let optionIdDeleteList = [];
     values.options.forEach((item) => {
       if (item.id === undefined) {
@@ -173,17 +173,16 @@ const EditQuestion = (props) => {
       }
       optionInputTypeList.push(item.optionInputType.toLowerCase());
       if (item.text) {
-        optionTextList.push(item.text.toLowerCase());
+        formData.append("optionTextList", item.text.toLowerCase());
       }
       if (item.operator) {
-        optionTextList.push(item.operator.toLowerCase());
+        formData.append("optionTextList", item.operator.toLowerCase());
       }
     });
     //List Option ID want to delete
     optionIdDeleteList = listOptionID.filter(
       (val) => !optionIdList.includes(val)
     );
-    let formData = new FormData();
     formData.append("id", props.data.id);
     formData.append("questionTitle", values.questionTitle);
     formData.append("score", 1);
@@ -194,7 +193,6 @@ const EditQuestion = (props) => {
       formData.append("imageFile", values.questionImg[0].originFileObj);
     }
     formData.append("optionInputTypeList", optionInputTypeList);
-    formData.append("optionTextList", optionTextList);
     formData.append("optionIdList", optionIdList);
     if (optionIdDeleteList.length === 0) {
       formData.append("optionIdDeleteList", []);
@@ -273,7 +271,6 @@ const EditQuestion = (props) => {
         value: values.value8,
       },
     ];
-    let optionTextList = [];
     let optionIdList = [];
     options.forEach((item) => {
       if (item.key === null) {
@@ -281,7 +278,7 @@ const EditQuestion = (props) => {
       } else {
         formData.append("imageFileList", item.key);
       }
-      optionTextList.push(item.value.toUpperCase());
+      formData.append("optionTextList", item.value.toLowerCase());
       optionIdList.push(item.id);
     });
     formData.append("questionTitle", values.questionTitle);
@@ -290,7 +287,6 @@ const EditQuestion = (props) => {
     }
     formData.append("score", 1);
     formData.append("optionIdList", optionIdList);
-    formData.append("optionTextList", optionTextList);
 
     editQuestion(formData);
   };
@@ -332,7 +328,6 @@ const EditQuestion = (props) => {
         value: values.value4,
       },
     ];
-    let optionTextList = [];
     let optionIdList = [];
     options.forEach((item) => {
       if (item.key === null) {
@@ -340,7 +335,7 @@ const EditQuestion = (props) => {
       } else {
         formData.append("imageFileList", item.key);
       }
-      optionTextList.push(item.value.toUpperCase());
+      formData.append("optionTextList", item.value.toLowerCase());
       optionIdList.push(item.id);
     });
     formData.append("questionTitle", values.questionTitle);
@@ -349,7 +344,6 @@ const EditQuestion = (props) => {
     }
     formData.append("score", 1);
     formData.append("optionIdList", optionIdList);
-    formData.append("optionTextList", optionTextList);
 
     editQuestion(formData);
   };
@@ -407,7 +401,6 @@ const EditQuestion = (props) => {
         value: values.value6,
       },
     ];
-    let optionTextList = [];
     let optionIdList = [];
     options.forEach((item) => {
       if (item.key === null) {
@@ -415,7 +408,7 @@ const EditQuestion = (props) => {
       } else {
         formData.append("imageFileList", item.key);
       }
-      optionTextList.push(item.value.toUpperCase());
+      formData.append("optionTextList", item.value.toLowerCase());
       optionIdList.push(item.id);
     });
     formData.append("questionTitle", values.questionTitle);
@@ -424,7 +417,6 @@ const EditQuestion = (props) => {
     }
     formData.append("score", 1);
     formData.append("optionIdList", optionIdList);
-    formData.append("optionTextList", optionTextList);
 
     editQuestion(formData);
   };

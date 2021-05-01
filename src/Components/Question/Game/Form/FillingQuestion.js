@@ -10,7 +10,6 @@ import {
   Col,
   Upload,
   message,
-  InputNumber,
 } from "antd";
 import {
   MinusCircleOutlined,
@@ -71,18 +70,17 @@ const FillingQuestion = (props) => {
   };
 
   const onFinish = (values) => {
-    let optionTextList = [];
+    let formData = new FormData();
     let optionInputTypeList = [];
     values.options.forEach((item) => {
       optionInputTypeList.push(item.option);
       if (item.text) {
-        optionTextList.push(item.text.toLowerCase());
+        formData.append("optionTextList", item.text.toLowerCase());
       }
       if (item.operator) {
-        optionTextList.push(item.operator.toLowerCase());
+        formData.append("optionTextList", item.operator.toLowerCase());
       }
     });
-    let formData = new FormData();
     formData.append("unitId", values.unit);
     formData.append("questionTitle", values.questionTitle);
     formData.append("questionType", props.type);
@@ -94,7 +92,6 @@ const FillingQuestion = (props) => {
       formData.append("imageFile", values.q_img[0].originFileObj);
     }
     formData.append("optionInputTypeList", optionInputTypeList);
-    formData.append("optionTextList", optionTextList);
 
     createFillQuestion(formData);
   };

@@ -10,7 +10,6 @@ import {
   Col,
   Upload,
   message,
-  InputNumber,
 } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 
@@ -104,12 +103,10 @@ const ChoosingQuestion = (props) => {
       { key: values.key7[0].originFileObj, value: values.value7 },
       { key: values.key8[0].originFileObj, value: values.value8 },
     ];
-    let optionTextList = [];
     options.forEach((item) => {
       formData.append("imageFileList", item.key);
-      optionTextList.push(item.value.toUpperCase());
+      formData.append("optionTextList", item.value.toLowerCase());
     });
-
     formData.append("unitId", values.unit);
     formData.append("questionTitle", values.questionTitle);
     formData.append("questionType", props.type);
@@ -117,7 +114,6 @@ const ChoosingQuestion = (props) => {
     if (values.description) {
       formData.append("description", values.description);
     }
-    formData.append("optionTextList", optionTextList);
 
     createChoosingQuestion(formData);
   };

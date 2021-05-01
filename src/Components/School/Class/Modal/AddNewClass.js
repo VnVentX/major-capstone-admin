@@ -33,16 +33,16 @@ const AddNewClass = (props) => {
         })
         .then((res) => {
           console.log(res);
-          props.getClassBySchoolGrade();
+          props.getClassBySchoolGrade(props.gradeID);
           setLoading(false);
           handleCancel();
           message.success("Create Class successfully");
           form.resetFields();
         })
         .catch((e) => {
-          if (e.response.data === "EXISTED") {
+          if (e.response?.data === "EXISTED") {
             message.error("This Class name is already existed");
-          } else if (e.response.data === "Input can not blank!") {
+          } else if (e.response?.data === "Input can not blank!") {
             message.error("Input can not be blank");
           } else {
             message.error("Fail to create Class");

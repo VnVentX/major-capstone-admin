@@ -25,12 +25,11 @@ const ClassComponent = (props) => {
   const [graduateLoading, setGraduateLoading] = useState(false);
 
   useEffect(() => {
-    getClassBySchoolGrade();
+    getClassBySchoolGrade(props.gradeID);
   }, []);
 
-  const getClassBySchoolGrade = async () => {
+  const getClassBySchoolGrade = async (gradeID) => {
     let schoolID = window.location.pathname.split("/")[2];
-    let gradeID = props.gradeID;
     await axios
       .post(`${process.env.REACT_APP_BASE_URL}/class/schoolGradeId`, {
         gradeId: gradeID,
@@ -61,7 +60,7 @@ const ClassComponent = (props) => {
       })
       .then((res) => {
         console.log(res);
-        getClassBySchoolGrade();
+        getClassBySchoolGrade(props.gradeID);
         setLoading(true);
         if (status === "DELETED") {
           message.success("Delete class successfully!");
@@ -71,7 +70,7 @@ const ClassComponent = (props) => {
       })
       .catch((e) => {
         console.log(e);
-        if (e.response.data === "CANNOT DELETE") {
+        if (e.response?.data === "CANNOT DELETE") {
           message.error("Can not delete class with active student!");
         } else if (status === "ACTIVE" || status === "INACTIVE") {
           message.error("Fail to change status");
@@ -180,6 +179,7 @@ const ClassComponent = (props) => {
               </Popconfirm>
               <EditClass
                 data={record}
+                gradeID={props.gradeID}
                 getClassBySchoolGrade={getClassBySchoolGrade}
               />
               <Popconfirm

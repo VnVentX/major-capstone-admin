@@ -65,7 +65,11 @@ const ImportClassExcel = (props) => {
       })
       .catch((e) => {
         console.log(e);
-        message.error("Fail to import file!");
+        if (e.response?.status === 400) {
+          message.error("Class's maximum student exceed, please check again!");
+        } else {
+          message.error("Fail to import file!");
+        }
         setLoading(false);
       });
   };
@@ -81,11 +85,13 @@ const ImportClassExcel = (props) => {
       })
       .then((res) => {
         if (res.data.size === 0) {
-          props.getClassBySchoolGrade();
+          console.log("Import success");
+          props.getClassBySchoolGrade(props.gradeID);
           setLoading(false);
           handleCancel();
           message.success("Import successfully!");
-        } else {
+        } else if (res.status === 200) {
+          console.log("Import success but ID not exist");
           let headerLine = res.headers["content-disposition"];
           let fileName = headerLine.split("filename=")[1];
           const url = window.URL.createObjectURL(new Blob([res.data]));
@@ -94,7 +100,7 @@ const ImportClassExcel = (props) => {
           link.setAttribute("download", fileName);
           document.body.appendChild(link);
           link.click();
-          props.getClassBySchoolGrade();
+          props.getClassBySchoolGrade(props.gradeID);
           message.error("Some student's ID are not exist");
           setLoading(false);
           setFileList([]);
@@ -102,6 +108,7 @@ const ImportClassExcel = (props) => {
       })
       .catch((e) => {
         console.log(e);
+        console.log("Import fail");
         message.error("Fail to import file!");
         setLoading(false);
       });
@@ -157,7 +164,6 @@ const ImportClassExcel = (props) => {
               fileList={fileList}
               beforeUpload={() => false}
               onChange={(info) => {
-                console.log(info.file.type);
                 if (
                   info.file.type !==
                   "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"

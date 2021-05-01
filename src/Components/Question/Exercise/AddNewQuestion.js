@@ -96,13 +96,12 @@ const AddNewQuestion = () => {
   };
 
   const onFinish = (values) => {
-    let optionTextList = [];
+    let formData = new FormData();
     let isCorrectList = [];
     values.options.forEach((item) => {
-      optionTextList.push(item.option);
+      formData.append("optionTextList", item.option);
       isCorrectList.push(item.correct);
     });
-    let formData = new FormData();
     formData.append("unitId", values.unit);
     formData.append(
       "questionTitle",
@@ -123,7 +122,6 @@ const AddNewQuestion = () => {
       formData.append("audioFile", values.audioFile[0].originFileObj);
     }
     formData.append("isCorrectList", [isCorrectList]);
-    formData.append("optionTextList", optionTextList);
 
     createQuestion(formData);
   };
