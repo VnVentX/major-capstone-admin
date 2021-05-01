@@ -69,11 +69,11 @@ const EditSubject = (props) => {
     if (event.subjectImg !== undefined && event.subjectImg.length !== 0) {
       formData.append("multipartFile", event.subjectImg[0].originFileObj);
     }
-    formData.append("id", props.data.id);
+    formData.append("id", props.subjectID);
     async function editSubject() {
       await axios
         .put(
-          `${process.env.REACT_APP_BASE_URL}/subject/${props.data.id}`,
+          `${process.env.REACT_APP_BASE_URL}/subject/${props.subjectID}`,
           formData
         )
         .then((res) => {
