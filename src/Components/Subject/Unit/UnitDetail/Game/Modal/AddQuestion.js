@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import { Button, Modal, Form, Table, Space, message } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import ViewQuestion from "../../../../../Question/Game/Modal/View/ViewQuestion";
+import { getJwt } from "../../../../../../helper/jwt";
 
 const selectingQuestionCol = [
   {
@@ -37,7 +38,12 @@ const AddQuestion = (props) => {
     let unitID = window.location.pathname.split("/")[4];
     await axios
       .get(
-        `${process.env.REACT_APP_BASE_URL}/unit/${unitID}/questions?isExercise=false`
+        `${process.env.REACT_APP_BASE_URL}/unit/${unitID}/questions?isExercise=false`,
+        {
+          headers: {
+            Authorization: getJwt(),
+          },
+        }
       )
       .then((res) => {
         resArr = Array.from(res.data);
@@ -54,11 +60,19 @@ const AddQuestion = (props) => {
     setLoading(true);
     let gameID = window.location.pathname.split("/")[6];
     await axios
-      .post(`${process.env.REACT_APP_BASE_URL}/exerciseGameQuestion`, {
-        exercise: false,
-        gameId: gameID,
-        questionIds: selectedRowKeys,
-      })
+      .post(
+        `${process.env.REACT_APP_BASE_URL}/exerciseGameQuestion`,
+        {
+          exercise: false,
+          gameId: gameID,
+          questionIds: selectedRowKeys,
+        },
+        {
+          headers: {
+            Authorization: getJwt(),
+          },
+        }
+      )
       .then((res) => {
         console.log(res);
         props.getQuestionByGameID();

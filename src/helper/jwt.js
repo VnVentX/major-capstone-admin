@@ -9,7 +9,3 @@ export const getRole = () => {
 export const getID = () => {
   return localStorage.getItem("id");
 };
-
-export const getUser = () => {
-  return localStorage.getItem("user");
-};

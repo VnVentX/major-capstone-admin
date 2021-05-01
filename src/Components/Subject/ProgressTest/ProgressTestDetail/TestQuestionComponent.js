@@ -9,6 +9,7 @@ import {
   DeleteOutlined,
   PlusOutlined,
 } from "@ant-design/icons";
+import { getJwt } from "../../../../helper/jwt";
 
 const TestQuestionComponent = () => {
   const [data, setData] = useState([]);
@@ -27,7 +28,11 @@ const TestQuestionComponent = () => {
   const getExerciseDetail = async () => {
     let exerciseID = window.location.pathname.split("/")[6];
     await axios
-      .get(`${process.env.REACT_APP_BASE_URL}/exercise/${exerciseID}/status`)
+      .get(`${process.env.REACT_APP_BASE_URL}/exercise/${exerciseID}/status`, {
+        headers: {
+          Authorization: getJwt(),
+        },
+      })
       .then((res) => {
         setStatus(res.data);
       })
@@ -39,10 +44,18 @@ const TestQuestionComponent = () => {
   const handleChangeStatus = async (status) => {
     let exerciseID = window.location.pathname.split("/")[6];
     await axios
-      .put(`${process.env.REACT_APP_BASE_URL}/exercise/delete`, {
-        id: exerciseID,
-        status: status,
-      })
+      .put(
+        `${process.env.REACT_APP_BASE_URL}/exercise/delete`,
+        {
+          id: exerciseID,
+          status: status,
+        },
+        {
+          headers: {
+            Authorization: getJwt(),
+          },
+        }
+      )
       .then((res) => {
         console.log(res);
         getExerciseDetail();
@@ -56,7 +69,12 @@ const TestQuestionComponent = () => {
     let exerciseID = window.location.pathname.split("/")[6];
     await axios
       .get(
-        `${process.env.REACT_APP_BASE_URL}/exerciseOrGame/${exerciseID}/questions?isExericse=true`
+        `${process.env.REACT_APP_BASE_URL}/exerciseOrGame/${exerciseID}/questions?isExericse=true`,
+        {
+          headers: {
+            Authorization: getJwt(),
+          },
+        }
       )
       .then((res) => {
         setData(res.data);
@@ -75,11 +93,19 @@ const TestQuestionComponent = () => {
       ids = id;
     }
     await axios
-      .put(`${process.env.REACT_APP_BASE_URL}/exerciseGameQuestion/delete`, {
-        exercise: true,
-        exerciseId: exerciseID,
-        questionIds: ids,
-      })
+      .put(
+        `${process.env.REACT_APP_BASE_URL}/exerciseGameQuestion/delete`,
+        {
+          exercise: true,
+          exerciseId: exerciseID,
+          questionIds: ids,
+        },
+        {
+          headers: {
+            Authorization: getJwt(),
+          },
+        }
+      )
       .then((res) => {
         console.log(res);
         getQuestionByExerciseID();

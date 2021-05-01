@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { Modal, Button, Form, Upload, message } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
+import { getJwt } from "../../../../helper/jwt";
 
 const normFile = (e) => {
   if (Array.isArray(e)) {
@@ -42,6 +43,9 @@ const ImportClassExcel = (props) => {
     await axios
       .post(`${process.env.REACT_APP_BASE_URL}/student/validate`, formData, {
         responseType: "blob",
+        headers: {
+          Authorization: getJwt(),
+        },
       })
       .then((res) => {
         if (res.data.size === 0) {
@@ -82,6 +86,9 @@ const ImportClassExcel = (props) => {
     await axios
       .post(`${process.env.REACT_APP_BASE_URL}/student/import`, formData, {
         responseType: "blob",
+        headers: {
+          Authorization: getJwt(),
+        },
       })
       .then((res) => {
         if (res.data.size === 0) {

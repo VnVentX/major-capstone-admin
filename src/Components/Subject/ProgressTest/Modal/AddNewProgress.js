@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { Button, Modal, Form, Input, Select, message } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
+import { getJwt } from "../../../../helper/jwt";
 
 const layout = {
   labelCol: { span: 8 },
@@ -17,7 +18,14 @@ const AddNewProgress = (props) => {
   const getUnitBySubjectID = async () => {
     let subjectID = window.location.pathname.split("/")[2];
     await axios
-      .get(`${process.env.REACT_APP_BASE_URL}/subject/${subjectID}/unitAterIds`)
+      .get(
+        `${process.env.REACT_APP_BASE_URL}/subject/${subjectID}/unitAterIds`,
+        {
+          headers: {
+            Authorization: getJwt(),
+          },
+        }
+      )
       .then((res) => {
         setUnit(res.data.length === 0 ? [] : res.data);
       })
@@ -39,12 +47,20 @@ const AddNewProgress = (props) => {
   const onFinish = async (values) => {
     setLoading(true);
     await axios
-      .post(`${process.env.REACT_APP_BASE_URL}/progressTest`, {
-        description: values.description?.replace(/\s+/g, " ").trim(),
-        subjectId: window.location.pathname.split("/")[2],
-        progressTestName: values.progressTest?.replace(/\s+/g, " ").trim(),
-        unitAfterId: values.unitAfter,
-      })
+      .post(
+        `${process.env.REACT_APP_BASE_URL}/progressTest`,
+        {
+          description: values.description?.replace(/\s+/g, " ").trim(),
+          subjectId: window.location.pathname.split("/")[2],
+          progressTestName: values.progressTest?.replace(/\s+/g, " ").trim(),
+          unitAfterId: values.unitAfter,
+        },
+        {
+          headers: {
+            Authorization: getJwt(),
+          },
+        }
+      )
       .then((res) => {
         console.log(res);
         props.getProgressTestBySubjectID();

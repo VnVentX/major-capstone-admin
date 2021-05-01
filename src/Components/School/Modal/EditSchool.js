@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { Button, Modal, Form, Input, Select, message } from "antd";
 import { EditOutlined } from "@ant-design/icons";
+import { getJwt } from "../../../helper/jwt";
 
 const { Option } = Select;
 
@@ -17,7 +18,11 @@ const EditSchool = (props) => {
 
   const getSchoolByID = async (id) => {
     await axios
-      .get(`${process.env.REACT_APP_BASE_URL}/school/${id}`)
+      .get(`${process.env.REACT_APP_BASE_URL}/school/${id}`, {
+        headers: {
+          Authorization: getJwt(),
+        },
+      })
       .then((res) => {
         form.setFieldsValue({
           schoolName: res.data.schoolName,
@@ -33,12 +38,20 @@ const EditSchool = (props) => {
 
   const updateSchool = async (id, values) => {
     await axios
-      .put(`${process.env.REACT_APP_BASE_URL}/school/${id}`, {
-        schoolName: values.schoolName,
-        schoolDistrict: values.schoolDistrict,
-        schoolStreet: values.schoolStreet?.replace(/\s+/g, " ").trim(),
-        schoolLevel: values.type,
-      })
+      .put(
+        `${process.env.REACT_APP_BASE_URL}/school/${id}`,
+        {
+          schoolName: values.schoolName,
+          schoolDistrict: values.schoolDistrict,
+          schoolStreet: values.schoolStreet?.replace(/\s+/g, " ").trim(),
+          schoolLevel: values.type,
+        },
+        {
+          headers: {
+            Authorization: getJwt(),
+          },
+        }
+      )
       .then((res) => {
         console.log(res);
         props.getAllSchool();

@@ -4,6 +4,7 @@ import { Tabs } from "antd";
 import Lesson from "./Lesson";
 import AddNewLesson from "./Modal/AddNewLesson";
 import EditLesson from "./Modal/EditLesson";
+import { getJwt } from "../../../../helper/jwt";
 
 const { TabPane } = Tabs;
 
@@ -18,7 +19,11 @@ const UnitComponent = (props) => {
   const getLessonByUnitID = async () => {
     let unitID = window.location.pathname.split("/")[4];
     await axios
-      .get(`${process.env.REACT_APP_BASE_URL}/unit/${unitID}/lessons`)
+      .get(`${process.env.REACT_APP_BASE_URL}/unit/${unitID}/lessons`, {
+        headers: {
+          Authorization: getJwt(),
+        },
+      })
       .then((res) => {
         setLesson(res.data.length === 0 ? [] : res.data);
         setSelectedLessonID(res.data.length === 0 ? [] : res.data[0].id);

@@ -10,6 +10,7 @@ import {
   message,
 } from "antd";
 import { EditOutlined } from "@ant-design/icons";
+import { getJwt } from "../../../../../../helper/jwt";
 
 const layout = {
   labelCol: { span: 8 },
@@ -31,11 +32,19 @@ const EditGame = (props) => {
   const editGame = async (values) => {
     setLoading(true);
     await axios
-      .put(`${process.env.REACT_APP_BASE_URL}/game/${props.data.id}`, {
-        gameName: values.name,
-        lessonId: props.lessonID,
-        description: values.description?.replace(/\s+/g, " ").trim(),
-      })
+      .put(
+        `${process.env.REACT_APP_BASE_URL}/game/${props.data.id}`,
+        {
+          gameName: values.name,
+          lessonId: props.lessonID,
+          description: values.description?.replace(/\s+/g, " ").trim(),
+        },
+        {
+          headers: {
+            Authorization: getJwt(),
+          },
+        }
+      )
       .then((res) => {
         console.log(res);
         props.getGameByLessonID();

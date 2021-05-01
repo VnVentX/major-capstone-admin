@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Subject from "./Subject";
 import { Tabs, Spin } from "antd";
+import { getJwt } from "../../helper/jwt";
 
 const { TabPane } = Tabs;
 
@@ -11,7 +12,11 @@ const SubjectComponent = (props) => {
 
   const getAllGrade = async () => {
     await axios
-      .get(`${process.env.REACT_APP_BASE_URL}/grade/all`)
+      .get(`${process.env.REACT_APP_BASE_URL}/grade/all`, {
+        headers: {
+          Authorization: getJwt(),
+        },
+      })
       .then((res) => {
         setGrade(res.data.length === 0 ? [] : res.data);
         setLoading(false);

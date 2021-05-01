@@ -15,6 +15,7 @@ import { Link } from "react-router-dom";
 import { QuestionCircleOutlined, DeleteOutlined } from "@ant-design/icons";
 import AddNewSubject from "./Modal/AddNewSubject";
 import EditSubject from "./Modal/EditSubject";
+import { getJwt } from "../../helper/jwt";
 
 const Subject = (props) => {
   const [subject, setSubject] = useState([]);
@@ -23,7 +24,11 @@ const Subject = (props) => {
 
   const getSubjectByGrade = async (gradeID) => {
     await axios
-      .get(`${process.env.REACT_APP_BASE_URL}/grade/${gradeID}/subjects`)
+      .get(`${process.env.REACT_APP_BASE_URL}/grade/${gradeID}/subjects`, {
+        headers: {
+          Authorization: getJwt(),
+        },
+      })
       .then((res) => {
         setSubject(res.data.length === 0 ? [] : res.data);
         setSearchData(res.data.length === 0 ? [] : res.data);
@@ -42,7 +47,12 @@ const Subject = (props) => {
     await axios
       .put(
         `${process.env.REACT_APP_BASE_URL}/subject/delete/${subjectID}`,
-        formData
+        formData,
+        {
+          headers: {
+            Authorization: getJwt(),
+          },
+        }
       )
       .then((res) => {
         console.log(res);

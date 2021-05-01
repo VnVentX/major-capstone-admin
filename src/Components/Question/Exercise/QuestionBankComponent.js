@@ -13,6 +13,7 @@ import {
 import EditQuestion from "./Modal/EditQuestion";
 import ViewQuestion from "./Modal/ViewQuestion";
 import { DeleteOutlined, QuestionCircleOutlined } from "@ant-design/icons";
+import { getJwt } from "../../../helper/jwt";
 
 const QuestionBankComponent = () => {
   const [form] = Form.useForm();
@@ -35,7 +36,11 @@ const QuestionBankComponent = () => {
   const getSubjectByGrade = async () => {
     let gradeID = window.location.pathname.split("/")[2];
     await axios
-      .get(`${process.env.REACT_APP_BASE_URL}/grade/${gradeID}/subjects`)
+      .get(`${process.env.REACT_APP_BASE_URL}/grade/${gradeID}/subjects`, {
+        headers: {
+          Authorization: getJwt(),
+        },
+      })
       .then((res) => {
         setSubject(res.data.length === 0 ? [] : res.data);
       })
@@ -46,7 +51,11 @@ const QuestionBankComponent = () => {
 
   const getUnitBySubjectID = async (subjectID) => {
     await axios
-      .get(`${process.env.REACT_APP_BASE_URL}/subject/${subjectID}/units`)
+      .get(`${process.env.REACT_APP_BASE_URL}/subject/${subjectID}/units`, {
+        headers: {
+          Authorization: getJwt(),
+        },
+      })
       .then((res) => {
         setUnit(res.data.length === 0 ? [] : res.data);
       })
@@ -59,7 +68,12 @@ const QuestionBankComponent = () => {
     setLoading(true);
     await axios
       .get(
-        `${process.env.REACT_APP_BASE_URL}/unit/${unitID}/questions?isExercise=true`
+        `${process.env.REACT_APP_BASE_URL}/unit/${unitID}/questions?isExercise=true`,
+        {
+          headers: {
+            Authorization: getJwt(),
+          },
+        }
       )
       .then((res) => {
         setQuestionData(res.data.length === 0 ? [] : res.data);
@@ -81,7 +95,11 @@ const QuestionBankComponent = () => {
     let formData = new FormData();
     formData.append("ids", ids);
     await axios
-      .put(`${process.env.REACT_APP_BASE_URL}/question/delete`, formData)
+      .put(`${process.env.REACT_APP_BASE_URL}/question/delete`, formData, {
+        headers: {
+          Authorization: getJwt(),
+        },
+      })
       .then((res) => {
         console.log(res);
         getQuestionByUnitID(selectedUnit);
@@ -96,6 +114,10 @@ const QuestionBankComponent = () => {
 
   const handleChangeSubject = (value) => {
     setSelectedSubject(value);
+    setSelectedUnit([]);
+    form.setFieldsValue({
+      unit: null,
+    });
   };
 
   const handleChangeUnit = (value) => {
@@ -190,6 +212,7 @@ const QuestionBankComponent = () => {
             placeholder="Select Subject"
             style={{ width: 200, marginRight: 10 }}
             onChange={handleChangeSubject}
+            allowClear
           >
             {subject?.map((item, idx) => (
               <Select.Option key={idx} value={item?.id}>
@@ -221,6 +244,7 @@ const QuestionBankComponent = () => {
                   placeholder="Select Unit"
                   onChange={handleChangeUnit}
                   style={{ width: 200, marginRight: 10 }}
+                  allowClear
                 >
                   {unit?.map((item, idx) => (
                     <Select.Option key={idx} value={item?.id}>

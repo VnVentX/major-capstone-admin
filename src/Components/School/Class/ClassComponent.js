@@ -17,6 +17,7 @@ import ImportClassExcel from "./Modal/ImportClassExcel";
 import EditClass from "./Modal/EditClass";
 import ExportClassExcel from "./Modal/ExportClassExcel";
 import ExportFinalScore from "./Modal/ExportFinalScore";
+import { getJwt } from "../../../helper/jwt";
 
 const ClassComponent = (props) => {
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
@@ -31,10 +32,18 @@ const ClassComponent = (props) => {
   const getClassBySchoolGrade = async (gradeID) => {
     let schoolID = window.location.pathname.split("/")[2];
     await axios
-      .post(`${process.env.REACT_APP_BASE_URL}/class/schoolGradeId`, {
-        gradeId: gradeID,
-        schoolId: schoolID,
-      })
+      .post(
+        `${process.env.REACT_APP_BASE_URL}/class/schoolGradeId`,
+        {
+          gradeId: gradeID,
+          schoolId: schoolID,
+        },
+        {
+          headers: {
+            Authorization: getJwt(),
+          },
+        }
+      )
       .then((res) => {
         setClassData(res.data.length === 0 ? [] : res.data);
         setLoading(false);
@@ -54,10 +63,18 @@ const ClassComponent = (props) => {
       ids = id;
     }
     await axios
-      .put(`${process.env.REACT_APP_BASE_URL}/class/changeStatus`, {
-        ids: ids,
-        status: status,
-      })
+      .put(
+        `${process.env.REACT_APP_BASE_URL}/class/changeStatus`,
+        {
+          ids: ids,
+          status: status,
+        },
+        {
+          headers: {
+            Authorization: getJwt(),
+          },
+        }
+      )
       .then((res) => {
         console.log(res);
         getClassBySchoolGrade(props.gradeID);

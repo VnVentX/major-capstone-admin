@@ -4,6 +4,7 @@ import { Table, Image, Button, Space, Tag, Popconfirm, message } from "antd";
 import AddNewBanner from "./Modal/AddNewBanner";
 import EditBanner from "./Modal/EditBanner";
 import { QuestionCircleOutlined, DeleteOutlined } from "@ant-design/icons";
+import { getJwt } from "../../../helper/jwt";
 
 export default class BannerComponent extends React.Component {
   state = {
@@ -18,7 +19,11 @@ export default class BannerComponent extends React.Component {
 
   getAllBanner = async () => {
     await axios
-      .get(`${process.env.REACT_APP_BASE_URL}/bannerImage/all`)
+      .get(`${process.env.REACT_APP_BASE_URL}/bannerImage/all`, {
+        headers: {
+          Authorization: getJwt(),
+        },
+      })
       .then((res) => {
         this.setState({
           dataSource: res.data.length === 0 ? [] : res.data,
@@ -39,10 +44,18 @@ export default class BannerComponent extends React.Component {
       ids = id;
     }
     await axios
-      .put(`${process.env.REACT_APP_BASE_URL}/bannerImage`, {
-        ids: ids,
-        status: status,
-      })
+      .put(
+        `${process.env.REACT_APP_BASE_URL}/bannerImage`,
+        {
+          ids: ids,
+          status: status,
+        },
+        {
+          headers: {
+            Authorization: getJwt(),
+          },
+        }
+      )
       .then((res) => {
         console.log(res);
         this.getAllBanner();

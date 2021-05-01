@@ -10,6 +10,7 @@ import {
   message,
 } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
+import { getJwt } from "../../../../../helper/jwt";
 
 const layout = {
   labelCol: { span: 6 },
@@ -30,11 +31,19 @@ const AddNewLesson = (props) => {
     }
     setLoading(true);
     await axios
-      .post(`${process.env.REACT_APP_BASE_URL}/lesson`, {
-        lessonName: values.lesson,
-        lessonUrl: url,
-        unitId: window.location.pathname.split("/")[4],
-      })
+      .post(
+        `${process.env.REACT_APP_BASE_URL}/lesson`,
+        {
+          lessonName: values.lesson,
+          lessonUrl: url,
+          unitId: window.location.pathname.split("/")[4],
+        },
+        {
+          headers: {
+            Authorization: getJwt(),
+          },
+        }
+      )
       .then((res) => {
         console.log(res);
         props.getLessonByUnitID();

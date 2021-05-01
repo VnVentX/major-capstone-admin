@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { Button, Modal, Form, Input, InputNumber, message } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
+import { getJwt } from "../../../../helper/jwt";
 
 const layout = {
   labelCol: { span: 6 },
@@ -16,11 +17,19 @@ const AddNewUnit = (props) => {
   const createUnit = async (values) => {
     setLoading(true);
     await axios
-      .post(`${process.env.REACT_APP_BASE_URL}/unit`, {
-        description: values.description?.replace(/\s+/g, " ").trim(),
-        subjectId: window.location.pathname.split("/")[2],
-        unitName: values.unit,
-      })
+      .post(
+        `${process.env.REACT_APP_BASE_URL}/unit`,
+        {
+          description: values.description?.replace(/\s+/g, " ").trim(),
+          subjectId: window.location.pathname.split("/")[2],
+          unitName: values.unit,
+        },
+        {
+          headers: {
+            Authorization: getJwt(),
+          },
+        }
+      )
       .then((res) => {
         console.log(res);
         props.getUnitBySubjectID();

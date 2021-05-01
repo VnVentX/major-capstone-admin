@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Button, Modal, Form, Input, message } from "antd";
 import { EditOutlined } from "@ant-design/icons";
+import { getJwt } from "../../../../helper/jwt";
 
 const layout = {
   labelCol: { span: 8 },
@@ -32,9 +33,17 @@ const EditClass = (props) => {
     setLoading(true);
     async function updateClass() {
       await axios
-        .put(`${process.env.REACT_APP_BASE_URL}/class/${props.data.id}`, {
-          className: values.className?.replace(/\s+/g, " ").trim(),
-        })
+        .put(
+          `${process.env.REACT_APP_BASE_URL}/class/${props.data.id}`,
+          {
+            className: values.className?.replace(/\s+/g, " ").trim(),
+          },
+          {
+            headers: {
+              Authorization: getJwt(),
+            },
+          }
+        )
         .then((res) => {
           console.log(res);
           props.getClassBySchoolGrade(props.gradeID);

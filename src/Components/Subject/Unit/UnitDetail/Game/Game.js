@@ -14,6 +14,7 @@ import { Link } from "react-router-dom";
 import { QuestionCircleOutlined, DeleteOutlined } from "@ant-design/icons";
 import AddGame from "./Modal/AddGame";
 import EditGame from "./Modal/EditGame";
+import { getJwt } from "../../../../../helper/jwt";
 
 const { Title } = Typography;
 
@@ -27,7 +28,12 @@ const Game = (props) => {
   const getGameByLessonID = async () => {
     await axios
       .get(
-        `${process.env.REACT_APP_BASE_URL}/lesson/${props.lessonID}/game/all`
+        `${process.env.REACT_APP_BASE_URL}/lesson/${props.lessonID}/game/all`,
+        {
+          headers: {
+            Authorization: getJwt(),
+          },
+        }
       )
       .then((res) => {
         setGame(res.data.length === 0 ? [] : res.data);
@@ -39,10 +45,18 @@ const Game = (props) => {
 
   const deleteGame = async (gameID) => {
     await axios
-      .put(`${process.env.REACT_APP_BASE_URL}/game`, {
-        id: gameID,
-        status: "DELETED",
-      })
+      .put(
+        `${process.env.REACT_APP_BASE_URL}/game`,
+        {
+          id: gameID,
+          status: "DELETED",
+        },
+        {
+          headers: {
+            Authorization: getJwt(),
+          },
+        }
+      )
       .then((res) => {
         console.log(res);
         getGameByLessonID();

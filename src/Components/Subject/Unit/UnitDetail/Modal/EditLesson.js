@@ -10,6 +10,7 @@ import {
   message,
 } from "antd";
 import { EditOutlined } from "@ant-design/icons";
+import { getJwt } from "../../../../../helper/jwt";
 
 const layout = {
   labelCol: { span: 6 },
@@ -25,7 +26,11 @@ const EditLesson = (props) => {
     if (props.lessonID) {
       const getLessonByID = async () => {
         await axios
-          .get(`${process.env.REACT_APP_BASE_URL}//lesson/${props.lessonID}`)
+          .get(`${process.env.REACT_APP_BASE_URL}//lesson/${props.lessonID}`, {
+            headers: {
+              Authorization: getJwt(),
+            },
+          })
           .then((res) => {
             form.setFieldsValue({
               lesson: res.data.lessonName,
@@ -54,11 +59,19 @@ const EditLesson = (props) => {
 
     setLoading(true);
     await axios
-      .put(`${process.env.REACT_APP_BASE_URL}/lesson/${props.lessonID}`, {
-        lessonName: values.lesson,
-        lessonUrl: url,
-        unitId: window.location.pathname.split("/")[4],
-      })
+      .put(
+        `${process.env.REACT_APP_BASE_URL}/lesson/${props.lessonID}`,
+        {
+          lessonName: values.lesson,
+          lessonUrl: url,
+          unitId: window.location.pathname.split("/")[4],
+        },
+        {
+          headers: {
+            Authorization: getJwt(),
+          },
+        }
+      )
       .then((res) => {
         console.log(res);
         props.getLessonByUnitID();

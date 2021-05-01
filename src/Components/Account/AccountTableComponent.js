@@ -4,6 +4,7 @@ import { Tabs } from "antd";
 import { useLocation } from "react-router-dom";
 import StudentAccountComponent from "./StundentAccountComponent";
 import SearchFilter from "./Filter/SearchFilter";
+import { getJwt } from "../../helper/jwt";
 
 const { TabPane } = Tabs;
 
@@ -49,11 +50,15 @@ export const AccountTableComponent = () => {
     }
     setLoading(true);
     await axios
-      .post(`${process.env.REACT_APP_BASE_URL}/student/all`, [
-        schoolID,
-        gradeID,
-        classID,
-      ])
+      .post(
+        `${process.env.REACT_APP_BASE_URL}/student/all`,
+        [schoolID, gradeID, classID],
+        {
+          headers: {
+            Authorization: getJwt(),
+          },
+        }
+      )
       .then((res) => {
         setRecord(res.data.length === 0 ? [] : res.data);
         setSearchRecord(res.data.length === 0 ? [] : res.data);
@@ -77,7 +82,12 @@ export const AccountTableComponent = () => {
     }
     await axios
       .get(
-        `${process.env.REACT_APP_BASE_URL}/class/${schoolID}?classesId=${classID}&gradeId=${gradeID}&schoolId=${schoolID}`
+        `${process.env.REACT_APP_BASE_URL}/class/${schoolID}?classesId=${classID}&gradeId=${gradeID}&schoolId=${schoolID}`,
+        {
+          headers: {
+            Authorization: getJwt(),
+          },
+        }
       )
       .then((res) => {
         setGradeClassList(res.data.length === 0 ? [] : res.data);

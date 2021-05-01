@@ -15,6 +15,7 @@ import AddNewStudent from "./Modal/AddNewStudent";
 import EditStudent from "./Modal/EditStudent";
 import ViewStudent from "./Modal/ViewStudent";
 import { QuestionCircleOutlined, DeleteOutlined } from "@ant-design/icons";
+import { getJwt } from "../../helper/jwt";
 
 export default class StudentAccountComponent extends Component {
   state = {
@@ -43,10 +44,18 @@ export default class StudentAccountComponent extends Component {
       ids = id;
     }
     await axios
-      .put(`${process.env.REACT_APP_BASE_URL}/student`, {
-        ids: ids,
-        status: status,
-      })
+      .put(
+        `${process.env.REACT_APP_BASE_URL}/student`,
+        {
+          ids: ids,
+          status: status,
+        },
+        {
+          headers: {
+            Authorization: getJwt(),
+          },
+        }
+      )
       .then((res) => {
         console.log(res);
         if (status === "ACTIVE" || status === "INACTIVE") {
@@ -79,7 +88,11 @@ export default class StudentAccountComponent extends Component {
     formData.append("classesId", this.state.changeClassID);
     formData.append("studentIdList", this.props.selectedRowKeys);
     await axios
-      .put(`${process.env.REACT_APP_BASE_URL}/student/changeClass`, formData)
+      .put(`${process.env.REACT_APP_BASE_URL}/student/changeClass`, formData, {
+        headers: {
+          Authorization: getJwt(),
+        },
+      })
       .then((res) => {
         console.log(res.data);
         if (Object.keys(res.data)[0] === "HAVE PROBLEM") {

@@ -3,6 +3,7 @@ import axios from "axios";
 import { Button, Modal, Form, Input, Select, message } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import { schoolreg } from "../../../helper/regex";
+import { getJwt } from "../../../helper/jwt";
 
 const { Option } = Select;
 
@@ -27,12 +28,20 @@ const AddNewSchool = (props) => {
 
   const createNewSchool = async (values) => {
     await axios
-      .post(`${process.env.REACT_APP_BASE_URL}/school`, {
-        schoolDistrict: values.schoolDistrict,
-        schoolName: values.schoolName?.replace(/\s+/g, " ").trim(),
-        schoolStreet: values.schoolStreet?.replace(/\s+/g, " ").trim(),
-        schoolLevel: values.type,
-      })
+      .post(
+        `${process.env.REACT_APP_BASE_URL}/school`,
+        {
+          schoolDistrict: values.schoolDistrict,
+          schoolName: values.schoolName?.replace(/\s+/g, " ").trim(),
+          schoolStreet: values.schoolStreet?.replace(/\s+/g, " ").trim(),
+          schoolLevel: values.type,
+        },
+        {
+          headers: {
+            Authorization: getJwt(),
+          },
+        }
+      )
       .then((res) => {
         console.log(res);
         props.getAllSchool();

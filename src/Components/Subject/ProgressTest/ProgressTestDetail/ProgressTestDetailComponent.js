@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { QuestionCircleOutlined, DeleteOutlined } from "@ant-design/icons";
 import AddProgress from "./Modal/AddProgress";
 import EditProgress from "./Modal/EditProgress";
+import { getJwt } from "../../../../helper/jwt";
 
 const ProgressTestDetailComponent = (props) => {
   const [data, setData] = useState([]);
@@ -17,7 +18,12 @@ const ProgressTestDetailComponent = (props) => {
     let progressTestID = window.location.pathname.split("/")[4];
     await axios
       .get(
-        `${process.env.REACT_APP_BASE_URL}/progressTest/${progressTestID}/exercises`
+        `${process.env.REACT_APP_BASE_URL}/progressTest/${progressTestID}/exercises`,
+        {
+          headers: {
+            Authorization: getJwt(),
+          },
+        }
       )
       .then((res) => {
         setData(res.data.length === 0 ? [] : res.data);
@@ -29,10 +35,18 @@ const ProgressTestDetailComponent = (props) => {
 
   const handleDelete = async (item) => {
     await axios
-      .put(`${process.env.REACT_APP_BASE_URL}/exercise/delete`, {
-        id: item,
-        status: "DELETED",
-      })
+      .put(
+        `${process.env.REACT_APP_BASE_URL}/exercise/delete`,
+        {
+          id: item,
+          status: "DELETED",
+        },
+        {
+          headers: {
+            Authorization: getJwt(),
+          },
+        }
+      )
       .then((res) => {
         console.log(res);
         getProgressTestByID();

@@ -14,6 +14,7 @@ import { Link } from "react-router-dom";
 import { QuestionCircleOutlined, DeleteOutlined } from "@ant-design/icons";
 import AddNewProgress from "./Modal/AddNewProgress";
 import EditProgressTest from "./Modal/EditProgressTest";
+import { getJwt } from "../../../helper/jwt";
 
 const { Search } = Input;
 
@@ -29,7 +30,12 @@ const ProgressTestComponent = (props) => {
     let subjectID = window.location.pathname.split("/")[2];
     await axios
       .get(
-        `${process.env.REACT_APP_BASE_URL}/subject/${subjectID}/progressTest`
+        `${process.env.REACT_APP_BASE_URL}/subject/${subjectID}/progressTest`,
+        {
+          headers: {
+            Authorization: getJwt(),
+          },
+        }
       )
       .then((res) => {
         setProgress(res.data.length === 0 ? [] : res.data);
@@ -44,7 +50,11 @@ const ProgressTestComponent = (props) => {
     let formData = new FormData();
     formData.append("id", id);
     await axios
-      .put(`${process.env.REACT_APP_BASE_URL}/progressTest/delete`, formData)
+      .put(`${process.env.REACT_APP_BASE_URL}/progressTest/delete`, formData, {
+        headers: {
+          Authorization: getJwt(),
+        },
+      })
       .then((res) => {
         console.log(res);
         getProgressTestBySubjectID();

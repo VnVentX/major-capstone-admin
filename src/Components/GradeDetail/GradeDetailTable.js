@@ -9,12 +9,12 @@ import {
   Tag,
   Popconfirm,
   AutoComplete,
-  Select,
   message,
 } from "antd";
 import { QuestionCircleOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import LinkNewSchool from "./Modal/LinkNewSchool";
+import { getJwt } from "../../helper/jwt";
 
 export default class GradeDetailTable extends Component {
   state = {
@@ -27,22 +27,7 @@ export default class GradeDetailTable extends Component {
 
   componentDidMount() {
     this.getSchoolByGradeID(this.props.gradeID);
-    this.getAllSchool();
   }
-
-  getAllSchool = async () => {
-    await axios
-      .get(`${process.env.REACT_APP_BASE_URL}/school/all/active`)
-      .then((res) => {
-        console.log(res.data);
-        this.setState({
-          allSchool: res.data.length === 0 ? [] : res.data,
-        });
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-  };
 
   getSchoolByGradeID = async (id) => {
     var gradeID = id;
@@ -50,7 +35,11 @@ export default class GradeDetailTable extends Component {
       gradeID = window.location.pathname.split("/")[2];
     }
     await axios
-      .get(`${process.env.REACT_APP_BASE_URL}/grade/${gradeID}/school`)
+      .get(`${process.env.REACT_APP_BASE_URL}/grade/${gradeID}/school`, {
+        headers: {
+          Authorization: getJwt(),
+        },
+      })
       .then((res) => {
         this.setState({
           tableLoading: false,
@@ -71,10 +60,18 @@ export default class GradeDetailTable extends Component {
     ids.push(gradeID);
     ids.push(schoolID);
     await axios
-      .put(`${process.env.REACT_APP_BASE_URL}/schoolGrade`, {
-        ids: ids,
-        status: status,
-      })
+      .put(
+        `${process.env.REACT_APP_BASE_URL}/schoolGrade`,
+        {
+          ids: ids,
+          status: status,
+        },
+        {
+          headers: {
+            Authorization: getJwt(),
+          },
+        }
+      )
       .then((res) => {
         console.log(res);
         this.getSchoolByGradeID(this.props.gradeID);
@@ -223,7 +220,6 @@ export default class GradeDetailTable extends Component {
           <div>
             <LinkNewSchool
               data={this.state.dataSource}
-              getAllSchool={this.getAllSchool}
               getSchoolByGradeID={this.getSchoolByGradeID}
               allSchool={this.state.allSchool}
             />

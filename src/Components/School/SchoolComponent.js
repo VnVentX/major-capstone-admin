@@ -15,6 +15,7 @@ import { QuestionCircleOutlined, DeleteOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import AddNewSchool from "./Modal/AddNewSchool";
 import EditSchool from "./Modal/EditSchool";
+import { getJwt } from "../../helper/jwt";
 
 export default class SchoolComponent extends Component {
   state = {
@@ -30,7 +31,11 @@ export default class SchoolComponent extends Component {
 
   getAllSchool = async () => {
     await axios
-      .get(`${process.env.REACT_APP_BASE_URL}/school/all`)
+      .get(`${process.env.REACT_APP_BASE_URL}/school/all`, {
+        headers: {
+          Authorization: getJwt(),
+        },
+      })
       .then((res) => {
         this.setState({
           dataSource: res.data.length === 0 ? [] : res.data,
@@ -46,10 +51,18 @@ export default class SchoolComponent extends Component {
   disableSchool = async (id, status) => {
     this.setState({ isLoading: true });
     await axios
-      .put(`${process.env.REACT_APP_BASE_URL}/school/changeStatus`, {
-        id: id,
-        status: status,
-      })
+      .put(
+        `${process.env.REACT_APP_BASE_URL}/school/changeStatus`,
+        {
+          id: id,
+          status: status,
+        },
+        {
+          headers: {
+            Authorization: getJwt(),
+          },
+        }
+      )
       .then((res) => {
         console.log(res);
         this.getAllSchool();

@@ -3,6 +3,7 @@ import axios from "axios";
 import { Button, Modal, Form, Table, Space, Select, message } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import ViewQuestion from "../../../../Question/Exercise/Modal/ViewQuestion";
+import { getJwt } from "../../../../../helper/jwt";
 
 const selectingQuestionCol = [
   {
@@ -37,7 +38,12 @@ const AddTestQuestion = (props) => {
       setTableLoading(true);
       await axios
         .get(
-          `${process.env.REACT_APP_BASE_URL}/unit/${unitID}/questions?isExercise=true`
+          `${process.env.REACT_APP_BASE_URL}/unit/${unitID}/questions?isExercise=true`,
+          {
+            headers: {
+              Authorization: getJwt(),
+            },
+          }
         )
         .then((res) => {
           resArr = Array.from(res.data);
@@ -57,7 +63,11 @@ const AddTestQuestion = (props) => {
   const getUnitBySubjectID = async () => {
     let subjectID = window.location.pathname.split("/")[2];
     await axios
-      .get(`${process.env.REACT_APP_BASE_URL}/subject/${subjectID}/units`)
+      .get(`${process.env.REACT_APP_BASE_URL}/subject/${subjectID}/units`, {
+        headers: {
+          Authorization: getJwt(),
+        },
+      })
       .then((res) => {
         setUnit(res.data.length === 0 ? [] : res.data);
       })
@@ -70,11 +80,19 @@ const AddTestQuestion = (props) => {
     setLoading(true);
     let exerciseID = window.location.pathname.split("/")[6];
     await axios
-      .post(`${process.env.REACT_APP_BASE_URL}/exerciseGameQuestion`, {
-        exercise: true,
-        exerciseId: exerciseID,
-        questionIds: selectedRowKeys,
-      })
+      .post(
+        `${process.env.REACT_APP_BASE_URL}/exerciseGameQuestion`,
+        {
+          exercise: true,
+          exerciseId: exerciseID,
+          questionIds: selectedRowKeys,
+        },
+        {
+          headers: {
+            Authorization: getJwt(),
+          },
+        }
+      )
       .then((res) => {
         console.log(res);
         props.getQuestionByExerciseID();

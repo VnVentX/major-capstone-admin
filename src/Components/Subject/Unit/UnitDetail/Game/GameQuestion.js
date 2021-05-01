@@ -9,6 +9,7 @@ import {
   DeleteOutlined,
   PlusOutlined,
 } from "@ant-design/icons";
+import { getJwt } from "../../../../../helper/jwt";
 
 const GameQuestion = () => {
   const [data, setData] = useState([]);
@@ -23,7 +24,11 @@ const GameQuestion = () => {
   const getGameDetail = async () => {
     let gameID = window.location.pathname.split("/")[6];
     await axios
-      .get(`${process.env.REACT_APP_BASE_URL}/game/${gameID}`)
+      .get(`${process.env.REACT_APP_BASE_URL}/game/${gameID}`, {
+        headers: {
+          Authorization: getJwt(),
+        },
+      })
       .then((res) => {
         setStatus(res.data.status);
       })
@@ -35,10 +40,18 @@ const GameQuestion = () => {
   const handleChangeStatus = async (status) => {
     let gameID = window.location.pathname.split("/")[6];
     await axios
-      .put(`${process.env.REACT_APP_BASE_URL}/game`, {
-        id: gameID,
-        status: status,
-      })
+      .put(
+        `${process.env.REACT_APP_BASE_URL}/game`,
+        {
+          id: gameID,
+          status: status,
+        },
+        {
+          headers: {
+            Authorization: getJwt(),
+          },
+        }
+      )
       .then((res) => {
         console.log(res);
         getGameDetail();
@@ -52,7 +65,12 @@ const GameQuestion = () => {
     let exerciseID = window.location.pathname.split("/")[6];
     await axios
       .get(
-        `${process.env.REACT_APP_BASE_URL}/exerciseOrGame/${exerciseID}/questions?isExericse=false`
+        `${process.env.REACT_APP_BASE_URL}/exerciseOrGame/${exerciseID}/questions?isExericse=false`,
+        {
+          headers: {
+            Authorization: getJwt(),
+          },
+        }
       )
       .then((res) => {
         setData(res.data);
@@ -71,11 +89,19 @@ const GameQuestion = () => {
       ids = id;
     }
     await axios
-      .put(`${process.env.REACT_APP_BASE_URL}/exerciseGameQuestion/delete`, {
-        exercise: false,
-        gameId: gameID,
-        questionIds: ids,
-      })
+      .put(
+        `${process.env.REACT_APP_BASE_URL}/exerciseGameQuestion/delete`,
+        {
+          exercise: false,
+          gameId: gameID,
+          questionIds: ids,
+        },
+        {
+          headers: {
+            Authorization: getJwt(),
+          },
+        }
+      )
       .then((res) => {
         console.log(res);
         getQuestionByGameID();

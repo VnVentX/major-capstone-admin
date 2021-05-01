@@ -6,6 +6,7 @@ import ViewMatchingQuestion from "./ViewMatchingQuestion";
 import ViewChoosingQuestion from "./ViewChoosingQuestion";
 import ViewFillingQuestion from "./ViewFillingQuestion";
 import ViewSwappingQuestion from "./ViewSwappingQuestion";
+import { getJwt } from "../../../../../helper/jwt";
 
 const ViewQuestion = (props) => {
   const [form] = Form.useForm();
@@ -15,7 +16,12 @@ const ViewQuestion = (props) => {
   const getQuestionChoosing = async () => {
     await axios
       .get(
-        `${process.env.REACT_APP_BASE_URL}/question/${props.data.id}?questionType=CHOOSE`
+        `${process.env.REACT_APP_BASE_URL}/question/${props.data.id}?questionType=CHOOSE`,
+        {
+          headers: {
+            Authorization: getJwt(),
+          },
+        }
       )
       .then((res) => {
         setQuestionData(res.data);
@@ -29,7 +35,12 @@ const ViewQuestion = (props) => {
   const getQuestionFilling = async () => {
     await axios
       .get(
-        `${process.env.REACT_APP_BASE_URL}/question/${props.data.id}?questionType=FILL`
+        `${process.env.REACT_APP_BASE_URL}/question/${props.data.id}?questionType=FILL`,
+        {
+          headers: {
+            Authorization: getJwt(),
+          },
+        }
       )
       .then((res) => {
         setQuestionData(res.data);
@@ -43,7 +54,12 @@ const ViewQuestion = (props) => {
   const getQuestionMatching = async () => {
     await axios
       .get(
-        `${process.env.REACT_APP_BASE_URL}/question/${props.data.id}?questionType=MATCH`
+        `${process.env.REACT_APP_BASE_URL}/question/${props.data.id}?questionType=MATCH`,
+        {
+          headers: {
+            Authorization: getJwt(),
+          },
+        }
       )
       .then((res) => {
         setQuestionData(res.data);
@@ -57,7 +73,12 @@ const ViewQuestion = (props) => {
   const getQuestionSwapping = async () => {
     await axios
       .get(
-        `${process.env.REACT_APP_BASE_URL}/question/${props.data.id}?questionType=SWAP`
+        `${process.env.REACT_APP_BASE_URL}/question/${props.data.id}?questionType=SWAP`,
+        {
+          headers: {
+            Authorization: getJwt(),
+          },
+        }
       )
       .then((res) => {
         setQuestionData(res.data);

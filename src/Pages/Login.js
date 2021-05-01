@@ -15,15 +15,15 @@ export default function Login(props) {
     formData.append("username", username);
     formData.append("password", password);
     await axios
-      .post(`${process.env.REACT_APP_BASE_URL}/account/login`, formData)
+      .post(`${process.env.REACT_APP_BASE_URL}/login`, {
+        password,
+        username,
+      })
       .then((res) => {
-        console.log(res.data);
-        if (res.data === 0) {
+        if (res.data === "") {
           props.history.push("/login");
         } else {
-          localStorage.setItem("token", "token");
-          localStorage.setItem("id", res.data);
-          // localStorage.setItem("role", res.data.userRoleDTO);
+          localStorage.setItem("token", "Bearer " + res.data);
           props.history.push("/");
         }
       })

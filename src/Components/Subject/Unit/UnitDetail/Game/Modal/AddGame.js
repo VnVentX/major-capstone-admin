@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { Button, Modal, Form, Input, InputNumber, message } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
+import { getJwt } from "../../../../../../helper/jwt";
 
 const layout = {
   labelCol: { span: 8 },
@@ -17,11 +18,19 @@ const AddGame = (props) => {
     setLoading(true);
     console.log(values, props.lessonID);
     await axios
-      .post(`${process.env.REACT_APP_BASE_URL}/game`, {
-        description: values.description?.replace(/\s+/g, " ").trim(),
-        lessonId: props.lessonID,
-        gameName: values.name,
-      })
+      .post(
+        `${process.env.REACT_APP_BASE_URL}/game`,
+        {
+          description: values.description?.replace(/\s+/g, " ").trim(),
+          lessonId: props.lessonID,
+          gameName: values.name,
+        },
+        {
+          headers: {
+            Authorization: getJwt(),
+          },
+        }
+      )
       .then((res) => {
         console.log(res);
         props.getGameByLessonID();

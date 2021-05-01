@@ -1,45 +1,56 @@
 import React, { Component } from "react";
-import { getJwt, getID } from "../../helper/jwt";
+import { getJwt } from "../../helper/jwt";
 import { withRouter } from "react-router-dom";
-// import axios from "axios";
+import { Spin } from "antd";
+import axios from "axios";
 
 class AuthenticatedConponent extends Component {
   state = {
-    user: "",
+    role: "",
   };
 
   async componentDidMount() {
     const jwt = getJwt();
-    // localStorage.setItem("token", "this is token");
     if (!jwt) {
       await this.props.history.push("/login");
     }
-    localStorage.setItem("user", "user");
-    this.setState({
-      user: "user",
-    });
-
-    // await axios
-    //   .get("https://mffood.herokuapp.com/api/users/" + id, {
-    //     headers: {
-    //       token: jwt,
-    //     },
-    //   })
-    //   .then((res) => {
-    //     //item storage phải ở trước setState
-    //     localStorage.setItem("user", res.data.email);
-    //     this.setState({
-    //       user: res.data.email,
-    //     });
-    //   })
-    //   .catch((err) => this.props.history.push("/login"));
+    await axios
+      .get(
+        `${process.env.REACT_APP_BASE_URL}/credential?token=${
+          jwt.split(" ")[1]
+        }`,
+        {
+          headers: {
+            Authorization: getJwt(),
+          },
+        }
+      )
+      .then((res) => {
+        //item storage phải ở trước setState
+        localStorage.setItem("id", res.data.accountId);
+        localStorage.setItem("role", res.data.description);
+        this.setState({
+          role: res.data.description,
+        });
+      })
+      .catch((err) => this.props.history.push("/login"));
   }
 
   render() {
-    if (this.state.user === "") {
+    if (!this.state.role) {
       return (
         <div>
-          <h1>Loading...</h1>;
+          <h1
+            style={{
+              position: "relative",
+              display: "grid",
+              placeItems: "center",
+              height: "100vh",
+            }}
+          >
+            <Spin size="large" />
+          </h1>
+          ;
         </div>
       );
     }

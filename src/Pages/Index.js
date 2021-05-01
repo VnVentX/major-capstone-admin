@@ -399,7 +399,8 @@ export default class Index extends React.Component {
                   to=""
                   onClick={() => {
                     localStorage.removeItem("token");
-                    localStorage.removeItem("user");
+                    localStorage.removeItem("id");
+                    localStorage.removeItem("role");
                     this.props.history.push("/login");
                   }}
                 >

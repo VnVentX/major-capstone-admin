@@ -3,6 +3,7 @@ import axios from "axios";
 import { Button, Modal, Form, Input, Upload, message, Tooltip } from "antd";
 import { EditOutlined } from "@ant-design/icons";
 import { UploadOutlined } from "@ant-design/icons";
+import { getJwt } from "../../../helper/jwt";
 
 const layout = {
   labelCol: { span: 6 },
@@ -24,7 +25,11 @@ const EditSubject = (props) => {
 
   const getSubjectByGrade = async () => {
     await axios
-      .get(`${process.env.REACT_APP_BASE_URL}/subject/${props.subjectID}`)
+      .get(`${process.env.REACT_APP_BASE_URL}/subject/${props.subjectID}`, {
+        headers: {
+          Authorization: getJwt(),
+        },
+      })
       .then((res) => {
         form.setFieldsValue({
           subject: res.data.subjectName,
@@ -74,7 +79,12 @@ const EditSubject = (props) => {
       await axios
         .put(
           `${process.env.REACT_APP_BASE_URL}/subject/${props.subjectID}`,
-          formData
+          formData,
+          {
+            headers: {
+              Authorization: getJwt(),
+            },
+          }
         )
         .then((res) => {
           console.log(res);

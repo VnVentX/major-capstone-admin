@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { Button, Popconfirm, message } from "antd";
 import { DownloadOutlined, QuestionCircleOutlined } from "@ant-design/icons";
+import { getJwt } from "../../../../helper/jwt";
 
 const ExportFinalScore = (props) => {
   const [loading, setLoading] = useState(false);
@@ -14,7 +15,12 @@ const ExportFinalScore = (props) => {
     await axios
       .get(
         `${process.env.REACT_APP_BASE_URL}/student/export/scoreFinal?gradeId=${gradeID}&schoolId=${schoolID}`,
-        { responseType: "blob" }
+        {
+          responseType: "blob",
+          headers: {
+            Authorization: getJwt(),
+          },
+        }
       )
       .then((res) => {
         let headerLine = res.headers["content-disposition"];

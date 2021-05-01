@@ -12,6 +12,7 @@ import {
   message,
 } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
+import { getJwt } from "../../../../helper/jwt";
 
 const normFile = (e) => {
   if (Array.isArray(e)) {
@@ -46,7 +47,11 @@ const ChoosingQuestion = (props) => {
   const getSubjectByGrade = async () => {
     let gradeID = window.location.pathname.split("/")[2];
     await axios
-      .get(`${process.env.REACT_APP_BASE_URL}/grade/${gradeID}/subjects`)
+      .get(`${process.env.REACT_APP_BASE_URL}/grade/${gradeID}/subjects`, {
+        headers: {
+          Authorization: getJwt(),
+        },
+      })
       .then((res) => {
         setSubject(res.data.length === 0 ? [] : res.data);
       })
@@ -57,7 +62,11 @@ const ChoosingQuestion = (props) => {
 
   const getUnitBySubjectID = async (subjectID) => {
     await axios
-      .get(`${process.env.REACT_APP_BASE_URL}/subject/${subjectID}/units`)
+      .get(`${process.env.REACT_APP_BASE_URL}/subject/${subjectID}/units`, {
+        headers: {
+          Authorization: getJwt(),
+        },
+      })
       .then((res) => {
         setUnit(res.data.length === 0 ? [] : res.data);
       })
@@ -121,7 +130,15 @@ const ChoosingQuestion = (props) => {
   const createChoosingQuestion = async (formData) => {
     setLoading(true);
     await axios
-      .post(`${process.env.REACT_APP_BASE_URL}/question/game/others`, formData)
+      .post(
+        `${process.env.REACT_APP_BASE_URL}/question/game/others`,
+        formData,
+        {
+          headers: {
+            Authorization: getJwt(),
+          },
+        }
+      )
       .then((res) => {
         console.log(res);
         setLoading(false);

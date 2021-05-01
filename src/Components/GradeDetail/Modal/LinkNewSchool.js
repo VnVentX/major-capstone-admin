@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { Button, Modal, Form, Select, message } from "antd";
 import { LinkOutlined } from "@ant-design/icons";
+import { getJwt } from "../../../helper/jwt";
 const { Option } = Select;
 
 const LinkNewSchool = (props) => {
@@ -13,7 +14,11 @@ const LinkNewSchool = (props) => {
   const getSchoolList = async () => {
     let gradeID = window.location.pathname.split("/")[2];
     await axios
-      .get(`${process.env.REACT_APP_BASE_URL}/school/all/${gradeID}`)
+      .get(`${process.env.REACT_APP_BASE_URL}/school/all/${gradeID}`, {
+        headers: {
+          Authorization: getJwt(),
+        },
+      })
       .then((res) => {
         setSchoolList(res.data.length === 0 ? [] : res.data);
       })
@@ -26,10 +31,18 @@ const LinkNewSchool = (props) => {
     setLoading(true);
     let gradeID = window.location.pathname.split("/")[2];
     await axios
-      .post(`${process.env.REACT_APP_BASE_URL}/schoolGrade`, {
-        gradeId: gradeID,
-        schoolId: schoolID,
-      })
+      .post(
+        `${process.env.REACT_APP_BASE_URL}/schoolGrade`,
+        {
+          gradeId: gradeID,
+          schoolId: schoolID,
+        },
+        {
+          headers: {
+            Authorization: getJwt(),
+          },
+        }
+      )
       .then((res) => {
         console.log(res);
         props.getSchoolByGradeID(gradeID);

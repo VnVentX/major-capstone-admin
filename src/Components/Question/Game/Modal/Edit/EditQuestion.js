@@ -6,6 +6,7 @@ import EditFillingQuestion from "./EditFillingQuestion";
 import EditChoosingQuestion from "./EditChoosingQuestions";
 import EditMatchingQuestion from "./EditMatchingQuestion";
 import EditSwappingQuestion from "./EditSwappingQuestion";
+import { getJwt } from "../../../../../helper/jwt";
 
 const EditQuestion = (props) => {
   const [form] = Form.useForm();
@@ -22,7 +23,12 @@ const EditQuestion = (props) => {
     await axios
       .put(
         `${process.env.REACT_APP_BASE_URL}/question/${props.data.id}/game/others`,
-        formData
+        formData,
+        {
+          headers: {
+            Authorization: getJwt(),
+          },
+        }
       )
       .then((res) => {
         console.log(res);
@@ -48,7 +54,12 @@ const EditQuestion = (props) => {
     await axios
       .put(
         `${process.env.REACT_APP_BASE_URL}/question/${props.data.id}/game/fillInBlank`,
-        formData
+        formData,
+        {
+          headers: {
+            Authorization: getJwt(),
+          },
+        }
       )
       .then((res) => {
         console.log(res);
@@ -73,7 +84,12 @@ const EditQuestion = (props) => {
   const getQuestionChoosing = async () => {
     await axios
       .get(
-        `${process.env.REACT_APP_BASE_URL}/question/${props.data?.id}?questionType=CHOOSE`
+        `${process.env.REACT_APP_BASE_URL}/question/${props.data?.id}?questionType=CHOOSE`,
+        {
+          headers: {
+            Authorization: getJwt(),
+          },
+        }
       )
       .then((res) => {
         setQuestionData(res.data);
@@ -87,7 +103,12 @@ const EditQuestion = (props) => {
   const getQuestionFilling = async () => {
     await axios
       .get(
-        `${process.env.REACT_APP_BASE_URL}/question/${props.data.id}?questionType=FILL`
+        `${process.env.REACT_APP_BASE_URL}/question/${props.data.id}?questionType=FILL`,
+        {
+          headers: {
+            Authorization: getJwt(),
+          },
+        }
       )
       .then((res) => {
         let listID = [];
@@ -106,7 +127,12 @@ const EditQuestion = (props) => {
   const getQuestionMatching = async () => {
     await axios
       .get(
-        `${process.env.REACT_APP_BASE_URL}/question/${props.data.id}?questionType=MATCH`
+        `${process.env.REACT_APP_BASE_URL}/question/${props.data.id}?questionType=MATCH`,
+        {
+          headers: {
+            Authorization: getJwt(),
+          },
+        }
       )
       .then((res) => {
         setQuestionData(res.data);
@@ -120,7 +146,12 @@ const EditQuestion = (props) => {
   const getQuestionSwapping = async () => {
     await axios
       .get(
-        `${process.env.REACT_APP_BASE_URL}/question/${props.data.id}?questionType=SWAP`
+        `${process.env.REACT_APP_BASE_URL}/question/${props.data.id}?questionType=SWAP`,
+        {
+          headers: {
+            Authorization: getJwt(),
+          },
+        }
       )
       .then((res) => {
         setQuestionData(res.data);

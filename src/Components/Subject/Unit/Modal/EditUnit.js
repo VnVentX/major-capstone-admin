@@ -10,6 +10,7 @@ import {
   message,
 } from "antd";
 import { EditOutlined } from "@ant-design/icons";
+import { getJwt } from "../../../../helper/jwt";
 
 const layout = {
   labelCol: { span: 6 },
@@ -23,7 +24,11 @@ const EditUnit = (props) => {
 
   const getUnitByID = async () => {
     await axios
-      .get(`${process.env.REACT_APP_BASE_URL}/unit/${props.data.id}`)
+      .get(`${process.env.REACT_APP_BASE_URL}/unit/${props.data.id}`, {
+        headers: {
+          Authorization: getJwt(),
+        },
+      })
       .then((res) => {
         form.setFieldsValue({
           unit: res.data.unitName,
@@ -39,11 +44,19 @@ const EditUnit = (props) => {
   const editUnit = async (values) => {
     setLoading(true);
     await axios
-      .put(`${process.env.REACT_APP_BASE_URL}/unit/${props.data.id}`, {
-        description: values.description?.replace(/\s+/g, " ").trim(),
-        unitName: values.unit,
-        subjectId: window.location.pathname.split("/")[2],
-      })
+      .put(
+        `${process.env.REACT_APP_BASE_URL}/unit/${props.data.id}`,
+        {
+          description: values.description?.replace(/\s+/g, " ").trim(),
+          unitName: values.unit,
+          subjectId: window.location.pathname.split("/")[2],
+        },
+        {
+          headers: {
+            Authorization: getJwt(),
+          },
+        }
+      )
       .then((res) => {
         console.log(res);
         props.getUnitBySubjectID();

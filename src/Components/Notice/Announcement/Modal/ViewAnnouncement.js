@@ -5,6 +5,7 @@ import { CKEditor } from "@ckeditor/ckeditor5-react";
 // import CustomEditor from "ckeditor5-build-classic";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { EyeOutlined } from "@ant-design/icons";
+import { getJwt } from "../../../../helper/jwt";
 
 const layout = {
   labelCol: { span: 24 },
@@ -21,7 +22,11 @@ const ViewAnnouncement = (props) => {
 
   const getNewsDetail = async (id) => {
     await axios
-      .get(`${process.env.REACT_APP_BASE_URL}/news/${id}`)
+      .get(`${process.env.REACT_APP_BASE_URL}/news/${id}`, {
+        headers: {
+          Authorization: getJwt(),
+        },
+      })
       .then((res) => {
         form.setFieldsValue({
           title: res.data.newsTitle,

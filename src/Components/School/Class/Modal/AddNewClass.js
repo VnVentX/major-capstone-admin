@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { Button, Modal, Form, Input, message } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
+import { getJwt } from "../../../../helper/jwt";
 
 const layout = {
   labelCol: { span: 8 },
@@ -26,11 +27,19 @@ const AddNewClass = (props) => {
     setLoading(true);
     async function createClass() {
       await axios
-        .post(`${process.env.REACT_APP_BASE_URL}/class`, {
-          className: values.className?.replace(/\s+/g, " ").trim(),
-          gradeId: props.gradeID,
-          schoolId: window.location.pathname.split("/")[2],
-        })
+        .post(
+          `${process.env.REACT_APP_BASE_URL}/class`,
+          {
+            className: values.className?.replace(/\s+/g, " ").trim(),
+            gradeId: props.gradeID,
+            schoolId: window.location.pathname.split("/")[2],
+          },
+          {
+            headers: {
+              Authorization: getJwt(),
+            },
+          }
+        )
         .then((res) => {
           console.log(res);
           props.getClassBySchoolGrade(props.gradeID);

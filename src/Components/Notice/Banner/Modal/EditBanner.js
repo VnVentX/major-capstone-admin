@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Button, Modal, Form, Input, Upload, message } from "antd";
 import { UploadOutlined, EditOutlined } from "@ant-design/icons";
+import { getJwt } from "../../../../helper/jwt";
 
 const layout = {
   labelCol: { span: 8 },
@@ -58,7 +59,12 @@ const EditBanner = (props) => {
       await axios
         .put(
           `${process.env.REACT_APP_BASE_URL}/bannerImage/${props.data.id}`,
-          formData
+          formData,
+          {
+            headers: {
+              Authorization: getJwt(),
+            },
+          }
         )
         .then((res) => {
           console.log(res);

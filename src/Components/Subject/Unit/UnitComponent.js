@@ -15,6 +15,7 @@ import { Link } from "react-router-dom";
 import { QuestionCircleOutlined, DeleteOutlined } from "@ant-design/icons";
 import AddNewUnit from "./Modal/AddNewUnit";
 import EditUnit from "./Modal/EditUnit";
+import { getJwt } from "../../../helper/jwt";
 
 const { Search } = Input;
 
@@ -29,7 +30,11 @@ const UnitComponent = (props) => {
   const getUnitBySubjectID = async () => {
     let subjectID = window.location.pathname.split("/")[2];
     await axios
-      .get(`${process.env.REACT_APP_BASE_URL}/subject/${subjectID}/units`)
+      .get(`${process.env.REACT_APP_BASE_URL}/subject/${subjectID}/units`, {
+        headers: {
+          Authorization: getJwt(),
+        },
+      })
       .then((res) => {
         setUnit(res.data.length === 0 ? [] : res.data);
         setSearchData(res.data.length === 0 ? [] : res.data);
@@ -43,7 +48,11 @@ const UnitComponent = (props) => {
     let formData = new FormData();
     formData.append("id", unitID);
     await axios
-      .put(`${process.env.REACT_APP_BASE_URL}/unit/delete`, formData)
+      .put(`${process.env.REACT_APP_BASE_URL}/unit/delete`, formData, {
+        headers: {
+          Authorization: getJwt(),
+        },
+      })
       .then((res) => {
         console.log(res);
         getUnitBySubjectID();

@@ -3,6 +3,7 @@ import axios from "axios";
 import { Button, Modal, Form, Input, Upload, message } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import { UploadOutlined } from "@ant-design/icons";
+import { getJwt } from "../../../helper/jwt";
 
 const layout = {
   labelCol: { span: 6 },
@@ -49,7 +50,11 @@ const AddNewSubject = (props) => {
     formData.append("multipartFile", event.subjectImg[0].originFileObj);
     async function createSubject() {
       await axios
-        .post(`${process.env.REACT_APP_BASE_URL}/subject`, formData)
+        .post(`${process.env.REACT_APP_BASE_URL}/subject`, formData, {
+          headers: {
+            Authorization: getJwt(),
+          },
+        })
         .then((res) => {
           console.log(res);
           props.getSubjectByGrade(props.gradeID);

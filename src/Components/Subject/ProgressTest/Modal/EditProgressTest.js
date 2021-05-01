@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import { Button, Modal, Form, Input, Select, Tooltip, message } from "antd";
 import { EditOutlined } from "@ant-design/icons";
+import { getJwt } from "../../../../helper/jwt";
 
 const layout = {
   labelCol: { span: 8 },
@@ -16,7 +17,11 @@ const EditProgressTest = (props) => {
 
   const getProgressTestByID = async () => {
     await axios
-      .get(`${process.env.REACT_APP_BASE_URL}/progressTest/${props.data.id}`)
+      .get(`${process.env.REACT_APP_BASE_URL}/progressTest/${props.data.id}`, {
+        headers: {
+          Authorization: getJwt(),
+        },
+      })
       .then((res) => {
         form.setFieldsValue({
           progressTest: res.data.progressTestName,
@@ -33,7 +38,14 @@ const EditProgressTest = (props) => {
   const getUnitBySubjectID = async () => {
     let subjectID = window.location.pathname.split("/")[2];
     await axios
-      .get(`${process.env.REACT_APP_BASE_URL}/subject/${subjectID}/unitAterIds`)
+      .get(
+        `${process.env.REACT_APP_BASE_URL}/subject/${subjectID}/unitAterIds`,
+        {
+          headers: {
+            Authorization: getJwt(),
+          },
+        }
+      )
       .then((res) => {
         console.log(res.data);
         let unit = [];
@@ -63,13 +75,21 @@ const EditProgressTest = (props) => {
   const onFinish = async (values) => {
     setLoading(true);
     await axios
-      .put(`${process.env.REACT_APP_BASE_URL}/progressTest/${props.data.id}`, {
-        description: values.description?.replace(/\s+/g, " ").trim(),
-        id: props.data.id,
-        subjectId: window.location.pathname.split("/")[2],
-        progressTestName: values.progressTest?.replace(/\s+/g, " ").trim(),
-        unitAfterId: values.unitAfter,
-      })
+      .put(
+        `${process.env.REACT_APP_BASE_URL}/progressTest/${props.data.id}`,
+        {
+          description: values.description?.replace(/\s+/g, " ").trim(),
+          id: props.data.id,
+          subjectId: window.location.pathname.split("/")[2],
+          progressTestName: values.progressTest?.replace(/\s+/g, " ").trim(),
+          unitAfterId: values.unitAfter,
+        },
+        {
+          headers: {
+            Authorization: getJwt(),
+          },
+        }
+      )
       .then((res) => {
         console.log(res);
         props.getProgressTestBySubjectID();

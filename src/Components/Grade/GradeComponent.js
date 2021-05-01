@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Card, List } from "antd";
 import { Link } from "react-router-dom";
+import { getJwt } from "../../helper/jwt";
 
 const GradeComponent = () => {
   const [grade, setGrade] = useState([]);
@@ -12,7 +13,11 @@ const GradeComponent = () => {
 
   const getAllGrade = async () => {
     await axios
-      .get(`${process.env.REACT_APP_BASE_URL}/grade/all`)
+      .get(`${process.env.REACT_APP_BASE_URL}/grade/all`, {
+        headers: {
+          Authorization: getJwt(),
+        },
+      })
       .then((res) => {
         setGrade(res.data.length === 0 ? [] : res.data);
       })

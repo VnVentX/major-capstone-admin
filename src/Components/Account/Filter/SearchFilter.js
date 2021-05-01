@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Form, Row, Col, Button, Select, Spin } from "antd";
+import { getJwt } from "../../../helper/jwt";
 
 const SearchFilter = (props) => {
   const [form] = Form.useForm();
@@ -37,10 +38,18 @@ const SearchFilter = (props) => {
   const getClassByGradeSchoolID = async (schoolID, gradeID) => {
     setClassLoading(true);
     await axios
-      .post(`${process.env.REACT_APP_BASE_URL}/class/schoolGradeId`, {
-        gradeId: gradeID,
-        schoolId: schoolID,
-      })
+      .post(
+        `${process.env.REACT_APP_BASE_URL}/class/schoolGradeId`,
+        {
+          gradeId: gradeID,
+          schoolId: schoolID,
+        },
+        {
+          headers: {
+            Authorization: getJwt(),
+          },
+        }
+      )
       .then((res) => {
         setClassData(res.data.length === 0 ? null : res.data);
         setClassLoading(false);
@@ -56,7 +65,11 @@ const SearchFilter = (props) => {
 
   const getAllSchool = async () => {
     await axios
-      .get(`${process.env.REACT_APP_BASE_URL}/school/all`)
+      .get(`${process.env.REACT_APP_BASE_URL}/school/all`, {
+        headers: {
+          Authorization: getJwt(),
+        },
+      })
       .then((res) => {
         setSchoolData(res.data.length === 0 ? [] : res.data);
         form.setFieldsValue({
@@ -70,7 +83,11 @@ const SearchFilter = (props) => {
 
   const getGradeBySchool = async (schoolID) => {
     await axios
-      .get(`${process.env.REACT_APP_BASE_URL}/grade/${schoolID}`)
+      .get(`${process.env.REACT_APP_BASE_URL}/grade/${schoolID}`, {
+        headers: {
+          Authorization: getJwt(),
+        },
+      })
       .then((res) => {
         setGradeData(res.data.length === 0 ? [] : res.data);
         form.setFieldsValue({

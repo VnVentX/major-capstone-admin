@@ -20,6 +20,7 @@ import {
   PlusOutlined,
   EditOutlined,
 } from "@ant-design/icons";
+import { getJwt } from "../../../../helper/jwt";
 
 const normFile = (e) => {
   if (Array.isArray(e)) {
@@ -42,7 +43,12 @@ const EditQuestion = (props) => {
   const getQuestionByID = async () => {
     await axios
       .get(
-        `${process.env.REACT_APP_BASE_URL}/question/${props.data.id}?questionType=EXERCISE`
+        `${process.env.REACT_APP_BASE_URL}/question/${props.data.id}?questionType=EXERCISE`,
+        {
+          headers: {
+            Authorization: getJwt(),
+          },
+        }
       )
       .then((res) => {
         let listID = [];
@@ -82,7 +88,12 @@ const EditQuestion = (props) => {
     await axios
       .put(
         `${process.env.REACT_APP_BASE_URL}/question/${props.data.id}/exercise`,
-        formData
+        formData,
+        {
+          headers: {
+            Authorization: getJwt(),
+          },
+        }
       )
       .then((res) => {
         console.log(res);

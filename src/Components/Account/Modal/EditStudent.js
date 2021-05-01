@@ -4,6 +4,7 @@ import moment from "moment";
 import { reunicode } from "../../../helper/regex";
 import { Modal, Button, Form, Input, Select, DatePicker, message } from "antd";
 import { EditOutlined } from "@ant-design/icons";
+import { getJwt } from "../../../helper/jwt";
 
 const layout = {
   labelCol: { span: 6 },
@@ -17,7 +18,11 @@ const EditStudent = (props) => {
 
   const getStudentDetail = async () => {
     await axios
-      .get(`${process.env.REACT_APP_BASE_URL}/student/${props.data.id}`)
+      .get(`${process.env.REACT_APP_BASE_URL}/student/${props.data.id}`, {
+        headers: {
+          Authorization: getJwt(),
+        },
+      })
       .then((res) => {
         form.setFieldsValue({
           name: res.data.fullName,
@@ -35,13 +40,21 @@ const EditStudent = (props) => {
   const updateStundent = async (values) => {
     setLoading(true);
     await axios
-      .put(`${process.env.REACT_APP_BASE_URL}/student/${props.data.id}`, {
-        doB: values.age.format("DD/MM/YYYY"),
-        fullName: values.name?.replace(/\s+/g, " ").trim(),
-        gender: values.gender,
-        parentName: values.parentName?.replace(/\s+/g, " ").trim(),
-        contact: values.contact?.replace(/\s+/g, " ").trim(),
-      })
+      .put(
+        `${process.env.REACT_APP_BASE_URL}/student/${props.data.id}`,
+        {
+          doB: values.age.format("DD/MM/YYYY"),
+          fullName: values.name?.replace(/\s+/g, " ").trim(),
+          gender: values.gender,
+          parentName: values.parentName?.replace(/\s+/g, " ").trim(),
+          contact: values.contact?.replace(/\s+/g, " ").trim(),
+        },
+        {
+          headers: {
+            Authorization: getJwt(),
+          },
+        }
+      )
       .then((res) => {
         console.log(res);
         props.handleSearch(props.searchData);

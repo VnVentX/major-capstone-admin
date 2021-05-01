@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Tabs, Card, Descriptions } from "antd";
 import ClassComponent from "./Class/ClassComponent";
+import { getJwt } from "../../helper/jwt";
 
 const { TabPane } = Tabs;
 
@@ -17,7 +18,11 @@ const SchoolDetailComponent = () => {
   const getSchoolByID = async () => {
     let schoolID = window.location.pathname.split("/")[2];
     await axios
-      .get(`${process.env.REACT_APP_BASE_URL}/school/${schoolID}`)
+      .get(`${process.env.REACT_APP_BASE_URL}/school/${schoolID}`, {
+        headers: {
+          Authorization: getJwt(),
+        },
+      })
       .then((res) => {
         setSchoolData(res.data.length === 0 ? [] : res.data);
       })
@@ -31,7 +36,11 @@ const SchoolDetailComponent = () => {
     let formData = new FormData();
     formData.append("schoolId ", schoolID);
     await axios
-      .get(`${process.env.REACT_APP_BASE_URL}/grade/${schoolID}`)
+      .get(`${process.env.REACT_APP_BASE_URL}/grade/${schoolID}`, {
+        headers: {
+          Authorization: getJwt(),
+        },
+      })
       .then((res) => {
         setGradeData(res.data.length === 0 ? [] : res.data);
       })

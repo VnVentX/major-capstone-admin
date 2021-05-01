@@ -10,6 +10,7 @@ import {
   message,
 } from "antd";
 import { EditOutlined } from "@ant-design/icons";
+import { getJwt } from "../../../../../helper/jwt";
 
 const layout = {
   labelCol: { span: 8 },
@@ -31,12 +32,20 @@ const EditExercise = (props) => {
   const editExercise = async (values) => {
     setLoading(true);
     await axios
-      .put(`${process.env.REACT_APP_BASE_URL}/exercise/${props.data.id}`, {
-        description: values.description?.replace(/\s+/g, " ").trim(),
-        exerciseName: values.name,
-        lessonId: props.lessonID,
-        id: props.data.id,
-      })
+      .put(
+        `${process.env.REACT_APP_BASE_URL}/exercise/${props.data.id}`,
+        {
+          description: values.description?.replace(/\s+/g, " ").trim(),
+          exerciseName: values.name,
+          lessonId: props.lessonID,
+          id: props.data.id,
+        },
+        {
+          headers: {
+            Authorization: getJwt(),
+          },
+        }
+      )
       .then((res) => {
         console.log(res);
         props.getExerciseByLessonID();

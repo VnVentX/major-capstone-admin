@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { Modal, Button, Card, Descriptions } from "antd";
 import { Link } from "react-router-dom";
+import { getJwt } from "../../../helper/jwt";
 
 const ViewStudent = (props) => {
   const [visible, setVisible] = useState(false);
@@ -9,7 +10,11 @@ const ViewStudent = (props) => {
 
   const getStudentByID = async () => {
     await axios
-      .get(`${process.env.REACT_APP_BASE_URL}/student/${props.data.id}`)
+      .get(`${process.env.REACT_APP_BASE_URL}/student/${props.data.id}`, {
+        headers: {
+          Authorization: getJwt(),
+        },
+      })
       .then((res) => {
         setData(res.data.length === 0 ? [] : res.data);
       })

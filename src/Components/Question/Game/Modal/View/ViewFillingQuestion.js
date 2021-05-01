@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import axios from "axios";
 import { Form, Input, Select, Divider, Row, Col, Image } from "antd";
 
 const { Option } = Select;

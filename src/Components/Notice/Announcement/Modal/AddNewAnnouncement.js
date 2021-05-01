@@ -29,12 +29,20 @@ const AddNewAnnouncement = (props) => {
     setLoading(true);
     async function createNews() {
       await axios
-        .post(`${process.env.REACT_APP_BASE_URL}/news`, {
-          accountId: getID(),
-          newsContent: event.content,
-          newsTitle: event.title,
-          shortDescription: event.shortDes,
-        })
+        .post(
+          `${process.env.REACT_APP_BASE_URL}/news`,
+          {
+            accountId: getID(),
+            newsContent: event.content,
+            newsTitle: event.title,
+            shortDescription: event.shortDes,
+          },
+          {
+            headers: {
+              Authorization: getJwt(),
+            },
+          }
+        )
         .then((res) => {
           props.getAllNews();
           form.resetFields();
@@ -162,8 +170,8 @@ class MyUploadAdapter {
 
     xhr.open("POST", `${process.env.REACT_APP_BASE_URL}/file`, true);
     xhr.responseType = "text";
-    // xhr.setRequestHeader("Access-Control-Allow-Origin", "*");
-    // xhr.setRequestHeader("Authorization", getToken());
+    xhr.setRequestHeader("Access-Control-Allow-Origin", "*");
+    xhr.setRequestHeader("Authorization", getJwt());
   }
 
   // Initializes XMLHttpRequest listeners.

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { Button, Modal, Form, Input, InputNumber, message } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
+import { getJwt } from "../../../../../helper/jwt";
 
 const layout = {
   labelCol: { span: 8 },
@@ -16,12 +17,20 @@ const AddExercise = (props) => {
   const createExercise = async (values) => {
     setLoading(true);
     await axios
-      .post(`${process.env.REACT_APP_BASE_URL}/exercise`, {
-        description: values.description?.replace(/\s+/g, " ").trim(),
-        exerciseName: values.name,
-        lessonId: props.lessonID,
-        progressTestId: 0,
-      })
+      .post(
+        `${process.env.REACT_APP_BASE_URL}/exercise`,
+        {
+          description: values.description?.replace(/\s+/g, " ").trim(),
+          exerciseName: values.name,
+          lessonId: props.lessonID,
+          progressTestId: 0,
+        },
+        {
+          headers: {
+            Authorization: getJwt(),
+          },
+        }
+      )
       .then((res) => {
         console.log(res);
         props.getExerciseByLessonID();

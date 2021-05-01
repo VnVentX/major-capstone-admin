@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { getID } from "../../../../helper/jwt";
+import { getID, getJwt } from "../../../../helper/jwt";
 import { Button, Modal, Form, Input, Upload, message } from "antd";
 import { UploadOutlined, PlusOutlined } from "@ant-design/icons";
 
@@ -45,7 +45,11 @@ const AddNewBanner = (props) => {
     formData.append("accountId", getID());
     async function createBanner() {
       await axios
-        .post(`${process.env.REACT_APP_BASE_URL}/bannerImage`, formData)
+        .post(`${process.env.REACT_APP_BASE_URL}/bannerImage`, formData, {
+          headers: {
+            Authorization: getJwt(),
+          },
+        })
         .then((res) => {
           console.log(res);
           props.getAllBanner();

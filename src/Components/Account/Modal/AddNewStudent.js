@@ -1,18 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import moment from "moment";
 import { reunicode } from "../../../helper/regex";
-import {
-  Modal,
-  Button,
-  Form,
-  Input,
-  Select,
-  DatePicker,
-  Spin,
-  message,
-} from "antd";
+import { Modal, Button, Form, Input, Select, DatePicker, message } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
+import { getJwt } from "../../../helper/jwt";
 
 const layout = {
   labelCol: { span: 6 },
@@ -45,14 +37,22 @@ const AddNewStudent = (props) => {
     };
     setLoading(true);
     await axios
-      .post(`${process.env.REACT_APP_BASE_URL}/student`, {
-        classesId: props.searchData?.class,
-        doB: values.age.format("DD/MM/YYYY"),
-        fullName: values.name?.replace(/\s+/g, " ").trim(),
-        gender: values.gender,
-        parentName: values.parentName?.replace(/\s+/g, " ").trim(),
-        contact: values.contact?.replace(/\s+/g, " ").trim(),
-      })
+      .post(
+        `${process.env.REACT_APP_BASE_URL}/student`,
+        {
+          classesId: props.searchData?.class,
+          doB: values.age.format("DD/MM/YYYY"),
+          fullName: values.name?.replace(/\s+/g, " ").trim(),
+          gender: values.gender,
+          parentName: values.parentName?.replace(/\s+/g, " ").trim(),
+          contact: values.contact?.replace(/\s+/g, " ").trim(),
+        },
+        {
+          headers: {
+            Authorization: getJwt(),
+          },
+        }
+      )
       .then((res) => {
         console.log(res);
         if (res.data === "CANNOT CREATE!") {

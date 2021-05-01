@@ -14,6 +14,7 @@ import { Link } from "react-router-dom";
 import { QuestionCircleOutlined, DeleteOutlined } from "@ant-design/icons";
 import AddExercise from "./AddExercise";
 import EditExercise from "./EditExercise";
+import { getJwt } from "../../../../../helper/jwt";
 
 const { Title } = Typography;
 
@@ -27,7 +28,12 @@ const Exercise = (props) => {
   const getExerciseByLessonID = async () => {
     await axios
       .get(
-        `${process.env.REACT_APP_BASE_URL}/lesson/${props.lessonID}/exercises`
+        `${process.env.REACT_APP_BASE_URL}/lesson/${props.lessonID}/exercises`,
+        {
+          headers: {
+            Authorization: getJwt(),
+          },
+        }
       )
       .then((res) => {
         setExercise(res.data.length === 0 ? [] : res.data);
@@ -39,10 +45,18 @@ const Exercise = (props) => {
 
   const deleteExercise = async (exerciseID) => {
     await axios
-      .put(`${process.env.REACT_APP_BASE_URL}/exercise/delete`, {
-        id: exerciseID,
-        status: "DELETED",
-      })
+      .put(
+        `${process.env.REACT_APP_BASE_URL}/exercise/delete`,
+        {
+          id: exerciseID,
+          status: "DELETED",
+        },
+        {
+          headers: {
+            Authorization: getJwt(),
+          },
+        }
+      )
       .then((res) => {
         console.log(res);
         getExerciseByLessonID();

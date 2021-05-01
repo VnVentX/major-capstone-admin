@@ -5,11 +5,16 @@ import PowerPoint from "./PowerPoint/PowerPoint";
 import Exercise from "./Exercise/Exercise";
 import Game from "./Game/Game";
 import { DeleteOutlined, QuestionCircleOutlined } from "@ant-design/icons";
+import { getJwt } from "../../../../helper/jwt";
 
 const Lesson = (props) => {
   const handleDelete = async (item) => {
     await axios
-      .put(`${process.env.REACT_APP_BASE_URL}/lesson?id=${item}`)
+      .put(`${process.env.REACT_APP_BASE_URL}/lesson?id=${item}`, {
+        headers: {
+          Authorization: getJwt(),
+        },
+      })
       .then((res) => {
         console.log(res);
         props.getLessonByUnitID();

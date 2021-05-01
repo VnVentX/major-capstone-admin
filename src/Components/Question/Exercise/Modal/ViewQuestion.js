@@ -17,6 +17,7 @@ import {
   PauseCircleOutlined,
   EyeOutlined,
 } from "@ant-design/icons";
+import { getJwt } from "../../../../helper/jwt";
 
 const useAudio = (url) => {
   const [audio] = useState(new Audio(url));
@@ -46,7 +47,12 @@ const ViewQuestion = (props) => {
   const getQuestionByID = async () => {
     await axios
       .get(
-        `${process.env.REACT_APP_BASE_URL}/question/${props.data.id}?questionType=EXERCISE`
+        `${process.env.REACT_APP_BASE_URL}/question/${props.data.id}?questionType=EXERCISE`,
+        {
+          headers: {
+            Authorization: getJwt(),
+          },
+        }
       )
       .then((res) => {
         form.setFieldsValue({

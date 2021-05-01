@@ -8,11 +8,11 @@ import {
   Popconfirm,
   message,
   AutoComplete,
-  Select,
 } from "antd";
 import AddNewAnnouncement from "./Modal/AddNewAnnouncement";
 import ViewAnnouncement from "./Modal/ViewAnnouncement";
 import { QuestionCircleOutlined, DeleteOutlined } from "@ant-design/icons";
+import { getJwt } from "../../../helper/jwt";
 
 export default class AnnouncementComponent extends React.Component {
   state = {
@@ -30,7 +30,11 @@ export default class AnnouncementComponent extends React.Component {
 
   getAllNews = async () => {
     await axios
-      .get(`${process.env.REACT_APP_BASE_URL}/news/all?isStudent=false`)
+      .get(`${process.env.REACT_APP_BASE_URL}/news/all?isStudent=false`, {
+        headers: {
+          Authorization: getJwt(),
+        },
+      })
       .then((res) => {
         this.setState({
           dataSource: res.data.length === 0 ? [] : res.data,
@@ -52,7 +56,11 @@ export default class AnnouncementComponent extends React.Component {
       ids = id;
     }
     await axios
-      .put(`${process.env.REACT_APP_BASE_URL}/news`, ids)
+      .put(`${process.env.REACT_APP_BASE_URL}/news`, ids, {
+        headers: {
+          Authorization: getJwt(),
+        },
+      })
       .then((res) => {
         console.log(res);
         this.getAllNews();

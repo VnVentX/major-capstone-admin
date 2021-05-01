@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { Modal, Button, Form, Select, message } from "antd";
 import { DownloadOutlined } from "@ant-design/icons";
+import { getJwt } from "../../../../helper/jwt";
 
 const layout = {
   labelCol: { span: 6 },
@@ -16,7 +17,14 @@ const ExportClassExcel = (props) => {
 
   const getSubjectByGrade = async () => {
     await axios
-      .get(`${process.env.REACT_APP_BASE_URL}/grade/${props.gradeID}/subjects`)
+      .get(
+        `${process.env.REACT_APP_BASE_URL}/grade/${props.gradeID}/subjects`,
+        {
+          headers: {
+            Authorization: getJwt(),
+          },
+        }
+      )
       .then((res) => {
         setSubject(res.data.length === 0 ? [] : res.data);
       })
@@ -33,7 +41,12 @@ const ExportClassExcel = (props) => {
     await axios
       .get(
         `${process.env.REACT_APP_BASE_URL}/student/export?gradeId=${gradeID}&schoolId=${schoolID}&subjectId=${subjectID}`,
-        { responseType: "blob" }
+        {
+          responseType: "blob",
+          headers: {
+            Authorization: getJwt(),
+          },
+        }
       )
       .then((res) => {
         let headerLine = res.headers["content-disposition"];
