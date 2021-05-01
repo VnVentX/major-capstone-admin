@@ -124,7 +124,10 @@ const EditLesson = (props) => {
             label="Lesson Name"
             rules={[
               { required: true, message: "Please input a lesson name" },
-              { type: "number", message: "Please input a number" },
+              {
+                pattern: /^\d+$/,
+                message: "Please input a number",
+              },
             ]}
           >
             <InputNumber

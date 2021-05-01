@@ -88,7 +88,10 @@ const AddExercise = (props) => {
             label="Exercise"
             rules={[
               { required: true, message: "Please input a exercise name" },
-              { type: "number", message: "Please input a number" },
+              {
+                pattern: /^\d+$/,
+                message: "Please input a number",
+              },
             ]}
           >
             <InputNumber

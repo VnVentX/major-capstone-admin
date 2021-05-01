@@ -97,7 +97,10 @@ const EditGame = (props) => {
             label="Game name"
             rules={[
               { required: true, message: "Please input a game name" },
-              { type: "number", message: "Please input a number" },
+              {
+                pattern: /^\d+$/,
+                message: "Please input a number",
+              },
             ]}
           >
             <InputNumber

@@ -109,7 +109,10 @@ const EditUnit = (props) => {
             label="Unit"
             rules={[
               { required: true, message: "Please input a unit name" },
-              { type: "number", message: "Please input a number" },
+              {
+                pattern: /^\d+$/,
+                message: "Please input a number",
+              },
             ]}
           >
             <InputNumber

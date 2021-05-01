@@ -57,7 +57,7 @@ const AddNewStudent = (props) => {
         console.log(res);
         if (res.data === "CANNOT CREATE!") {
           message.error(
-            "This class is currently disabled. Please check again!"
+            "This class is currently disabled or pending. Please check again!"
           );
           setLoading(false);
         } else {
@@ -95,7 +95,10 @@ const AddNewStudent = (props) => {
         visible={visible}
         confirmLoading={loading}
         okText="Create"
-        onCancel={handleCancel}
+        onCancel={() => {
+          handleCancel();
+          form.resetFields();
+        }}
         destroyOnClose
         onOk={() => {
           form
