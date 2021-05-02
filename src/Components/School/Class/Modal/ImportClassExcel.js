@@ -143,6 +143,7 @@ const ImportClassExcel = (props) => {
         okText="Import"
         confirmLoading={loading}
         destroyOnClose
+        cancelText="Close"
         onOk={() => {
           form
             .validateFields()

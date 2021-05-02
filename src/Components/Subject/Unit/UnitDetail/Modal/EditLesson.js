@@ -22,29 +22,24 @@ const EditLesson = (props) => {
   const [visible, setVisible] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    if (props.lessonID) {
-      const getLessonByID = async () => {
-        await axios
-          .get(`${process.env.REACT_APP_BASE_URL}//lesson/${props.lessonID}`, {
-            headers: {
-              Authorization: getJwt(),
-            },
-          })
-          .then((res) => {
-            form.setFieldsValue({
-              lesson: res.data.lessonName,
-              url: res.data.lessonUrl,
-              unitId: res.data.unitId,
-            });
-          })
-          .catch((e) => {
-            console.log(e);
-          });
-      };
-      getLessonByID();
-    }
-  }, [form, props.lessonID]);
+  const getLessonByID = async () => {
+    await axios
+      .get(`${process.env.REACT_APP_BASE_URL}/lesson/${props.lessonID}`, {
+        headers: {
+          Authorization: getJwt(),
+        },
+      })
+      .then((res) => {
+        form.setFieldsValue({
+          lesson: res.data.lessonName,
+          url: res.data.lessonUrl,
+          unitId: res.data.unitId,
+        });
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
 
   const editLesson = async (values) => {
     let url = "";
@@ -91,6 +86,7 @@ const EditLesson = (props) => {
   };
 
   const showModal = () => {
+    getLessonByID();
     setVisible(true);
   };
 
@@ -118,7 +114,10 @@ const EditLesson = (props) => {
         visible={visible}
         okText="Update"
         confirmLoading={loading}
-        onCancel={handleCancel}
+        onCancel={() => {
+          handleCancel();
+          form.resetFields();
+        }}
         destroyOnClose
         onOk={() => {
           form

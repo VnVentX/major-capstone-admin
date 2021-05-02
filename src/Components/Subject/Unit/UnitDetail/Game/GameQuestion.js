@@ -14,6 +14,7 @@ import { getJwt } from "../../../../../helper/jwt";
 const GameQuestion = () => {
   const [data, setData] = useState([]);
   const [status, setStatus] = useState("");
+  const [loading, setLoading] = useState(false);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
 
   useEffect(() => {
@@ -22,6 +23,7 @@ const GameQuestion = () => {
   }, []);
 
   const getGameDetail = async () => {
+    setLoading(true);
     let gameID = window.location.pathname.split("/")[6];
     await axios
       .get(`${process.env.REACT_APP_BASE_URL}/game/${gameID}`, {
@@ -31,9 +33,11 @@ const GameQuestion = () => {
       })
       .then((res) => {
         setStatus(res.data.status);
+        setLoading(false);
       })
       .catch((e) => {
         console.log(e);
+        setLoading(false);
       });
   };
 
@@ -62,6 +66,7 @@ const GameQuestion = () => {
   };
 
   const getQuestionByGameID = async () => {
+    setLoading(true);
     let exerciseID = window.location.pathname.split("/")[6];
     await axios
       .get(
@@ -74,9 +79,11 @@ const GameQuestion = () => {
       )
       .then((res) => {
         setData(res.data);
+        setLoading(false);
       })
       .catch((e) => {
         console.log(e);
+        setLoading(false);
       });
   };
 
@@ -236,6 +243,7 @@ const GameQuestion = () => {
         dataSource={data}
         rowKey={(record) => record.id}
         scroll={{ x: true }}
+        loading={loading}
       />
       <div>
         <h1>With selected:</h1>

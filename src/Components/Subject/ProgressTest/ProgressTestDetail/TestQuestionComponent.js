@@ -14,6 +14,7 @@ import { getJwt } from "../../../../helper/jwt";
 const TestQuestionComponent = () => {
   const [data, setData] = useState([]);
   const [status, setStatus] = useState("");
+  const [loading, setLoading] = useState(false);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
 
   useEffect(() => {
@@ -26,6 +27,7 @@ const TestQuestionComponent = () => {
     },
   };
   const getExerciseDetail = async () => {
+    setLoading(true);
     let exerciseID = window.location.pathname.split("/")[6];
     await axios
       .get(`${process.env.REACT_APP_BASE_URL}/exercise/${exerciseID}/status`, {
@@ -35,9 +37,11 @@ const TestQuestionComponent = () => {
       })
       .then((res) => {
         setStatus(res.data);
+        setLoading(false);
       })
       .catch((e) => {
         console.log(e);
+        setLoading(false);
       });
   };
 
@@ -66,6 +70,7 @@ const TestQuestionComponent = () => {
   };
 
   const getQuestionByExerciseID = async () => {
+    setLoading(true);
     let exerciseID = window.location.pathname.split("/")[6];
     await axios
       .get(
@@ -78,9 +83,11 @@ const TestQuestionComponent = () => {
       )
       .then((res) => {
         setData(res.data);
+        setLoading(false);
       })
       .catch((e) => {
         console.log(e);
+        setLoading(false);
       });
   };
 
@@ -239,6 +246,7 @@ const TestQuestionComponent = () => {
         dataSource={data}
         rowKey={(record) => record.id}
         pagination={paginationProps}
+        loading={loading}
       />
       <div>
         <h1>With selected:</h1>

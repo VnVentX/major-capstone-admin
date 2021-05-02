@@ -153,6 +153,7 @@ const AddQuestion = (props) => {
             columns={selectingQuestionCol}
             dataSource={data}
             rowKey={(record) => record.id}
+            loading={loading}
           />
         </Form>
       </Modal>

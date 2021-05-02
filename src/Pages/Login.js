@@ -11,9 +11,6 @@ export default function Login(props) {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    let formData = new FormData();
-    formData.append("username", username);
-    formData.append("password", password);
     await axios
       .post(`${process.env.REACT_APP_BASE_URL}/login`, {
         password,

@@ -73,6 +73,8 @@ export default class StudentAccountComponent extends Component {
         console.log(e);
         if (e.response.data === "CANNOT DELETE") {
           message.error("Can not delete active student!");
+        } else if (e.response.data === "CANNOT ACTIVE") {
+          message.error("Can not active student in disabled class!");
         } else {
           message.error("Fail to delete student!");
         }

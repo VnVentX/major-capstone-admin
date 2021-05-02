@@ -85,8 +85,10 @@ export default class GradeDetailTable extends Component {
       .catch((e) => {
         console.log(e);
         this.setState({ tableLoading: false });
-        if (e.response.data === "CANNOT DELETE") {
+        if (e.response?.data === "CANNOT DELETE") {
           message.error("Can not unlink school with active student!");
+        } else if (e.response.data === "CANNOT ACTIVE") {
+          message.error("Can not active link in disabled school!");
         } else if (status === "ACTIVE" || status === "INACTIVE") {
           message.error("Fail to change status");
         }

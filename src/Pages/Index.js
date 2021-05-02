@@ -34,7 +34,8 @@ import ExerciseQuestionBank from "./ExerciseQuestionBank";
 import GameQuestionBank from "./GameQuestionBank";
 import AddTestQuestion from "./AddTestQuestion";
 import Page404 from "./Page404";
-import { getJwt } from "../helper/jwt";
+import { getJwt, getRole } from "../helper/jwt";
+import Staff from "./Staff";
 
 const { Header, Sider } = Layout;
 
@@ -349,7 +350,6 @@ export default class Index extends React.Component {
             ) : (
               <img src={logo} alt="major-logo" width="80" height="80" />
             )}
-
             <Menu
               theme="dark"
               mode="inline"
@@ -364,45 +364,52 @@ export default class Index extends React.Component {
                   <span>Home</span>
                 </Link>
               </Menu.Item>
-              <SubMenu
-                key="sub1"
-                icon={<DashboardOutlined />}
-                title="Manage"
-                onTitleClick={this.handleClickSubMenu}
-              >
-                <Menu.Item key="news">
-                  <Link to="/news">
-                    <span>News</span>
-                  </Link>
-                </Menu.Item>
+              {getRole() === "admin" && (
                 <SubMenu
-                  key="sub3"
-                  title="Grade"
+                  key="sub1"
+                  icon={<DashboardOutlined />}
+                  title="Manage"
                   onTitleClick={this.handleClickSubMenu}
                 >
-                  {this.state.grade?.map((i, idx) => (
-                    <Menu.Item key={idx + 20} id={`grade${idx + 1}`}>
-                      <Link
-                        to={{
-                          pathname: `/grade/${i.id}`,
-                        }}
-                      >
-                        <span>Grade {i.gradeName}</span>
-                      </Link>
-                    </Menu.Item>
-                  ))}
+                  <Menu.Item key="news">
+                    <Link to="/news">
+                      <span>News</span>
+                    </Link>
+                  </Menu.Item>
+                  <SubMenu
+                    key="sub3"
+                    title="Grade"
+                    onTitleClick={this.handleClickSubMenu}
+                  >
+                    {this.state.grade?.map((i, idx) => (
+                      <Menu.Item key={idx + 20} id={`grade${idx + 1}`}>
+                        <Link
+                          to={{
+                            pathname: `/grade/${i.id}`,
+                          }}
+                        >
+                          <span>Grade {i.gradeName}</span>
+                        </Link>
+                      </Menu.Item>
+                    ))}
+                  </SubMenu>
+                  <Menu.Item key="school" id="school">
+                    <Link to="/school">
+                      <span>School</span>
+                    </Link>
+                  </Menu.Item>
+                  <Menu.Item key="student" id="student">
+                    <Link to="/student">
+                      <span>Student</span>
+                    </Link>
+                  </Menu.Item>
+                  <Menu.Item key="staff" id="staff">
+                    <Link to="/staff">
+                      <span>Staff</span>
+                    </Link>
+                  </Menu.Item>
                 </SubMenu>
-                <Menu.Item key="school" id="school">
-                  <Link to="/school">
-                    <span>School</span>
-                  </Link>
-                </Menu.Item>
-                <Menu.Item key="student" id="student">
-                  <Link to="/student">
-                    <span>Student</span>
-                  </Link>
-                </Menu.Item>
-              </SubMenu>
+              )}
               <Menu.Item key="subject">
                 <Link to="/subject">
                   <BookOutlined />
@@ -451,7 +458,9 @@ export default class Index extends React.Component {
                   onClick: this.toggle,
                 }
               )}
-              <h1 style={{ marginRight: 25 }}>Welcome Admin</h1>
+              <h1 style={{ marginRight: 25 }}>
+                {getRole() === "admin" ? "Welcome Admin" : "Welcome Staff"}
+              </h1>
             </Header>
             <BreadcrumbComponent />
             <Row gutter={16} style={{ margin: 0 }}>
@@ -553,6 +562,7 @@ export default class Index extends React.Component {
                   exact
                   component={GameQuestionBank}
                 />
+                <Route path="/staff" exact component={Staff} />
                 <Route exact component={Page404} />
               </Switch>
             </Row>

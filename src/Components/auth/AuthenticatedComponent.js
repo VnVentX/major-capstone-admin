@@ -26,12 +26,17 @@ class AuthenticatedConponent extends Component {
           }
         )
         .then((res) => {
-          //item storage phải ở trước setState
-          localStorage.setItem("id", res.data.accountId);
-          localStorage.setItem("role", res.data.description);
-          this.setState({
-            role: res.data.description,
-          });
+          if (res.data.description === "student") {
+            this.props.history.push("/login");
+            localStorage.removeItem("token");
+          } else {
+            //item storage phải ở trước setState
+            localStorage.setItem("id", res.data.accountId);
+            localStorage.setItem("role", res.data.description);
+            this.setState({
+              role: res.data.description,
+            });
+          }
         })
         .catch((err) => {
           localStorage.removeItem("token");

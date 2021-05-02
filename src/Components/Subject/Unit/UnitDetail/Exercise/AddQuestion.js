@@ -31,6 +31,7 @@ const AddQuestion = (props) => {
   const [data, setData] = useState([]);
 
   const getQuestionByUnitID = async () => {
+    setLoading(true);
     let unitID = window.location.pathname.split("/")[4];
     await axios
       .get(
@@ -46,9 +47,11 @@ const AddQuestion = (props) => {
         var ids = new Set(props.data.map(({ id }) => id));
         resArr = resArr.filter(({ id }) => !ids.has(id));
         setData(resArr);
+        setLoading(false);
       })
       .catch((e) => {
         console.log(e);
+        setLoading(false);
       });
   };
 
@@ -155,6 +158,7 @@ const AddQuestion = (props) => {
             columns={selectingQuestionCol}
             dataSource={data}
             rowKey={(record) => record.id}
+            loading={loading}
           />
         </Form>
       </Modal>

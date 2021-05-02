@@ -14,6 +14,7 @@ import { getJwt } from "../../../../../helper/jwt";
 const QuizQuestionComponent = () => {
   const [data, setData] = useState([]);
   const [status, setStatus] = useState("");
+  const [loading, setLoading] = useState(false);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
 
   useEffect(() => {
@@ -22,6 +23,7 @@ const QuizQuestionComponent = () => {
   }, []);
 
   const getExerciseDetail = async () => {
+    setLoading(true);
     let exerciseID = window.location.pathname.split("/")[6];
     await axios
       .get(`${process.env.REACT_APP_BASE_URL}/exercise/${exerciseID}/status`, {
@@ -31,9 +33,11 @@ const QuizQuestionComponent = () => {
       })
       .then((res) => {
         setStatus(res.data);
+        setLoading(false);
       })
       .catch((e) => {
         console.log(e);
+        setLoading(false);
       });
   };
 
@@ -62,6 +66,7 @@ const QuizQuestionComponent = () => {
   };
 
   const getQuestionByExerciseID = async () => {
+    setLoading(true);
     let exerciseID = window.location.pathname.split("/")[6];
     await axios
       .get(
@@ -74,9 +79,11 @@ const QuizQuestionComponent = () => {
       )
       .then((res) => {
         setData(res.data);
+        setLoading(false);
       })
       .catch((e) => {
         console.log(e);
+        setLoading(false);
       });
   };
 
@@ -240,6 +247,7 @@ const QuizQuestionComponent = () => {
         rowKey={(record) => record.id}
         scroll={{ x: true }}
         pagination={paginationProps}
+        loading={loading}
       />
       <div>
         <h1>With selected:</h1>

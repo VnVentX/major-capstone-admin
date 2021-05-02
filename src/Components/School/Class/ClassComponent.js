@@ -11,16 +11,13 @@ import {
   Popconfirm,
   message,
 } from "antd";
-import {
-  QuestionCircleOutlined,
-  DeleteOutlined,
-  DownloadOutlined,
-} from "@ant-design/icons";
+import { QuestionCircleOutlined, DeleteOutlined } from "@ant-design/icons";
 import AddNewClass from "./Modal/AddNewClass";
 import ImportClassExcel from "./Modal/ImportClassExcel";
 import EditClass from "./Modal/EditClass";
 import ExportClassExcel from "./Modal/ExportClassExcel";
 import ExportFinalScore from "./Modal/ExportFinalScore";
+import ExportAccount from "./Modal/ExportAccount";
 import { getJwt } from "../../../helper/jwt";
 
 const ClassComponent = (props) => {
@@ -93,6 +90,8 @@ const ClassComponent = (props) => {
         console.log(e);
         if (e.response?.data === "CANNOT DELETE") {
           message.error("Can not delete class with active student!");
+        } else if (e.response.data === "CANNOT ACTIVE") {
+          message.error("Can not active class in disabled link!");
         } else if (status === "ACTIVE" || status === "INACTIVE") {
           message.error("Fail to change status");
         }
@@ -127,39 +126,6 @@ const ClassComponent = (props) => {
       message = "ACTIVE";
     }
     disableClass(e, message);
-  };
-
-  const exportStudentAccount = async () => {
-    setLoading(true);
-    let gradeID = props.gradeID;
-    let schoolID = window.location.pathname.split("/")[2];
-    await axios
-      .get(
-        `${process.env.REACT_APP_BASE_URL}/student/export/account?gradeId=${gradeID}&schoolId=${schoolID}`,
-        {
-          responseType: "blob",
-          headers: {
-            Authorization: getJwt(),
-          },
-        }
-      )
-      .then((res) => {
-        let headerLine = res.headers["content-disposition"];
-        let fileName = headerLine.split("filename=")[1];
-        const url = window.URL.createObjectURL(new Blob([res.data]));
-        const link = document.createElement("a");
-        link.href = url;
-        link.setAttribute("download", fileName);
-        document.body.appendChild(link);
-        link.click();
-        setLoading(false);
-        message.success("Export student account successfully");
-      })
-      .catch((e) => {
-        console.log(e);
-        setLoading(false);
-        message.error("Fail to export student account");
-      });
   };
 
   const columns = [
@@ -317,28 +283,7 @@ const ClassComponent = (props) => {
                 justifyContent: "space-between",
               }}
             >
-              <Popconfirm
-                placement="topRight"
-                title="Do you want to export Student's account"
-                onConfirm={() => {
-                  exportStudentAccount();
-                }}
-                okText="Yes"
-                cancelText="No"
-                icon={<QuestionCircleOutlined style={{ color: "red" }} />}
-              >
-                <Button
-                  size="large"
-                  icon={<DownloadOutlined />}
-                  type="default"
-                  loading={loading}
-                  style={{
-                    marginRight: 5,
-                  }}
-                >
-                  Export Student's Account
-                </Button>
-              </Popconfirm>
+              <ExportAccount gradeID={props.gradeID} />
               <AddNewClass
                 gradeID={props.gradeID}
                 getClassBySchoolGrade={getClassBySchoolGrade}

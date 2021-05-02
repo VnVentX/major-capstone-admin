@@ -1,5 +1,6 @@
 import React from "react";
 import { Layout, Col } from "antd";
+import { Link } from "react-router-dom";
 const { Content } = Layout;
 
 const Page404 = () => {
@@ -17,7 +18,7 @@ const Page404 = () => {
             Maybe this page moved? Got deleted? Is hiding out in quarantine?
             Never existed in the first place?
             <p>
-              Let's go <a href="#">home</a> and try from there.
+              Let's go <Link to="/">home</Link> and try from there.
             </p>
           </div>
         </div>
