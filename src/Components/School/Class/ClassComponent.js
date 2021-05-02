@@ -11,7 +11,11 @@ import {
   Popconfirm,
   message,
 } from "antd";
-import { QuestionCircleOutlined, DeleteOutlined } from "@ant-design/icons";
+import {
+  QuestionCircleOutlined,
+  DeleteOutlined,
+  DownloadOutlined,
+} from "@ant-design/icons";
 import AddNewClass from "./Modal/AddNewClass";
 import ImportClassExcel from "./Modal/ImportClassExcel";
 import EditClass from "./Modal/EditClass";
@@ -123,6 +127,39 @@ const ClassComponent = (props) => {
       message = "ACTIVE";
     }
     disableClass(e, message);
+  };
+
+  const exportStudentAccount = async () => {
+    setLoading(true);
+    let gradeID = props.gradeID;
+    let schoolID = window.location.pathname.split("/")[2];
+    await axios
+      .get(
+        `${process.env.REACT_APP_BASE_URL}/student/export/account?gradeId=${gradeID}&schoolId=${schoolID}`,
+        {
+          responseType: "blob",
+          headers: {
+            Authorization: getJwt(),
+          },
+        }
+      )
+      .then((res) => {
+        let headerLine = res.headers["content-disposition"];
+        let fileName = headerLine.split("filename=")[1];
+        const url = window.URL.createObjectURL(new Blob([res.data]));
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", fileName);
+        document.body.appendChild(link);
+        link.click();
+        setLoading(false);
+        message.success("Export student account successfully");
+      })
+      .catch((e) => {
+        console.log(e);
+        setLoading(false);
+        message.error("Fail to export student account");
+      });
   };
 
   const columns = [
@@ -273,10 +310,40 @@ const ClassComponent = (props) => {
                 handleGraduateLoading={handleGraduateLoading}
               />
             </div>
-            <AddNewClass
-              gradeID={props.gradeID}
-              getClassBySchoolGrade={getClassBySchoolGrade}
-            />
+            <div
+              style={{
+                marginBottom: 10,
+                display: "flex",
+                justifyContent: "space-between",
+              }}
+            >
+              <Popconfirm
+                placement="topRight"
+                title="Do you want to export Student's account"
+                onConfirm={() => {
+                  exportStudentAccount();
+                }}
+                okText="Yes"
+                cancelText="No"
+                icon={<QuestionCircleOutlined style={{ color: "red" }} />}
+              >
+                <Button
+                  size="large"
+                  icon={<DownloadOutlined />}
+                  type="default"
+                  loading={loading}
+                  style={{
+                    marginRight: 5,
+                  }}
+                >
+                  Export Student's Account
+                </Button>
+              </Popconfirm>
+              <AddNewClass
+                gradeID={props.gradeID}
+                getClassBySchoolGrade={getClassBySchoolGrade}
+              />
+            </div>
           </div>
           <Table
             className="class-table"
