@@ -52,7 +52,7 @@ export default class StudentAccountComponent extends Component {
         },
         {
           headers: {
-            Authorization: getJwt(),
+            Authorization: await getJwt(),
           },
         }
       )
@@ -90,7 +90,7 @@ export default class StudentAccountComponent extends Component {
     await axios
       .put(`${process.env.REACT_APP_BASE_URL}/student/changeClass`, formData, {
         headers: {
-          Authorization: getJwt(),
+          Authorization: await getJwt(),
         },
       })
       .then((res) => {

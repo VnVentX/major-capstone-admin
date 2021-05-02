@@ -46,7 +46,7 @@ const SearchFilter = (props) => {
         },
         {
           headers: {
-            Authorization: getJwt(),
+            Authorization: await getJwt(),
           },
         }
       )
@@ -67,7 +67,7 @@ const SearchFilter = (props) => {
     await axios
       .get(`${process.env.REACT_APP_BASE_URL}/school/all`, {
         headers: {
-          Authorization: getJwt(),
+          Authorization: await getJwt(),
         },
       })
       .then((res) => {
@@ -85,7 +85,7 @@ const SearchFilter = (props) => {
     await axios
       .get(`${process.env.REACT_APP_BASE_URL}/grade/${schoolID}`, {
         headers: {
-          Authorization: getJwt(),
+          Authorization: await getJwt(),
         },
       })
       .then((res) => {

@@ -9,31 +9,37 @@ class AuthenticatedConponent extends Component {
     role: "",
   };
 
-  async componentDidMount() {
+  componentDidMount() {
     const jwt = getJwt();
     if (!jwt) {
-      await this.props.history.push("/login");
-    }
-    await axios
-      .get(
-        `${process.env.REACT_APP_BASE_URL}/credential?token=${
-          jwt.split(" ")[1]
-        }`,
-        {
-          headers: {
-            Authorization: getJwt(),
-          },
-        }
-      )
-      .then((res) => {
-        //item storage phải ở trước setState
-        localStorage.setItem("id", res.data.accountId);
-        localStorage.setItem("role", res.data.description);
-        this.setState({
-          role: res.data.description,
+      this.props.history.push("/login");
+    } else {
+      axios
+        .get(
+          `${process.env.REACT_APP_BASE_URL}/credential?token=${
+            jwt?.split(" ")[1]
+          }`,
+          {
+            headers: {
+              Authorization: getJwt(),
+            },
+          }
+        )
+        .then((res) => {
+          //item storage phải ở trước setState
+          localStorage.setItem("id", res.data.accountId);
+          localStorage.setItem("role", res.data.description);
+          this.setState({
+            role: res.data.description,
+          });
+        })
+        .catch((err) => {
+          localStorage.removeItem("token");
+          localStorage.removeItem("id");
+          localStorage.removeItem("role");
+          this.props.history.push("/login");
         });
-      })
-      .catch((err) => this.props.history.push("/login"));
+    }
   }
 
   render() {

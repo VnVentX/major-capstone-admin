@@ -34,6 +34,7 @@ import ExerciseQuestionBank from "./ExerciseQuestionBank";
 import GameQuestionBank from "./GameQuestionBank";
 import AddTestQuestion from "./AddTestQuestion";
 import Page404 from "./Page404";
+import { getJwt } from "../helper/jwt";
 
 const { Header, Sider } = Layout;
 
@@ -102,7 +103,11 @@ export default class Index extends React.Component {
   };
   getAllGrade = async () => {
     await axios
-      .get(`${process.env.REACT_APP_BASE_URL}/grade/all`)
+      .get(`${process.env.REACT_APP_BASE_URL}/grade/all`, {
+        headers: {
+          Authorization: await getJwt(),
+        },
+      })
       .then((res) => {
         res.data.forEach((item) => {
           let key = item.id;
@@ -124,7 +129,11 @@ export default class Index extends React.Component {
   };
   getAllSchool = async () => {
     await axios
-      .get(`${process.env.REACT_APP_BASE_URL}/school/all`)
+      .get(`${process.env.REACT_APP_BASE_URL}/school/all`, {
+        headers: {
+          Authorization: await getJwt(),
+        },
+      })
       .then((res) => {
         res.data.forEach((item) => {
           let key = item.id;
@@ -143,7 +152,11 @@ export default class Index extends React.Component {
   };
   getAllSubject = async () => {
     await axios
-      .get(`${process.env.REACT_APP_BASE_URL}/breadcrumb/subject`)
+      .get(`${process.env.REACT_APP_BASE_URL}/breadcrumb/subject`, {
+        headers: {
+          Authorization: await getJwt(),
+        },
+      })
       .then((res) => {
         this.setState({
           subjectNameByID: res.data,
@@ -155,7 +168,11 @@ export default class Index extends React.Component {
   };
   getAllUnit = async () => {
     await axios
-      .get(`${process.env.REACT_APP_BASE_URL}/breadcrumb/unit`)
+      .get(`${process.env.REACT_APP_BASE_URL}/breadcrumb/unit`, {
+        headers: {
+          Authorization: await getJwt(),
+        },
+      })
       .then((res) => {
         this.setState({
           unitNameByID: res.data,
@@ -167,7 +184,11 @@ export default class Index extends React.Component {
   };
   getAllProgressTest = async () => {
     await axios
-      .get(`${process.env.REACT_APP_BASE_URL}/breadcrumb/progressTest`)
+      .get(`${process.env.REACT_APP_BASE_URL}/breadcrumb/progressTest`, {
+        headers: {
+          Authorization: await getJwt(),
+        },
+      })
       .then((res) => {
         this.setState({
           progressTestNameByID: res.data,
@@ -179,7 +200,11 @@ export default class Index extends React.Component {
   };
   getAllExercise = async () => {
     await axios
-      .get(`${process.env.REACT_APP_BASE_URL}/breadcrumb/exercise`)
+      .get(`${process.env.REACT_APP_BASE_URL}/breadcrumb/exercise`, {
+        headers: {
+          Authorization: await getJwt(),
+        },
+      })
       .then((res) => {
         this.setState({
           exerciseNameByID: res.data,
@@ -191,7 +216,11 @@ export default class Index extends React.Component {
   };
   getAllGame = async () => {
     await axios
-      .get(`${process.env.REACT_APP_BASE_URL}/breadcrumb/game`)
+      .get(`${process.env.REACT_APP_BASE_URL}/breadcrumb/game`, {
+        headers: {
+          Authorization: await getJwt(),
+        },
+      })
       .then((res) => {
         this.setState({
           gameNameByID: res.data,

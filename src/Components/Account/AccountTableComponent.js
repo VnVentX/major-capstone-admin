@@ -55,7 +55,7 @@ export const AccountTableComponent = () => {
         [schoolID, gradeID, classID],
         {
           headers: {
-            Authorization: getJwt(),
+            Authorization: await getJwt(),
           },
         }
       )
@@ -85,7 +85,7 @@ export const AccountTableComponent = () => {
         `${process.env.REACT_APP_BASE_URL}/class/${schoolID}?classesId=${classID}&gradeId=${gradeID}&schoolId=${schoolID}`,
         {
           headers: {
-            Authorization: getJwt(),
+            Authorization: await getJwt(),
           },
         }
       )
