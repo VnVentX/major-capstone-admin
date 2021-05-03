@@ -55,7 +55,7 @@ const EditStaff = (props) => {
         `${process.env.REACT_APP_BASE_URL}/account/${props.id}`,
         {
           fullName: values.fullName,
-          password: values.password,
+          password: values.password ? values.password : null,
         },
         {
           headers: {
@@ -134,7 +134,6 @@ const EditStaff = (props) => {
             label="New Password"
             rules={[
               { max: 30, message: "Can only input 30 characters" },
-              { required: true, message: "Please input password" },
               {
                 min: 6,
                 message: "Password length must have 6 characters or more",

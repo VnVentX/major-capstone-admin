@@ -208,6 +208,10 @@ const GameQuestion = () => {
             >
               <Button type="danger">Close Game</Button>
             </Popconfirm>
+          ) : data?.length < 1 ? (
+            <Button type="primary" disabled>
+              Open Game
+            </Button>
           ) : status === "INACTIVE" ? (
             <Popconfirm
               placement="topRight"
