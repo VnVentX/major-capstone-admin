@@ -255,7 +255,7 @@ const ClassComponent = (props) => {
         </div>
       ) : (
         <>
-          {props.status && (
+          {props.status === "ACTIVE" && (
             <div
               style={{
                 marginBottom: 10,
