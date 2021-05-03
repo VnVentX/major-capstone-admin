@@ -69,8 +69,10 @@ const ImportClassExcel = (props) => {
       })
       .catch((e) => {
         console.log(e);
-        if (e.response?.status === 400) {
+        if (e.response?.status === 413) {
           message.error("Class's maximum student exceed, please check again!");
+        } else if (e.response?.status === 400) {
+          message.error("Can not import empty sheet, please check again!");
         } else {
           message.error("Fail to import file!");
         }
