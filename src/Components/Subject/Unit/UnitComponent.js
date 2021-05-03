@@ -60,7 +60,17 @@ const UnitComponent = (props) => {
       })
       .catch((e) => {
         console.log(e);
-        message.error("Fail to delete Unit");
+        if (e.response.data === "CANNOT DELETE") {
+          message.error(
+            "Can not delete unit with active exercise or game, please check again!"
+          );
+        } else if (e.response.data === "Have progressTest LINKED!") {
+          message.error(
+            "Can not delete Unit linked with Progress Test, please check again!"
+          );
+        } else {
+          message.error("Fail to delete Unit");
+        }
       });
   };
 

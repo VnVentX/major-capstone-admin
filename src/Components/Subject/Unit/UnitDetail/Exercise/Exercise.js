@@ -64,7 +64,11 @@ const Exercise = (props) => {
       })
       .catch((e) => {
         console.log(e);
-        message.error("Fail to delete Exercise");
+        if (e.response.data === "CANNOT DELETE") {
+          message.error("Can not delete active exercise, please check again!");
+        } else {
+          message.error("Fail to delete Exercise");
+        }
       });
   };
 

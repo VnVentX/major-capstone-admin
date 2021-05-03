@@ -22,7 +22,13 @@ const Lesson = (props) => {
       })
       .catch((e) => {
         console.log(e);
-        message.error("Fail to delete Lesson");
+        if (e.response.data === "CANNOT DELETE") {
+          message.error(
+            "Can not delete lesson with active exercise or game, please check again!"
+          );
+        } else {
+          message.error("Fail to delete Lesson");
+        }
       });
   };
 

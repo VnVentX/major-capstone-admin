@@ -63,7 +63,13 @@ const Subject = (props) => {
       .catch((e) => {
         console.log(e);
         setLoading(false);
-        message.error("Fail to delete this Subject!");
+        if (e.response.data === "CANNOT DELETE") {
+          message.error(
+            "Can not delete Subject with active exercise or game, please check again!"
+          );
+        } else {
+          message.error("Fail to delete Subject");
+        }
       });
   };
 
