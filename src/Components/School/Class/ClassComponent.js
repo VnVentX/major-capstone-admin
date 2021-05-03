@@ -239,11 +239,13 @@ const ClassComponent = (props) => {
           }}
         >
           Class Management
-          <ExportFinalScore
-            gradeID={props.gradeID}
-            handleGraduateLoading={handleGraduateLoading}
-            getClassBySchoolGrade={getClassBySchoolGrade}
-          />
+          {props.status && (
+            <ExportFinalScore
+              gradeID={props.gradeID}
+              handleGraduateLoading={handleGraduateLoading}
+              getClassBySchoolGrade={getClassBySchoolGrade}
+            />
+          )}
         </div>
       }
     >
@@ -253,13 +255,7 @@ const ClassComponent = (props) => {
         </div>
       ) : (
         <>
-          <div
-            style={{
-              marginBottom: 10,
-              display: "flex",
-              justifyContent: "space-between",
-            }}
-          >
+          {props.status && (
             <div
               style={{
                 marginBottom: 10,
@@ -267,29 +263,37 @@ const ClassComponent = (props) => {
                 justifyContent: "space-between",
               }}
             >
-              <ImportClassExcel
-                gradeID={props.gradeID}
-                getClassBySchoolGrade={getClassBySchoolGrade}
-              />
-              <ExportClassExcel
-                gradeID={props.gradeID}
-                handleGraduateLoading={handleGraduateLoading}
-              />
+              <div
+                style={{
+                  marginBottom: 10,
+                  display: "flex",
+                  justifyContent: "space-between",
+                }}
+              >
+                <ImportClassExcel
+                  gradeID={props.gradeID}
+                  getClassBySchoolGrade={getClassBySchoolGrade}
+                />
+                <ExportClassExcel
+                  gradeID={props.gradeID}
+                  handleGraduateLoading={handleGraduateLoading}
+                />
+              </div>
+              <div
+                style={{
+                  marginBottom: 10,
+                  display: "flex",
+                  justifyContent: "space-between",
+                }}
+              >
+                <ExportAccount gradeID={props.gradeID} />
+                <AddNewClass
+                  gradeID={props.gradeID}
+                  getClassBySchoolGrade={getClassBySchoolGrade}
+                />
+              </div>
             </div>
-            <div
-              style={{
-                marginBottom: 10,
-                display: "flex",
-                justifyContent: "space-between",
-              }}
-            >
-              <ExportAccount gradeID={props.gradeID} />
-              <AddNewClass
-                gradeID={props.gradeID}
-                getClassBySchoolGrade={getClassBySchoolGrade}
-              />
-            </div>
-          </div>
+          )}
           <Table
             className="class-table"
             rowKey={(record) => record.id}

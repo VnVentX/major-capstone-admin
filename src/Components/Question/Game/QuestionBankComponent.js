@@ -108,7 +108,13 @@ const QuestionBankComponent = () => {
       })
       .catch((e) => {
         console.log(e);
-        message.error("Fail to delete this Question");
+        if (e.response.data === "CANNOT DELETE") {
+          message.error(
+            "This question is currently being used, please check again"
+          );
+        } else {
+          message.error("Fail to delete this Question");
+        }
       });
   };
 

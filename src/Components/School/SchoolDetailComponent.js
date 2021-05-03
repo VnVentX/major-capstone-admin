@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Tabs, Card, Descriptions } from "antd";
+import { Tabs, Card, Descriptions, Button } from "antd";
 import ClassComponent from "./Class/ClassComponent";
 import { getJwt } from "../../helper/jwt";
+import { Link } from "react-router-dom";
 
 const { TabPane } = Tabs;
 
@@ -101,10 +102,15 @@ const SchoolDetailComponent = () => {
         </Descriptions>
       </Card>
       <Card type="inner" title="Linked Grades" style={{ marginTop: 20 }}>
+        {gradeData.length === 0 && (
+          <Button type="primary" style={{ textAlign: "center", margin: 0 }}>
+            <Link to="/grade/1">Go to link Grade</Link>
+          </Button>
+        )}
         <Tabs type="card">
           {gradeData?.map((i, idx) => (
             <TabPane tab={`Grade ${i.gradeName}`} key={idx + 1}>
-              <ClassComponent gradeID={i.id} />
+              <ClassComponent gradeID={i.id} status={i.status} />
             </TabPane>
           ))}
         </Tabs>

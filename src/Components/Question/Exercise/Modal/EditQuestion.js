@@ -120,7 +120,13 @@ const EditQuestion = (props) => {
       .catch((e) => {
         console.log(e);
         setLoading(false);
-        message.error("Fail to edit Exercise Question");
+        if (e.response.data === "CANNOT UPDATE") {
+          message.error(
+            "This question is currently being used, please check again"
+          );
+        } else {
+          message.error("Fail to edit this Question");
+        }
       });
   };
 
