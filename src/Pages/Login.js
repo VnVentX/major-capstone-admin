@@ -4,6 +4,7 @@ import axios from "axios";
 export default function Login(props) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState(false);
 
   if (localStorage.getItem("token")) {
     props.history.push("/");
@@ -23,9 +24,11 @@ export default function Login(props) {
           localStorage.setItem("token", "Bearer " + res.data);
           props.history.push("/");
         }
+        setError(false);
       })
       .catch((e) => {
         console.log(e);
+        setError(true);
       });
   };
 
@@ -44,7 +47,6 @@ export default function Login(props) {
             }}
           />
         </div>
-
         <div className="txtb">
           <input
             type="password"
@@ -56,6 +58,7 @@ export default function Login(props) {
             }}
           />
         </div>
+        {error && <h4>Username or password is incorrect</h4>}
         <input type="submit" className="logbtn" value="Login"></input>
       </form>
     </div>

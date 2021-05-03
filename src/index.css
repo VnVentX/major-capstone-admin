@@ -27,12 +27,12 @@ body {
 }
 
 .login-form {
+  position: absolute;
   width: 360px;
   background: #f1f1f1;
   height: 580px;
   padding: 80px 40px;
   border-radius: 10px;
-  position: absolute;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
@@ -41,6 +41,14 @@ body {
 .login-form h1 {
   text-align: center;
   margin-bottom: 60px;
+}
+.login-form h4 {
+  position: relative;
+  font-size: medium;
+  color: red;
+  width: 100%;
+  text-align: center;
+  margin-bottom: 20px;
 }
 
 .txtb {
@@ -344,4 +352,3 @@ input[type="checkbox"] + *::before {
   top: 45%;
   width: 75%;
 }
-
