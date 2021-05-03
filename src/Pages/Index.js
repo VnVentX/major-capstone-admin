@@ -376,6 +376,11 @@ export default class Index extends React.Component {
                       <span>News</span>
                     </Link>
                   </Menu.Item>
+                  <Menu.Item key="school" id="school">
+                    <Link to="/school">
+                      <span>School</span>
+                    </Link>
+                  </Menu.Item>
                   <SubMenu
                     key="sub3"
                     title="Grade"
@@ -393,11 +398,6 @@ export default class Index extends React.Component {
                       </Menu.Item>
                     ))}
                   </SubMenu>
-                  <Menu.Item key="school" id="school">
-                    <Link to="/school">
-                      <span>School</span>
-                    </Link>
-                  </Menu.Item>
                   <Menu.Item key="student" id="student">
                     <Link to="/student">
                       <span>Student</span>

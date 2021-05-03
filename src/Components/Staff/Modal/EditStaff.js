@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { reunicode } from "../../../helper/regex";
 import { Modal, Button, Form, Input, message } from "antd";
-import { PlusOutlined } from "@ant-design/icons";
+import { EditOutlined } from "@ant-design/icons";
 import { getJwt } from "../../../helper/jwt";
 
 const layout = {
@@ -10,12 +10,32 @@ const layout = {
   wrapperCol: { span: 18 },
 };
 
-const CreateStaff = (props) => {
+const EditStaff = (props) => {
   const [form] = Form.useForm();
   const [visible, setVisible] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  const getStaffDetail = async () => {
+    await axios
+      .get(`${process.env.REACT_APP_BASE_URL}/account/${props.id}`, {
+        headers: {
+          Authorization: getJwt(),
+        },
+      })
+      .then((res) => {
+        console.log(res);
+        form.setFieldsValue({
+          fullName: res.data.fullName,
+          username: res.data.username,
+        });
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
+
   const showModal = () => {
+    getStaffDetail();
     setVisible(true);
   };
 
@@ -25,18 +45,17 @@ const CreateStaff = (props) => {
   };
 
   const onFinish = (values) => {
-    createStaff(values);
+    editStaff(values);
   };
 
-  const createStaff = async (values) => {
+  const editStaff = async (values) => {
     setLoading(true);
     await axios
-      .post(
-        `${process.env.REACT_APP_BASE_URL}/account/create`,
+      .put(
+        `${process.env.REACT_APP_BASE_URL}/account/${props.id}`,
         {
           fullName: values.fullName,
           password: values.password,
-          username: values.username,
         },
         {
           headers: {
@@ -46,23 +65,18 @@ const CreateStaff = (props) => {
       )
       .then((res) => {
         console.log(res);
-        if (res.data === "CANNOT CREATE!") {
-          message.error("Can not create staff right now. Please check again!");
-          setLoading(false);
-        } else {
-          props.getAllStaff();
-          setLoading(false);
-          handleCancel();
-          form.resetFields();
-          message.success("Create Staff successfully!");
-        }
+        props.getAllStaff();
+        setLoading(false);
+        handleCancel();
+        form.resetFields();
+        message.success("Edit Staff successfully!");
       })
       .catch((e) => {
         console.log(e);
         if (e.response.data === "EXISTED") {
           message.error("This staff has already existed!");
         } else {
-          message.error("Fail to create Staff!");
+          message.error("Fail to edit Staff!");
         }
         setLoading(false);
       });
@@ -70,20 +84,14 @@ const CreateStaff = (props) => {
 
   return (
     <div>
-      <Button
-        type="primary"
-        size="large"
-        icon={<PlusOutlined />}
-        onClick={showModal}
-        style={{ marginLeft: 5, marginBottom: 10 }}
-      >
-        Create Staff
+      <Button type="primary" icon={<EditOutlined />} onClick={showModal}>
+        Edit
       </Button>
       <Modal
-        title="Create Staff"
+        title="Edit Staff"
         visible={visible}
         confirmLoading={loading}
-        okText="Create"
+        okText="Update"
         onCancel={() => {
           handleCancel();
           form.resetFields();
@@ -118,22 +126,12 @@ const CreateStaff = (props) => {
           >
             <Input maxLength={51} placeholder="Staff's Name" />
           </Form.Item>
-          <Form.Item
-            name="username"
-            label="Username"
-            rules={[
-              {
-                required: true,
-                message: "Please input a username",
-              },
-              { max: 30, message: "Can only input 30 characters" },
-            ]}
-          >
-            <Input maxLength={31} placeholder="Username" />
+          <Form.Item name="username" label="Username">
+            <Input placeholder="Username" disabled />
           </Form.Item>
           <Form.Item
             name="password"
-            label="Password"
+            label="New Password"
             rules={[
               { max: 30, message: "Can only input 30 characters" },
               { required: true, message: "Please input password" },
@@ -143,7 +141,7 @@ const CreateStaff = (props) => {
               },
             ]}
           >
-            <Input type="password" maxLength={51} placeholder="Password" />
+            <Input type="password" maxLength={31} placeholder="Password" />
           </Form.Item>
         </Form>
       </Modal>
@@ -151,4 +149,4 @@ const CreateStaff = (props) => {
   );
 };
 
-export default CreateStaff;
+export default EditStaff;

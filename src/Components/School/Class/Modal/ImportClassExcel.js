@@ -48,7 +48,7 @@ const ImportClassExcel = (props) => {
         },
       })
       .then((res) => {
-        if (res.data.size === 0) {
+        if (res.data.size === 0 && res.status === 200) {
           //import
           importFile(file);
         } else {
@@ -91,7 +91,7 @@ const ImportClassExcel = (props) => {
         },
       })
       .then((res) => {
-        if (res.data.size === 0) {
+        if (res.data.size === 0 && res.status === 201) {
           console.log("Import success");
           props.getClassBySchoolGrade(props.gradeID);
           setLoading(false);
@@ -116,7 +116,11 @@ const ImportClassExcel = (props) => {
       .catch((e) => {
         console.log(e);
         console.log("Import fail");
-        message.error("Fail to import file!");
+        if (e.response.status === 400) {
+          message.error("Something is wrong, please try again");
+        } else {
+          message.error("Fail to import file!");
+        }
         setLoading(false);
       });
   };

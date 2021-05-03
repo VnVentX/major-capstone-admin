@@ -3,6 +3,7 @@ import axios from "axios";
 import { Tabs, Table, Tag, Space, Popconfirm, Button } from "antd";
 import { getJwt } from "../../helper/jwt";
 import CreateStaff from "./Modal/CreateStaff";
+import EditStaff from "./Modal/EditStaff";
 
 const { TabPane } = Tabs;
 
@@ -73,15 +74,29 @@ export const StaffComponent = () => {
       ),
     },
     {
+      title: "Status",
+      align: "center",
+      dataIndex: "status",
+      render: (status) => (
+        <span>
+          {status === "admin" ? (
+            <Tag color={"volcano"} key={status}>
+              Disabled
+            </Tag>
+          ) : status === "staff" ? (
+            <Tag color={"green"} key={status}>
+              Active
+            </Tag>
+          ) : null}
+        </span>
+      ),
+    },
+    {
       title: "Action",
       align: "center",
       render: (record) => (
         <Space size="small">
-          {/* <EditStudent
-            data={record}
-            handleSearch={this.props.handleSearch}
-            searchData={this.props.searchData}
-          /> */}
+          <EditStaff id={record.id} getAllStaff={getAllStaff} />
         </Space>
       ),
     },

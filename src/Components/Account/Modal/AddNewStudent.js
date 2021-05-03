@@ -175,7 +175,7 @@ const AddNewStudent = (props) => {
                 required: true,
                 message: "Please input a concat (Phone or Email)",
               },
-              { max: 51, message: "Can only input 100 characters" },
+              { max: 51, message: "Can only input 50 characters" },
             ]}
           >
             <Input maxLength={50} placeholder="Contact (Phone / Email)" />
