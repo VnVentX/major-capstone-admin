@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import axios from "axios";
 
 export default function Login(props) {
-  const [username, setUsername] = useState("admin");
-  const [password, setPassword] = useState("12345678");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const [error, setError] = useState(false);
 
   if (localStorage.getItem("token")) {
@@ -13,8 +13,8 @@ export default function Login(props) {
   const onSubmit = async (e) => {
     e.preventDefault();
     let formData = new FormData();
-    formData.append("username", username);
-    formData.append("password", password);
+    formData.append("username", "admin");
+    formData.append("password", "12345678");
     await axios
       .post(`${process.env.REACT_APP_BASE_URL}/login`, formData)
       .then((res) => {
@@ -41,7 +41,7 @@ export default function Login(props) {
             type="text"
             name="username"
             placeholder="Username"
-            value={username}
+            value="admin"
             onChange={(e) => {
               setUsername(e.target.value);
             }}
@@ -52,7 +52,7 @@ export default function Login(props) {
             type="password"
             name="password"
             placeholder="Password"
-            value={password}
+            value="12345678"
             onChange={(e) => {
               setPassword(e.target.value);
             }}
