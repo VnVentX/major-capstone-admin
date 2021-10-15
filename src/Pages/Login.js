@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import axios from "axios";
 
 export default function Login(props) {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [username, setUsername] = useState("admin");
+  const [password, setPassword] = useState("12345678");
   const [error, setError] = useState(false);
 
   if (localStorage.getItem("token")) {
